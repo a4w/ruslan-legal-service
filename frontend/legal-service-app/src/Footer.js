@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";

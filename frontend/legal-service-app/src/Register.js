@@ -1,8 +1,8 @@
 import React from "react";
-import "../../template/files/assets/css/bootstrap-datetimepicker.min.css";
-import "../../template/files/assets/css/bootstrap.min.css";
-import "../../template/files/assets/css/bootstrap.css";
-import "../../template/files/assets/css/style.css";
+import "./assets/css/bootstrap-datetimepicker.min.css";
+import "./assets/css/bootstrap.min.css";
+import "./assets/css/bootstrap.css";
+import "./assets/css/style.css";
 
 const Register = () => {
   return (

@@ -23,6 +23,10 @@ const Register = () => {
   const UserTypeHandler = () => {
     setUser({ ...user, isClient: !user.isClient });
   };
+  const OnSubmitHandler = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+  };
   return (
     <div className="content">
       <div className="container-fluid">
@@ -31,11 +35,11 @@ const Register = () => {
             <div className="account-content">
               <div className="row align-items-center justify-content-center">
                 <div className="col-md-7 col-lg-6 login-left">
-                  {/* <img
-                    src="assets/img/login-banner.png"
+                  <img
+                    src="./assets/img/login-banner.png"
                     className="img-fluid"
                     alt="Doccure Register"
-                  /> */}
+                  />
                 </div>
                 <div className="col-md-12 col-lg-6 login-right">
                   <div className="login-header">
@@ -47,7 +51,7 @@ const Register = () => {
                     </h3>
                   </div>
 
-                  <form>
+                  <form onSubmit={OnSubmitHandler}>
                     <Input
                       placeholder={"Name"}
                       name={"name"}
@@ -84,30 +88,25 @@ const Register = () => {
                       OnChangeHandler={OnChangeHandler}
                     />
                     <div className="text-right">
-                      {/* <a className="forgot-link" href="login.html">
+                      <a className="forgot-link" href="login.html">
                         Already have an account?
-                      </a> */}
+                      </a>
                     </div>
-                    <button
-                      className="btn btn-primary btn-block btn-lg login-btn"
-                      type="submit"
-                    >
-                      Signup
-                    </button>
+                    <Button />
                     <div className="login-or">
                       <span className="or-line"></span>
                       <span className="span-or">or</span>
                     </div>
                     <div className="row form-row social-login">
                       <div className="col-6">
-                        {/* <a href="#" className="btn btn-facebook btn-block">
+                        <a href="#" className="btn btn-facebook btn-block">
                           <i className="fab fa-facebook-f mr-1"></i> Login
-                        </a> */}
+                        </a>
                       </div>
                       <div className="col-6">
-                        {/* <a href="#" className="btn btn-google btn-block">
+                        <a href="#" className="btn btn-google btn-block">
                           <i className="fab fa-google mr-1"></i> Login
-                        </a> */}
+                        </a>
                       </div>
                     </div>
                   </form>
@@ -134,6 +133,16 @@ const Input = ({ placeholder, value, name, OnChangeHandler, type }) => {
       />
       <label className="focus-label">{placeholder}</label>
     </div>
+  );
+};
+const Button = () => {
+  return (
+    <button
+      className="btn btn-primary btn-block btn-lg login-btn"
+      type="submit"
+    >
+      Signup
+    </button>
   );
 };
 export default Register;

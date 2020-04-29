@@ -6,14 +6,13 @@ import "./assets/css/style.css";
 
 const Register = () => {
   const initUser = {
-    Name: "",
-    Surname: "",
-    Email: "",
-    Phone: "",
-    Password: "",
+    name: "",
+    surName: "",
+    email: "",
+    number: "",
+    password: "",
   };
   const [user, setUser] = useState(initUser);
-  const fields = ["Name", "Surname", "Email", "Phone", "Password"];
   const OnChangeHandler = (event) => {
     console.log("changing ", event.target.name);
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -46,15 +45,41 @@ const Register = () => {
                   </div>
 
                   <form>
-                    {fields.map((element) => (
-                      <Input
-                        key={element}
-                        name={element}
-                        value={user[element]}
-                        type={element}
-                        OnChangeHandler={OnChangeHandler}
-                      />
-                    ))}
+                    <Input
+                      placeholder={"Name"}
+                      name={"name"}
+                      value={user.name}
+                      type={"text"}
+                      OnChangeHandler={OnChangeHandler}
+                    />
+                    <Input
+                      placeholder={"Surname"}
+                      name={"surName"}
+                      value={user.surName}
+                      type={"text"}
+                      OnChangeHandler={OnChangeHandler}
+                    />
+                    <Input
+                      placeholder={"Telephone Number"}
+                      name={"number"}
+                      value={user.number}
+                      type={"number"}
+                      OnChangeHandler={OnChangeHandler}
+                    />
+                    <Input
+                      placeholder={"Email"}
+                      name={"email"}
+                      value={user.email}
+                      type={"email"}
+                      OnChangeHandler={OnChangeHandler}
+                    />
+                    <Input
+                      placeholder={"Password"}
+                      name={"password"}
+                      value={user.password}
+                      type={"password"}
+                      OnChangeHandler={OnChangeHandler}
+                    />
                     <div className="text-right">
                       {/* <a className="forgot-link" href="login.html">
                         Already have an account?
@@ -101,7 +126,7 @@ const Register = () => {
 //           OnChangeHandler={OnChangeHandler}
 //           required={true}
 
-const Input = ({ value, name, OnChangeHandler, type }) => {
+const Input = ({ placeholder, value, name, OnChangeHandler, type }) => {
   return (
     <div className="form-group form-focus">
       <input
@@ -112,7 +137,7 @@ const Input = ({ value, name, OnChangeHandler, type }) => {
         required
         className="form-control floating"
       />
-      <label className="focus-label">{name}</label>
+      <label className="focus-label">{placeholder}</label>
     </div>
   );
 };

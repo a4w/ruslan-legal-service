@@ -5,7 +5,7 @@ import "./assets/css/bootstrap.min.css";
 import "./assets/css/bootstrap.css";
 import "./assets/css/style.css";
 
-const Register = () => {
+const Register = (props) => {
   const initUser = {
     name: "",
     surName: "",
@@ -28,6 +28,79 @@ const Register = () => {
     const data = new FormData(event.target);
   };
   return (
+    <Wrapper>
+      <div className="login-header">
+        <h3>
+          {user.isClient ? "Client Register" : "Lawyer Register?"}
+          <a href="#" onClick={UserTypeHandler}>
+            {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
+          </a>
+        </h3>
+      </div>
+      <form onSubmit={OnSubmitHandler}>
+        <Input
+          placeholder={"Name"}
+          name={"name"}
+          value={user.name}
+          type={"text"}
+          OnChangeHandler={OnChangeHandler}
+        />
+        <Input
+          placeholder={"Surname"}
+          name={"surName"}
+          value={user.surName}
+          type={"text"}
+          OnChangeHandler={OnChangeHandler}
+        />
+        <Input
+          placeholder={"Telephone Number"}
+          name={"number"}
+          value={user.number}
+          type={"number"}
+          OnChangeHandler={OnChangeHandler}
+        />
+        <Input
+          placeholder={"Email"}
+          name={"email"}
+          value={user.email}
+          type={"email"}
+          OnChangeHandler={OnChangeHandler}
+        />
+        <Input
+          placeholder={"Password"}
+          name={"password"}
+          value={user.password}
+          type={"password"}
+          OnChangeHandler={OnChangeHandler}
+        />
+        <div className="text-right">
+          <a className="forgot-link" href="login.html">
+            Already have an account?
+          </a>
+        </div>
+        <Button />
+        <div className="login-or">
+          <span className="or-line"></span>
+          <span className="span-or">or</span>
+        </div>
+        <div className="row form-row social-login">
+          <div className="col-6">
+            <a href="#" className="btn btn-facebook btn-block">
+              <i className="fab fa-facebook-f mr-1"></i> Login
+            </a>
+          </div>
+          <div className="col-6">
+            <a href="#" className="btn btn-google btn-block">
+              <i className="fab fa-google mr-1"></i> Login
+            </a>
+          </div>
+        </div>
+      </form>
+    </Wrapper>
+  );
+};
+const Wrapper = (props) => {
+  return (
     <div className="content">
       <div className="container-fluid">
         <div className="row">
@@ -42,74 +115,7 @@ const Register = () => {
                   />
                 </div>
                 <div className="col-md-12 col-lg-6 login-right">
-                  <div className="login-header">
-                    <h3>
-                      {user.isClient ? "Client Register" : "Lawyer Register?"}
-                      <a href="#" onClick={UserTypeHandler}>
-                        {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
-                      </a>
-                    </h3>
-                  </div>
-
-                  <form onSubmit={OnSubmitHandler}>
-                    <Input
-                      placeholder={"Name"}
-                      name={"name"}
-                      value={user.name}
-                      type={"text"}
-                      OnChangeHandler={OnChangeHandler}
-                    />
-                    <Input
-                      placeholder={"Surname"}
-                      name={"surName"}
-                      value={user.surName}
-                      type={"text"}
-                      OnChangeHandler={OnChangeHandler}
-                    />
-                    <Input
-                      placeholder={"Telephone Number"}
-                      name={"number"}
-                      value={user.number}
-                      type={"number"}
-                      OnChangeHandler={OnChangeHandler}
-                    />
-                    <Input
-                      placeholder={"Email"}
-                      name={"email"}
-                      value={user.email}
-                      type={"email"}
-                      OnChangeHandler={OnChangeHandler}
-                    />
-                    <Input
-                      placeholder={"Password"}
-                      name={"password"}
-                      value={user.password}
-                      type={"password"}
-                      OnChangeHandler={OnChangeHandler}
-                    />
-                    <div className="text-right">
-                      <a className="forgot-link" href="login.html">
-                        Already have an account?
-                      </a>
-                    </div>
-                    <Button />
-                    <div className="login-or">
-                      <span className="or-line"></span>
-                      <span className="span-or">or</span>
-                    </div>
-                    <div className="row form-row social-login">
-                      <div className="col-6">
-                        <a href="#" className="btn btn-facebook btn-block">
-                          <i className="fab fa-facebook-f mr-1"></i> Login
-                        </a>
-                      </div>
-                      <div className="col-6">
-                        <a href="#" className="btn btn-google btn-block">
-                          <i className="fab fa-google mr-1"></i> Login
-                        </a>
-                      </div>
-                    </div>
-                  </form>
+                  {props.children}
                 </div>
               </div>
             </div>

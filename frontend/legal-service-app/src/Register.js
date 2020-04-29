@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
@@ -11,6 +12,7 @@ const Register = () => {
     email: "",
     number: "",
     password: "",
+    isClient: true,
   };
   const [user, setUser] = useState(initUser);
   const OnChangeHandler = (event) => {
@@ -18,10 +20,9 @@ const Register = () => {
     setUser({ ...user, [event.target.name]: event.target.value });
     console.log("user", user);
   };
-  // <div>
-  //     {users.map((element) => (<Card key={element.id} {...element} />
-  //     ))}
-  //   </div>
+  const UserTypeHandler = () => {
+    setUser({ ...user, isClient: !user.isClient });
+  };
   return (
     <div className="content">
       <div className="container-fluid">
@@ -39,8 +40,10 @@ const Register = () => {
                 <div className="col-md-12 col-lg-6 login-right">
                   <div className="login-header">
                     <h3>
-                      Patient Register{" "}
-                      {/* <a href="doctor-register.html">Are you a Doctor?</a> */}
+                      {user.isClient ? "Client Register" : "Lawyer Register?"}
+                      <a href="#" onClick={UserTypeHandler}>
+                        {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
+                      </a>
                     </h3>
                   </div>
 
@@ -117,14 +120,6 @@ const Register = () => {
     </div>
   );
 };
-
-// submitEvent={submitEvent}
-//           placeholder={"password"}
-//           value={user.password}
-//           type={"password"}
-//           name={"password"}
-//           OnChangeHandler={OnChangeHandler}
-//           required={true}
 
 const Input = ({ placeholder, value, name, OnChangeHandler, type }) => {
   return (

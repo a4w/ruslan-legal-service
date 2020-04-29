@@ -15,11 +15,8 @@ const Register = (props) => {
     isClient: true,
   };
   const [user, setUser] = useState(initUser);
-  const OnChangeHandler = (event) => {
-    console.log("changing ", event.target.name);
+  const OnChangeHandler = (event) =>
     setUser({ ...user, [event.target.name]: event.target.value });
-    console.log("user", user);
-  };
   const UserTypeHandler = () => {
     setUser({ ...user, isClient: !user.isClient });
   };
@@ -31,7 +28,7 @@ const Register = (props) => {
     <Wrapper>
       <div className="login-header">
         <h3>
-          {user.isClient ? "Client Register" : "Lawyer Register?"}
+          {user.isClient ? "Client Register" : "Lawyer Register"}
           <a href="#" onClick={UserTypeHandler}>
             {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
           </a>
@@ -56,14 +53,14 @@ const Register = (props) => {
           placeholder={"Telephone Number"}
           name={"number"}
           value={user.number}
-          type={"number"}
+          type={"text"}
           OnChangeHandler={OnChangeHandler}
         />
         <Input
           placeholder={"Email"}
           name={"email"}
           value={user.email}
-          type={"email"}
+          type={"text"}
           OnChangeHandler={OnChangeHandler}
         />
         <Input
@@ -128,7 +125,11 @@ const Wrapper = (props) => {
 
 const Input = ({ placeholder, value, name, OnChangeHandler, type }) => {
   return (
-    <div className="form-group form-focus">
+    <div
+      className={
+        value === "" ? "form-group form-focus" : "form-group form-focus focused"
+      }
+    >
       <input
         name={name}
         value={value}

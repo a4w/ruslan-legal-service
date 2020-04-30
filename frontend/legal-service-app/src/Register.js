@@ -1,12 +1,13 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from "react";
-import {registrationValidation, defaultValidation} from "./Validations.js"
+import {registrationValidation} from "./Validations.js"
+import useValidation from "./useValidation"
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/bootstrap.css";
 import "./assets/css/style.css";
 
-const Register = (props) => {
+
+const Register = (_) => {
     const initUser = {
         name: "",
         surName: "",
@@ -16,37 +17,29 @@ const Register = (props) => {
         isClient: true,
     };
 
-
     const [user, setUser] = useState(initUser);
-    const [validator, setValidator] = useState(defaultValidation);
-    const [touched, setTouched] = useState({});
+    const [errors, runValidation] = useValidation(registrationValidation);
+
 
     const OnChangeHandler = (event) =>{
-        const userState = {...user, [event.target.name]: event.target.value};
-        const touchedState = {...touched, [event.target.name]: true};
-        setUser(userState);
-        setTouched(touchedState);
-        const validatorState = registrationValidation({...userState}, touchedState);
-        setValidator(validatorState);
+        const fieldName = event.target.name;
+        const nextUser = {...user, [fieldName]: event.target.value};
+        setUser(nextUser);
+        runValidation(nextUser, fieldName);
     }
+
     const UserTypeHandler = () => {
         setUser({...user, isClient: !user.isClient});
     };
 
+
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        // const data = new FormData(event.target);
-        // Touch all
-        const touchedState = {...user};
-        for(let key in touchedState){
-            touchedState[key] = true;
-        }
-        setTouched(touchedState);
-        const validatorState = registrationValidation({...user}, touchedState);
-        setValidator(validatorState);
-        if(validatorState.hasErrors())
-            return;
-        // Send request
+        runValidation(user).then((hasErrors, _) => {
+            if(!hasErrors){
+                console.log("Continue");
+            }
+        });
     };
 
     return (
@@ -54,34 +47,40 @@ const Register = (props) => {
             <div className="login-header">
                 <h3>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <a href="#" onClick={UserTypeHandler}>
+                    <button className="btn btn-link" onClick={UserTypeHandler}>
                         {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
-                    </a>
+                    </button>
                 </h3>
             </div>
             <form onSubmit={OnSubmitHandler}>
+                <div className="form-row">
+                    <div className="col">
                 <Input
                     placeholder={"Name"}
                     name={"name"}
                     value={user.name}
                     type={"text"}
-                    validator={validator}
+                    errors={errors.name}
                     OnChangeHandler={OnChangeHandler}
                 />
+                    </div>
+                    <div className="col">
                 <Input
                     placeholder={"Surname"}
                     name={"surName"}
                     value={user.surName}
                     type={"text"}
-                    validator={validator}
+                    errors={errors.surName}
                     OnChangeHandler={OnChangeHandler}
                 />
+                    </div>
+                </div>
                 <Input
                     placeholder={"Telephone Number"}
                     name={"number"}
                     value={user.number}
                     type={"text"}
-                    validator={validator}
+                    errors={errors.number}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input
@@ -89,7 +88,7 @@ const Register = (props) => {
                     name={"email"}
                     value={user.email}
                     type={"text"}
-                    validator={validator}
+                    errors={errors.email}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input
@@ -97,7 +96,7 @@ const Register = (props) => {
                     name={"password"}
                     value={user.password}
                     type={"password"}
-                    validator={validator}
+                    errors={errors.password}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className="text-right">
@@ -112,12 +111,12 @@ const Register = (props) => {
                 </div>
                 <div className="row form-row social-login">
                     <div className="col-6">
-                        <a href="#" className="btn btn-facebook btn-block">
+                        <a href="facebook.com" className="btn btn-facebook btn-block">
                             <i className="fab fa-facebook-f mr-1"></i> Login
             </a>
                     </div>
                     <div className="col-6">
-                        <a href="#" className="btn btn-google btn-block">
+                        <a href="google.com" className="btn btn-google btn-block">
                             <i className="fab fa-google mr-1"></i> Login
             </a>
                     </div>
@@ -153,7 +152,7 @@ const Wrapper = (props) => {
     );
 };
 
-const Input = ({validator, placeholder, value, name, OnChangeHandler, type}) => {
+const Input = ({errors = [], placeholder, value, name, OnChangeHandler, type}) => {
     return (
         <div
             className={ value === "" ? "form-group form-focus" : "form-group form-focus focused" } >
@@ -165,7 +164,7 @@ const Input = ({validator, placeholder, value, name, OnChangeHandler, type}) => 
                 className="form-control floating"
             />
             <label className="focus-label">{placeholder}</label>
-            {validator.hasErrors(name) && <label className="text-danger ml-2 font-weight-light text-sm">{validator.getErrors(name)}</label>}
+            {errors.length > 0 && <label className="text-danger ml-2 font-weight-light text-xs">{errors[0]}</label>}
         </div>
     );
 };

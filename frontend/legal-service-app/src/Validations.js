@@ -2,7 +2,6 @@ import { validate, test, enforce } from "vest";
 
 export const registrationValidation = (data) => {
     return validate("RegistrationForm", () => {
-        console.log(data);
         const trimmedEmail = truncate(data.email, 15);
         test("email", `${trimmedEmail} is not valid email address`, () => {
             enforce(data.email).isNotEmpty().matches(/[^@]+@[^.]+\..+/g);

@@ -153,7 +153,7 @@ const Input = ({validator, placeholder, value, name, OnChangeHandler, type}) => 
                 className="form-control floating"
             />
             <label className="focus-label">{placeholder}</label>
-            {validator && validator.hasErrors(name) && <label className="text-danger ml-2 font-weight-light text-sm">{validator.getErrors(name)}</label>}
+            {validator.hasErrors(name) && <label className="text-danger ml-2 font-weight-light text-sm">{validator.getErrors(name)}</label>}
         </div>
     );
 };

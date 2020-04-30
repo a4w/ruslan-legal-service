@@ -13,6 +13,10 @@ export const registrationValidation = (data) => {
     });
 };
 
+export const defaultValidation = (_) => {
+    return validate("I do nothing", () => { });
+};
+
 const truncate = (string, len) => {
     if(string.length > len)
         return string.substring(0, len) + "...";

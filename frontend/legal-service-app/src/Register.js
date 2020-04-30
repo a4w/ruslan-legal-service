@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from "react";
-import {registrationValidation} from "./Validations.js"
+import {registrationValidation, defaultValidation} from "./Validations.js"
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/bootstrap.css";
@@ -17,7 +17,7 @@ const Register = (props) => {
     };
 
     const [user, setUser] = useState(initUser);
-    const [validator, setValidator] = useState(null);
+    const [validator, setValidator] = useState(defaultValidation);
 
     const OnChangeHandler = (event) =>{
         setUser({...user, [event.target.name]: event.target.value});
@@ -29,13 +29,15 @@ const Register = (props) => {
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         // const data = new FormData(event.target);
-        setValidator(registrationValidation({
+        // You need to review this, I cannot access the setted state directly, so I'm using a variable for both. Is there a better way?
+        const v = registrationValidation({
             email: user.email,
             password: user.password
-        }));
-        if(validator.hasErrors())
-            return;
+        });
+        setValidator(v);
         // Send request
+        if(v.hasErrors())
+            return;
     };
 
     return (

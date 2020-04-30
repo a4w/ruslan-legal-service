@@ -16,11 +16,18 @@ const Register = (props) => {
         isClient: true,
     };
 
+
     const [user, setUser] = useState(initUser);
     const [validator, setValidator] = useState(defaultValidation);
+    const [touched, setTouched] = useState({});
 
     const OnChangeHandler = (event) =>{
-        setUser({...user, [event.target.name]: event.target.value});
+        const userState = {...user, [event.target.name]: event.target.value};
+        const touchedState = {...touched, [event.target.name]: true};
+        setUser(userState);
+        setTouched(touchedState);
+        const validatorState = registrationValidation({...userState}, touchedState);
+        setValidator(validatorState);
     }
     const UserTypeHandler = () => {
         setUser({...user, isClient: !user.isClient});
@@ -29,12 +36,11 @@ const Register = (props) => {
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         // const data = new FormData(event.target);
-        // You need to review this, I cannot access the setted state directly, so I'm using a variable for both. Is there a better way?
-        const v = registrationValidation({...user});
-        setValidator(v);
-        // Send request
-        if(v.hasErrors())
+        const validatorState = registrationValidation({...user}, touched);
+        setValidator(validatorState);
+        if(validatorState.hasErrors())
             return;
+        // Send request
     };
 
     return (

@@ -1,20 +1,20 @@
 import { validate, test, enforce } from "vest";
 
-export const registrationValidation = (data, touched) => {
+export const registrationValidation = (data, touched = false) => {
     return validate("RegistrationForm", () => {
-        if(touched.email){
+        if(!touched || touched.email){
             const trimmedEmail = truncate(data.email.toString(), 15);
             test("email", `${trimmedEmail} is not valid email address`, () => {
                 enforce(data.email.toString()).isNotEmpty().matches(/[^@]+@[^.]+\..+/g);
             });
         }
-        if(touched.password){
+        if(!touched || touched.password){
             test("password", "Password should be atleast 8 characters long", () => {
                 enforce(data.password.toString()).longerThanOrEquals(8);
             });
         }
         ["name", "surName", "number"].forEach((elem) => {
-            if(touched[elem]){
+            if(!touched || touched[elem]){
                 test(elem, "This field is required", () => {
                     enforce(data[elem].toString()).isNotEmpty();
                 });

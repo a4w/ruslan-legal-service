@@ -30,10 +30,7 @@ const Register = (props) => {
         event.preventDefault();
         // const data = new FormData(event.target);
         // You need to review this, I cannot access the setted state directly, so I'm using a variable for both. Is there a better way?
-        const v = registrationValidation({
-            email: user.email,
-            password: user.password
-        });
+        const v = registrationValidation({...user});
         setValidator(v);
         // Send request
         if(v.hasErrors())
@@ -56,6 +53,7 @@ const Register = (props) => {
                     name={"name"}
                     value={user.name}
                     type={"text"}
+                    validator={validator}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input
@@ -63,6 +61,7 @@ const Register = (props) => {
                     name={"surName"}
                     value={user.surName}
                     type={"text"}
+                    validator={validator}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input
@@ -70,6 +69,7 @@ const Register = (props) => {
                     name={"number"}
                     value={user.number}
                     type={"text"}
+                    validator={validator}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input
@@ -150,7 +150,6 @@ const Input = ({validator, placeholder, value, name, OnChangeHandler, type}) => 
                 value={value}
                 type={type}
                 onChange={OnChangeHandler}
-                required
                 className="form-control floating"
             />
             <label className="focus-label">{placeholder}</label>

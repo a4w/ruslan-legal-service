@@ -36,7 +36,13 @@ const Register = (props) => {
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         // const data = new FormData(event.target);
-        const validatorState = registrationValidation({...user});
+        // Touch all
+        const touchedState = {...user};
+        for(let key in touchedState){
+            touchedState[key] = true;
+        }
+        setTouched(touchedState);
+        const validatorState = registrationValidation({...user}, touchedState);
         setValidator(validatorState);
         if(validatorState.hasErrors())
             return;

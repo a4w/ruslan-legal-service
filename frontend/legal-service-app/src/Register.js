@@ -7,6 +7,7 @@ import "./assets/css/bootstrap.css";
 import "./assets/css/style.css";
 import Input from "./Input";
 import Wrapper from "./Wrapper";
+import { Link } from "react-router-dom";
 
 const Register = (_) => {
     const initUser = {
@@ -99,9 +100,9 @@ const Register = (_) => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className='text-right'>
-                    <a className='forgot-link' href='login.html'>
+                    <Link to='/login' className='forgot-link'>
                         Already have an account?
-                    </a>
+                    </Link>
                 </div>
                 <Button />
                 <div className='login-or'>

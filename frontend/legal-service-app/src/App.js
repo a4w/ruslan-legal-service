@@ -2,22 +2,28 @@ import React from "react";
 import "./App.css";
 import Register from "./Register";
 import Login from "./Login";
+import Home from "./Home";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+import { Route, BrowserRouter } from "react-router-dom";
 
 function App() {
     return (
-        <div>
-            <div>
-                <NavBar />
-            </div>
-            <div>
-                <Login />
-            </div>
-            <div>
-                <Footer />
-            </div>
-        </div>
+        <>
+            <NavBar />
+            <BrowserRouter>
+                <Route exact path='/'>
+                    <Home />
+                </Route>
+                <Route path='/login'>
+                    <Login />
+                </Route>
+                <Route path='/Register'>
+                    <Register />
+                </Route>
+            </BrowserRouter>
+            <Footer />
+        </>
     );
 }
 

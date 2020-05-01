@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Input from "./Input";
 import Wrapper from "./Wrapper";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const initUser = {
@@ -69,7 +70,7 @@ const Login = () => {
                     </div>
                 </div>
                 <div className='text-center dont-have'>
-                    Don’t have an account? <a href='register.html'>Register</a>
+                    Don’t have an account? <Link to='/Register'>Register</Link>
                 </div>
             </form>
         </Wrapper>

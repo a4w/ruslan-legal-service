@@ -10,8 +10,8 @@ import { Route, BrowserRouter } from "react-router-dom";
 function App() {
     return (
         <>
-            <NavBar />
             <BrowserRouter>
+                <NavBar />
                 <Route exact path='/'>
                     <Home />
                 </Route>
@@ -21,8 +21,8 @@ function App() {
                 <Route path='/Register'>
                     <Register />
                 </Route>
+                <Footer />
             </BrowserRouter>
-            <Footer />
         </>
     );
 }

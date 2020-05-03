@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Input from "./Input";
 import Wrapper from "./Wrapper";
 import { Link } from "react-router-dom";
+import { loginValidation } from "./Validations";
+import useValidation from "./useValidation";
 
 const Login = () => {
     const initUser = {
@@ -10,15 +12,19 @@ const Login = () => {
         password: "",
     };
     const [user, setUser] = useState(initUser);
-    // const [{ errors, warnings }, setValidations] = useValidate();
+    const [errors, runValidation] = useValidation(loginValidation);
     const OnChangeHandler = ({ target: { name, value } }) => {
-        setUser({ ...user, [name]: value });
+        const nextUser = { ...user, [name]: value };
+        setUser(nextUser);
+        runValidation(nextUser, name);
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        // setValidations(user, null);
-        // eslint-disable-next-line no-unused-vars
-        const data = new FormData(event.target);
+        runValidation(user).then((hasErrors, _) => {
+            if (!hasErrors) {
+                console.log("Continue");
+            }
+        });
     };
     return (
         <Wrapper>
@@ -34,6 +40,7 @@ const Login = () => {
                     value={user.email}
                     type={"text"}
                     OnChangeHandler={OnChangeHandler}
+                    errors={errors.email}
                 />
                 <Input
                     placeholder={"Password"}
@@ -41,6 +48,7 @@ const Login = () => {
                     value={user.password}
                     type={"password"}
                     OnChangeHandler={OnChangeHandler}
+                    errors={errors.password}
                 />
                 <div className='text-right'>
                     <a className='forgot-link' href='forgot-password.html'>

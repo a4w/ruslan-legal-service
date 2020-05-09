@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Notifications\AccountEmailVerification;
+use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Account extends Authenticatable implements JWTSubject, MustVerifyEmail
+class Account extends Authenticatable implements MustVerifyEmail
 {
     protected $table = 'users';
     use Notifiable;
@@ -49,13 +50,19 @@ class Account extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasOne(Lawyer::class, 'user_id');
     }
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
 
-    public function getJWTCustomClaims()
+    public function sendEmailVerificationNotification()
     {
-        return [];
+        $key = env('APP_KEY');
+        $payload = array(
+            "iss" => url('/'),
+            "aud" => url('/'),
+            "iat" => now()->unix(),
+            "exp" => now()->addDays(1)->unix(),
+            "sub" => $this->getKey()
+        );
+        $token = JWT::encode($payload, $key);
+        $verify_url = route('verify.email', ['token' => $token]);
+        $this->notify(new AccountEmailVerification($verify_url));
     }
 }

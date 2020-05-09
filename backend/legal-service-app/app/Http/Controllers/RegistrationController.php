@@ -6,7 +6,7 @@ use App\Account;
 use App\Client;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegistrationController extends Controller
 {
@@ -21,7 +21,7 @@ class RegistrationController extends Controller
         // Insert
         $account = Account::create($request->only('name', 'surname', 'email', 'password'));
         $account->client()->save(Client::make());
-
+        event(new Registered($account));
         return ['error' => false, 'message' => 'User added successfully'];
     }
 
@@ -36,6 +36,7 @@ class RegistrationController extends Controller
         // Insert
         $account = Account::create($request->only('name', 'surname', 'email', 'password'));
         $account->lawyer()->save(Lawyer::make());
+        event(new Registered($account));
 
         return ['error' => false, 'message' => 'User added successfully'];
     }

@@ -15,7 +15,7 @@ class CreateLawyersTable extends Migration
     {
         Schema::create('lawyers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('lawyer_type_id')->nullable()->references('id')->on('lawyer_types');
             $table->text('biography')->nullable();
             $table->unsignedInteger('years_licenced')->nullable();

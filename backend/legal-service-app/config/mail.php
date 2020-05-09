@@ -41,6 +41,7 @@ return [
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
+            'sendmail' =>  '/usr/sbin/sendmail -t',
             'timeout' => null,
             'auth_mode' => null,
         ],
@@ -59,7 +60,7 @@ return [
 
         'sendmail' => [
             'transport' => 'sendmail',
-            'path' => '/usr/sbin/sendmail -bs',
+            'path' => '/usr/sbin/sendmail -t',
         ],
 
         'log' => [

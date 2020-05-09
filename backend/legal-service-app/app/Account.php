@@ -2,11 +2,12 @@
 
 namespace App;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Account extends Authenticatable implements JWTSubject
+class Account extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     protected $table = 'users';
     use Notifiable;
@@ -41,6 +42,11 @@ class Account extends Authenticatable implements JWTSubject
     public function client()
     {
         return $this->hasOne(Client::class, 'user_id');
+    }
+
+    public function lawyer()
+    {
+        return $this->hasOne(Lawyer::class, 'user_id');
     }
 
     public function getJWTIdentifier()

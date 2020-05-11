@@ -23,7 +23,7 @@ Route::get('/test', function () {
     return (new MailMessage)->markdown('emails.account.emailverification');
 });
 Route::get('verify/email/{token}', function ($token) {
-    $key = env('APP_KEY');
+    $key = config('app.key');
     $jwt = JWT::decode($token, $key, array('HS256'));
     $account = Account::find($jwt->sub);
     if (!$account->hasVerifiedEmail()) {

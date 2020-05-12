@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import { registrationValidation } from "./Validations.js";
+import React, {useState} from "react";
+import {registrationValidation} from "./Validations.js";
 import useValidation from "./useValidation";
-import "./assets/css/bootstrap-datetimepicker.min.css";
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/bootstrap.css";
-import "./assets/css/style.css";
 import Input from "./Input";
 import Wrapper from "./Wrapper";
-import { Link } from "react-router-dom";
 
 const Register = (_) => {
     const initUser = {
@@ -24,13 +19,13 @@ const Register = (_) => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };
 
     const UserTypeHandler = () => {
-        setUser({ ...user, isClient: !user.isClient });
+        setUser({...user, isClient: !user.isClient});
     };
 
     const OnSubmitHandler = (event) => {
@@ -44,84 +39,78 @@ const Register = (_) => {
 
     return (
         <Wrapper>
-            <div className='login-header'>
-                <h3>
-                    {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <button className='btn btn-link' onClick={UserTypeHandler}>
-                        {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
-                    </button>
-                </h3>
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+
+                    <div class="account-content">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-md-7 col-lg-6 login-left">
+                                <img src={user.isClient ? "/undraw_personal_info.svg" : "/undraw_businessman.svg"} class="img-fluid" alt="Register" />
+                            </div>
+                            <div class="col-md-12 col-lg-6 login-right">
+                                <div className='login-header'>
+                                    <h5>
+                                        {user.isClient ? "Client Registration" : "Lawyer Registration"}
+                                        <button className='btn btn-link' onClick={UserTypeHandler}>
+                                            {user.isClient ? "Are you a lawyer?" : "Not a Lawyer?"}
+                                        </button>
+                                    </h5>
+                                </div>
+                                <form onSubmit={OnSubmitHandler}>
+                                    <div className='form-row'>
+                                        <div className='col'>
+                                            <Input
+                                                placeholder={"Name"}
+                                                name={"name"}
+                                                value={user.name}
+                                                type={"text"}
+                                                errors={errors.name}
+                                                OnChangeHandler={OnChangeHandler}
+                                            />
+                                        </div>
+                                        <div className='col'>
+                                            <Input
+                                                placeholder={"Surname"}
+                                                name={"surName"}
+                                                value={user.surName}
+                                                type={"text"}
+                                                errors={errors.surName}
+                                                OnChangeHandler={OnChangeHandler}
+                                            />
+                                        </div>
+                                    </div>
+                                    <Input
+                                        placeholder={"Telephone Number"}
+                                        name={"number"}
+                                        value={user.number}
+                                        type={"text"}
+                                        errors={errors.number}
+                                        OnChangeHandler={OnChangeHandler}
+                                    />
+                                    <Input
+                                        placeholder={"Email"}
+                                        name={"email"}
+                                        value={user.email}
+                                        type={"text"}
+                                        errors={errors.email}
+                                        OnChangeHandler={OnChangeHandler}
+                                    />
+                                    <Input
+                                        placeholder={"Password"}
+                                        name={"password"}
+                                        value={user.password}
+                                        type={"password"}
+                                        errors={errors.password}
+                                        OnChangeHandler={OnChangeHandler}
+                                    />
+                                    <Button />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form onSubmit={OnSubmitHandler}>
-                <div className='form-row'>
-                    <div className='col'>
-                        <Input
-                            placeholder={"Name"}
-                            name={"name"}
-                            value={user.name}
-                            type={"text"}
-                            errors={errors.name}
-                            OnChangeHandler={OnChangeHandler}
-                        />
-                    </div>
-                    <div className='col'>
-                        <Input
-                            placeholder={"Surname"}
-                            name={"surName"}
-                            value={user.surName}
-                            type={"text"}
-                            errors={errors.surName}
-                            OnChangeHandler={OnChangeHandler}
-                        />
-                    </div>
-                </div>
-                <Input
-                    placeholder={"Telephone Number"}
-                    name={"number"}
-                    value={user.number}
-                    type={"text"}
-                    errors={errors.number}
-                    OnChangeHandler={OnChangeHandler}
-                />
-                <Input
-                    placeholder={"Email"}
-                    name={"email"}
-                    value={user.email}
-                    type={"text"}
-                    errors={errors.email}
-                    OnChangeHandler={OnChangeHandler}
-                />
-                <Input
-                    placeholder={"Password"}
-                    name={"password"}
-                    value={user.password}
-                    type={"password"}
-                    errors={errors.password}
-                    OnChangeHandler={OnChangeHandler}
-                />
-                <div className='text-right'>
-                    <Link to='/login' className='forgot-link'>
-                        Already have an account?
-                    </Link>
-                </div>
-                <Button />
-                <div className='login-or'>
-                    <span className='or-line'></span>
-                    <span className='span-or'>or</span>
-                </div>
-                <div className='row form-row social-login'>
-                    <div className='col-6'>
-                        <a href='facebook.com' className='btn btn-facebook btn-block'>
-                            <i className='fab fa-facebook-f mr-1'></i> Login
-                        </a>
-                    </div>
-                    <div className='col-6'>
-                        <a href='google.com' className='btn btn-google btn-block'>
-                            <i className='fab fa-google mr-1'></i> Login
-                        </a>
-                    </div>
-                </div>
-            </form>
+            <br />
         </Wrapper>
     );
 };

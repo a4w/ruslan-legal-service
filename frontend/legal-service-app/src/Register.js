@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { registrationValidation } from "./Validations.js";
 import useValidation from "./useValidation";
 import "./assets/css/bootstrap-datetimepicker.min.css";
@@ -8,13 +9,14 @@ import "./assets/css/style.css";
 import Input from "./Input";
 import Wrapper from "./Wrapper";
 import { Link } from "react-router-dom";
+import Config from "./Config.js";
 
 const Register = (_) => {
     const initUser = {
         name: "",
-        surName: "",
+        surname: "",
         email: "",
-        number: "",
+        phone: "",
         password: "",
         isClient: true,
     };
@@ -32,12 +34,14 @@ const Register = (_) => {
     const UserTypeHandler = () => {
         setUser({ ...user, isClient: !user.isClient });
     };
-
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        runValidation(user).then((hasErrors, _) => {
+        runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                console.log("Continue");
+                let url = Config.api_url;
+                if (user.isClient) url = url + "/register/client";
+                else url = url + "/register/lawyer";
+                const res = await axios.post(url, JSON.stringify(user));
             }
         });
     };
@@ -66,21 +70,21 @@ const Register = (_) => {
                     </div>
                     <div className='col'>
                         <Input
-                            placeholder={"Surname"}
-                            name={"surName"}
-                            value={user.surName}
+                            placeholder={"surname"}
+                            name={"surname"}
+                            value={user.surname}
                             type={"text"}
-                            errors={errors.surName}
+                            errors={errors.surname}
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
                 </div>
                 <Input
                     placeholder={"Telephone Number"}
-                    name={"number"}
-                    value={user.number}
+                    name={"phone"}
+                    value={user.phone}
                     type={"text"}
-                    errors={errors.number}
+                    errors={errors.phone}
                     OnChangeHandler={OnChangeHandler}
                 />
                 <Input

@@ -12,7 +12,7 @@ const PreFooter = () => {
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-about">
                                 <div className="footer-logo">
-                                    <b>Lawbe</b>.co.uk
+                                    <span className="text-primary"><b>Lawbe</b>.co.uk</span>
                                 </div>
                                 <div className="footer-about-content">
                                     <p>

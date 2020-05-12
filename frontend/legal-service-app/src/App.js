@@ -7,7 +7,6 @@ import PreFooter from "./PreFooter";
 import PostRegistration from "./PostRegisration";
 import "./assets/plugins/fontawesome/css/fontawesome.min.css"
 import "./assets/plugins/fontawesome/css/all.css"
-import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/bootstrap.css";
 import "./assets/css/style.css";

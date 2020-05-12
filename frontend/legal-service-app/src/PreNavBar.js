@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import {Link} from "react-router-dom";
+import {FiPhoneCall} from "react-icons/fi"
 
 const PreNavBar = () => {
     return (
@@ -40,12 +41,9 @@ const PreNavBar = () => {
                 </div>
                 <ul className='nav header-navbar-rht'>
                     <li className='nav-item contact-item'>
-                        <div className='header-contact-img'>
-                            <i className='far fa-hospital'></i>
-                        </div>
                         <div className='header-contact-detail'>
                             <p className='contact-header'>Contact</p>
-                            <p className='contact-info-header'> +1 315 369 5943</p>
+                            <a href="tel:1234"><p className='contact-info-header'> +1 315 369 5943</p></a>
                         </div>
                     </li>
                     <li className='nav-item'>

@@ -65,4 +65,9 @@ class Account extends Authenticatable implements MustVerifyEmail
         $verify_url = route('verify.email', ['token' => $token]);
         $this->notify(new AccountEmailVerification($verify_url));
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

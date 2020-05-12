@@ -16,10 +16,11 @@ class RegistrationController extends Controller
             'name' => ['required'],
             'surname' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:8']
+            'password' => ['required', 'min:8'],
+            'phone' => ['required']
         ]);
         // Insert
-        $account = Account::create($request->only('name', 'surname', 'email', 'password'));
+        $account = Account::create($request->only('name', 'surname', 'email', 'password', 'phone'));
         $account->client()->save(Client::make());
         event(new Registered($account));
         return ['error' => false, 'message' => 'User added successfully'];
@@ -31,10 +32,11 @@ class RegistrationController extends Controller
             'name' => ['required'],
             'surname' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:8']
+            'password' => ['required', 'min:8'],
+            'phone' => ['required']
         ]);
         // Insert
-        $account = Account::create($request->only('name', 'surname', 'email', 'password'));
+        $account = Account::create($request->only('name', 'surname', 'email', 'password', 'phone'));
         $account->lawyer()->save(Lawyer::make());
         event(new Registered($account));
 

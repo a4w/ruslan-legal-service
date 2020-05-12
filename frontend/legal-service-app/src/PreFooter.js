@@ -1,9 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import "./assets/css/bootstrap-datetimepicker.min.css";
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/bootstrap.css";
-import "./assets/css/style.css";
 import {FaTwitter, FaFacebook} from "react-icons/fa"
 import "react-icons/fa/index"
 

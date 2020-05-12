@@ -5,12 +5,10 @@ import PreReleaseHome from "./PreReleaseHome";
 import PreNavBar from "./PreNavBar";
 import PreFooter from "./PreFooter";
 import PostRegistration from "./PostRegisration";
-import "./assets/plugins/fontawesome/css/fontawesome.min.css"
-import "./assets/plugins/fontawesome/css/all.css"
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/bootstrap.css";
-import "./assets/css/style.css";
 import {Route, BrowserRouter, Redirect, Switch} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/css/style.css'
+import './assets/plugins/fontawesome/css/all.css'
 
 function App() {
     return (

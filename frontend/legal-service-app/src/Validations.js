@@ -4,7 +4,7 @@ export const registrationValidation = (data, field) => {
     return validate("RegistrationForm", () => {
         vest.only(field);
 
-        ["name", "surName", "number", "email", "password"].forEach((elem) => {
+        ["name", "surname", "phone", "email", "password"].forEach((elem) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });

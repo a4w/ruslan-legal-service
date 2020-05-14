@@ -54,6 +54,7 @@ class Account extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $key = config('app.key');
+        // TODO: include in payload that this is for verification
         $payload = array(
             "iss" => url('/'),
             "aud" => url('/'),

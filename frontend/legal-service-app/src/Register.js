@@ -28,7 +28,7 @@ const Register = (_) => {
         const fieldName = event.target.name;
         const nextUser = { ...user, [fieldName]: event.target.value };
         setUser(nextUser);
-        runValidation(nextUser, fieldName);
+        runValidation(nextUser, addError, fieldName);
     };
 
     const UserTypeHandler = () => {

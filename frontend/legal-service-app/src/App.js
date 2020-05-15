@@ -18,9 +18,6 @@ function App() {
                 <Route exact path='/'>
                     <PreReleaseHome />
                 </Route>
-                <Route exact path='/register'>
-                    <Register />
-                </Route>
                 <Route exact path='/post-registration'>
                     <PostRegistration />
                 </Route>

@@ -39,9 +39,21 @@ const Register = (_) => {
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 let url = Config.api_url;
+                const cfg = Config.headers;
+
                 if (user.isClient) url = url + "/register/client";
                 else url = url + "/register/lawyer";
-                const res = await axios.post(url, JSON.stringify(user));
+
+                axios
+                    .post(url, user, cfg.headers)
+                    .then((response) => {})
+                    .catch((error) => {
+                        if (error.response) {
+                            const data = error.response.data;
+                            const _errors = data.errors;
+                            runValidation(_errors, null, true);
+                        }
+                    });
             }
         });
     };

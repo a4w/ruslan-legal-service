@@ -1,20 +1,22 @@
 import React, {useState} from "react";
+import axios from "axios"
 import {registrationValidation} from "./Validations.js";
 import useValidation from "./useValidation";
 import Input from "./Input";
+import history from "./history";
 
-const Register = (_) => {
+const Register = (props) => {
     const initUser = {
         name: "",
-        surName: "",
+        surname: "",
         email: "",
-        number: "",
+        phone: "",
         password: "",
         isClient: true,
     };
 
     const [user, setUser] = useState(initUser);
-    const [errors, runValidation] = useValidation(registrationValidation);
+    const [errors, addError, runValidation] = useValidation(registrationValidation);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
@@ -31,7 +33,28 @@ const Register = (_) => {
         event.preventDefault();
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
-                console.log("Continue");
+                if (!hasErrors) {
+                    let url = "http://localhost:8000";
+                    if (user.isClient) {
+                        url = url + "/api/register/client";
+                    } else {
+                        url = url + "/api/register/lawyer";
+                    }
+
+                    axios.post(url, user, [{'Content-Type': 'application/json'}])
+                        .then((_) => {
+                            history.push("/post-registration");
+                        })
+                        .catch((error) => {
+                            if (error.response && error.response.status === 422) {
+                                const data = error.response.data;
+                                const _errors = data.errors;
+                                for (const field in data.errors) {
+                                    addError(field, data.errors[field]);
+                                }
+                            }
+                        });
+                }
             }
         });
     };
@@ -66,20 +89,20 @@ const Register = (_) => {
                             <div className='col'>
                                 <Input
                                     placeholder={"Surname"}
-                                    name={"surName"}
-                                    value={user.surName}
+                                    name={"surname"}
+                                    value={user.surname}
                                     type={"text"}
-                                    errors={errors.surName}
+                                    errors={errors.surname}
                                     OnChangeHandler={OnChangeHandler}
                                 />
                             </div>
                         </div>
                         <Input
                             placeholder={"Telephone Number"}
-                            name={"number"}
-                            value={user.number}
+                            name={"phone"}
+                            value={user.phone}
                             type={"text"}
-                            errors={errors.number}
+                            errors={errors.phone}
                             OnChangeHandler={OnChangeHandler}
                         />
                         <Input

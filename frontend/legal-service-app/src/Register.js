@@ -53,7 +53,9 @@ const Register = (_) => {
                         if (error.response) {
                             const data = error.response.data;
                             const _errors = data.errors;
-                            runValidation(_errors, null, true);
+                    for (const field in data.errors) {
+                        addError(field, data.errors[field]);
+                    }
                         }
                     });
             }

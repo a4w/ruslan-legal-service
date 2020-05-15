@@ -46,7 +46,9 @@ const Register = (_) => {
 
                 axios
                     .post(url, user, cfg.headers)
-                    .then((response) => {})
+                    .then((response) => {
+                        console.log("success");
+                    })
                     .catch((error) => {
                         if (error.response) {
                             const data = error.response.data;

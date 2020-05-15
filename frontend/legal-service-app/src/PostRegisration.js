@@ -18,12 +18,6 @@ const PostRegistration = (_) => {
                                         <b>Email verification sent</b><br />
                                         Please check your inbox for further instructions
                                     </h5>
-                                    <span className="d-block text-center">
-                                        Didn't receive?&nbsp;
-                                    <Link className="text-primary">
-                                            Resend Email
-                                    </Link>
-                                    </span>
                                 </div>
                             </div>
                         </div>

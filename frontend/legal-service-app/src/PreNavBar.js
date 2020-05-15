@@ -43,13 +43,8 @@ const PreNavBar = () => {
                     <li className='nav-item contact-item'>
                         <div className='header-contact-detail'>
                             <p className='contact-header'>Contact</p>
-                            <a href="tel:1234"><p className='contact-info-header'> +1 315 369 5943</p></a>
+                            <a href="mailto:info@lawbe.co.uk"><p className='contact-info-header'>info@lawbe.co.uk</p></a>
                         </div>
-                    </li>
-                    <li className='nav-item'>
-                        <Link className='nav-link header-login' to='/register'>
-                            Pre-register
-                        </Link>
                     </li>
                 </ul>
             </nav>

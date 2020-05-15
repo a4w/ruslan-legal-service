@@ -13,5 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/register/client', 'RegistrationController@registerClient');
-Route::get('/register/lawyer', 'RegistrationController@registerLawyer');
+Route::post('/register/client', 'RegistrationController@registerClient');
+Route::post('/register/lawyer', 'RegistrationController@registerLawyer');

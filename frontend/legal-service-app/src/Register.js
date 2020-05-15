@@ -34,7 +34,7 @@ const Register = (props) => {
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
                 if (!hasErrors) {
-                    let url = "http://localhost:8000";
+                    let url = "https://testingapi.lawbe.co.uk";
                     if (user.isClient) {
                         url = url + "/api/register/client";
                     } else {

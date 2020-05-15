@@ -34,7 +34,12 @@ const useValidation = (vest) => {
             });
         });
     };
-    return [errors, run];
+	const addError = (field, error) => {
+        const nextErrors = {...errors, [field]: error};
+        setErrors(nextErrors);
+    };
+
+    return [errors, addError, run];
 };
 
 export default useValidation;

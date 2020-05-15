@@ -16,12 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/test', function () {
-    return (new MailMessage)->markdown('emails.account.emailverification');
-});
+
 Route::get('verify/email/{token}', function ($token) {
     $key = config('app.key');
     $jwt = JWT::decode($token, $key, array('HS256'));
@@ -29,5 +24,5 @@ Route::get('verify/email/{token}', function ($token) {
     if (!$account->hasVerifiedEmail()) {
         $account->markEmailAsVerified();
     }
-    return redirect('/');
+    return "Thank you, you are now registered";
 })->name('verify.email');

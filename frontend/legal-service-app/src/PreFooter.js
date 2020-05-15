@@ -88,15 +88,8 @@ const PreFooter = () => {
                                         <span>
                                             <i className="fas fa-map-marker-alt"></i>
                                         </span>
-                                        <p>
-                                            {" "}
-                                            3556 Beech Street, San Francisco, California, CA 94108{" "}
-                                        </p>
+                                        <p>London, United Kingdom</p>
                                     </div>
-                                    <p>
-                                        <i className="fas fa-phone-alt"></i>
-                                        +1 315 369 5943
-                                    </p>
                                     <p className="mb-0">
                                         <i className="fas fa-envelope"></i>
                                         support@lawbe.co.uk

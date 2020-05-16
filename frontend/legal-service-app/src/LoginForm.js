@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Input from "./Input";
 import { Link } from "react-router-dom";
-import { loginValidation } from "./Validations";
+import { loginValidation } from "../public/utilities/Validations";
 import useValidation from "./useValidation";
 
 const LoginForm = () => {

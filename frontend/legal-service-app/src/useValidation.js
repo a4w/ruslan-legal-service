@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { passingValidation } from "./Validations";
+import { passingValidation } from "../public/utilities/Validations";
 
 const useValidation = (vest) => {
     const [validation, setValidation] = useState(passingValidation);
@@ -34,8 +34,8 @@ const useValidation = (vest) => {
             });
         });
     };
-	const addError = (field, error) => {
-        const nextErrors = {...errors, [field]: error};
+    const addError = (field, error) => {
+        const nextErrors = { ...errors, [field]: error };
         setErrors(nextErrors);
     };
 

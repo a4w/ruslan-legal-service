@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
-import Register from "./Register";
+import RegisterationForm from "./Register";
 import PreReleaseHome from "./PreReleaseHome";
-import Login from "./Login";
+import LoginForm from "./Login";
 import Home from "./Home";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
@@ -20,12 +20,12 @@ function App() {
             </Route>
             <Route path='/login'>
                 <NavBar />
-                <Login />
+                <LoginForm />
                 <Footer />
             </Route>
             <Route path='/Register'>
                 <NavBar />
-                <Register />
+                <RegisterationForm />
                 <Footer />
             </Route>
             <Route path='/home'>

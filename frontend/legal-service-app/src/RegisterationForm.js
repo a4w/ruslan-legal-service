@@ -3,11 +3,10 @@ import axios from "axios";
 import { registrationValidation } from "./Validations.js";
 import useValidation from "./useValidation";
 import Input from "./Input";
-import Wrapper from "./Wrapper";
 import { Link } from "react-router-dom";
 import Config from "./Config.js";
 
-const Register = (_) => {
+const RegisterationForm = (_) => {
     const initUser = {
         name: "",
         surname: "",
@@ -49,8 +48,8 @@ const Register = (_) => {
                         if (error.response) {
                             const data = error.response.data;
                             const _errors = data.errors;
-                            for (const field in data.errors) {
-                                addError(field, data.errors[field]);
+                            for (const field in _errors) {
+                                addError(field, _errors[field]);
                             }
                         }
                     });
@@ -59,7 +58,7 @@ const Register = (_) => {
     };
 
     return (
-        <Wrapper>
+        <>
             <div className='login-header'>
                 <h3>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
@@ -138,7 +137,7 @@ const Register = (_) => {
                     </div>
                 </div>
             </form>
-        </Wrapper>
+        </>
     );
 };
 
@@ -149,4 +148,4 @@ const Button = () => {
         </button>
     );
 };
-export default Register;
+export default RegisterationForm;

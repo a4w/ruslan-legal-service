@@ -4,6 +4,7 @@ import {registrationValidation} from "./Validations.js";
 import useValidation from "./useValidation";
 import Input from "./Input";
 import history from "./history";
+import {FaSpinner} from "react-icons/fa"
 
 const Register = (props) => {
     const initUser = {
@@ -16,6 +17,7 @@ const Register = (props) => {
     };
 
     const [user, setUser] = useState(initUser);
+    const [isSending, setIsSending] = useState(false);
     const [errors, addError, runValidation] = useValidation(registrationValidation);
 
     const OnChangeHandler = (event) => {
@@ -34,6 +36,7 @@ const Register = (props) => {
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
                 if (!hasErrors) {
+                    setIsSending(true);
                     let url = "https://testingapi.lawbe.co.uk";
                     if (user.isClient) {
                         url = url + "/api/register/client";
@@ -53,6 +56,9 @@ const Register = (props) => {
                                     addError(field, data.errors[field]);
                                 }
                             }
+                        })
+                        .finally(() => {
+                            setIsSending(false);
                         });
                 }
             }
@@ -121,19 +127,15 @@ const Register = (props) => {
                             errors={errors.password}
                             OnChangeHandler={OnChangeHandler}
                         />
-                        <Button />
+                        <button className={'btn btn-primary btn-block btn-lg login-btn ' + (isSending ? "cursor-not-allowed" : '')} type='submit' disabled={isSending} >
+                            {isSending && <FaSpinner className="icon-spin" />}
+                            &nbsp;{isSending ? "" : "Register"}
+                        </button>
                     </form>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
-const Button = () => {
-    return (
-        <button className='btn btn-primary btn-block btn-lg login-btn' type='submit'>
-            Signup
-        </button>
-    );
-};
 export default Register;

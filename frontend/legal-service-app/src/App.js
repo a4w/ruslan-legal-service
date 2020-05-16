@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
-import RegisterationForm from "./Register";
+import RegisterationForm from "./RegisterationForm";
 import PreReleaseHome from "./PreReleaseHome";
-import LoginForm from "./Login";
+import LoginForm from "./LoginForm";
 import Home from "./Home";
 import NavBar from "./NavBar";
 import Footer from "./Footer";

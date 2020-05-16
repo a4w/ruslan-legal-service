@@ -18,7 +18,7 @@ const Register = (_) => {
     };
 
     const [user, setUser] = useState(initUser);
-    const [errors, runValidation] = useValidation(registrationValidation);
+    const [errors, addError, runValidation] = useValidation(registrationValidation);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
@@ -49,9 +49,9 @@ const Register = (_) => {
                         if (error.response) {
                             const data = error.response.data;
                             const _errors = data.errors;
-                    for (const field in data.errors) {
-                        addError(field, data.errors[field]);
-                    }
+                            for (const field in data.errors) {
+                                addError(field, data.errors[field]);
+                            }
                         }
                     });
             }

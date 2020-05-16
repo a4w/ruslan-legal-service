@@ -2,7 +2,6 @@
 
 use App\Account;
 use Firebase\JWT\JWT;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
 
 /*

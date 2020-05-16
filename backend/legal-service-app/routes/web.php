@@ -2,6 +2,7 @@
 
 use App\Account;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+const default_app_url = 'https://testing.lawbe.co.uk/';
 
 Route::get('verify/email/{token}', function ($token) {
     $key = config('app.key');
@@ -23,5 +25,5 @@ Route::get('verify/email/{token}', function ($token) {
     if (!$account->hasVerifiedEmail()) {
         $account->markEmailAsVerified();
     }
-    return "Thank you, you are now registered";
+    return Redirect::to(default_app_url . 'post-verification');
 })->name('verify.email');

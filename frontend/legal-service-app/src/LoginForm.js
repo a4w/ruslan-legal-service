@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import Input from "./Input";
-import Wrapper from "./Wrapper";
 import { Link } from "react-router-dom";
 import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
 
-const Login = () => {
+const LoginForm = () => {
     const initUser = {
         email: "",
         password: "",
@@ -27,10 +26,10 @@ const Login = () => {
         });
     };
     return (
-        <Wrapper>
+        <>
             <div className='login-header'>
                 <h3>
-                    Login <span>Doccure</span>
+                    Login <span>Lawbe</span>
                 </h3>
             </div>
             <form onSubmit={OnSubmitHandler}>
@@ -81,7 +80,7 @@ const Login = () => {
                     Don’t have an account? <Link to='/Register'>Register</Link>
                 </div>
             </form>
-        </Wrapper>
+        </>
     );
 };
-export default Login;
+export default LoginForm;

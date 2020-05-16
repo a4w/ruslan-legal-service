@@ -12,7 +12,7 @@ const PostRegistration = (_) => {
                         <div class="row align-items-center justify-content-center">
                             <div class="col-md-12 col-lg-6 login-right">
                                 <div className='login-header'>
-                                    <img src="/undraw_reminders.svg" style={{width: "200px", padding: "20px", margin: "auto", display: "block"}} />
+                                    <img src="/undraw_reminders.svg" style={{width: "400px", padding: "20px", margin: "auto", display: "block"}} />
                                     <h5 style={{textAlign: "center"}}>
                                         <b>Thank you for registering!</b><br />
                                         You will be notified by email as soon as we launch

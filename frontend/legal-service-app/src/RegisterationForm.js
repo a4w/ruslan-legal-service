@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from "axios";
-import { registrationValidation } from "../public/utilities/Validations.js";
+import {registrationValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Config from "./Config.js";
 
 const RegisterationForm = (_) => {
@@ -21,13 +21,13 @@ const RegisterationForm = (_) => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, addError, fieldName);
     };
 
     const UserTypeHandler = () => {
-        setUser({ ...user, isClient: !user.isClient });
+        setUser({...user, isClient: !user.isClient});
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();

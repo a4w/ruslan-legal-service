@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "./Axios";
 import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
@@ -37,13 +37,12 @@ const RegisterationForm = (_) => {
             if (!hasErrors) {
                 setIsRegistering(true);
                 let url = Config.api_url;
-                const cfg = Config.headers;
 
                 if (user.isClient) url = url + "/register/client";
                 else url = url + "/register/lawyer";
 
                 axios
-                    .post(url, user, cfg.headers)
+                    .post(url, user)
                     .then((response) => {
                         console.log("success");
                     })

@@ -14,7 +14,7 @@ function App() {
     return (
         <Router history={history}>
             <Switch>
-                <Route path='/'>
+                <Route exact path='/'>
                     <h1> Yet to be done </h1>
                 </Route>>
                 <Route path='/login'>

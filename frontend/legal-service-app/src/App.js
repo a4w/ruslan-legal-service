@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import RegisterationForm from "./RegisterationForm";
+import LoginForm from "./LoginForm";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
+import {Route, Router, Switch} from "react-router-dom";
+import history from "./History";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.css"
+import "./assets/css/style.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router history={history}>
+            <Switch>
+                <Route path='/'>
+                    <h1> Yet to be done </h1>
+                </Route>>
+                <Route path='/login'>
+                    <NavBar />
+                    <LoginForm />
+                    <Footer />
+                </Route>
+                <Route path='/register'>
+                    <NavBar />
+                    <RegisterationForm />
+                    <Footer />
+                </Route>
+            </Switch>
+        </Router>
+    );
 }
 
 export default App;

@@ -18,10 +18,8 @@ const useValidation = (vest) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [validation]);
 
-    const run = (subject, field = false, errorObj = false) => {
-        if (errorObj) {
-            setErrors({...errors, ...subject});
-        } else if (!field) {
+    const run = (subject, field = false) => {
+        if(!field) {
             setValidation(vest(subject));
         } else {
             setValidation(vest(subject, field));

@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import {registrationValidation} from "./Validations";
+import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Config from "./Config.js";
-import {FaSpinner} from "react-icons/fa"
+import { FaSpinner } from "react-icons/fa";
 
 const RegisterationForm = (_) => {
     const initUser = {
@@ -23,13 +23,13 @@ const RegisterationForm = (_) => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = {...user, [fieldName]: event.target.value};
+        const nextUser = { ...user, [fieldName]: event.target.value };
         setUser(nextUser);
-        runValidation(nextUser, addError, fieldName);
+        runValidation(nextUser, fieldName);
     };
 
     const UserTypeHandler = () => {
-        setUser({...user, isClient: !user.isClient});
+        setUser({ ...user, isClient: !user.isClient });
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -125,8 +125,15 @@ const RegisterationForm = (_) => {
                         Already have an account?
                     </Link>
                 </div>
-                <button className={'btn btn-primary btn-block btn-lg login-btn ' + (isRegistering ? "cursor-not-allowed" : '')} type='submit' disabled={isRegistering} >
-                    {isRegistering && <FaSpinner className="icon-spin" />}
+                <button
+                    className={
+                        "btn btn-primary btn-block btn-lg login-btn " +
+                        (isRegistering ? "cursor-not-allowed" : "")
+                    }
+                    type='submit'
+                    disabled={isRegistering}
+                >
+                    {isRegistering && <FaSpinner className='icon-spin' />}
                     &nbsp;{isRegistering ? "" : "Register"}
                 </button>
                 <div className='login-or'>

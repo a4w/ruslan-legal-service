@@ -1,11 +1,5 @@
-/* eslint-disable no-script-url */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import "./assets/css/bootstrap-datetimepicker.min.css";
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/bootstrap.css";
-import "./assets/css/style.css";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const NavBar = () => {
     return (

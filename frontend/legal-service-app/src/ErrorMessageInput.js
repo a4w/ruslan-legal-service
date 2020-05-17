@@ -1,6 +1,13 @@
 import React from "react";
 
-const Input = ({ errors = [], placeholder, value, name, OnChangeHandler, type }) => {
+const ErrorMessageInput = ({
+    errors = [],
+    placeholder,
+    value,
+    name,
+    OnChangeHandler,
+    type,
+}) => {
     return (
         <div
             className={
@@ -24,4 +31,4 @@ const Input = ({ errors = [], placeholder, value, name, OnChangeHandler, type })
     );
 };
 
-export default Input;
+export default ErrorMessageInput;

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { registrationValidation } from "../public/utilities/Validations.js";
+import axios from "./Axios";
+import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
 import Config from "./Config.js";
+import { FaSpinner } from "react-icons/fa";
 
 const RegisterationForm = (_) => {
     const initUser = {
@@ -17,13 +18,14 @@ const RegisterationForm = (_) => {
     };
 
     const [user, setUser] = useState(initUser);
+    const [isRegistering, setIsRegistering] = useState(false);
     const [errors, addError, runValidation] = useValidation(registrationValidation);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
         const nextUser = { ...user, [fieldName]: event.target.value };
         setUser(nextUser);
-        runValidation(nextUser, addError, fieldName);
+        runValidation(nextUser, fieldName);
     };
 
     const UserTypeHandler = () => {
@@ -33,14 +35,14 @@ const RegisterationForm = (_) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                setIsRegistering(true);
                 let url = Config.api_url;
-                const cfg = Config.headers;
 
                 if (user.isClient) url = url + "/register/client";
                 else url = url + "/register/lawyer";
 
                 axios
-                    .post(url, user, cfg.headers)
+                    .post(url, user)
                     .then((response) => {
                         console.log("success");
                     })
@@ -52,6 +54,9 @@ const RegisterationForm = (_) => {
                                 addError(field, _errors[field]);
                             }
                         }
+                    })
+                    .finally(() => {
+                        setIsRegistering(false);
                     });
             }
         });
@@ -119,7 +124,17 @@ const RegisterationForm = (_) => {
                         Already have an account?
                     </Link>
                 </div>
-                <Button />
+                <button
+                    className={
+                        "btn btn-primary btn-block btn-lg login-btn " +
+                        (isRegistering ? "cursor-not-allowed" : "")
+                    }
+                    type='submit'
+                    disabled={isRegistering}
+                >
+                    {isRegistering && <FaSpinner className='icon-spin' />}
+                    &nbsp;{isRegistering ? "" : "Register"}
+                </button>
                 <div className='login-or'>
                     <span className='or-line'></span>
                     <span className='span-or'>or</span>
@@ -141,11 +156,4 @@ const RegisterationForm = (_) => {
     );
 };
 
-const Button = () => {
-    return (
-        <button className='btn btn-primary btn-block btn-lg login-btn' type='submit'>
-            Signup
-        </button>
-    );
-};
 export default RegisterationForm;

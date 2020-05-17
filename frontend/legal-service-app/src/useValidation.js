@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import { passingValidation } from "../public/utilities/Validations";
+import {useState, useEffect} from "react";
+import {passingValidation} from "./Validations";
 
 const useValidation = (vest) => {
     const [validation, setValidation] = useState(passingValidation);
-    const [resolver, setResolver] = useState({ resolve: null });
+    const [resolver, setResolver] = useState({resolve: null});
     const [errors, setErrors] = useState({});
     useEffect(() => {
         let nextErrors = errors;
         for (let tested of validation.tested) {
-            nextErrors = { ...nextErrors, [tested]: validation.getErrors(tested) };
+            nextErrors = {...nextErrors, [tested]: validation.getErrors(tested)};
         }
 
         setErrors(nextErrors);
@@ -20,7 +20,7 @@ const useValidation = (vest) => {
 
     const run = (subject, field = false, errorObj = false) => {
         if (errorObj) {
-            setErrors({ ...errors, ...subject });
+            setErrors({...errors, ...subject});
         } else if (!field) {
             setValidation(vest(subject));
         } else {
@@ -35,7 +35,7 @@ const useValidation = (vest) => {
         });
     };
     const addError = (field, error) => {
-        const nextErrors = { ...errors, [field]: error };
+        const nextErrors = {...errors, [field]: error};
         setErrors(nextErrors);
     };
 

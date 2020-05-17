@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { Link } from "react-router-dom";
-import { loginValidation } from "../public/utilities/Validations";
+import {Link} from "react-router-dom";
+import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
 
 const LoginForm = () => {
@@ -12,8 +12,8 @@ const LoginForm = () => {
     };
     const [user, setUser] = useState(initUser);
     const [errors, runValidation] = useValidation(loginValidation);
-    const OnChangeHandler = ({ target: { name, value } }) => {
-        const nextUser = { ...user, [name]: value };
+    const OnChangeHandler = ({target: {name, value}}) => {
+        const nextUser = {...user, [name]: value};
         setUser(nextUser);
         runValidation(nextUser, name);
     };

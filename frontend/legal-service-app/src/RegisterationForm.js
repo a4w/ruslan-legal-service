@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { registrationValidation } from "../public/utilities/Validations.js";
 import useValidation from "./useValidation";
-import Input from "./Input";
+import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
 import Config from "./Config.js";
 
@@ -70,7 +70,7 @@ const RegisterationForm = (_) => {
             <form onSubmit={OnSubmitHandler}>
                 <div className='form-row'>
                     <div className='col'>
-                        <Input
+                        <ErrorMessageInput
                             placeholder={"Name"}
                             name={"name"}
                             value={user.name}
@@ -80,7 +80,7 @@ const RegisterationForm = (_) => {
                         />
                     </div>
                     <div className='col'>
-                        <Input
+                        <ErrorMessageInput
                             placeholder={"surname"}
                             name={"surname"}
                             value={user.surname}
@@ -90,7 +90,7 @@ const RegisterationForm = (_) => {
                         />
                     </div>
                 </div>
-                <Input
+                <ErrorMessageInput
                     placeholder={"Telephone Number"}
                     name={"phone"}
                     value={user.phone}
@@ -98,7 +98,7 @@ const RegisterationForm = (_) => {
                     errors={errors.phone}
                     OnChangeHandler={OnChangeHandler}
                 />
-                <Input
+                <ErrorMessageInput
                     placeholder={"Email"}
                     name={"email"}
                     value={user.email}
@@ -106,7 +106,7 @@ const RegisterationForm = (_) => {
                     errors={errors.email}
                     OnChangeHandler={OnChangeHandler}
                 />
-                <Input
+                <ErrorMessageInput
                     placeholder={"Password"}
                     name={"password"}
                     value={user.password}

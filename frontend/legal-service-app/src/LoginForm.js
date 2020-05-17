@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import Input from "./Input";
+import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
 import { loginValidation } from "../public/utilities/Validations";
 import useValidation from "./useValidation";
@@ -33,7 +33,7 @@ const LoginForm = () => {
                 </h3>
             </div>
             <form onSubmit={OnSubmitHandler}>
-                <Input
+                <ErrorMessageInput
                     placeholder={"Email"}
                     name={"email"}
                     value={user.email}
@@ -41,7 +41,7 @@ const LoginForm = () => {
                     OnChangeHandler={OnChangeHandler}
                     errors={errors.email}
                 />
-                <Input
+                <ErrorMessageInput
                     placeholder={"Password"}
                     name={"password"}
                     value={user.password}

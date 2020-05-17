@@ -2,10 +2,19 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 
 function LawyerList() {
-    return <LawyerCard />;
+    return (
+        <>
+            <LawyerCard />
+        </>
+    );
 }
 
-const LawyerCardList = () => {};
+const LawyerCardList = (lawyers) => {
+    return (
+        // eslint-disable-next-line no-undef
+        lawyers.map((lawyer) => <LawyerCard key={lawyer.id} lawer={lawyer} />)
+    );
+};
 const LawyerCard = () => {
     return (
         <div className="card">

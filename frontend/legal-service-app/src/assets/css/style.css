@@ -2910,6 +2910,10 @@ html.menu-opened body {
     font-size: 14px;
     margin-bottom: 25px;
 }
+.lawyer-education {
+    color: #757575;
+    font-size: 14px;
+}
 .doc-location a {
     color: #09e5ab;
     font-weight: 500;

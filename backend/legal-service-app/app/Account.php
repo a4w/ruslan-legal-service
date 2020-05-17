@@ -7,8 +7,9 @@ use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Account extends Authenticatable implements MustVerifyEmail
+class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     protected $table = 'users';
     use Notifiable;
@@ -70,5 +71,15 @@ class Account extends Authenticatable implements MustVerifyEmail
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

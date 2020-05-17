@@ -10,6 +10,7 @@ function LawyerList() {
     );
 }
 
+// eslint-disable-next-line no-unused-vars
 const LawyerCardList = (lawyers) => {
     return (
         // eslint-disable-next-line no-undef
@@ -60,32 +61,22 @@ const LawyerCard = () => {
                     <div className="doc-info-right">
                         <div className="clini-infos">
                             <ul>
-                                <li>
-                                    <i className="far fa-thumbs-up"></i> 99%
-                                </li>
-                                <li>
-                                    <i className="far fa-comment"></i> 35
-                                    Feedback
-                                </li>
+                                <li>percaentage rating</li>
+                                <li>Feedback</li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
                                     Lawyer's Location
                                 </li>
                                 <li>
-                                    <i className="far fa-money-bill-alt"></i>{" "}
-                                    $100 - $400{" "}
-                                    <i
-                                        className="fas fa-info-circle"
-                                        data-toggle="tooltip"
-                                        title="Lorem Ipsum"
-                                    ></i>
-                                </li>
-                                <li>
-                                    <i className="far fa-money-bill-alt"></i>{" "}
                                     <Countdown
                                         date={Date.now() + 5000}
-                                        precision={3}
-                                        renderer={renderer}
+                                        renderer={(props) =>
+                                            renderer({
+                                                ...props,
+                                                cost: 400,
+                                                discount: 100,
+                                            })
+                                        }
                                     />
                                 </li>
                             </ul>
@@ -108,21 +99,43 @@ const LawyerCard = () => {
     );
 };
 
-const Cost = ({ cost, discount }) => {};
-
-const renderer = ({ days, hours, minutes, seconds, completed }) => {
+const renderer = ({
+    days,
+    hours,
+    minutes,
+    seconds,
+    completed,
+    cost,
+    discount,
+}) => {
     if (completed) {
-        return <strong>Offer Has Ended!</strong>;
+        return (
+            <ul>
+                <li>{cost}</li>
+                <li>
+                    <strong>Offer Has Ended!</strong>;
+                </li>
+            </ul>
+        );
     } else {
         return (
-            <>
-                Ends in <strong>{days}</strong> days and{" "}
-                <strong>
-                    <span>
-                        {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
-                    </span>
-                </strong>
-            </>
+            <ul>
+                <li>
+                    <strong>
+                        <strike style={{ color: "red" }}>{cost}</strike> -{" "}
+                    </strong>
+                    <strong style={{ color: "green" }}>{discount}</strong>
+                </li>
+                <li>
+                    Ends in <strong>{days}</strong> days and{" "}
+                    <strong>
+                        <span>
+                            {zeroPad(hours)}:{zeroPad(minutes)}:
+                            {zeroPad(seconds)}
+                        </span>
+                    </strong>
+                </li>
+            </ul>
         );
     }
 };

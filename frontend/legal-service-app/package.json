@@ -13,6 +13,7 @@
         "bootstrap": "^4.5.0",
         "react": "^16.13.1",
         "react-bootstrap-datetimepicker": "0.0.22",
+        "react-countdown": "^2.2.1",
         "react-dom": "^16.13.1",
         "react-icons": "^3.10.0",
         "react-router": "^5.1.2",

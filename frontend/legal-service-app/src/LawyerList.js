@@ -1,5 +1,6 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
+import Countdown, { zeroPad } from "react-countdown";
 
 function LawyerList() {
     return (
@@ -81,7 +82,11 @@ const LawyerCard = () => {
                                 </li>
                                 <li>
                                     <i className="far fa-money-bill-alt"></i>{" "}
-                                    Ends in <strong>Time</strong>
+                                    <Countdown
+                                        date={Date.now() + 5000}
+                                        precision={3}
+                                        renderer={renderer}
+                                    />
                                 </li>
                             </ul>
                         </div>
@@ -101,6 +106,25 @@ const LawyerCard = () => {
             </div>
         </div>
     );
+};
+
+const Cost = ({ cost, discount }) => {};
+
+const renderer = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+        return <strong>Offer Has Ended!</strong>;
+    } else {
+        return (
+            <>
+                Ends in <strong>{days}</strong> days and{" "}
+                <strong>
+                    <span>
+                        {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
+                    </span>
+                </strong>
+            </>
+        );
+    }
 };
 
 export default LawyerList;

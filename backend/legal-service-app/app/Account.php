@@ -59,8 +59,9 @@ class Account extends Authenticatable implements MustVerifyEmail
             "iss" => url('/'),
             "aud" => url('/'),
             "iat" => now()->unix(),
-            "exp" => now()->addDays(1)->unix(),
-            "sub" => $this->getKey()
+            "exp" => now()->addHours(8)->unix(),
+            "sub" => $this->getKey(),
+            "rea" => 'EMAIL_VERIFY'
         );
         $token = JWT::encode($payload, $key);
         $verify_url = route('verify.email', ['token' => $token]);

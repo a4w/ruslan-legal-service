@@ -19,5 +19,6 @@ Route::post('/register/lawyer', 'RegistrationController@registerLawyer');
 Route::prefix('auth')->group(function () {
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
+    Route::post('refreshCurrentToken', 'AuthController@refreshCurrentToken');
     Route::post('refresh', 'AuthController@refresh');
 });

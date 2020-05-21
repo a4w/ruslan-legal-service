@@ -44,7 +44,7 @@ const LawyerCard = () => {
                                     starSpacing="0px"
                                     numberOfStars={5}
                                     name="rating"
-                                />
+                                />&nbsp;
                                 <span className="d-inline-block text-xs average-rating">
                                     (number of clients rated, percentage)
                                 </span>

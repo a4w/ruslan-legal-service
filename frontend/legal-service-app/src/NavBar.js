@@ -40,7 +40,7 @@ const NavBar = () => {
                             </a>
                             <ul className='submenu'>
                                 <li>
-                                    <a href='doctor-dashboard.html'>Doctor Dashboard</a>
+                                    <a href='lawyer-dashboard.html'>Doctor Dashboard</a>
                                 </li>
                                 <li>
                                     <a href='appointments.html'>Appointments</a>
@@ -52,16 +52,16 @@ const NavBar = () => {
                                     <a href='my-patients.html'>Patients List</a>
                                 </li>
                                 <li>
-                                    <a href='patient-profile.html'>Patients Profile</a>
+                                    <a href='client-profile.html'>Patients Profile</a>
                                 </li>
                                 <li>
-                                    <a href='chat-doctor.html'>Chat</a>
+                                    <a href='chat-lawyer.html'>Chat</a>
                                 </li>
                                 <li>
                                     <a href='invoices.html'>Invoices</a>
                                 </li>
                                 <li>
-                                    <a href='doctor-profile-settings.html'>
+                                    <a href='lawyer-profile-settings.html'>
                                         Profile Settings
                                     </a>
                                 </li>
@@ -69,7 +69,7 @@ const NavBar = () => {
                                     <a href='reviews.html'>Reviews</a>
                                 </li>
                                 <li>
-                                    <a href='doctor-register.html'>Doctor Register</a>
+                                    <a href='lawyer-register.html'>Doctor Register</a>
                                 </li>
                             </ul>
                         </li>
@@ -93,7 +93,7 @@ const NavBar = () => {
                                     <a href='search.html'>Search Doctor</a>
                                 </li>
                                 <li>
-                                    <a href='doctor-profile.html'>Doctor Profile</a>
+                                    <a href='lawyer-profile.html'>Doctor Profile</a>
                                 </li>
                                 <li>
                                     <a href='booking.html'>Booking</a>
@@ -105,7 +105,7 @@ const NavBar = () => {
                                     <a href='booking-success.html'>Booking Success</a>
                                 </li>
                                 <li>
-                                    <a href='patient-dashboard.html'>Patient Dashboard</a>
+                                    <a href='client-dashboard.html'>Patient Dashboard</a>
                                 </li>
                                 <li>
                                     <a href='favourites.html'>Favourites</a>

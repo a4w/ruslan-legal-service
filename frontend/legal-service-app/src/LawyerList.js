@@ -45,8 +45,8 @@ const LawyerCard = () => {
                                     numberOfStars={5}
                                     name="rating"
                                 />
-                                <span className="d-inline-block average-rating">
-                                    (number of clients rated)
+                                <span className="d-inline-block text-xs average-rating">
+                                    (number of clients rated, percentage)
                                 </span>
                             </div>
                             <div className="clinic-details">
@@ -61,7 +61,6 @@ const LawyerCard = () => {
                     <div className="doc-info-right">
                         <div className="clini-infos">
                             <ul>
-                                <li>percaentage rating</li>
                                 <li>Feedback</li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
@@ -71,7 +70,7 @@ const LawyerCard = () => {
                                     <Countdown
                                         date={Date.now() + 5000}
                                         renderer={(props) =>
-                                            renderer({
+                                            LawyerCountDownRenderer({
                                                 ...props,
                                                 cost: 400,
                                                 discount: 100,
@@ -99,7 +98,7 @@ const LawyerCard = () => {
     );
 };
 
-const renderer = ({
+const LawyerCountDownRenderer = ({
     days,
     hours,
     minutes,
@@ -111,9 +110,10 @@ const renderer = ({
     if (completed) {
         return (
             <ul>
-                <li>{cost}</li>
                 <li>
-                    <strong>Offer Has Ended!</strong>;
+                    <strong className="text-lg">
+                        <strong className="text-primary">&pound;{cost}</strong>
+                    </strong>
                 </li>
             </ul>
         );
@@ -121,13 +121,19 @@ const renderer = ({
         return (
             <ul>
                 <li>
-                    <strong>
-                        <strike style={{ color: "red" }}>{cost}</strike> -{" "}
+                    <strong className="text-lg">
+                        <strong className="text-success">
+                            &pound;{discount}
+                        </strong>
                     </strong>
-                    <strong style={{ color: "green" }}>{discount}</strong>
+                    &nbsp;
+                    <strike className="text-lg text-danger">
+                        &pound;{cost}
+                    </strike>
                 </li>
                 <li>
-                    Ends in <strong>{days}</strong> days and{" "}
+                    Ends in <strong>{days}</strong> {days !== 1 ? "days" : "day"}{" "}
+                    and{" "}
                     <strong>
                         <span>
                             {zeroPad(hours)}:{zeroPad(minutes)}:

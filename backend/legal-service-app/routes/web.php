@@ -4,6 +4,7 @@ use App\Account;
 use Firebase\JWT\JWT;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +25,22 @@ Route::get('/test', function () {
 });
 Route::get('verify/email/{token}', function ($token) {
     $key = config('app.key');
-    $jwt = JWT::decode($token, $key, array('HS256'));
+    try {
+        $jwt = JWT::decode($token, $key, array('HS256'));
+    } catch (TokenExpiredException $e) {
+        return "Email verification token expired";
+    } catch (Exception $e) {
+        return redirect('/');
+    }
+    if ($jwt->rea !== 'EMAIL_VERIFY') {
+        return redirect('/');
+    }
     $account = Account::find($jwt->sub);
+    if ($account === null) {
+        return redirect('/');
+    }
     if (!$account->hasVerifiedEmail()) {
         $account->markEmailAsVerified();
     }
-    return redirect('/');
+    return "Email verified correctly"; // TODO Create post verification page
 })->name('verify.email');

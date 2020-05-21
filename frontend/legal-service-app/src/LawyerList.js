@@ -111,9 +111,7 @@ const LawyerCountDownRenderer = ({
         return (
             <ul>
                 <li>
-                    <strong className="text-lg">
-                        <strong className="text-primary">&pound;{cost}</strong>
-                    </strong>
+                    <p className="text-lg text-primary">&pound;{cost}</p>
                 </li>
             </ul>
         );
@@ -121,19 +119,16 @@ const LawyerCountDownRenderer = ({
         return (
             <ul>
                 <li>
-                    <strong className="text-lg">
-                        <strong className="text-success">
-                            &pound;{discount}
-                        </strong>
-                    </strong>
+                    <p className="text-lg text-success">&pound;{discount}
                     &nbsp;
                     <strike className="text-lg text-danger">
                         &pound;{cost}
                     </strike>
+                    </p>
                 </li>
                 <li>
-                    Ends in <strong>{days}</strong> {days !== 1 ? "days" : "day"}{" "}
-                    and{" "}
+                    Ends in <strong>{days}</strong>{" "}
+                    {days !== 1 ? "days" : "day"} and{" "}
                     <strong>
                         <span>
                             {zeroPad(hours)}:{zeroPad(minutes)}:

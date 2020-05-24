@@ -67,7 +67,7 @@ const Footer = () => {
                                         <a href="booking.html">Booking</a>
                                     </li>
                                     <li>
-                                        <a href="patient-dashboard.html">Patient Dashboard</a>
+                                        <a href="client-dashboard.html">Patient Dashboard</a>
                                     </li>
                                 </ul>
                             </div>
@@ -86,10 +86,10 @@ const Footer = () => {
                                         <a href="login.html">Login</a>
                                     </li>
                                     <li>
-                                        <a href="doctor-register.html">Register</a>
+                                        <a href="lawyer-register.html">Register</a>
                                     </li>
                                     <li>
-                                        <a href="doctor-dashboard.html">Doctor Dashboard</a>
+                                        <a href="lawyer-dashboard.html">Doctor Dashboard</a>
                                     </li>
                                 </ul>
                             </div>

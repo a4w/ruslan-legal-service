@@ -13,6 +13,7 @@
         "react": "^16.13.1",
         "react-bootstrap-datetimepicker": "0.0.22",
         "react-countdown": "^2.2.1",
+        "react-datepicker": "^2.16.0",
         "react-dom": "^16.13.1",
         "react-dropdown-select": "^4.4.1",
         "react-icons": "^3.10.0",
@@ -20,6 +21,7 @@
         "react-router-dom": "^5.1.2",
         "react-scripts": "3.4.1",
         "react-star-ratings": "^2.3.0",
+        "react-sticky": "^6.0.3",
         "vest": "^1.0.9"
     },
     "scripts": {

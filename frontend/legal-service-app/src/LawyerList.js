@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
-import Select from "react-select";
+import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { StickyContainer, Sticky } from "react-sticky";
 
 function LawyerList() {
-    const [selectedValue, setSelected] = useState(null);
-    const OnChangeHandler = ({ value }) => {
-        setSelected(value);
-        console.log(value);
+    const [sortBy, setSortBy] = useState(null);
+    const SortHandler = ([{ value }]) => {
+        setSortBy(value);
+        console.log("sort by: ", value);
     };
     const lawyers = [
         {
@@ -22,27 +22,39 @@ function LawyerList() {
         {
             id: "3",
         },
+        {
+            id: "4",
+        },
+        {
+            id: "5",
+        },
     ];
     return (
         <>
             <LawyerListHeader
-                OnChangeHandler={OnChangeHandler}
-                selectedValue={selectedValue}
+                OnChangeHandler={SortHandler}
+                selectedValue={sortBy}
             />
             <StickyContainer>
+                <Sticky>
+                    {({ style }) => (
+                        <div style={{ ...style, zIndex: "100" }}>
+                            <LawyerSearchFilter />
+                        </div>
+                    )}
+                </Sticky>
                 <div className="content">
                     <div className="row">
-                        <div className="col-md-12 col-lg-4 col-xl-3">
-                            <Sticky>
-                                {({ style }) => (
-                                    <div style={style}>
-                                        <LawyerSearchFilter />
-                                    </div>
-                                )}
-                            </Sticky>
-                        </div>
-                        <div className="col-md-12 col-lg-8 col-xl-9">
+                        <div
+                            className="col-md-12 col-lg-8 col-xl-9"
+                            style={{ zIndex: "0" }}
+                        >
                             <LawyerCardList lawyers={lawyers} />
+                        </div>
+                        <div className="col-md-12 col-lg-4 col-xl-3">
+                            <div>
+                                <h1>Lawyer's Pop Up</h1>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,62 +64,56 @@ function LawyerList() {
 }
 
 const LawyerSearchFilter = () => {
-    const [selectedDate, handleDateChange] = useState();
+    const options = [
+        { value: 1, label: "f1" },
+        { value: 2, label: "f2" },
+        { value: 3, label: "f3" },
+        { value: 4, label: "f4" },
+    ];
+    const [filter, setFilter] = useState({});
     return (
         <div className="card search-filter">
             <div className="card-header">
                 <h4 className="card-title mb-0">Search Filter</h4>
             </div>
-            <div className="card-body">
-                <div className="filter-widget">
-                    <div className="cal-icon">
-                        <DatePicker
-                            className="form-control datetimepicker"
-                            selected={selectedDate}
-                            onChange={(date) => handleDateChange(date)}
-                            maxDate={new Date()}
-                            placeholderText="Select Date"
+            <div className="card-body row">
+                <form className="card-body row">
+                    <div className="filter-widget col-md-12 col-lg-3 col-xl-3">
+                        <h5>DatePicker Date</h5>
+                        <div className="cal-icon">
+                            <DatePicker
+                                className="form-control"
+                                selected={filter.date}
+                                onChange={(date) =>
+                                    setFilter({ ...filter, date: date })
+                                }
+                                maxDate={new Date()}
+                                placeholderText="Select Date"
+                                style={{ zIndex: "100" }}
+                            />
+                        </div>
+                    </div>
+                    <div className="filter-widget col-md-12 col-lg-3 col-xl-3">
+                        <h5>Select filter</h5>
+                        <Select
+                            className="form-control"
+                            value={filter.filterOne}
+                            placeholder={
+                                filter.filterOne ? filter.filterOne : "select"
+                            }
+                            options={options}
+                            onChange={([{ value }]) =>
+                                setFilter({ ...filter, filterOne: value })
+                            }
+                            style={{ zIndex: "100" }}
                         />
                     </div>
-                </div>
-                <div className="filter-widget">
-                    <h4>Some Filteration Header</h4>
-                    <div>
-                        <label className="custom_check">
-                            <input type="checkbox" name="select_specialist" />
-                            <span className="checkmark"></span> F1
-                        </label>
+                    <div className="btn-search col-md-12 col-lg-3 col-xl-3 align-left">
+                        <button type="button" className="btn btn-block">
+                            Search
+                        </button>
                     </div>
-                    <div>
-                        <label className="custom_check">
-                            <input type="checkbox" name="select_specialist" />
-                            <span className="checkmark"></span> F2
-                        </label>
-                    </div>
-                    <div>
-                        <label className="custom_check">
-                            <input type="checkbox" name="select_specialist" />
-                            <span className="checkmark"></span> F3
-                        </label>
-                    </div>
-                    <div>
-                        <label className="custom_check">
-                            <input type="checkbox" name="select_specialist" />
-                            <span className="checkmark"></span> F4
-                        </label>
-                    </div>
-                    <div>
-                        <label className="custom_check">
-                            <input type="checkbox" name="select_specialist" />
-                            <span className="checkmark"></span> F5
-                        </label>
-                    </div>
-                </div>
-                <div className="btn-search">
-                    <button type="button" className="btn btn-block">
-                        Search
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     );

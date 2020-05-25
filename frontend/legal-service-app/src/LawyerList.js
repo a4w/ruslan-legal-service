@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { StickyContainer, Sticky } from "react-sticky";
+import {StickyContainer, Sticky} from "react-sticky";
+import {FaSearch} from "react-icons/fa"
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
-    const SortHandler = ([{ value }]) => {
+    const SortHandler = ([{value}]) => {
         setSortBy(value);
         console.log("sort by: ", value);
     };
@@ -37,8 +38,8 @@ function LawyerList() {
             />
             <StickyContainer>
                 <Sticky>
-                    {({ style }) => (
-                        <div style={{ ...style, zIndex: "100" }}>
+                    {({style}) => (
+                        <div style={{...style, zIndex: "100"}}>
                             <LawyerSearchFilter />
                         </div>
                     )}
@@ -47,7 +48,7 @@ function LawyerList() {
                     <div className="row">
                         <div
                             className="col-md-12 col-lg-8 col-xl-9"
-                            style={{ zIndex: "0" }}
+                            style={{zIndex: "0"}}
                         >
                             <LawyerCardList lawyers={lawyers} />
                         </div>
@@ -65,66 +66,57 @@ function LawyerList() {
 
 const LawyerSearchFilter = () => {
     const options = [
-        { value: 1, label: "f1" },
-        { value: 2, label: "f2" },
-        { value: 3, label: "f3" },
-        { value: 4, label: "f4" },
+        {value: 1, label: "f1"},
+        {value: 2, label: "f2"},
+        {value: 3, label: "f3"},
+        {value: 4, label: "f4"},
     ];
     const [filter, setFilter] = useState({});
     return (
         <div className="card search-filter">
-            <div className="card-header">
-                <h4 className="card-title mb-0">Search Filter</h4>
-            </div>
-            <div className="card-body row">
-                <form className="card-body row">
-                    <div className="filter-widget col-md-12 col-lg-3 col-xl-3">
-                        <h5>DatePicker Date</h5>
-                        <div className="cal-icon">
-                            <DatePicker
-                                className="form-control"
-                                selected={filter.date}
-                                onChange={(date) =>
-                                    setFilter({ ...filter, date: date })
-                                }
-                                maxDate={new Date()}
-                                placeholderText="Select Date"
-                                style={{ zIndex: "100" }}
-                            />
-                        </div>
-                    </div>
-                    <div className="filter-widget col-md-12 col-lg-3 col-xl-3">
-                        <h5>Select filter</h5>
-                        <Select
-                            className="form-control"
-                            value={filter.filterOne}
-                            placeholder={
-                                filter.filterOne ? filter.filterOne : "select"
+            <form className="card-body form-row p-2">
+                <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
+                    <div className="cal-icon">
+                        <DatePicker
+                            className="form-control mb-0"
+                            selected={filter.date}
+                            onChange={(date) =>
+                                setFilter({...filter, date: date})
                             }
-                            options={options}
-                            onChange={([{ value }]) =>
-                                setFilter({ ...filter, filterOne: value })
-                            }
-                            style={{ zIndex: "100" }}
+                            maxDate={new Date()}
+                            placeholderText="Available on"
+                            style={{zIndex: "100"}}
                         />
                     </div>
-                    <div className="btn-search col-md-12 col-lg-3 col-xl-3 align-left">
-                        <button type="button" className="btn btn-block">
-                            Search
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
+                    <Select
+                        className="form-control mb-0"
+                        value={filter.filterOne}
+                        placeholder="Filter"
+                        options={options}
+                        onChange={([{value}]) =>
+                            setFilter({...filter, filterOne: value})
+                        }
+                        style={{zIndex: "100", minHeight: '46px'}}
+                    />
+                </div>
+                <div className="btn-search col-md-12 col-lg-1 col-xl-1 align-left">
+                    <button type="button" className="btn btn-block font-weight-bold">
+                        <FaSearch />
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };
 
-const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
+const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
     const options = [
-        { value: "rating", label: "Rating" },
-        { value: "popular", label: "Popular" },
-        { value: "latest", label: "Latest" },
-        { value: "free", label: "Free" },
+        {value: "rating", label: "Rating"},
+        {value: "popular", label: "Popular"},
+        {value: "latest", label: "Latest"},
+        {value: "free", label: "Free"},
     ];
     return (
         <div className="breadcrumb-bar">

@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import { Route, Router, Switch } from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
 

@@ -2,11 +2,12 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 import Countdown, { zeroPad } from "react-countdown";
 
-const LawyerCardList = (lawyers) => {
-    return (
-        // eslint-disable-next-line no-undef
-        lawyers.map((lawyer) => <LawyerCard key={lawyer.id} lawer={lawyer} />)
-    );
+const LawyerCardList = ({ lawyers }) => {
+    if (lawyers)
+        return lawyers.map((lawyer) => (
+            <LawyerCard key={lawyer.id} lawer={lawyer} />
+        ));
+    else return <LawyerCard />;
 };
 
 const LawyerCard = () => {
@@ -36,7 +37,8 @@ const LawyerCard = () => {
                                     starSpacing="0px"
                                     numberOfStars={5}
                                     name="rating"
-                                />&nbsp;
+                                />
+                                &nbsp;
                                 <span className="d-inline-block text-xs average-rating">
                                     (number of clients rated, percentage)
                                 </span>
@@ -101,21 +103,20 @@ const LawyerCountDownRenderer = ({
 }) => {
     if (completed) {
         return (
-            <ul>
-                <li>
-                    <p className="text-lg text-primary">&pound;{cost}</p>
-                </li>
-            </ul>
+            <li>
+                <p className="text-lg text-primary">&pound;{cost}</p>
+            </li>
         );
     } else {
         return (
-            <ul>
+            <>
                 <li>
-                    <p className="text-lg text-success">&pound;{discount}
-                    &nbsp;
-                    <strike className="text-lg text-danger">
-                        &pound;{cost}
-                    </strike>
+                    <p className="text-lg text-success">
+                        &pound;{discount}
+                        &nbsp;
+                        <strike className="text-lg text-danger">
+                            &pound;{cost}
+                        </strike>
                     </p>
                 </li>
                 <li>
@@ -128,7 +129,7 @@ const LawyerCountDownRenderer = ({
                         </span>
                     </strong>
                 </li>
-            </ul>
+            </>
         );
     }
 };

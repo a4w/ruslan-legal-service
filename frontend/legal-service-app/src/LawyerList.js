@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
-import Select from "react-select";
+import Select from "react-dropdown-select";
 
 function LawyerList() {
     const [selectedValue, setSelected] = useState(null);
-    const OnChangeHandler = ({ value }) => {
+    const OnChangeHandler = (choices) => {
+        const {value, label} = {...choices[0]};
         setSelected(value);
         console.log(value);
     };

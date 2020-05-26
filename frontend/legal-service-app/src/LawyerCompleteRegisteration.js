@@ -10,10 +10,15 @@ const LawyerCompleteRegisteration = (_) => {
         setLawyer({ ...lawyer, [name]: value });
         console.log(lawyer);
     };
-    const options = [
+    const typeOptions = [
         { value: "solicitor", label: "Solicitor" },
         { value: "barrister", label: "Barrister" },
         { value: "other", label: "Other" },
+    ];
+    const practiceAreasOptions = [
+        { value: "1", label: "area1" },
+        { value: "2", label: "area2" },
+        { value: "3", label: "area3" },
     ];
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
@@ -27,7 +32,7 @@ const LawyerCompleteRegisteration = (_) => {
                         placeholder={
                             lawyer.type ? lawyer.type : "Select type.."
                         }
-                        options={options}
+                        options={typeOptions}
                         onChange={([{ value }]) =>
                             setLawyer({ ...lawyer, type: value })
                         }
@@ -77,6 +82,21 @@ const LawyerCompleteRegisteration = (_) => {
                     onChange={OnChangeHandler}
                 ></textarea>
             </Label>
+            <div className="form-group">
+                <Select
+                    multi
+                    name="select"
+                    style={{ minHeight: "50px" }}
+                    className="form-control floating"
+                    value={lawyer.practiceAreas}
+                    placeholder="Select practice areas"
+                    options={practiceAreasOptions}
+                    onChange={(values) =>
+                        setLawyer({ ...lawyer, practiceAreas: values })
+                    }
+                />
+            </div>
+
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"

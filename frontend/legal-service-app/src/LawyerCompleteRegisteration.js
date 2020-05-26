@@ -49,22 +49,33 @@ const LawyerCompleteRegisteration = (_) => {
                     </Label>
                 </div>
             </div>
+            <div className="form-row">
+                <Label value={lawyer.yearLicensed} label="Year licensed">
+                    <input
+                        className="form-control"
+                        name="yearLicensed"
+                        value={lawyer.yearLicensed}
+                        onChange={OnChangeHandler}
+                    />
+                </Label>
+                <Label value={lawyer.regulatedBy} label="Regulated by">
+                    <input
+                        className="form-control"
+                        name="regulatedBy"
+                        value={lawyer.regulatedBy}
+                        onChange={OnChangeHandler}
+                    />
+                </Label>
+            </div>
             <Label value={lawyer.bio} label="Bio..">
                 <textarea
                     className="form-control"
                     name="bio"
+                    style={{ minHeight: "100px" }}
                     form="regForm"
                     value={lawyer.bio}
                     onChange={OnChangeHandler}
                 ></textarea>
-            </Label>
-            <Label value={lawyer.yearLicensed} label="Year licensed">
-                <input
-                    className="form-control"
-                    name="yearLicensed"
-                    value={lawyer.yearLicensed}
-                    onChange={OnChangeHandler}
-                />
             </Label>
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "

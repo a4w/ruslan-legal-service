@@ -72,40 +72,48 @@ const LawyerCompleteRegisteration = (_) => {
                 </div>
             </div>
             <div className="form-row">
-                <Label value={lawyer.yearLicensed} label="Year licensed">
-                    <input
-                        className="form-control"
-                        name="yearLicensed"
-                        value={lawyer.yearLicensed}
-                        onChange={OnChangeHandler}
-                    />
-                </Label>
-                <Label value={lawyer.regulatedBy} label="Regulated by">
-                    <input
-                        className="form-control"
-                        name="regulatedBy"
-                        value={lawyer.regulatedBy}
-                        onChange={OnChangeHandler}
-                    />
-                </Label>
+                <div className="col">
+                    <Label value={lawyer.yearLicensed} label="Year licensed">
+                        <input
+                            className="form-control"
+                            name="yearLicensed"
+                            value={lawyer.yearLicensed}
+                            onChange={OnChangeHandler}
+                        />
+                    </Label>
+                </div>
+                <div className="col">
+                    <Label value={lawyer.regulatedBy} label="Regulated by">
+                        <input
+                            className="form-control"
+                            name="regulatedBy"
+                            value={lawyer.regulatedBy}
+                            onChange={OnChangeHandler}
+                        />
+                    </Label>
+                </div>
             </div>
             <div className="form-row">
-                <Label value={lawyer.education} label="Education">
-                    <input
-                        className="form-control"
-                        name="education"
-                        value={lawyer.education}
-                        onChange={OnChangeHandler}
-                    />
-                </Label>
-                <Label value={lawyer.graduation} label="Graduation year">
-                    <input
-                        className="form-control"
-                        name="graduation"
-                        value={lawyer.graduation}
-                        onChange={OnChangeHandler}
-                    />
-                </Label>
+                <div className="col">
+                    <Label value={lawyer.education} label="Education">
+                        <input
+                            className="form-control"
+                            name="education"
+                            value={lawyer.education}
+                            onChange={OnChangeHandler}
+                        />
+                    </Label>
+                </div>
+                <div className="col">
+                    <Label value={lawyer.graduation} label="Graduation year">
+                        <input
+                            className="form-control"
+                            name="graduation"
+                            value={lawyer.graduation}
+                            onChange={OnChangeHandler}
+                        />
+                    </Label>
+                </div>
             </div>
             <div className="form-group">
                 <Select

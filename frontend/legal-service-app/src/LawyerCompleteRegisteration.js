@@ -20,6 +20,11 @@ const LawyerCompleteRegisteration = (_) => {
         { value: "2", label: "area2" },
         { value: "3", label: "area3" },
     ];
+    const accreditationOptions = [
+        { value: "1", label: "Accreditation 1" },
+        { value: "2", label: "Accreditation 2" },
+        { value: "3", label: "Accreditation 3" },
+    ];
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
@@ -83,6 +88,20 @@ const LawyerCompleteRegisteration = (_) => {
                     options={practiceAreasOptions}
                     onChange={(values) =>
                         setLawyer({ ...lawyer, practiceAreas: values })
+                    }
+                />
+            </div>
+            <div className="form-group">
+                <Select
+                    multi
+                    name="select"
+                    style={{ minHeight: "50px" }}
+                    className="form-control floating"
+                    value={lawyer.accreditations}
+                    placeholder="Select accreditations"
+                    options={accreditationOptions}
+                    onChange={(values) =>
+                        setLawyer({ ...lawyer, accreditations: values })
                     }
                 />
             </div>

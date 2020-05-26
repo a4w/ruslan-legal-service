@@ -58,7 +58,14 @@ const LawyerCompleteRegisteration = (_) => {
                     onChange={OnChangeHandler}
                 ></textarea>
             </Label>
-
+            <Label value={lawyer.yearLicensed} label="Year licensed">
+                <input
+                    className="form-control"
+                    name="yearLicensed"
+                    value={lawyer.yearLicensed}
+                    onChange={OnChangeHandler}
+                />
+            </Label>
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"

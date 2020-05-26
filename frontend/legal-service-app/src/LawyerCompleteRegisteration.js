@@ -28,7 +28,7 @@ const LawyerCompleteRegisteration = (_) => {
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
-                <div className="col-3 form-group">
+                <div className="col form-group">
                     <Select
                         name="select"
                         className="form-control floating"
@@ -44,7 +44,7 @@ const LawyerCompleteRegisteration = (_) => {
                     />
                 </div>
                 <div
-                    className="col-3"
+                    className="col"
                     style={{
                         display: lawyer.type === "other" ? "block" : "none",
                     }}
@@ -73,6 +73,24 @@ const LawyerCompleteRegisteration = (_) => {
                         className="form-control"
                         name="regulatedBy"
                         value={lawyer.regulatedBy}
+                        onChange={OnChangeHandler}
+                    />
+                </Label>
+            </div>
+            <div className="form-row">
+                <Label value={lawyer.education} label="Education">
+                    <input
+                        className="form-control"
+                        name="education"
+                        value={lawyer.education}
+                        onChange={OnChangeHandler}
+                    />
+                </Label>
+                <Label value={lawyer.graduation} label="Graduation year">
+                    <input
+                        className="form-control"
+                        name="graduation"
+                        value={lawyer.graduation}
                         onChange={OnChangeHandler}
                     />
                 </Label>

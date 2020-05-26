@@ -72,16 +72,6 @@ const LawyerCompleteRegisteration = (_) => {
                     />
                 </Label>
             </div>
-            <Label value={lawyer.bio} label="Bio..">
-                <textarea
-                    className="form-control"
-                    name="bio"
-                    style={{ minHeight: "100px" }}
-                    form="regForm"
-                    value={lawyer.bio}
-                    onChange={OnChangeHandler}
-                ></textarea>
-            </Label>
             <div className="form-group">
                 <Select
                     multi
@@ -96,7 +86,16 @@ const LawyerCompleteRegisteration = (_) => {
                     }
                 />
             </div>
-
+            <Label value={lawyer.bio} label="Bio..">
+                <textarea
+                    className="form-control"
+                    name="bio"
+                    style={{ minHeight: "100px" }}
+                    form="regForm"
+                    value={lawyer.bio}
+                    onChange={OnChangeHandler}
+                ></textarea>
+            </Label>
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"

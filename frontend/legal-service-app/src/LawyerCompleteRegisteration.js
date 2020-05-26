@@ -2,8 +2,20 @@ import React, { useState } from "react";
 import Select from "react-dropdown-select";
 
 const LawyerCompleteRegisteration = (_) => {
-    const [lawyer, setLawyer] = useState({});
-    const OnSubmitHandler = () => {
+    const init = {
+        accreditations: "",
+        bio: "",
+        education: "",
+        graduation: "",
+        other: "",
+        practiceAreas: "",
+        regulatedBy: "",
+        type: "",
+        yearLicensed: "",
+    };
+    const [lawyer, setLawyer] = useState(init);
+    const OnSubmitHandler = (event) => {
+        event.preventDefault();
         console.log("submitting");
     };
     const OnChangeHandler = ({ target: { value, name } }) => {

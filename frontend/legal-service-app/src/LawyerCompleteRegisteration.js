@@ -16,14 +16,14 @@ const LawyerCompleteRegisteration = (_) => {
         { value: "other", label: "Other" },
     ];
     return (
-        <form onSubmit={OnSubmitHandler}>
+        <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
-                <div className="col-3 m-1">
+                <div className="col-3 form-group">
                     <Select
                         name="select"
                         className="form-control floating"
                         value={lawyer.type}
-                        style={{ minHeight: "48px" }}
+                        style={{ minHeight: "50px" }}
                         placeholder={
                             lawyer.type ? lawyer.type : "Select type.."
                         }
@@ -34,28 +34,31 @@ const LawyerCompleteRegisteration = (_) => {
                     />
                 </div>
                 <div
-                    className="col-3 m-1"
+                    className="col-3"
                     style={{
                         display: lawyer.type === "other" ? "block" : "none",
                     }}
                 >
-                    <div
-                        className={
-                            !lawyer.other || lawyer.other === ""
-                                ? "form-group form-focus"
-                                : "form-group form-focus focused"
-                        }
-                    >
+                    <Label value={lawyer.other} label="Type">
                         <input
                             name="other"
                             value={lawyer.other}
                             onChange={OnChangeHandler}
                             className="form-control floating"
                         />
-                        <label className="focus-label">Type</label>
-                    </div>
+                    </Label>
                 </div>
             </div>
+            <Label value={lawyer.bio} label="Bio..">
+                <textarea
+                    className="form-control"
+                    name="bio"
+                    form="regForm"
+                    value={lawyer.bio}
+                    onChange={OnChangeHandler}
+                ></textarea>
+            </Label>
+
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"
@@ -66,4 +69,18 @@ const LawyerCompleteRegisteration = (_) => {
     );
 };
 
+const Label = (props) => {
+    return (
+        <div
+            className={
+                !props.value || props.value === ""
+                    ? "form-group form-focus"
+                    : "form-group form-focus focused"
+            }
+        >
+            {props.children}
+            <label className="focus-label">{props.label}</label>
+        </div>
+    );
+};
 export default LawyerCompleteRegisteration;

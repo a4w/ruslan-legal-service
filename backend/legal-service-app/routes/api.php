@@ -22,3 +22,5 @@ Route::prefix('auth')->group(function () {
     Route::post('refreshCurrentToken', 'AuthController@refreshCurrentToken');
     Route::post('refresh', 'AuthController@refresh');
 });
+
+Route::get('/lawyers', 'LawyerController@getLawyersPaginated');

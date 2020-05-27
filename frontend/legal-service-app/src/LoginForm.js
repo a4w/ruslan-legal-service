@@ -1,19 +1,22 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {Link} from "react-router-dom";
-import {loginValidation} from "./Validations";
+import { Link } from "react-router-dom";
+import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
+import axios from "./Axios";
+import Config from "./Config";
 
 const LoginForm = () => {
     const initUser = {
         email: "",
         password: "",
+        refreshToken: false,
     };
     const [user, setUser] = useState(initUser);
-    const [errors, runValidation] = useValidation(loginValidation);
-    const OnChangeHandler = ({target: {name, value}}) => {
-        const nextUser = {...user, [name]: value};
+    const [errors, addError, runValidation] = useValidation(loginValidation);
+    const OnChangeHandler = ({ target: { name, value } }) => {
+        const nextUser = { ...user, [name]: value };
         setUser(nextUser);
         runValidation(nextUser, name);
     };
@@ -21,13 +24,27 @@ const LoginForm = () => {
         event.preventDefault();
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
-                console.log("Continue");
+                const url = Config.api_url + "/auth/login";
+                axios
+                    .post(url, user)
+                    .then((response) => {
+                        console.log("success");
+                    })
+                    .catch((error) => {
+                        if (error.response) {
+                            const data = error.response.data;
+                            const _errors = data.errors;
+                            for (const field in _errors) {
+                                addError(field, _errors[field]);
+                            }
+                        }
+                    });
             }
         });
     };
     return (
         <>
-            <div className='login-header'>
+            <div className="login-header">
                 <h3>
                     Login <span>Lawbe</span>
                 </h3>
@@ -49,35 +66,54 @@ const LoginForm = () => {
                     OnChangeHandler={OnChangeHandler}
                     errors={errors.password}
                 />
-                <div className='text-right'>
-                    <a className='forgot-link' href='forgot-password.html'>
-                        Forgot Password ?
-                    </a>
+                <div className="form-row">
+                    <div className="col">
+                        <div>
+                            <label className="custom_check">
+                                <input
+                                    type="checkbox"
+                                    name="refreshToken"
+                                    value={user.refreshToken}
+                                />
+                                <span className="checkmark"></span> remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="text-right">
+                            <a
+                                className="forgot-link"
+                                href="forgot-password.html"
+                            >
+                                Forgot Password ?
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <button
-                    className='btn btn-primary btn-block btn-lg login-btn'
-                    type='submit'
+                    className="btn btn-primary btn-block btn-lg login-btn"
+                    type="submit"
                 >
                     Login
                 </button>
-                <div className='login-or'>
-                    <span className='or-line'></span>
-                    <span className='span-or'>or</span>
+                <div className="login-or">
+                    <span className="or-line"></span>
+                    <span className="span-or">or</span>
                 </div>
-                <div className='row form-row social-login'>
-                    <div className='col-6'>
-                        <a href='#' className='btn btn-facebook btn-block'>
-                            <i className='fab fa-facebook-f mr-1'></i> Login
+                <div className="row form-row social-login">
+                    <div className="col-6">
+                        <a href="#" className="btn btn-facebook btn-block">
+                            <i className="fab fa-facebook-f mr-1"></i> Login
                         </a>
                     </div>
-                    <div className='col-6'>
-                        <a href='#' className='btn btn-google btn-block'>
-                            <i className='fab fa-google mr-1'></i> Login
+                    <div className="col-6">
+                        <a href="#" className="btn btn-google btn-block">
+                            <i className="fab fa-google mr-1"></i> Login
                         </a>
                     </div>
                 </div>
-                <div className='text-center dont-have'>
-                    Don’t have an account? <Link to='/Register'>Register</Link>
+                <div className="text-center dont-have">
+                    Don’t have an account? <Link to="/Register">Register</Link>
                 </div>
             </form>
         </>

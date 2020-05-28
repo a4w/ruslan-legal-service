@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
 import { request, setAccessToken, setRefreshToken } from "./Axios";
+import { FaSpinner } from "react-icons/fa";
 
 export const LoginTokens = React.createContext();
 
@@ -15,6 +16,7 @@ const LoginForm = () => {
         refresh_token: false,
     };
     const [user, setUser] = useState(initUser);
+    const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
     const OnChangeHandler = ({ target: { name, value } }) => {
         const nextUser = { ...user, [name]: value };
@@ -22,10 +24,10 @@ const LoginForm = () => {
         runValidation(nextUser, name);
     };
     const OnSubmitHandler = (event) => {
-        console.log("errors: ", errors);
         event.preventDefault();
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
+                setLoggingIn(true);
                 const url = "/auth/login";
                 request({ url: url, method: "POST", data: user })
                     .then((data) => {
@@ -41,6 +43,9 @@ const LoginForm = () => {
                             email: ["Invalid User"],
                             password: ["Invalid User"],
                         });
+                    })
+                    .finally(() => {
+                        setLoggingIn(false);
                     });
             }
         });
@@ -100,10 +105,15 @@ const LoginForm = () => {
                     </div>
                 </div>
                 <button
-                    className="btn btn-primary btn-block btn-lg login-btn"
+                    className={
+                        "btn btn-primary btn-block btn-lg login-btn " +
+                        (isLoggingIn ? "cursor-not-allowed" : "")
+                    }
                     type="submit"
+                    disabled={isLoggingIn}
                 >
-                    Login
+                    {isLoggingIn && <FaSpinner className="icon-spin" />}
+                    &nbsp;{isLoggingIn ? "" : "Login"}
                 </button>
                 <div className="login-or">
                     <span className="or-line"></span>

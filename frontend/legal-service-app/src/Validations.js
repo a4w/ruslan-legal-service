@@ -49,3 +49,28 @@ const truncate = (string, len) => {
     if (string.length > len) return string.substring(0, len) + "...";
     else return string;
 };
+
+export const editEmailPasswordValidation = (data, field) => {
+    return validate("EditEmailPassword", () => {
+        vest.only(field);
+        ["email", "password", "passwordConfirm"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+        const trimmedEmail = truncate(data.email.toString(), 15);
+        test("email", `${trimmedEmail} is not valid email address`, () => {
+            enforce(data.email.toString())
+                .isNotEmpty()
+                .matches(/[^@]+@[^.]+\..+/g);
+        });
+        test("password", "Password should be atleast 8 characters long", () => {
+            enforce(data.password.toString()).longerThanOrEquals(8);
+        });
+        test("passwordConfirm", "Passwords should be matching", () => {
+            enforce(
+                data.password.toString() === data.passwordConfirm.toString()
+            ).isTruthy();
+        });
+    });
+};

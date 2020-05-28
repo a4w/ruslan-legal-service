@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { editEmailPasswordValidation } from "./Validations";
+import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 
 const EditPersonal = () => {
@@ -9,14 +11,24 @@ const EditPersonal = () => {
     };
 
     const [user, setUser] = useState(initUser);
+    const [errors, addError, runValidation] = useValidation(
+        editEmailPasswordValidation
+    );
 
     const OnChangeHandler = ({ target: { name, value } }) => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
+        runValidation(nextUser, name);
+        if (name === "password") runValidation(nextUser, "passwordConfirm");
     };
 
     const OnSubmitHandler = (event) => {
         event.preventDefault();
+        runValidation(user).then(async (hasErrors, _) => {
+            if (!hasErrors) {
+                console.log("safe");
+            }
+        });
     };
 
     return (
@@ -28,6 +40,7 @@ const EditPersonal = () => {
                         name={"email"}
                         value={user.email}
                         type={"text"}
+                        errors={errors.email}
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
@@ -37,6 +50,7 @@ const EditPersonal = () => {
                         name={"password"}
                         value={user.password}
                         type={"password"}
+                        errors={errors.password}
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
@@ -47,9 +61,10 @@ const EditPersonal = () => {
                     <ErrorMessageInput
                         disabled={user.password === ""}
                         placeholder={"Re-Enter Password"}
-                        name={"password"}
+                        name={"passwordConfirm"}
                         value={user.passwordConfirm}
                         type={"password"}
+                        errors={errors.passwordConfirm}
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>

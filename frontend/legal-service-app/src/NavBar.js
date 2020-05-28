@@ -245,10 +245,7 @@ const NavBar = () => {
                         <ModalPopUp
                             show={modalShow}
                             onHide={() => setModalShow(false)}
-                            headerTitle="Login"
-                        >
-                            <LoginForm />
-                        </ModalPopUp>
+                        />
                     </li>
                 </ul>
             </nav>

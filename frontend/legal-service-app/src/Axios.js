@@ -1,5 +1,6 @@
 import axios from "axios";
 import Config from "./Config";
+import Cookies from "universal-cookie";
 
 const client = axios.create({
     baseURL: Config.api_url,
@@ -17,6 +18,14 @@ const setAccessToken = (access_token) => {
     console.log("Set Successful!", client.defaults.headers.common.headers);
 };
 
+const setRefreshToken = (refresh_token) => {
+    const cookie = new Cookies();
+    cookie.set("refresh_token", refresh_token, {
+        path: "/",
+    });
+    console.log("Set Successful!", cookie.get("refresh_token"));
+};
+
 const request = function (options) {
     const onSuccess = function (response) {
         console.log("Request Successful!", response);
@@ -25,30 +34,18 @@ const request = function (options) {
 
     const onError = function (error) {
         console.error("Request Failed:", error.config);
-
         if (error.response) {
-            // Request was made but server responded with something
-            // other than 2xx
             console.error("Status:", error.response.status);
             console.error("Data:", error.response.data);
             console.error("Headers:", error.response.headers);
         } else {
-            // Something else happened while setting up the request
-            // triggered the error
             console.error("Error Message:", error.message);
         }
-        if (error.response.data) return error.response.data;
-        return Promise.reject(error.response.data || error.message);
+        // if (error.response.data) return error.response.data;
+        return Promise.reject(error.response.data);
     };
 
     return client(options).then(onSuccess).catch(onError);
 };
 
-export { request, setAccessToken };
-
-// axios.defaults.headers.common = {
-//     "Content-Type": "application/json",
-//     Accept: "appliation/json",
-// };
-
-// export default axios;
+export { request, setAccessToken, setRefreshToken };

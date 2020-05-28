@@ -37,8 +37,9 @@ const LoginForm = () => {
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
-                        ["email", "password"].forEach((field) => {
-                            addError(field, ["Invalid User"]);
+                        addError(["password", "email"], {
+                            email: ["Invalid User"],
+                            password: ["Invalid User"],
                         });
                     });
             }

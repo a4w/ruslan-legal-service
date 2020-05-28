@@ -46,9 +46,11 @@ const RegisterationForm = (_) => {
                         console.log("success", response);
                     })
                     .catch((_errors) => {
+                        const fields = [];
                         for (const field in _errors) {
-                            addError(field, _errors[field]);
+                            fields.push(field);
                         }
+                        addError(fields, _errors);
                     })
                     .finally(() => {
                         setIsRegistering(false);

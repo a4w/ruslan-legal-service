@@ -32,8 +32,14 @@ const useValidation = (vest) => {
             });
         });
     };
-    const addError = (field, error) => {
-        const nextErrors = {...errors, [field]: error};
+    const addError = (fields, _errors) => {
+        let nextErrors = errors;
+        for (let field of fields) {
+            nextErrors = {
+                ...nextErrors,
+                [field]: _errors[field],
+            };
+        }
         setErrors(nextErrors);
     };
 

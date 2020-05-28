@@ -8,7 +8,7 @@ import { FaSpinner } from "react-icons/fa";
 
 export const LoginTokens = React.createContext();
 
-const LoginForm = ({setRegister}) => {
+const LoginForm = ({setRegister, hideModal}) => {
     const initUser = {
         email: "",
         password: "",
@@ -45,6 +45,7 @@ const LoginForm = ({setRegister}) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
+                        hideModal();
                     });
             }
         });

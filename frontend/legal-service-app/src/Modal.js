@@ -18,7 +18,7 @@ const ModalPopUp = (props) => {
                     {headerTitle}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>{getBody(register, setRegister, props.OnHide)}</Modal.Body>
+            <Modal.Body>{getBody(register, setRegister, props.onHide)}</Modal.Body>
         </Modal>
     );
 };

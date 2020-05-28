@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Config from "./Config.js";
 import { FaSpinner } from "react-icons/fa";
 
-const RegisterationForm = (_) => {
+const RegisterationForm = ({setRegister, hideModal}) => {
     const initUser = {
         name: "",
         surname: "",
@@ -57,6 +57,7 @@ const RegisterationForm = (_) => {
                     })
                     .finally(() => {
                         setIsRegistering(false);
+                        hideModal();
                     });
             }
         });
@@ -120,9 +121,16 @@ const RegisterationForm = (_) => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className='text-right'>
-                    <Link to='/login' className='forgot-link'>
+                    <a
+                        href="//"
+                        className="forgot-link"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            setRegister(false);
+                        }}
+                    >
                         Already have an account?
-                    </Link>
+                    </a>
                 </div>
                 <button
                     className={

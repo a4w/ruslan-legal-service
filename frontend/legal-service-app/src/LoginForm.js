@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {Link} from "react-router-dom";
 import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
 
-const LoginForm = () => {
+const LoginForm = ({setRegister}) => {
     const initUser = {
         email: "",
         password: "",
@@ -77,7 +76,16 @@ const LoginForm = () => {
                     </div>
                 </div>
                 <div className='text-center dont-have'>
-                    Don’t have an account? <Link to='/Register'>Register</Link>
+                    Don’t have an account? 
+                    <a
+                        href="//"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            setRegister(true);
+                        }}
+                    >
+                        Register
+                    </a>
                 </div>
             </form>
         </>

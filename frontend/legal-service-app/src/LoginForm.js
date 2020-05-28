@@ -140,7 +140,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                             setRegister(true);
                         }}
                     >
-                        Register
+                        {" "}Register
                     </a>
                 </div>
             </form>

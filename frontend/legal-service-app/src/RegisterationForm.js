@@ -3,7 +3,6 @@ import { request } from "./Axios";
 import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { Link } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
 
 const RegisterationForm = ({setRegister, hideModal}) => {

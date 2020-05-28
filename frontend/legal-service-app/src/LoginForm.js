@@ -4,7 +4,7 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
 import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
-import { request, setAccessToken } from "./Axios";
+import { request, setAccessToken, setRefreshToken } from "./Axios";
 
 export const LoginTokens = React.createContext();
 
@@ -22,6 +22,7 @@ const LoginForm = () => {
         runValidation(nextUser, name);
     };
     const OnSubmitHandler = (event) => {
+        console.log("errors: ", errors);
         event.preventDefault();
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
@@ -29,12 +30,16 @@ const LoginForm = () => {
                 request({ url: url, method: "POST", data: user })
                     .then((data) => {
                         console.log("success", data);
-                        setAccessToken(data.access_token);
+                        if (user.access_token)
+                            setAccessToken(data.access_token);
+                        if (user.refresh_token)
+                            setRefreshToken(data.refresh_token);
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
-                        addError("email", "Invalid User");
-                        addError("password", "Invalid User");
+                        ["email", "password"].forEach((field) => {
+                            addError(field, ["Invalid User"]);
+                        });
                     });
             }
         });

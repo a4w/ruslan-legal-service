@@ -1,7 +1,5 @@
 import React from "react";
 import "./App.css";
-import RegisterationForm from "./RegisterationForm";
-import LoginForm from "./LoginForm";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { Route, Router, Switch } from "react-router-dom";
@@ -19,17 +17,6 @@ function App() {
                 <Route exact path="/">
                     <NavBar />
                     <Home />
-                    <Footer />
-                </Route>
-                >
-                <Route exact path="/login">
-                    <NavBar />
-                    <LoginForm />
-                    <Footer />
-                </Route>
-                <Route exact path="/register">
-                    <NavBar />
-                    <RegisterationForm />
                     <Footer />
                 </Route>
                 <Route exact path="/list">

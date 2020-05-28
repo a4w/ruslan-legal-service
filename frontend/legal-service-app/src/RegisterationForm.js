@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import axios from "./Axios";
+import { request } from "./Axios";
 import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
-import Config from "./Config.js";
 import { FaSpinner } from "react-icons/fa";
 
 const RegisterationForm = (_) => {
@@ -19,7 +18,9 @@ const RegisterationForm = (_) => {
 
     const [user, setUser] = useState(initUser);
     const [isRegistering, setIsRegistering] = useState(false);
-    const [errors, addError, runValidation] = useValidation(registrationValidation);
+    const [errors, addError, runValidation] = useValidation(
+        registrationValidation
+    );
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
@@ -36,24 +37,20 @@ const RegisterationForm = (_) => {
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 setIsRegistering(true);
-                let url = Config.api_url;
+                let url = "";
 
-                if (user.isClient) url = url + "/register/client";
-                else url = url + "/register/lawyer";
-
-                axios
-                    .post(url, user)
+                if (user.isClient) url = "/register/client";
+                else url = "/register/lawyer";
+                request({ url: url, method: "POST", data: user })
                     .then((response) => {
-                        console.log("success");
+                        console.log("success", response);
                     })
-                    .catch((error) => {
-                        if (error.response) {
-                            const data = error.response.data;
-                            const _errors = data.errors;
-                            for (const field in _errors) {
-                                addError(field, _errors[field]);
-                            }
+                    .catch((_errors) => {
+                        const fields = [];
+                        for (const field in _errors) {
+                            fields.push(field);
                         }
+                        addError(fields, _errors);
                     })
                     .finally(() => {
                         setIsRegistering(false);
@@ -64,17 +61,17 @@ const RegisterationForm = (_) => {
 
     return (
         <>
-            <div className='login-header'>
+            <div className="login-header">
                 <h3>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <button className='btn btn-link' onClick={UserTypeHandler}>
+                    <button className="btn btn-link" onClick={UserTypeHandler}>
                         {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
                     </button>
                 </h3>
             </div>
             <form onSubmit={OnSubmitHandler}>
-                <div className='form-row'>
-                    <div className='col'>
+                <div className="form-row">
+                    <div className="col">
                         <ErrorMessageInput
                             placeholder={"Name"}
                             name={"name"}
@@ -84,7 +81,7 @@ const RegisterationForm = (_) => {
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
-                    <div className='col'>
+                    <div className="col">
                         <ErrorMessageInput
                             placeholder={"surname"}
                             name={"surname"}
@@ -119,8 +116,8 @@ const RegisterationForm = (_) => {
                     errors={errors.password}
                     OnChangeHandler={OnChangeHandler}
                 />
-                <div className='text-right'>
-                    <Link to='/login' className='forgot-link'>
+                <div className="text-right">
+                    <Link to="/login" className="forgot-link">
                         Already have an account?
                     </Link>
                 </div>
@@ -129,25 +126,31 @@ const RegisterationForm = (_) => {
                         "btn btn-primary btn-block btn-lg login-btn " +
                         (isRegistering ? "cursor-not-allowed" : "")
                     }
-                    type='submit'
+                    type="submit"
                     disabled={isRegistering}
                 >
-                    {isRegistering && <FaSpinner className='icon-spin' />}
+                    {isRegistering && <FaSpinner className="icon-spin" />}
                     &nbsp;{isRegistering ? "" : "Register"}
                 </button>
-                <div className='login-or'>
-                    <span className='or-line'></span>
-                    <span className='span-or'>or</span>
+                <div className="login-or">
+                    <span className="or-line"></span>
+                    <span className="span-or">or</span>
                 </div>
-                <div className='row form-row social-login'>
-                    <div className='col-6'>
-                        <a href='facebook.com' className='btn btn-facebook btn-block'>
-                            <i className='fab fa-facebook-f mr-1'></i> Login
+                <div className="row form-row social-login">
+                    <div className="col-6">
+                        <a
+                            href="facebook.com"
+                            className="btn btn-facebook btn-block"
+                        >
+                            <i className="fab fa-facebook-f mr-1"></i> Login
                         </a>
                     </div>
-                    <div className='col-6'>
-                        <a href='google.com' className='btn btn-google btn-block'>
-                            <i className='fab fa-google mr-1'></i> Login
+                    <div className="col-6">
+                        <a
+                            href="google.com"
+                            className="btn btn-google btn-block"
+                        >
+                            <i className="fab fa-google mr-1"></i> Login
                         </a>
                     </div>
                 </div>

@@ -4,12 +4,13 @@ import RegisterationForm from "./RegisterationForm";
 import LoginForm from "./LoginForm";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch } from "react-router-dom";
+import {Route, Router, Switch} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
+import BookingForm from "./BookingForm";
 
 function App() {
     return (
@@ -31,6 +32,9 @@ function App() {
                 </Route>
                 <Route exact path="/list">
                     <LawyerList />
+                </Route>
+                <Route exact path="/book">
+                    <BookingForm />
                 </Route>
             </Switch>
         </Router>

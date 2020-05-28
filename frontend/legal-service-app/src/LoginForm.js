@@ -4,14 +4,15 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import { Link } from "react-router-dom";
 import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
-import axios from "./Axios";
-import Config from "./Config";
+import { request, setAccessToken } from "./Axios";
+
+export const LoginTokens = React.createContext();
 
 const LoginForm = () => {
     const initUser = {
         email: "",
         password: "",
-        refreshToken: false,
+        refresh_token: false,
     };
     const [user, setUser] = useState(initUser);
     const [errors, addError, runValidation] = useValidation(loginValidation);
@@ -24,20 +25,16 @@ const LoginForm = () => {
         event.preventDefault();
         runValidation(user).then((hasErrors, _) => {
             if (!hasErrors) {
-                const url = Config.api_url + "/auth/login";
-                axios
-                    .post(url, user)
-                    .then((response) => {
-                        console.log("success");
+                const url = "/auth/login";
+                request({ url: url, method: "POST", data: user })
+                    .then((data) => {
+                        console.log("success", data);
+                        setAccessToken(data.access_token);
                     })
-                    .catch((error) => {
-                        if (error.response) {
-                            const data = error.response.data;
-                            const _errors = data.errors;
-                            for (const field in _errors) {
-                                addError(field, _errors[field]);
-                            }
-                        }
+                    .catch((_errors) => {
+                        console.log("failed", _errors);
+                        addError("email", "Invalid User");
+                        addError("password", "Invalid User");
                     });
             }
         });
@@ -72,8 +69,14 @@ const LoginForm = () => {
                             <label className="custom_check">
                                 <input
                                     type="checkbox"
-                                    name="refreshToken"
-                                    value={user.refreshToken}
+                                    name="refresh_token"
+                                    value={user.refresh_token}
+                                    onChange={() =>
+                                        setUser({
+                                            ...user,
+                                            refresh_token: !user.refresh_token,
+                                        })
+                                    }
                                 />
                                 <span className="checkmark"></span> remember me
                             </label>

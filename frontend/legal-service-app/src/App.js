@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
+import EditPersonal from "./EditPersonal";
 
 function App() {
     return (
@@ -31,6 +32,9 @@ function App() {
                 </Route>
                 <Route exact path="/list">
                     <LawyerList />
+                </Route>
+                <Route wxact path="/edit">
+                    <EditPersonal />
                 </Route>
             </Switch>
         </Router>

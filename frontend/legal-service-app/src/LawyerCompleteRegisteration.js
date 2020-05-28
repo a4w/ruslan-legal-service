@@ -95,7 +95,7 @@ const LawyerCompleteRegisteration = (_) => {
             </div>
             <div className="form-row">
                 <div className="col">
-                    <Label value={lawyer.education} label="Education">
+                    <Label value={lawyer.education} label="Institution">
                         <input
                             className="form-control"
                             name="education"

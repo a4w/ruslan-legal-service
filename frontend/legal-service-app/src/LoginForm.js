@@ -5,6 +5,7 @@ import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
 import { request, setAccessToken, setRefreshToken } from "./Axios";
 import { FaSpinner } from "react-icons/fa";
+import history from "./History";
 
 export const LoginTokens = React.createContext();
 
@@ -46,6 +47,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                     .finally(() => {
                         setLoggingIn(false);
                         hideModal();
+                        history.push('/');
                     });
             }
         });

@@ -4,6 +4,7 @@ import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
+import history from "./History";
 
 const RegisterationForm = ({ setRegister, hideModal }) => {
     const initUser = {
@@ -54,6 +55,7 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                     .finally(() => {
                         setIsRegistering(false);
                         hideModal();
+                        history.push('/');
                     });
             }
         });

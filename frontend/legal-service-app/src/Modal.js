@@ -15,15 +15,21 @@ const ModalPopUp = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {headerTitle}
+                {getTitle(register)}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>{getBody(register, setRegister, props.onHide)}</Modal.Body>
+            <Modal.Body>
+                {getBody(register, setRegister, props.onHide)}
+            </Modal.Body>
         </Modal>
     );
 };
 const getBody = (register, setRegister, hide) => {
     if (register) return <RegisterationForm setRegister={setRegister} hideModal={hide} />;
     else return <LoginForm setRegister={setRegister} hideModal={hide} />;
+};
+const getTitle = (register) => {
+    if (register) return "Register";
+    else return "Log In";
 };
 export default ModalPopUp;

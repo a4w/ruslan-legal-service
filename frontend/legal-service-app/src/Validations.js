@@ -74,3 +74,13 @@ export const editEmailPasswordValidation = (data, field) => {
         });
     });
 };
+export const editNameSurnameValidation = (data, field) => {
+    return validate("EditNameSurname", () => {
+        vest.only(field);
+        ["name", "surname"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+    });
+};

@@ -51,7 +51,7 @@ const LoginForm = ({setRegister, hideModal}) => {
         });
     };
     return (
-        <>
+        <LoginWrapper>
             <div className="login-header">
                 <h3>
                     Login <span>Lawbe</span>
@@ -144,7 +144,25 @@ const LoginForm = ({setRegister, hideModal}) => {
                     </a>
                 </div>
             </form>
-        </>
+        </LoginWrapper>
+    );
+};
+const LoginWrapper = (props) => {
+    return (
+        <div className="account-content">
+            <div className="row align-items-center justify-content-center">
+                <div className="col-md-7 col-lg-6 login-left">
+                    <img
+                        src="/undraw_welcoming_xvuq.svg"
+                        className="img-fluid"
+                        alt="Register"
+                    />
+                </div>
+                <div className="col-md-12 col-lg-5 login-right">
+                    {props.children}
+                </div>
+            </div>
+        </div>
     );
 };
 export default LoginForm;

@@ -4,8 +4,8 @@ import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 
-const EditBasicInfo = () => {
-    const [user, setUser] = useState({ email: "" });
+const EditEmail = ({ email }) => {
+    const [user, setUser] = useState({ email: email });
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editEmailValidations);
 
@@ -27,7 +27,7 @@ const EditBasicInfo = () => {
     return (
         <form onSubmit={OnSubmitHandler}>
             <div className="form-row">
-                <div className="col-lg-6 col-md-6 col-sm-12">
+                <div className="col-lg-9 col-md-9 col-sm-12">
                     <ErrorMessageInput
                         placeholder={"Email"}
                         name={"email"}
@@ -37,12 +37,12 @@ const EditBasicInfo = () => {
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="col-lg-4 col-md-5 col-sm-12">
+                <div className="col-lg-3 col-md-3 col-sm-12">
                     <button
                         type="submit"
                         disabled={isSaving}
                         className={
-                            "btn btn-primary search-btn btn-block btn-lg" +
+                            "btn btn-primary btn-block btn-lg" +
                             (isSaving ? "cursor-not-allowed" : "")
                         }
                     >
@@ -61,4 +61,4 @@ const EditBasicInfo = () => {
     );
 };
 
-export default EditBasicInfo;
+export default EditEmail;

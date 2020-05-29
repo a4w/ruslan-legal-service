@@ -69,21 +69,28 @@ export const editPasswordValidation = (data, field) => {
 export const editBasicInfoValidation = (data, field) => {
     return validate("editBasicInfo", () => {
         vest.only(field);
-        ["name", "surname", "email", "phone"].forEach((elem) => {
+        ["name", "surname", "phone"].forEach((elem) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
-        });
-        const trimmedEmail = truncate(data.email.toString(), 15);
-        test("email", `${trimmedEmail} is not valid email address`, () => {
-            enforce(data.email.toString())
-            .isNotEmpty()
-            .matches(/[^@]+@[^.]+\..+/g);
         });
         const phone = data.phone.toString();
         test("phone", `${phone} is not a valid phone number`, () => {
             enforce(parseInt(phone)).isNumeric();
         });
-
+    });
+};
+export const editEmailValidations = (data, field) => {
+    return validate("editBasicInfo", () => {
+        vest.only(field);
+        test("email", "This field is required", () => {
+            enforce(data.email.toString()).isNotEmpty();
+        });
+        const trimmedEmail = truncate(data.email.toString(), 15);
+        test("email", `${trimmedEmail} is not valid email address`, () => {
+            enforce(data.email.toString())
+                .isNotEmpty()
+                .matches(/[^@]+@[^.]+\..+/g);
+        });
     });
 };

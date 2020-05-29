@@ -13,6 +13,12 @@ const LawyerCompleteRegisteration = (_) => {
         type: "",
         yearLicensed: "",
     };
+    const selectStyle = {
+        borderColor: "#dcdcdc",
+        backgroundColor: "#ffffff",
+        color: "#333",
+        minHeight: "50px",
+    };
     const [lawyer, setLawyer] = useState(init);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -22,57 +28,58 @@ const LawyerCompleteRegisteration = (_) => {
         setLawyer({ ...lawyer, [name]: value });
         console.log(lawyer);
     };
+    const OnSelectHandler = ([{ value, name }]) => {
+        setLawyer({ ...lawyer, [name]: value });
+    };
+    const MultiselectHandler = (values) => {
+        const [{ name }] = values;
+        setLawyer({ ...lawyer, [name]: values });
+    };
     const typeOptions = [
-        { value: "solicitor", label: "Solicitor" },
-        { value: "barrister", label: "Barrister" },
-        { value: "other", label: "Other" },
+        { value: "solicitor", label: "Solicitor", name: "type" },
+        { value: "barrister", label: "Barrister", name: "type" },
+        { value: "other", label: "Other", name: "type" },
     ];
     const practiceAreasOptions = [
-        { value: "1", label: "area1" },
-        { value: "2", label: "area2" },
-        { value: "3", label: "area3" },
+        { value: "1", label: "area1", name: "practiceAreas" },
+        { value: "2", label: "area2", name: "practiceAreas" },
+        { value: "3", label: "area3", name: "practiceAreas" },
     ];
     const accreditationOptions = [
-        { value: "1", label: "Accreditation 1" },
-        { value: "2", label: "Accreditation 2" },
-        { value: "3", label: "Accreditation 3" },
+        { value: "1", label: "Accreditation 1", name: "accreditations" },
+        { value: "2", label: "Accreditation 2", name: "accreditations" },
+        { value: "3", label: "Accreditation 3", name: "accreditations" },
     ];
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
-                <div className="col form-group">
+                <div className="col-lg-6 col-md-6 col-sm-6 form-group">
                     <Select
-                        name="select"
-                        className="form-control floating"
+                        name="type"
+                        className="floating"
                         value={lawyer.type}
-                        style={{ minHeight: "50px" }}
+                        style={selectStyle}
                         placeholder={
                             lawyer.type ? lawyer.type : "Select type.."
                         }
                         options={typeOptions}
-                        onChange={([{ value }]) =>
-                            setLawyer({ ...lawyer, type: value })
-                        }
+                        onChange={OnSelectHandler}
                     />
                 </div>
-                <div
-                    className="col"
-                    style={{
-                        display: lawyer.type === "other" ? "block" : "none",
-                    }}
-                >
-                    <Label value={lawyer.other} label="Type">
+                <div className="col-lg-6 col-md-6 col-sm-6">
+                    <Label value={lawyer.other} label="Other..">
                         <input
                             name="other"
                             value={lawyer.other}
                             onChange={OnChangeHandler}
                             className="form-control floating"
+                            disabled={lawyer.type !== "other"}
                         />
                     </Label>
                 </div>
             </div>
             <div className="form-row">
-                <div className="col">
+                <div className="col-lg-3 col-md-3 col-sm-3">
                     <Label value={lawyer.yearLicensed} label="Year licensed">
                         <input
                             className="form-control"
@@ -82,7 +89,7 @@ const LawyerCompleteRegisteration = (_) => {
                         />
                     </Label>
                 </div>
-                <div className="col">
+                <div className="col-lg-9 col-md-9 col-sm-9">
                     <Label value={lawyer.regulatedBy} label="Regulated by">
                         <input
                             className="form-control"
@@ -94,7 +101,7 @@ const LawyerCompleteRegisteration = (_) => {
                 </div>
             </div>
             <div className="form-row">
-                <div className="col">
+                <div className="col-lg-9 col-md-9 col-sm-9">
                     <Label value={lawyer.education} label="Institution">
                         <input
                             className="form-control"
@@ -104,7 +111,7 @@ const LawyerCompleteRegisteration = (_) => {
                         />
                     </Label>
                 </div>
-                <div className="col">
+                <div className="col-lg-3 col-md-3 col-sm-3">
                     <Label value={lawyer.graduation} label="Graduation year">
                         <input
                             className="form-control"
@@ -115,44 +122,46 @@ const LawyerCompleteRegisteration = (_) => {
                     </Label>
                 </div>
             </div>
-            <div className="form-group">
-                <Select
-                    multi
-                    name="select"
-                    style={{ minHeight: "50px" }}
-                    className="form-control floating"
-                    value={lawyer.practiceAreas}
-                    placeholder="Select practice areas"
-                    options={practiceAreasOptions}
-                    onChange={(values) =>
-                        setLawyer({ ...lawyer, practiceAreas: values })
-                    }
-                />
+            <div className="form-row">
+                <div className="col-lg-6 col-md-6 col-sm-12 form-group">
+                    <Select
+                        multi
+                        name="practiceAreas"
+                        style={selectStyle}
+                        className="floating"
+                        value={lawyer.practiceAreas}
+                        placeholder="Select practice areas"
+                        options={practiceAreasOptions}
+                        onChange={MultiselectHandler}
+                    />
+                </div>
+                <div className="col-lg-6 col-md-6 col-sm-12 form-group">
+                    <Select
+                        multi
+                        name="accreditations"
+                        style={selectStyle}
+                        className="floating"
+                        value={lawyer.accreditations}
+                        placeholder="Select accreditations"
+                        options={accreditationOptions}
+                        onChange={MultiselectHandler}
+                    />
+                </div>
             </div>
-            <div className="form-group">
-                <Select
-                    multi
-                    name="select"
-                    style={{ minHeight: "50px" }}
-                    className="form-control floating"
-                    value={lawyer.accreditations}
-                    placeholder="Select accreditations"
-                    options={accreditationOptions}
-                    onChange={(values) =>
-                        setLawyer({ ...lawyer, accreditations: values })
-                    }
-                />
+            <div className="form-row">
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                    <Label value={lawyer.bio} label="Bio..">
+                        <textarea
+                            className="form-control"
+                            name="bio"
+                            style={{ minHeight: "100px" }}
+                            form="regForm"
+                            value={lawyer.bio}
+                            onChange={OnChangeHandler}
+                        ></textarea>
+                    </Label>
+                </div>
             </div>
-            <Label value={lawyer.bio} label="Bio..">
-                <textarea
-                    className="form-control"
-                    name="bio"
-                    style={{ minHeight: "100px" }}
-                    form="regForm"
-                    value={lawyer.bio}
-                    onChange={OnChangeHandler}
-                ></textarea>
-            </Label>
             <button
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"

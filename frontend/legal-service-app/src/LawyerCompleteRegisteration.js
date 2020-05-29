@@ -12,6 +12,7 @@ const LawyerCompleteRegisteration = (_) => {
         regulatedBy: "",
         type: "",
         yearLicensed: "",
+        course: "",
     };
     const selectStyle = {
         borderColor: "#dcdcdc",
@@ -101,7 +102,7 @@ const LawyerCompleteRegisteration = (_) => {
                 </div>
             </div>
             <div className="form-row">
-                <div className="col-lg-9 col-md-9 col-sm-9">
+                <div className="col-lg-6 col-md-6 col-sm-8">
                     <Label value={lawyer.education} label="Institution">
                         <input
                             className="form-control"
@@ -111,12 +112,22 @@ const LawyerCompleteRegisteration = (_) => {
                         />
                     </Label>
                 </div>
-                <div className="col-lg-3 col-md-3 col-sm-3">
+                <div className="col-lg-3 col-md-3 col-sm-2">
                     <Label value={lawyer.graduation} label="Graduation year">
                         <input
                             className="form-control"
                             name="graduation"
                             value={lawyer.graduation}
+                            onChange={OnChangeHandler}
+                        />
+                    </Label>
+                </div>
+                <div className="col-lg-3 col-md-3 col-sm-2">
+                    <Label value={lawyer.course} label="Course Name">
+                        <input
+                            className="form-control"
+                            name="course"
+                            value={lawyer.course}
                             onChange={OnChangeHandler}
                         />
                     </Label>

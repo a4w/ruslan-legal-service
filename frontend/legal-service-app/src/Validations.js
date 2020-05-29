@@ -50,19 +50,11 @@ const truncate = (string, len) => {
     else return string;
 };
 
-export const editEmailPasswordValidation = (data, field) => {
-    return validate("EditEmailPassword", () => {
+export const editPasswordValidation = (data, field) => {
+    return validate("EditPassword", () => {
         vest.only(field);
-        ["email", "password", "passwordConfirm"].forEach((elem) => {
-            test(elem, "This field is required", () => {
-                enforce(data[elem].toString()).isNotEmpty();
-            });
-        });
-        const trimmedEmail = truncate(data.email.toString(), 15);
-        test("email", `${trimmedEmail} is not valid email address`, () => {
-            enforce(data.email.toString())
-                .isNotEmpty()
-                .matches(/[^@]+@[^.]+\..+/g);
+        test("password", "This field is required", () => {
+            enforce(data.password.toString()).isNotEmpty();
         });
         test("password", "Password should be atleast 8 characters long", () => {
             enforce(data.password.toString()).longerThanOrEquals(8);

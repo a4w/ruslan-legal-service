@@ -41,6 +41,7 @@ const EditPassword = () => {
                         type={"password"}
                         errors={errors.oldPassword}
                         OnChangeHandler={OnChangeHandler}
+                        disabled={true}
                     />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12">
@@ -58,7 +59,6 @@ const EditPassword = () => {
                 <div className="col-lg-6 col-md-6 col-sm-0"></div>
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageInput
-                        disabled={user.newPassword === ""}
                         placeholder={"Re-Enter Password"}
                         name={"passwordConfirm"}
                         value={user.passwordConfirm}

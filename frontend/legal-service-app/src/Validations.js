@@ -53,15 +53,25 @@ const truncate = (string, len) => {
 export const editPasswordValidation = (data, field) => {
     return validate("EditPassword", () => {
         vest.only(field);
-        test("password", "This field is required", () => {
-            enforce(data.password.toString()).isNotEmpty();
+        test("newPassword", "This field is required", () => {
+            enforce(data.newPassword.toString()).isNotEmpty();
         });
-        test("password", "Password should be atleast 8 characters long", () => {
-            enforce(data.password.toString()).longerThanOrEquals(8);
-        });
+
+        test(
+            "newPassword",
+            "Password should be atleast 8 characters long",
+            () => {
+                enforce(data.newPassword.toString()).longerThanOrEquals(8);
+            }
+        );
         test("passwordConfirm", "Passwords should be matching", () => {
             enforce(
-                data.password.toString() === data.passwordConfirm.toString()
+                data.newPassword.toString() === data.passwordConfirm.toString()
+            ).isTruthy();
+        });
+        test("newPassword", "New password can't match old password", () => {
+            enforce(
+                data.newPassword.toString() !== data.oldPassword.toString()
             ).isTruthy();
         });
     });

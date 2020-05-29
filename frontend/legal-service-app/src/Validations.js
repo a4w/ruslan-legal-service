@@ -66,13 +66,24 @@ export const editPasswordValidation = (data, field) => {
         });
     });
 };
-export const editNameSurnameValidation = (data, field) => {
-    return validate("EditNameSurname", () => {
+export const editBasicInfoValidation = (data, field) => {
+    return validate("editBasicInfo", () => {
         vest.only(field);
-        ["name", "surname"].forEach((elem) => {
+        ["name", "surname", "email", "phone"].forEach((elem) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
         });
+        const trimmedEmail = truncate(data.email.toString(), 15);
+        test("email", `${trimmedEmail} is not valid email address`, () => {
+            enforce(data.email.toString())
+            .isNotEmpty()
+            .matches(/[^@]+@[^.]+\..+/g);
+        });
+        const phone = data.phone.toString();
+        test("phone", `${phone} is not a valid phone number`, () => {
+            enforce(parseInt(phone)).isNumeric();
+        });
+
     });
 };

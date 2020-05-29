@@ -5,7 +5,8 @@ import ErrorMessageInput from "./ErrorMessageInput";
 
 const EditPassword = () => {
     const initUser = {
-        password: "",
+        oldPassword: "",
+        newPassword: "",
         passwordConfirm: "",
     };
 
@@ -16,7 +17,7 @@ const EditPassword = () => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
         runValidation(nextUser, name);
-        if (name === "password" && nextUser.passwordConfirm !== "")
+        if (name === "newPassword" && nextUser.passwordConfirm !== "")
             runValidation(nextUser, "passwordConfirm");
     };
 
@@ -32,19 +33,32 @@ const EditPassword = () => {
     return (
         <form onSubmit={OnSubmitHandler}>
             <div className="form-row">
-                <div className="col-lg-5 col-md-4 col-sm-12">
+                <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageInput
-                        placeholder={"Password"}
-                        name={"password"}
-                        value={user.password}
+                        placeholder={"Old Password"}
+                        name={"oldPassword"}
+                        value={user.oldPassword}
                         type={"password"}
-                        errors={errors.password}
+                        errors={errors.oldPassword}
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="col-lg-5 col-md-4 col-sm-12">
+                <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageInput
-                        disabled={user.password === ""}
+                        placeholder={"New Password"}
+                        name={"newPassword"}
+                        value={user.newPassword}
+                        type={"password"}
+                        errors={errors.newPassword}
+                        OnChangeHandler={OnChangeHandler}
+                    />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="col-lg-6 col-md-6 col-sm-0"></div>
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <ErrorMessageInput
+                        disabled={user.newPassword === ""}
                         placeholder={"Re-Enter Password"}
                         name={"passwordConfirm"}
                         value={user.passwordConfirm}
@@ -53,7 +67,10 @@ const EditPassword = () => {
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="col-lg-2 col-md-4 col-sm-12">
+            </div>
+            <div className="form-row">
+                <div className="col-lg-10 col-md-8 col-sm-0 float-right"></div>
+                <div className="col-lg-2 col-md-4 col-sm-12 float-right">
                     <button
                         className="btn btn-primary btn-block btn-lg login-btn "
                         type="submit"

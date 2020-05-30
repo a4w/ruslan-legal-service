@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ErrorMessageSelect from "./ErrorMessageSelect";
+import ErrorMessageInput from "./ErrorMessageInput";
 
 const LawyerCompleteRegisteration = (_) => {
     const init = {
@@ -58,69 +59,63 @@ const LawyerCompleteRegisteration = (_) => {
                     />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
-                    <Label value={lawyer.other} label="Other..">
-                        <input
-                            name="other"
-                            value={lawyer.other}
-                            onChange={OnChangeHandler}
-                            className="form-control floating"
-                            disabled={lawyer.type !== "other"}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        disabled={lawyer.type !== "other"}
+                        type={"text"}
+                        name="other"
+                        placeholder={"Other.."}
+                        value={lawyer.other}
+                        OnChangeHandler={OnChangeHandler}
+                    />
                 </div>
             </div>
             <div className="form-row">
                 <div className="col-lg-3 col-md-3 col-sm-3">
-                    <Label value={lawyer.yearLicensed} label="Year licensed">
-                        <input
-                            className="form-control"
-                            name="yearLicensed"
-                            value={lawyer.yearLicensed}
-                            onChange={OnChangeHandler}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        type={"text"}
+                        name="yearLicensed"
+                        value={lawyer.yearLicensed}
+                        OnChangeHandler={OnChangeHandler}
+                        placeholder={"Year licensed"}
+                    />
                 </div>
                 <div className="col-lg-9 col-md-9 col-sm-9">
-                    <Label value={lawyer.regulatedBy} label="Regulated by">
-                        <input
-                            className="form-control"
-                            name="regulatedBy"
-                            value={lawyer.regulatedBy}
-                            onChange={OnChangeHandler}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        type={"text"}
+                        name="regulatedBy"
+                        value={lawyer.regulatedBy}
+                        OnChangeHandler={OnChangeHandler}
+                        placeholder={"Regulated by"}
+                    />
                 </div>
             </div>
             <div className="form-row">
                 <div className="col-lg-6 col-md-6 col-sm-8">
-                    <Label value={lawyer.education} label="Institution">
-                        <input
-                            className="form-control"
-                            name="education"
-                            value={lawyer.education}
-                            onChange={OnChangeHandler}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        type={"text"}
+                        name="education"
+                        value={lawyer.education}
+                        OnChangeHandler={OnChangeHandler}
+                        placeholder={"Institution"}
+                    />
                 </div>
                 <div className="col-lg-3 col-md-3 col-sm-2">
-                    <Label value={lawyer.graduation} label="Graduation year">
-                        <input
-                            className="form-control"
-                            name="graduation"
-                            value={lawyer.graduation}
-                            onChange={OnChangeHandler}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        type={"text"}
+                        name="graduation"
+                        value={lawyer.graduation}
+                        OnChangeHandler={OnChangeHandler}
+                        placeholder={"Graduation year"}
+                    />
                 </div>
                 <div className="col-lg-3 col-md-3 col-sm-2">
-                    <Label value={lawyer.course} label="Course Name">
-                        <input
-                            className="form-control"
-                            name="course"
-                            value={lawyer.course}
-                            onChange={OnChangeHandler}
-                        />
-                    </Label>
+                    <ErrorMessageInput
+                        type={"text"}
+                        name="course"
+                        value={lawyer.course}
+                        OnChangeHandler={OnChangeHandler}
+                        placeholder={"Course Name"}
+                    />
                 </div>
             </div>
             <div className="form-row">

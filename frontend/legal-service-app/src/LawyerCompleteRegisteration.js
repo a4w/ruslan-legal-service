@@ -1,24 +1,18 @@
 import React, { useState } from "react";
-import Select from "react-dropdown-select";
+import ErrorMessageSelect from "./ErrorMessageSelect";
 
 const LawyerCompleteRegisteration = (_) => {
     const init = {
-        accreditations: "",
-        bio: "",
+        type: [],
+        other: "",
+        regulatedBy: "",
+        yearLicensed: "",
         education: "",
         graduation: "",
-        other: "",
-        practiceAreas: "",
-        regulatedBy: "",
-        type: "",
-        yearLicensed: "",
         course: "",
-    };
-    const selectStyle = {
-        borderColor: "#dcdcdc",
-        backgroundColor: "#ffffff",
-        color: "#333",
-        minHeight: "50px",
+        practiceAreas: [],
+        accreditations: [],
+        bio: "",
     };
     const [lawyer, setLawyer] = useState(init);
     const OnSubmitHandler = (event) => {
@@ -54,15 +48,11 @@ const LawyerCompleteRegisteration = (_) => {
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
-                <div className="col-lg-6 col-md-6 col-sm-6 form-group">
-                    <Select
+                <div className="col-lg-6 col-md-6 col-sm-6">
+                    <ErrorMessageSelect
                         name="type"
-                        className="floating"
                         value={lawyer.type}
-                        style={selectStyle}
-                        placeholder={
-                            lawyer.type ? lawyer.type : "Select type.."
-                        }
+                        placeholder={"Select type.."}
                         options={typeOptions}
                         onChange={OnSelectHandler}
                     />
@@ -134,11 +124,10 @@ const LawyerCompleteRegisteration = (_) => {
                 </div>
             </div>
             <div className="form-row">
-                <div className="col-lg-6 col-md-6 col-sm-12 form-group">
-                    <Select
-                        multi
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <ErrorMessageSelect
+                        multi={true}
                         name="practiceAreas"
-                        style={selectStyle}
                         className="floating"
                         value={lawyer.practiceAreas}
                         placeholder="Select practice areas"
@@ -146,11 +135,10 @@ const LawyerCompleteRegisteration = (_) => {
                         onChange={MultiselectHandler}
                     />
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-12 form-group">
-                    <Select
-                        multi
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <ErrorMessageSelect
+                        multi={true}
                         name="accreditations"
-                        style={selectStyle}
                         className="floating"
                         value={lawyer.accreditations}
                         placeholder="Select accreditations"

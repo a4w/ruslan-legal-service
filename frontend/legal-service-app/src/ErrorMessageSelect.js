@@ -8,6 +8,7 @@ const ErrorMessageSelect = ({
     name,
     OnChangeHandler,
     options,
+    multi = false,
 }) => {
     const selectStyle = {
         borderColor: "#dcdcdc",
@@ -18,6 +19,7 @@ const ErrorMessageSelect = ({
     return (
         <div className="form-group">
             <Select
+                multi={multi}
                 name={name}
                 className="floating"
                 value={value}

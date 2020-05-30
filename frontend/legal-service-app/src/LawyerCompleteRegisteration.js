@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ErrorMessageSelect from "./ErrorMessageSelect";
 import ErrorMessageInput from "./ErrorMessageInput";
+import useValidation from "./useValidation";
+import { LawyerInfoValidations } from "./Validations";
 
 const LawyerCompleteRegisteration = (_) => {
     const init = {
@@ -16,20 +18,29 @@ const LawyerCompleteRegisteration = (_) => {
         bio: "",
     };
     const [lawyer, setLawyer] = useState(init);
+    const [errors, , validate] = useValidation(LawyerInfoValidations);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
+        validate(lawyer);
         console.log("submitting");
     };
     const OnChangeHandler = ({ target: { value, name } }) => {
-        setLawyer({ ...lawyer, [name]: value });
+        const newData = { ...lawyer, [name]: value };
+        setLawyer(newData);
         console.log(lawyer);
+        console.log("Validating: ", name, " with: ", newData);
+        validate(newData, name);
     };
     const OnSelectHandler = ([{ value, name }]) => {
-        setLawyer({ ...lawyer, [name]: value });
+        const newData = { ...lawyer, [name]: value };
+        setLawyer(newData);
+        validate(newData, name);
     };
     const MultiselectHandler = (values) => {
         const [{ name }] = values;
-        setLawyer({ ...lawyer, [name]: values });
+        const newData = { ...lawyer, [name]: values };
+        setLawyer(newData);
+        validate(newData, name);
     };
     const typeOptions = [
         { value: "solicitor", label: "Solicitor", name: "type" },
@@ -52,15 +63,17 @@ const LawyerCompleteRegisteration = (_) => {
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageSelect
                         name="type"
+                        errors={errors.type}
                         value={lawyer.type}
                         placeholder={"Select type.."}
                         options={typeOptions}
-                        onChange={OnSelectHandler}
+                        OnChangeHandler={OnSelectHandler}
                     />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
                         disabled={lawyer.type !== "other"}
+                        errors={errors.other}
                         type={"text"}
                         name="other"
                         placeholder={"Other.."}
@@ -122,12 +135,13 @@ const LawyerCompleteRegisteration = (_) => {
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageSelect
                         multi={true}
+                        errors={errors.practiceAreas}
                         name="practiceAreas"
                         className="floating"
                         value={lawyer.practiceAreas}
                         placeholder="Select practice areas"
                         options={practiceAreasOptions}
-                        onChange={MultiselectHandler}
+                        OnChangeHandler={MultiselectHandler}
                     />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12">
@@ -138,7 +152,7 @@ const LawyerCompleteRegisteration = (_) => {
                         value={lawyer.accreditations}
                         placeholder="Select accreditations"
                         options={accreditationOptions}
-                        onChange={MultiselectHandler}
+                        OnChangeHandler={MultiselectHandler}
                     />
                 </div>
             </div>

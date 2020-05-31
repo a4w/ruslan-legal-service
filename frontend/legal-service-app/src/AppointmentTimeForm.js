@@ -3,7 +3,7 @@ import moment from "moment"
 import {FaCheck} from "react-icons/fa"
 import Config from "./Config";
 
-const BookingForm = (props) => {
+const AppointmentTimeForm = (props) => {
     /*
         This will show the date from today (current hour) -> 7 days ahead (same week day next week)
     */
@@ -199,4 +199,4 @@ const BookingForm = (props) => {
 }
 
 
-export default BookingForm;
+export default AppointmentTimeForm;

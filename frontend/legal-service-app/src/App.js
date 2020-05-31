@@ -10,7 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
-import BookingForm from "./BookingForm";
+import AppointmentTimeForm from "./AppointmentTimeForm"
 
 function App() {
     return (
@@ -34,7 +34,7 @@ function App() {
                     <LawyerList />
                 </Route>
                 <Route exact path="/book">
-                    <BookingForm lawyer_id="1" />
+                    <AppointmentTimeForm lawyer_id="1" />
                 </Route>
             </Switch>
         </Router>

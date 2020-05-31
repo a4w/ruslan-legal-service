@@ -34,7 +34,7 @@ function App() {
                     <LawyerList />
                 </Route>
                 <Route exact path="/book">
-                    <BookingForm />
+                    <BookingForm lawyer_id="1" />
                 </Route>
             </Switch>
         </Router>

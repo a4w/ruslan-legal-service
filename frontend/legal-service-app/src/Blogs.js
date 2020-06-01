@@ -19,7 +19,16 @@ const Blogs = () => {
             id: "5",
         },
     ];
-    return <BlogList blogs={blogs} />;
+    return (
+        <div className="row">
+            <div className="col-lg-8 col-md-12">
+                <BlogList blogs={blogs} />
+            </div>
+            <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
+                sideBar
+            </div>
+        </div>
+    );
 };
 
 export default Blogs;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
-import resetPasswordValidation from "./Validations";
+import { resetPasswordValidation } from "./Validations";
 
 const ResetPassword = () => {
     const initUser = {
@@ -16,8 +16,10 @@ const ResetPassword = () => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
         runValidation(nextUser, name);
-        if (name === "newPassword" && nextUser.passwordConfirm !== "")
+        if (name === "newPassword" && nextUser.passwordConfirm !== "") {
             runValidation(nextUser, "passwordConfirm");
+            runValidation(nextUser, "newPassword");
+        }
     };
 
     const OnSubmitHandler = (event) => {

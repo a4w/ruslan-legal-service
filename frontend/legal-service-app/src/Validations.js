@@ -62,7 +62,7 @@ export const resetPasswordValidation = (data, field) => {
             "newPassword",
             "Password should be atleast 8 characters long",
             () => {
-                enforce(data.password.toString()).longerThanOrEquals(8);
+                enforce(data.newPassword.toString()).longerThanOrEquals(8);
             }
         );
         test("passwordConfirm", "Passwords should be matching", () => {

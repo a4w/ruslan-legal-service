@@ -3,10 +3,10 @@ import { request } from "./Axios";
 import { registrationValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { Link } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
+import history from "./History";
 
-const RegisterationForm = (_) => {
+const RegisterationForm = ({ setRegister, hideModal }) => {
     const initUser = {
         name: "",
         surname: "",
@@ -54,20 +54,22 @@ const RegisterationForm = (_) => {
                     })
                     .finally(() => {
                         setIsRegistering(false);
+                        hideModal();
+                        history.push('/');
                     });
             }
         });
     };
 
     return (
-        <>
+        <RegisterationWrapper isClient={user.isClient}>
             <div className="login-header">
-                <h3>
+                <h5>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <button className="btn btn-link" onClick={UserTypeHandler}>
+                    <button className="btn btn-link text-right" onClick={UserTypeHandler}>
                         {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
                     </button>
-                </h3>
+                </h5>
             </div>
             <form onSubmit={OnSubmitHandler}>
                 <div className="form-row">
@@ -117,9 +119,16 @@ const RegisterationForm = (_) => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className="text-right">
-                    <Link to="/login" className="forgot-link">
+                    <a
+                        href="//"
+                        className="forgot-link"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            setRegister(false);
+                        }}
+                    >
                         Already have an account?
-                    </Link>
+                    </a>
                 </div>
                 <button
                     className={
@@ -155,8 +164,30 @@ const RegisterationForm = (_) => {
                     </div>
                 </div>
             </form>
-        </>
+        </RegisterationWrapper>
     );
 };
 
+const RegisterationWrapper = (props) => {
+    return (
+        <div className="account-content">
+            <div className="row align-items-center justify-content-center">
+                <div className="col-md-7 col-lg-6 login-left">
+                    <img
+                        src={
+                            props.isClient
+                                ? "/undraw_personal_info.svg"
+                                : "/undraw_businessman.svg"
+                        }
+                        className="img-fluid"
+                        alt="Register"
+                    />
+                </div>
+                <div className="col-md-12 col-lg-5 login-right">
+                    {props.children}
+                </div>
+            </div>
+        </div>
+    );
+};
 export default RegisterationForm;

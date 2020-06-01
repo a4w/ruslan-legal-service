@@ -22,6 +22,9 @@ function App() {
                 <Route exact path="/list">
                     <LawyerList />
                 </Route>
+                <Route exact path="/complete-registeration">
+                    <LawyerCompleteRegisteration />
+                </Route>
             </Switch>
         </Router>
     );

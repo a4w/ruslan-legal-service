@@ -7377,6 +7377,16 @@ html.menu-opened body {
         margin-bottom: 10px;
     }
 }
+.select-form-control{
+    min-height: 46px;
+    border-color: #dcdcdc;
+    background-color: #ffffff;
+    color: #333;
+}
+.modal-90w {
+    width: 90%;
+    max-width: none!important;
+}
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: #fff;
     background-color: #09dca4;

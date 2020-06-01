@@ -50,6 +50,14 @@ const truncate = (string, len) => {
     else return string;
 };
 
+export const resetPasswordValidation = (data, field) => {
+    return validate("ResetPassword", () => {
+        vest.only(field);
+        ["newPassword", "passwordConfirm"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
 export const editPasswordValidation = (data, field) => {
     return validate("EditPassword", () => {
         vest.only(field);

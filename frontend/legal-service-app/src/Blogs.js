@@ -31,6 +31,7 @@ const Blogs = () => {
             <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                 <Search setBlogs={setBlogs} />
                 <LatestBlogs latest={blogs} />
+                <Catagories />
             </div>
         </div>
     );
@@ -106,6 +107,27 @@ const LatestBlogList = ({ latest }) => {
                 </li>
             ))}
         </ul>
+    );
+};
+const Catagories = () => {
+    const cats = ["cat 1", "cat 2", "cat 3"];
+    return (
+        <div class="card category-widget">
+            <div class="card-header">
+                <h4 class="card-title">Blog Categories</h4>
+            </div>
+            <div class="card-body">
+                <ul class="categories">
+                    {cats.map((cat) => (
+                        <li>
+                            <a href="//">
+                                {cat} <span>subject num</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     );
 };
 export default Blogs;

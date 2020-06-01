@@ -33,7 +33,7 @@ function App() {
                 <Route exact path="/list">
                     <LawyerList />
                 </Route>
-                <Route wxact path="/edit">
+                <Route exact path="/edit">
                     <EditPersonal />
                 </Route>
             </Switch>

@@ -24,6 +24,7 @@ const ErrorMessageInput = ({
                 type={type}
                 onChange={OnChangeHandler}
                 className="form-control floating"
+                disabled={disabled}
             />
             <label className="focus-label">{placeholder}</label>
             {errors.length > 0 && (

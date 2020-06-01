@@ -7275,6 +7275,17 @@ html.menu-opened body {
     .read-more {
         font-size: 14px;
     }
+    .tab-form .search-btn span {
+        display: inline-block;
+        margin-left: 5px;
+        text-transform: uppercase;
+    }
+    .tab-form .search-btn {
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        min-height: 46px;
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width:479px) {
@@ -7365,4 +7376,26 @@ html.menu-opened body {
     .fc-header-toolbar .fc-right {
         margin-bottom: 10px;
     }
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #09dca4;
+    border-color: #959595;
+} 
+
+.tab-form {
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 18px;
+    padding: 25px;
+}
+.tab-form .search-btn {
+    width: 46px;
+    -ms-flex: 0 0 46px;
+    flex: 0 0 46px;
+    height: 46px;
+}
+.tab-form .search-btn span {
+    display: none;
+    font-weight: 500;
 }

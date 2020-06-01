@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from "react";
 import BlogList from "./BlogList";
+import StickyBox from "react-sticky-box";
 
 const Blogs = () => {
-    const init = [
-        {
-            id: "1",
-        },
-        {
-            id: "2",
-        },
-        {
-            id: "3",
-        },
-        {
-            id: "4",
-        },
-        {
-            id: "5",
-        },
-    ];
+    const init = [];
+    const test = [];
+    for (let i = 0; i < 30; i++) {
+        init.push({ id: i });
+    }
+    for (let i = 0; i < 10; i++) {
+        test.push({ id: i });
+    }
     const [blogs, setBlogs] = useState(init);
     useEffect(() => {
         // here will be the first loaded blogs call
@@ -29,10 +21,12 @@ const Blogs = () => {
                 <BlogList blogs={blogs} />
             </div>
             <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                <Search setBlogs={setBlogs} />
-                <LatestBlogs latest={blogs} />
-                <Catagories />
-                <TagsList />
+                <StickyBox offsetTop={20} offsetBottom={20}>
+                    <Search setBlogs={setBlogs} />
+                    <LatestBlogs latest={test} />
+                    <Catagories />
+                    <TagsList />
+                </StickyBox>
             </div>
         </div>
     );

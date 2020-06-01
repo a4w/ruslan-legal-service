@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
+import useValidation from "./useValidation";
+import resetPasswordValidation from "./Validations";
+
 const ResetPassword = () => {
     const initUser = {
         newPassword: "",
@@ -7,15 +10,25 @@ const ResetPassword = () => {
     };
 
     const [user, setUser] = useState(initUser);
+    const [errors, , runValidation] = useValidation(resetPasswordValidation);
 
     const OnChangeHandler = ({ target: { name, value } }) => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
+        runValidation(nextUser, name);
+        if (name === "newPassword" && nextUser.passwordConfirm !== "")
+            runValidation(nextUser, "passwordConfirm");
     };
 
     const OnSubmitHandler = (event) => {
         event.preventDefault();
+        runValidation(user).then(async (hasErrors, _) => {
+            if (!hasErrors) {
+                console.log("safe");
+            }
+        });
     };
+
     const style = {
         backgroundColor: "#fff",
         border: "1px solid #f0f0f0",
@@ -33,6 +46,7 @@ const ResetPassword = () => {
                                 name={"newPassword"}
                                 value={user.newPassword}
                                 type={"password"}
+                                errors={errors.newPassword}
                                 OnChangeHandler={OnChangeHandler}
                             />
                         </div>
@@ -42,6 +56,7 @@ const ResetPassword = () => {
                                 name={"passwordConfirm"}
                                 value={user.passwordConfirm}
                                 type={"password"}
+                                errors={errors.passwordConfirm}
                                 OnChangeHandler={OnChangeHandler}
                             />
                         </div>

@@ -1,15 +1,15 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {StickyContainer, Sticky} from "react-sticky";
-import {FaSearch} from "react-icons/fa"
+import { FaSearch } from "react-icons/fa";
+import StickyBox from "react-sticky-box";
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
-    const SortHandler = ([{value}]) => {
+    const SortHandler = ([{ value }]) => {
         setSortBy(value);
         console.log("sort by: ", value);
     };
@@ -31,45 +31,37 @@ function LawyerList() {
         },
     ];
     return (
-        <>
+        <div>
             <LawyerListHeader
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
-            <StickyContainer>
-                <Sticky>
-                    {({style}) => (
-                        <div style={{...style, zIndex: "100"}}>
-                            <LawyerSearchFilter />
-                        </div>
-                    )}
-                </Sticky>
-                <div className="content">
-                    <div className="row">
-                        <div
-                            className="col-md-12 col-lg-8 col-xl-9"
-                            style={{zIndex: "0"}}
-                        >
-                            <LawyerCardList lawyers={lawyers} />
-                        </div>
-                        <div className="col-md-12 col-lg-4 col-xl-3">
-                            <div>
-                                <h1>Lawyer's Pop Up</h1>
-                            </div>
+            <StickyBox style={{ zIndex: 6 }}>
+                <LawyerSearchFilter />
+            </StickyBox>
+
+            <div className="content">
+                <div className="row">
+                    <div className="col-md-12 col-lg-8 col-xl-9">
+                        <LawyerCardList lawyers={lawyers} />
+                    </div>
+                    <div className="col-md-12 col-lg-4 col-xl-3">
+                        <div>
+                            <h1>Lawyer's Pop Up</h1>
                         </div>
                     </div>
                 </div>
-            </StickyContainer>
-        </>
+            </div>
+        </div>
     );
 }
 
 const LawyerSearchFilter = () => {
     const options = [
-        {value: 1, label: "f1"},
-        {value: 2, label: "f2"},
-        {value: 3, label: "f3"},
-        {value: 4, label: "f4"},
+        { value: 1, label: "f1" },
+        { value: 2, label: "f2" },
+        { value: 3, label: "f3" },
+        { value: 4, label: "f4" },
     ];
     const [filter, setFilter] = useState({});
     return (
@@ -81,11 +73,10 @@ const LawyerSearchFilter = () => {
                             className="form-control mb-0"
                             selected={filter.date}
                             onChange={(date) =>
-                                setFilter({...filter, date: date})
+                                setFilter({ ...filter, date: date })
                             }
                             maxDate={new Date()}
                             placeholderText="Available on"
-                            style={{zIndex: "100"}}
                         />
                     </div>
                 </div>
@@ -95,14 +86,17 @@ const LawyerSearchFilter = () => {
                         value={filter.filterOne}
                         placeholder="Filter"
                         options={options}
-                        onChange={([{value}]) =>
-                            setFilter({...filter, filterOne: value})
+                        onChange={([{ value }]) =>
+                            setFilter({ ...filter, filterOne: value })
                         }
-                        style={{zIndex: "100", minHeight: '46px'}}
+                        style={{ minHeight: "46px" }}
                     />
                 </div>
                 <div className="btn-search col-md-12 col-lg-1 col-xl-1 align-left">
-                    <button type="button" className="btn btn-block font-weight-bold">
+                    <button
+                        type="button"
+                        className="btn btn-block font-weight-bold"
+                    >
                         <FaSearch />
                     </button>
                 </div>
@@ -111,12 +105,12 @@ const LawyerSearchFilter = () => {
     );
 };
 
-const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
+const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
     const options = [
-        {value: "rating", label: "Rating"},
-        {value: "popular", label: "Popular"},
-        {value: "latest", label: "Latest"},
-        {value: "free", label: "Free"},
+        { value: "rating", label: "Rating" },
+        { value: "popular", label: "Popular" },
+        { value: "latest", label: "Latest" },
+        { value: "free", label: "Free" },
     ];
     return (
         <div className="breadcrumb-bar">

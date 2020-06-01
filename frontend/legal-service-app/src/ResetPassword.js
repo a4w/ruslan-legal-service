@@ -16,10 +16,15 @@ const ResetPassword = () => {
     const OnSubmitHandler = (event) => {
         event.preventDefault();
     };
-
+    const style = {
+        backgroundColor: "#fff",
+        border: "1px solid #f0f0f0",
+        borderRadius: "5px",
+        padding: "25px",
+    };
     return (
         <div className="align-items-center justify-content-center m-1">
-            <div>
+            <div style={style} className="m-3">
                 <form onSubmit={OnSubmitHandler}>
                     <div className="form-row">
                         <div className="col-lg-5 col-md-5 col-sm-12">

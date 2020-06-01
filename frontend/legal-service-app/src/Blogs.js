@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BlogList from "./BlogList";
 
 const Blogs = () => {
-    const blogs = [
+    const init = [
         {
             id: "1",
         },
@@ -19,26 +19,31 @@ const Blogs = () => {
             id: "5",
         },
     ];
+    const [blogs, setBlogs] = useState(init);
+    useEffect(() => {
+        // here will be the first loaded blogs call
+    }, []);
     return (
         <div className="row">
             <div className="col-lg-8 col-md-12">
                 <BlogList blogs={blogs} />
             </div>
             <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                <Search />
+                <Search setBlogs={setBlogs} />
                 <LatestBlogs latest={blogs} />
             </div>
         </div>
     );
 };
 
-const Search = () => {
+const Search = ({ setBlogs }) => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({ target: { value } }) => {
         setSearchInput(value);
     };
     const OnSubmitHandler = (e) => {
         e.preventDefault();
+        // On search here will set the new blog list
     };
     return (
         <div className="card search-widget">
@@ -81,11 +86,11 @@ const LatestBlogCard = () => {
     return (
         <>
             <div className="post-thumb">
-                <a href="blog-details.html">Thumbnail</a>
+                <a href="//">Thumbnail</a>
             </div>
             <div className="post-info">
                 <h4>
-                    <a href="blog-details.html">Title</a>
+                    <a href="//">Title</a>
                 </h4>
                 <p>Date</p>
             </div>
@@ -95,11 +100,11 @@ const LatestBlogCard = () => {
 const LatestBlogList = ({ latest }) => {
     return (
         <ul className="latest-posts">
-            <li>
-                {latest.map((blog) => (
+            {latest.map((blog) => (
+                <li>
                     <LatestBlogCard key={blog.id} lawer={blog} />
-                ))}
-            </li>
+                </li>
+            ))}
         </ul>
     );
 };

@@ -26,6 +26,7 @@ const Blogs = () => {
             </div>
             <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                 <Search />
+                <LatestBlogs latest={blogs} />
             </div>
         </div>
     );
@@ -61,6 +62,45 @@ const Search = () => {
                 </form>
             </div>
         </div>
+    );
+};
+
+const LatestBlogs = ({ latest }) => {
+    return (
+        <div className="card post-widget">
+            <div className="card-header">
+                <h4 className="card-title">Latest Posts</h4>
+            </div>
+            <div className="card-body">
+                <LatestBlogList latest={latest} />
+            </div>
+        </div>
+    );
+};
+const LatestBlogCard = () => {
+    return (
+        <>
+            <div className="post-thumb">
+                <a href="blog-details.html">Thumbnail</a>
+            </div>
+            <div className="post-info">
+                <h4>
+                    <a href="blog-details.html">Title</a>
+                </h4>
+                <p>Date</p>
+            </div>
+        </>
+    );
+};
+const LatestBlogList = ({ latest }) => {
+    return (
+        <ul className="latest-posts">
+            <li>
+                {latest.map((blog) => (
+                    <LatestBlogCard key={blog.id} lawer={blog} />
+                ))}
+            </li>
+        </ul>
     );
 };
 export default Blogs;

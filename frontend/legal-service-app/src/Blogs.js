@@ -104,8 +104,8 @@ const LatestBlogList = ({ latest }) => {
         </ul>
     );
 };
-const Catagories = () => {
-    const cats = ["cat 1", "cat 2", "cat 3"];
+const Catagories = ({ cats }) => {
+    cats = ["cat 1", "cat 2", "cat 3"];
     return (
         <div className="card category-widget">
             <div className="card-header">
@@ -126,8 +126,8 @@ const Catagories = () => {
     );
 };
 
-const TagsList = () => {
-    const tags = [
+const TagsList = ({ tags }) => {
+    tags = [
         "Tag 1",
         "Tag 2",
         "Tag 3",

@@ -18,6 +18,7 @@ const ErrorMessageInput = ({
             }
         >
             <input
+                disabled={disabled}
                 name={name}
                 value={value}
                 type={type}

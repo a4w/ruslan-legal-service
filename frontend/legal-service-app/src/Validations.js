@@ -102,5 +102,24 @@ export const editEmailValidations = (data, field) => {
                 .isNotEmpty()
                 .matches(/[^@]+@[^.]+\..+/g);
         });
+export const LawyerInfoValidations = (data, field) => {
+    return validate("LawyerCompleteRegisteration", () => {
+        vest.only(field);
+        test("type", "Please select a type", () => {
+            enforce(data.type.toString()).isNotEmpty();
+        });
+        test("other", "Please enter a type", () => {
+            const addOther = data.type.toString() === "other";
+            if (addOther) {
+                enforce(data.other.toString()).isNotEmpty();
+            }
+        });
+        test(
+            "practiceAreas",
+            "Please select at least one practice area",
+            () => {
+                enforce(data.practiceAreas).isNotEmpty();
+            }
+        );
     });
 };

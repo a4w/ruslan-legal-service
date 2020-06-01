@@ -65,5 +65,10 @@ export const resetPasswordValidation = (data, field) => {
                 enforce(data.password.toString()).longerThanOrEquals(8);
             }
         );
+        test("passwordConfirm", "Passwords should be matching", () => {
+            enforce(
+                data.newPassword.toString() === data.passwordConfirm.toString()
+            ).isTruthy();
+        });
     });
 };

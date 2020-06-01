@@ -12,6 +12,7 @@ import Blogs from "./Blogs";
 import ResetPassword from "./ResetPassword";
 import EditPersonal from "./EditPersonal";
 import Home from "./Home";
+import LawyerCompleteRegisteration from "./LawyerCompleteRegisteration";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                 </Route>
                 <Route exact path="/blogs">
                     <Blogs />
+                </Route>
                 <Route exact path="/reset">
                     <ResetPassword />
                 </Route>

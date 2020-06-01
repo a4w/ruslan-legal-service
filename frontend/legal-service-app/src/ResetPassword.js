@@ -18,37 +18,39 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={OnSubmitHandler}>
-                <div className="form-row">
-                    <div className="col-lg-5 col-md-5 col-sm-12">
-                        <ErrorMessageInput
-                            placeholder={"New Password"}
-                            name={"newPassword"}
-                            value={user.newPassword}
-                            type={"password"}
-                            OnChangeHandler={OnChangeHandler}
-                        />
+        <div className="align-items-center justify-content-center m-1">
+            <div>
+                <form onSubmit={OnSubmitHandler}>
+                    <div className="form-row">
+                        <div className="col-lg-5 col-md-5 col-sm-12">
+                            <ErrorMessageInput
+                                placeholder={"New Password"}
+                                name={"newPassword"}
+                                value={user.newPassword}
+                                type={"password"}
+                                OnChangeHandler={OnChangeHandler}
+                            />
+                        </div>
+                        <div className="col-lg-5 col-md-5 col-sm-12">
+                            <ErrorMessageInput
+                                placeholder={"Re-Enter Password"}
+                                name={"passwordConfirm"}
+                                value={user.passwordConfirm}
+                                type={"password"}
+                                OnChangeHandler={OnChangeHandler}
+                            />
+                        </div>
+                        <div className="col-lg-2 col-md-2 col-sm-12 float-right">
+                            <button
+                                className="btn btn-primary btn-block btn-lg login-btn "
+                                type="submit"
+                            >
+                                Save
+                            </button>
+                        </div>
                     </div>
-                    <div className="col-lg-5 col-md-5 col-sm-12">
-                        <ErrorMessageInput
-                            placeholder={"Re-Enter Password"}
-                            name={"passwordConfirm"}
-                            value={user.passwordConfirm}
-                            type={"password"}
-                            OnChangeHandler={OnChangeHandler}
-                        />
-                    </div>
-                    <div className="col-lg-2 col-md-2 col-sm-12 float-right">
-                        <button
-                            className="btn btn-primary btn-block btn-lg login-btn "
-                            type="submit"
-                        >
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     );
 };

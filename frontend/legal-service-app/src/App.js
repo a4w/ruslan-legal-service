@@ -2,12 +2,13 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch } from "react-router-dom";
+import {Route, Router, Switch} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
+import AppointmentTimeForm from "./AppointmentTimeForm"
 import Blogs from "./Blogs";
 import ResetPassword from "./ResetPassword";
 import EditPersonal from "./EditPersonal";
@@ -25,8 +26,12 @@ function App() {
                 <Route exact path="/list">
                     <LawyerList />
                 </Route>
+                <Route exact path="/book">
+                    <AppointmentTimeForm lawyer_id="1" />
+                </Route>
                 <Route exact path="/blogs">
                     <Blogs />
+                </Route>
                 <Route exact path="/reset">
                     <ResetPassword />
                 </Route>

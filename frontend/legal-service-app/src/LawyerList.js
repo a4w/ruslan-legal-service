@@ -143,6 +143,7 @@ const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
                             <span className="sort-title">Sort by</span>
                             <span className="sortby-fliter">
                                 <Select
+                                    className="select-form-control"
                                     value={selectedValue}
                                     placeholder={
                                         selectedValue ? selectedValue : "select"

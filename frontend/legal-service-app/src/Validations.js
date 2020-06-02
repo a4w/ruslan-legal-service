@@ -58,6 +58,8 @@ export const resetPasswordValidation = (data, field) => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
         });
+    });
+};
 export const editPasswordValidation = (data, field) => {
     return validate("EditPassword", () => {
         vest.only(field);
@@ -110,6 +112,8 @@ export const editEmailValidations = (data, field) => {
                 .isNotEmpty()
                 .matches(/[^@]+@[^.]+\..+/g);
         });
+    });
+};
 export const LawyerInfoValidations = (data, field) => {
     return validate("LawyerCompleteRegisteration", () => {
         vest.only(field);

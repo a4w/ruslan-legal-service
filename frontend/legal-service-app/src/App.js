@@ -13,6 +13,7 @@ import Blogs from "./Blogs";
 import ResetPassword from "./ResetPassword";
 import EditPersonal from "./EditPersonal";
 import Home from "./Home";
+import LawyerCompleteRegisteration from "./LawyerCompleteRegisteration";
 
 function App() {
     return (

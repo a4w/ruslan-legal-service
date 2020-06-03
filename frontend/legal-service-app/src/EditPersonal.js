@@ -7,7 +7,7 @@ import EditLawyerInfo from "./EditLawyerInfo";
 
 const EditPersonal = () => {
     return (
-        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Tab.Container id="edit-personal-info" defaultActiveKey="first">
             <div className="row">
                 <div className="col-lg-3 col-md-2 col-sm-12">
                     <Nav variant="pills" className="flex-column">

@@ -1,5 +1,7 @@
 import React from "react";
 import Tab from "react-bootstrap/Tab";
+import EditPassword from "./EditPassword";
+import EditPersonal, {Content} from "./EditPersonal";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -11,9 +13,15 @@ const LawyerDashboardTabs = () => {
             <Tab.Pane eventKey="invoices">test 5</Tab.Pane>
             <Tab.Pane eventKey="reviews">test 6</Tab.Pane>
             <Tab.Pane eventKey="messages">test 7</Tab.Pane>
-            <Tab.Pane eventKey="settings">test 8</Tab.Pane>
+            <Tab.Pane eventKey="settings">
+                <EditPersonal />
+            </Tab.Pane>
             <Tab.Pane eventKey="social-media">test 9</Tab.Pane>
-            <Tab.Pane eventKey="change-password">test 10</Tab.Pane>
+            <Tab.Pane eventKey="change-password">
+                <Content>
+                    <EditPassword />
+                </Content>
+            </Tab.Pane>
             <Tab.Pane eventKey="logout">test 11</Tab.Pane>
         </Tab.Content>
     );

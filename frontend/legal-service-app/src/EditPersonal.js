@@ -1,40 +1,31 @@
 import React from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import EditPassword from "./EditPassword";
 import EditBasicInfo from "./EditBasicInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
 
 const EditPersonal = () => {
     return (
-        <Tab.Container id="edit-personal-info" defaultActiveKey="first">
+        <Tab.Container id="personal-info" defaultActiveKey="peronal-info">
             <div className="row">
                 <div className="col-lg-3 col-md-2 col-sm-12">
                     <Nav variant="pills" className="flex-column">
                         <Nav.Item>
-                            <Nav.Link eventKey="first">Password</Nav.Link>
+                            <Nav.Link eventKey="peronal-info">Personal Info</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="second">Personal Info</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="third">Lawyer Info</Nav.Link>
+                            <Nav.Link eventKey="lawyer-info">Lawyer Info</Nav.Link>
                         </Nav.Item>
                     </Nav>
                 </div>
                 <div className="col-lg-9 col-md-10 col-sm-12">
                     <Tab.Content>
-                        <Tab.Pane eventKey="first">
-                            <Content>
-                                <EditPassword />
-                            </Content>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="second">
+                        <Tab.Pane eventKey="peronal-info">
                             <Content>
                                 <EditBasicInfo />
                             </Content>
                         </Tab.Pane>
-                        <Tab.Pane eventKey="third">
+                        <Tab.Pane eventKey="lawyer-info">
                             <Content>
                                 <EditLawyerInfo />
                             </Content>

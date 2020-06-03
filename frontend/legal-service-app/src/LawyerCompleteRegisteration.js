@@ -17,7 +17,7 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
         accreditations: [],
         bio: "",
     };
-    const [lawyer, setLawyer] = useState(lawyerData? init : lawyerData);
+    const [lawyer, setLawyer] = useState(lawyerData === null? init : lawyerData);
     const [errors, , validate] = useValidation(LawyerInfoValidations);
     const OnSubmitHandler = (event) => {
         event.preventDefault();

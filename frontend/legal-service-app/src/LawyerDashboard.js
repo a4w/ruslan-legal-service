@@ -6,15 +6,15 @@ import LawyerDashboardTabs from "./LawyerDashboardTabs";
 
 const LawyerDashboard = () => {
     return (
-        <div>
+        <div className="row">
             {" "}
-            <Tab.Container id="dashboard" defaultActiveKey="first">
-                <div className="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+            <Tab.Container id="dashboard" defaultActiveKey="dashboard">
+                <div className="col-md-5 col-lg-4 col-xl-3">
                     <StickyBox offsetTop={20} offsetBottom={20}>
                         <LawyerDashboardSidebar />
                     </StickyBox>
                 </div>
-                <div class="col-md-7 col-lg-8 col-xl-9">
+                <div className="col-md-7 col-lg-8 col-xl-9">
                     <LawyerDashboardTabs />
                 </div>
             </Tab.Container>

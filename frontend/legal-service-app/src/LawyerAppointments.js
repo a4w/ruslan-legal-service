@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 
 const LawyerAppointments = () => {
     return (
@@ -15,6 +16,12 @@ const AppointmentCard = () => {
     };
     const OnReject = () => {
         setAccepted(true);
+    };
+    const show = () => {
+        setView(true);
+    };
+    const hide = () => {
+        setView(false);
     };
     return (
         <div className="appointment-list">
@@ -44,9 +51,10 @@ const AppointmentCard = () => {
                 </div>
             </div>
             <div className="appointment-action">
-                <button className="btn btn-sm bg-info-light m-1">
+                {/* <button className="btn btn-sm bg-info-light m-1" onClick={show}>
                     <i className="far fa-eye"></i> View
-                </button>
+                    <AppointmentDetails show={viewDetails} onHide={hide} />
+                </button> */}
                 <button
                     className="btn btn-sm bg-success-light m-1"
                     onClick={OnAccept}
@@ -61,6 +69,58 @@ const AppointmentCard = () => {
                 </button>
             </div>
         </div>
+    );
+};
+
+const AppointmentDetails = (props) => {
+    return (
+        <Modal
+            {...props}
+            backdrop="true"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Appointment Details
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <ul className="info-details">
+                    <li>
+                        <div className="details-header">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <span className="title">
+                                        Appointment number
+                                    </span>
+                                    <span className="text">Date</span>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="text-right">
+                                        <button className="btn bg-success-light btn-sm">
+                                            status
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <span className="title">Status:</span>
+                        <span className="text">Completed</span>
+                    </li>
+                    <li>
+                        <span className="title">Confirm Date:</span>
+                        <span className="text">...</span>
+                    </li>
+                    <li>
+                        <span className="title">Paid Amount</span>
+                        <span className="text">$...</span>
+                    </li>
+                </ul>
+            </Modal.Body>
+        </Modal>
     );
 };
 

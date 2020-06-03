@@ -4,7 +4,7 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import { LawyerInfoValidations } from "./Validations";
 
-const LawyerCompleteRegisteration = (_) => {
+const LawyerCompleteRegisteration = ({lawyerData}) => {
     const init = {
         type: [],
         other: "",
@@ -17,7 +17,7 @@ const LawyerCompleteRegisteration = (_) => {
         accreditations: [],
         bio: "",
     };
-    const [lawyer, setLawyer] = useState(init);
+    const [lawyer, setLawyer] = useState(lawyerData? init : lawyerData);
     const [errors, , validate] = useValidation(LawyerInfoValidations);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -174,7 +174,7 @@ const LawyerCompleteRegisteration = (_) => {
                 className="btn btn-primary btn-block btn-lg login-btn "
                 type="submit"
             >
-                &nbsp;Register
+                &nbsp;Save
             </button>
         </form>
     );

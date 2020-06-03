@@ -11,11 +11,14 @@ const LawyerAppointments = () => {
 const AppointmentCard = () => {
     const [viewDetails, setView] = useState(false);
     const [accepted, setAccepted] = useState(null);
+    const [date, setDate] = useState(null);
     const OnAccept = () => {
+        setDate(new Date());
         setAccepted(true);
     };
     const OnReject = () => {
-        setAccepted(true);
+        setDate(new Date());
+        setAccepted(false);
     };
     const show = () => {
         setView(true);
@@ -44,9 +47,10 @@ const AppointmentCard = () => {
                         <h5>
                             <i className="fas fa-envelope"></i> Email
                         </h5>
-                        <h5 className="mb-0">
+                        <h5>
                             <i className="fas fa-phone"></i> Number
                         </h5>
+                        {accepted !== null && getStatus(accepted)}
                     </div>
                 </div>
             </div>
@@ -55,23 +59,37 @@ const AppointmentCard = () => {
                     <i className="far fa-eye"></i> View
                     <AppointmentDetails show={viewDetails} onHide={hide} />
                 </button> */}
-                <button
-                    className="btn btn-sm bg-success-light m-1"
-                    onClick={OnAccept}
-                >
-                    <i className="fas fa-check"></i> Accept
-                </button>
-                <button
-                    className="btn btn-sm bg-danger-light m-1"
-                    onClick={OnReject}
-                >
-                    <i className="fas fa-times"></i> Cancel
-                </button>
+                {accepted === null && (
+                    <>
+                        <button
+                            className="btn btn-sm bg-success-light m-1"
+                            onClick={OnAccept}
+                        >
+                            <i className="fas fa-check"></i> Accept
+                        </button>
+                        <button
+                            className="btn btn-sm bg-danger-light m-1"
+                            onClick={OnReject}
+                        >
+                            <i className="fas fa-times"></i> Cancel
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
 };
 
+const getStatus = (accepted) => {
+    return (
+        <h5 className="mb-0">
+            <i className={accepted ? "fas fa-check" : "fas fa-times"}></i>{" "}
+            <span className={accepted ? "text-primary" : "text-danger"}>
+                {accepted ? "Accepted" : "Rejected"}
+            </span>
+        </h5>
+    );
+};
 const AppointmentDetails = (props) => {
     return (
         <Modal

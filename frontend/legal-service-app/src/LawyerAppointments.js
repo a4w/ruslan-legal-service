@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 
 const LawyerAppointments = () => {
+    const clients = [{ id: 1 }, { id: 2 }, { id: 3 }];
     return (
         <div className="appointments">
-            <AppointmentCard />
+            {clients.map((client) => (
+                <AppointmentCard client={client} />
+            ))}
         </div>
     );
 };
-const AppointmentCard = () => {
+const AppointmentCard = ({ client }) => {
     const [viewDetails, setView] = useState(false);
     const [accepted, setAccepted] = useState(null);
     const [date, setDate] = useState(null);

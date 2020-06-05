@@ -70,4 +70,23 @@ const AppointmentsTable = (props) => {
     );
 };
 
+const UpcomingAppointments = ({ appointments }) => {
+    return (
+        <AppointmentsTable>
+            {appointments.map((appointment) => (
+                <ListItem key={appointment.id} />
+            ))}
+        </AppointmentsTable>
+    );
+};
+const TodayAppointments = ({ appointments }) => {
+    return (
+        <AppointmentsTable>
+            {appointments.map((appointment) => (
+                <ListItem key={appointment.id} />
+            ))}
+        </AppointmentsTable>
+    );
+};
+
 export default LawyerDashboardStatus;

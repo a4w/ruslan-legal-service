@@ -2,14 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Appointment;
+use App\Account;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
+use Symfony\Component\HttpFoundation\Request;
 
 class LawyerController extends Controller
 {
+
+    public function getLawyersPaginated(Request $request)
+    {
+        $offset = $request->get('offset', 0);
+        $length = (int) $request->get('length', 10);
+
+        // This can be cached (and should be)
+        $lawyers = Lawyer::with(['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'])
+            ->where('slot_length', '<>', null)
+            ->limit($length)
+            ->skip($offset)
+            ->get();
+
+        foreach ($lawyers as &$lawyer) {
+            // Show only average rating
+            $ratings = collect($lawyer['ratings']);
+            $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
+            $lawyer['ratings_count'] = $ratings->count();
+            $end_date = new Carbon($lawyer['discount_end']);
+            $lawyer['discount_ends_in'] = $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : null;
+            unset($lawyer['ratings']);
+        }
+        return $lawyers;
+    }
 
     public function fetchSchedule($id, JSONRequest $request)
     {

@@ -33,4 +33,9 @@ class Lawyer extends Model
     {
         return $this->belongsToMany(PracticeArea::class, 'lawyers_practice_areas', 'lawyer_id', 'practice_area_id');
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

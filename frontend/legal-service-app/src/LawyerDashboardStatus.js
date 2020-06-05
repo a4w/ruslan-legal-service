@@ -4,9 +4,87 @@ import Nav from "react-bootstrap/Nav";
 
 const LawyerDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
-    return <AppointmentsListTabs appointments={appointments} />;
+    return (
+        <div className="row">
+            <div className="col-12">
+                <LawyerStatus />
+            </div>
+            <div className="col-12">
+                <AppointmentsListTabs appointments={appointments} />
+            </div>
+        </div>
+    );
 };
+const LawyerStatus = () => {
+    const date = new Date().toLocaleString("en-GB", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
+    return (
+        <div className="card dash-card">
+            <div className="card-body">
+                <div className="row">
+                    <div className="col-md-12 col-lg-4">
+                        <div className="dash-widget dct-border-rht">
+                            <div className="circle-bar circle-bar1">
+                                <div
+                                    className="circle-graph1"
+                                    data-percent="75"
+                                >
+                                    ICON
+                                </div>
+                            </div>
+                            <div className="dash-widget-info">
+                                <h6>Total Clients</h6>
+                                <h3>Number</h3>
+                                <p className="text-muted">Till Today</p>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div className="col-md-12 col-lg-4">
+                        <div className="dash-widget dct-border-rht">
+                            <div className="circle-bar circle-bar2">
+                                <div
+                                    className="circle-graph2"
+                                    data-percent="65"
+                                >
+                                    ICON
+                                </div>
+                            </div>
+                            <div className="dash-widget-info">
+                                <h6>Today Clients</h6>
+                                <h3>Number</h3>
+                                <p className="text-muted">{date}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md-12 col-lg-4">
+                        <div className="dash-widget">
+                            <div className="circle-bar circle-bar3">
+                                <div
+                                    className="circle-graph3"
+                                    data-percent="50"
+                                >
+                                    ICON
+                                </div>
+                            </div>
+                            <div className="dash-widget-info">
+                                <h6>Appoinments</h6>
+                                <h3>Total</h3>
+                                <p className="text-muted">
+                                    Date of next session
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 const ListItem = () => {
     const [cancel, setCancel] = useState(false);
     const [date, setDate] = useState(null);

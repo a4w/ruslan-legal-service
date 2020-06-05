@@ -3,6 +3,7 @@ import Tab from "react-bootstrap/Tab";
 import EditPassword from "./EditPassword";
 import EditPersonal, { Content } from "./EditPersonal";
 import LawyerAppointments from "./LawyerAppointments";
+import LawyerInvoice from "./LawyerInvoice";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -13,7 +14,9 @@ const LawyerDashboardTabs = () => {
             </Tab.Pane>
             <Tab.Pane eventKey="clients">test 3</Tab.Pane>
             <Tab.Pane eventKey="schedule">test 4</Tab.Pane>
-            <Tab.Pane eventKey="invoices">test 5</Tab.Pane>
+            <Tab.Pane eventKey="invoices">
+                <LawyerInvoice />
+            </Tab.Pane>
             <Tab.Pane eventKey="reviews">test 6</Tab.Pane>
             <Tab.Pane eventKey="messages">test 7</Tab.Pane>
             <Tab.Pane eventKey="settings">

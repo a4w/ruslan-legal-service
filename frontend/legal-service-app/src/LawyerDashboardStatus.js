@@ -88,9 +88,10 @@ const LawyerStatus = () => {
 const ListItem = () => {
     const [cancel, setCancel] = useState(false);
     const [date, setDate] = useState(null);
-    const OnReject = () => {
+    const OnReject = (e) => {
+        e.preventDefault();
         setDate(new Date());
-        setCancel(false);
+        setCancel(true);
         // The API cancel Rquest will be sent here
     };
     return (
@@ -110,17 +111,19 @@ const ListItem = () => {
                 Session date{" "}
                 <span className="d-block text-info">Session time</span>
             </td>
-            <td>{cancel ? "Rejected" : "Upcoming or Done"}</td>
+            <td>{cancel ? "Cancelled" : "Upcoming or Done"}</td>
             <td className="text-center">paid amount</td>
             <td className="text-right">
                 <div className="table-action">
-                    <a
-                        href="//"
-                        className="btn btn-sm bg-danger-light"
-                        onClick={OnReject}
-                    >
-                        <i className="fas fa-times"></i> Cancel
-                    </a>
+                    {cancel === false && (
+                        <a
+                            href="//"
+                            className="btn btn-sm bg-danger-light"
+                            onClick={OnReject}
+                        >
+                            <i className="fas fa-times"></i> Cancel
+                        </a>
+                    )}
                 </div>
             </td>
         </tr>

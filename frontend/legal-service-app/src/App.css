@@ -97,3 +97,11 @@
 .cursor-wait {cursor: wait;}
 .cursor-zoom-in {cursor: zoom-in;}
 .cursor-zoom-out {cursor: zoom-out;}
+
+.time-slot li .timing:disabled{
+    background-color: #CCC !important;
+    cursor: not-allowed;
+}
+.time-slot li .timing:disabled:hover{
+    background-color: #CCC !important;
+}

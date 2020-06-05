@@ -11,4 +11,9 @@ class Client extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

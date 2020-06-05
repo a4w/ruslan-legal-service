@@ -38,4 +38,9 @@ class Lawyer extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function isAvailable()
+    {
+        return $this->schedule !== null;
+    }
 }

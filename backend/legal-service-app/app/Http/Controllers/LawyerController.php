@@ -6,45 +6,46 @@ use App\Appointment;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Helpers\AppointmentHelper;
 
 class LawyerController extends Controller
 {
-    private static function minutesToClock($minutes)
-    {
-        $hour = $minutes / 60;
-        $minute = $minutes % 60;
-        return self::formatTwoDigits($hour) . ':' . self::formatTwoDigits($minute);
-    }
-
-    private static function formatTwoDigits($number)
-    {
-        return substr("0" . $number, -2);
-    }
 
     public function fetchSchedule($id, JSONRequest $request)
     {
         // Get lawyer
         $lawyer = Lawyer::find($id);
+        if (!$lawyer->isAvailable()) {
+            return ['error' => 'Lawyer not available'];
+        }
         $schedule = json_decode($lawyer->schedule, true);
+
+        $output = [];
+
         // Get from and days to show
-        $days_to_show = $request->get('days_to_show');
-        $from_date = new Carbon($request->get('from'));
+        $days_to_show = (int) $request->get('days_to_show', 7);
+        $from_date = new Carbon($request->get('from', now()));
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
+
+        $output['from'] = now()->format(AppointmentHelper::$DATETIME_FORMAT);
+        $output['days'] = $days_to_show;
+
         // Fetch lawyer data
         $slot_length = $lawyer->slot_length;
-        // Get appointments and preprocess them
+
+        // Get appointments and pre-process them for fast checking
         $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
         foreach ($appointments as $appointment) {
-            $appointments_check[$appointment->appointment_time->format('Y-m-d')][$appointment->appointment_time->format('H:i')] = true;
+            $appointments_check[$appointment->appointment_time->format(AppointmentHelper::$DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::$TIME_FORMAT)] = true;
         }
+
         // Process schedule
         $data = array();
-        $current = $from_date;
+        $current = new Carbon($from_date);
         for ($d = 0; $d < $days_to_show; ++$d) {
-            $formated_date = $current->format('Y-m-d');
+            $formated_date = $current->format(AppointmentHelper::$DATE_FORMAT);
             $day = array(
                 'name' => $current->dayName,
                 'date' => $formated_date
@@ -52,17 +53,19 @@ class LawyerController extends Controller
             $slots = $schedule[$current->dayOfWeek];
             for ($i = 0; $i < count($slots); ++$i) {
                 $start_minute = $slots[$i] * $slot_length;
-                $end_minute = $start_minute + $slot_length;
+                $start_time = AppointmentHelper::minutesToClock($start_minute);
+                $end_time = AppointmentHelper::minutesToClock($start_minute + $slot_length);
                 $day['slots'][] = [
                     'id' => $slots[$i],
-                    'from' => self::minutesToClock($start_minute),
-                    'to' => self::minutesToClock($end_minute),
-                    'reserved' => isset($appointments_check[$formated_date][self::minutesToClock($start_minute)])
+                    'from' => $start_time,
+                    'to' => $end_time,
+                    'reserved' => isset($appointments_check[$formated_date][$start_time])
                 ];
             }
             $data[] = $day;
             $current->addDay();
         }
-        return $data;
+        $output['data'] = $data;
+        return $output;
     }
 }

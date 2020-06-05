@@ -1,9 +1,18 @@
 import React from "react";
 
 const LawyerInvoice = () => {
+    const clients = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+    ];
     return (
         <InvoiceTable>
-            <InvoiceTableRow />
+            <InvoiceTableRows clients={clients} />
         </InvoiceTable>
     );
 };

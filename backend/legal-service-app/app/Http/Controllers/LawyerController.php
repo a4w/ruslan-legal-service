@@ -54,12 +54,17 @@ class LawyerController extends Controller
             for ($i = 0; $i < count($slots); ++$i) {
                 $start_minute = $slots[$i] * $slot_length;
                 $start_time = AppointmentHelper::minutesToClock($start_minute);
+                $current->setTime($start_minute / 60, $start_minute % 60);
+                $is_upcoming = true;
+                if ($current->lt(now())) {
+                    $is_upcoming = false;
+                }
                 $end_time = AppointmentHelper::minutesToClock($start_minute + $slot_length);
                 $day['slots'][] = [
                     'id' => $slots[$i],
                     'from' => $start_time,
                     'to' => $end_time,
-                    'reserved' => isset($appointments_check[$formated_date][$start_time])
+                    'reserved' => !$is_upcoming || isset($appointments_check[$formated_date][$start_time])
                 ];
             }
             $data[] = $day;

@@ -32,7 +32,7 @@ const LawyerStatus = () => {
                                     className="circle-graph1"
                                     data-percent="75"
                                 >
-                                    ICON
+                                    <div className="img-fluid">ICON</div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">
@@ -50,7 +50,7 @@ const LawyerStatus = () => {
                                     className="circle-graph2"
                                     data-percent="65"
                                 >
-                                    ICON
+                                    <div className="img-fluid">ICON</div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">
@@ -68,7 +68,7 @@ const LawyerStatus = () => {
                                     className="circle-graph3"
                                     data-percent="50"
                                 >
-                                    ICON
+                                    <div className="img-fluid">ICON</div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">

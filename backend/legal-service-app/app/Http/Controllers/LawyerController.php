@@ -11,28 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LawyerController extends Controller
 {
-    private function sortColumn($sort)
-    {
-        $data = [
-            'RATING' => '',
-            'PRICE' => ''
-        ];
-        return isset($data[$sort]) ? $data[$sort] : 'account.name';
-    }
 
     public function getLawyersPaginated(Request $request)
     {
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
-        $sortBy = $request->get('sortBy', 'name');
 
         // This can be cached (and should be)
         $lawyers = Lawyer::with(['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'])
             ->where('slot_length', '<>', null)
             ->limit($length)
             ->skip($offset)
-            ->get()
-            ->sortBy('account.name')->values();
+            ->get();
 
         foreach ($lawyers as &$lawyer) {
             // Show only average rating

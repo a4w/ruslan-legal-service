@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Lawyer extends Model
 {
     protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year'];
+    protected $hidden = [
+        'schedule'
+    ];
     public $timestamps = false;
 
     public function account()
@@ -16,12 +19,12 @@ class Lawyer extends Model
 
     public function lawyer_type()
     {
-        $this->belongsTo(LawyerType::class, 'lawyer_type_id');
+        return $this->belongsTo(LawyerType::class, 'lawyer_type_id', 'id');
     }
 
     public function regulator()
     {
-        $this->belongsTo(Regulator::class, 'regulator_id');
+        return $this->belongsTo(Regulator::class, 'regulator_id');
     }
 
     public function accreditations()

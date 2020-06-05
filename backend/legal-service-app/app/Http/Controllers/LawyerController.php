@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
@@ -10,19 +11,43 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LawyerController extends Controller
 {
+    private function sortColumn($sort)
+    {
+        $data = [
+            'RATING' => '',
+            'PRICE' => ''
+        ];
+        return isset($data[$sort]) ? $data[$sort] : 'account.name';
+    }
+
     public function getLawyersPaginated(Request $request)
     {
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
         $sortBy = $request->get('sortBy', 'name');
-        return Lawyer::paginate($length);
+
+        // This can be cached (and should be)
+        $lawyers = Lawyer::with(['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'])
+            ->where('slot_length', '<>', null)
+            ->limit($length)
+            ->skip($offset)
+            ->get()
+            ->sortBy('account.name')->values();
+
+        foreach ($lawyers as &$lawyer) {
+            // Show only average rating
+            $ratings = collect($lawyer['ratings']);
+            $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
+            $lawyer['ratings_count'] = $ratings->count();
+            unset($lawyer['ratings']);
+        }
+        return $lawyers;
     }
 
     public function fetchSchedule($id, JSONRequest $request)
     {
         // Get lawyer
         $lawyer = Lawyer::find($id);
-        dump($lawyer->ratings);
         if (!$lawyer->isAvailable()) {
             return ['error' => 'Lawyer not available'];
         }

@@ -11,7 +11,7 @@ class Lawyer extends Model
 
     public function account()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class, 'user_id');
     }
 
     public function lawyer_type()

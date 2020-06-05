@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import Tab from "react-bootstrap/Tab";
+import Nav from "react-bootstrap/Nav";
 
 const LawyerDashboardStatus = () => {
-    return <div>test 1</div>;
+    const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+    return <AppointmentsListTabs appointments={appointments} />;
 };
 
 const ListItem = () => {
@@ -88,5 +91,29 @@ const TodayAppointments = ({ appointments }) => {
         </AppointmentsTable>
     );
 };
+const AppointmentsListTabs = ({ appointments }) => {
+    return (
+        <Tab.Container id="appointments-dashboard" defaultActiveKey="today">
+            <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                <Nav className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                    <li className="nav-item">
+                        <Nav.Link eventKey="upcoming">Upcoming</Nav.Link>
+                    </li>
+                    <li className="nav-item">
+                        <Nav.Link eventKey="today">Today</Nav.Link>
+                    </li>
+                </Nav>
+            </ul>
 
+            <Tab.Content>
+                <Tab.Pane eventKey="upcoming">
+                    <UpcomingAppointments appointments={appointments} />
+                </Tab.Pane>
+                <Tab.Pane eventKey="today">
+                    <TodayAppointments appointments={appointments} />
+                </Tab.Pane>
+            </Tab.Content>
+        </Tab.Container>
+    );
+};
 export default LawyerDashboardStatus;

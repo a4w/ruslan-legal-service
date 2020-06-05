@@ -53,3 +53,4 @@ const Content = (props) => {
     );
 };
 export default EditPersonal;
+export {Content};

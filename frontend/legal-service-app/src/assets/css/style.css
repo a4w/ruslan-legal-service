@@ -7393,6 +7393,13 @@ html.menu-opened body {
     border-color: #959595;
 } 
 
+.dashboard-widget .nav .nav-link.active, .show>.nav-link {
+    color: #0de0fe;
+} 
+.dashboard-widget .nav .nav-link:hover {
+    color: #0de0fe;
+} 
+
 .tab-form {
     background-color: #fff;
     border: 1px solid #f0f0f0;
@@ -7408,4 +7415,7 @@ html.menu-opened body {
 .tab-form .search-btn span {
     display: none;
     font-weight: 500;
+}
+.dashboard-menu {
+min-width: 100%;
 }

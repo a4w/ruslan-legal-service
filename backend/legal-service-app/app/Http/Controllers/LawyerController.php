@@ -22,6 +22,7 @@ class LawyerController extends Controller
     {
         // Get lawyer
         $lawyer = Lawyer::find($id);
+        dump($lawyer->ratings);
         if (!$lawyer->isAvailable()) {
             return ['error' => 'Lawyer not available'];
         }

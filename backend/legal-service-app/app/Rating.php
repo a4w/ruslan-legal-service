@@ -6,13 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rating extends Model
 {
-    public function client()
+    public function appointment()
     {
-        return $this->belongsTo(Client::class);
-    }
-
-    public function lawyer()
-    {
-        return $this->belongsTo(Lawyer::class);
+        return $this->belongsTo(Appointment::class);
     }
 }

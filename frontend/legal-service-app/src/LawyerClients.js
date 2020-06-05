@@ -3,7 +3,9 @@ import React from "react";
 const LawyerClients = () => {
     return <ClientCard />;
 };
-
+const ClientCardList = ({ clients }) => {
+    return clients.map((client) => <ClientCard client={client} />);
+};
 const ClientCard = ({ client }) => {
     return (
         <div className="col-md-6 col-lg-4 col-xl-3">

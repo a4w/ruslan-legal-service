@@ -7,7 +7,12 @@ const LawyerInvoice = () => {
         </InvoiceTable>
     );
 };
-const InvoiceTableRow = () => {
+const InvoiceTableRows = ({ clients }) => {
+    return clients.map((client) => (
+        <InvoiceTableRow key={client.id} client={client} />
+    ));
+};
+const InvoiceTableRow = ({ client }) => {
     return (
         <tr>
             <td>

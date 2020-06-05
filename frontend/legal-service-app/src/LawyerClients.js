@@ -1,10 +1,25 @@
 import React from "react";
 
 const LawyerClients = () => {
-    return <ClientCard />;
+    const clients = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+    ];
+    return (
+        <div class="row row-grid">
+            <ClientCardList clients={clients} />
+        </div>
+    );
 };
 const ClientCardList = ({ clients }) => {
-    return clients.map((client) => <ClientCard client={client} />);
+    return clients.map((client) => (
+        <ClientCard key={client.id} client={client} />
+    ));
 };
 const ClientCard = ({ client }) => {
     return (

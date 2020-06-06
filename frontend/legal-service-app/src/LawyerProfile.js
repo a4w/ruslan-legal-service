@@ -124,9 +124,11 @@ const NavBar = () => {
 };
 
 const Overview = () => {
+    const courses = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
     return (
         <div className="col-md-12 col-lg-9">
             <Bio />
+            <Education courses={courses} />
         </div>
     );
 };
@@ -135,6 +137,40 @@ const Bio = () => {
         <div className="widget about-widget">
             <h4 className="widget-title">About Me</h4>
             <p>Text. Bio. Wtvr</p>
+        </div>
+    );
+};
+const EducationItem = () => {
+    return (
+        <>
+            <div className="experience-user">
+                <div className="before-circle"></div>
+            </div>
+            <div className="experience-content">
+                <div className="timeline-content">
+                    <a href="#/" className="name">
+                        Place
+                    </a>
+                    <div>Degree</div>
+                    <span className="time">start year - end year</span>
+                </div>
+            </div>
+        </>
+    );
+};
+const Education = ({ courses }) => {
+    return (
+        <div className="widget education-widget">
+            <h4 className="widget-title">Education</h4>
+            <div className="experience-box">
+                <ul className="experience-list">
+                    {courses.map((course) => (
+                        <li key={course.id}>
+                            <EducationItem />
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };

@@ -15,6 +15,8 @@ class AddUnverifiedEmailField extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('unverified_email')->nullable();
+            $table->dropUnique('users_email_unique');
+            $table->string('email')->unique()->nullable()->change();
         });
     }
 
@@ -27,6 +29,8 @@ class AddUnverifiedEmailField extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['unverified_email']);
+            $table->dropUnique('users_email_unique');
+            $table->string('email')->unique()->change();
         });
     }
 }

@@ -82,4 +82,22 @@ class AccountController extends Controller
             'message' => 'Updated successfully'
         ];
     }
+
+    public function updatePassword(JSONRequest $request)
+    {
+        $request->validate([
+            'new_password' => ['required', 'min:8'],
+            'old_password' => ['required', 'min:8'],
+        ]);
+        $user = Auth::user();
+        if (!Auth::validate(['email' => $user->email, 'password' => $request->get('old_password')])) {
+            return ['error' => true, 'message' => 'unauthorized'];
+        }
+        $user->password = $request->get('new_password');
+        $user->save();
+        return [
+            'error' => 'false',
+            'message' => 'Updated successfully'
+        ];
+    }
 }

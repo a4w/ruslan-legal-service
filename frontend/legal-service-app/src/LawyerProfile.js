@@ -124,13 +124,15 @@ const NavBar = () => {
 };
 
 const Overview = () => {
-    const courses = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-    const experiences = [{ id: 1 }, { id: 4 }, { id: 5 }];
+    const courses = [{ id: 1 }, { id: 4 }, { id: 5 }];
+    const experiences = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
+    const awards = [{ id: 1 }, { id: 4 }, { id: 5 }];
     return (
         <div className="col-md-12 col-lg-9">
             <Bio />
             <Education courses={courses} />
             <Experience experiences={experiences} />
+            <Awards awards={awards} />
         </div>
     );
 };
@@ -204,6 +206,39 @@ const Experience = ({ experiences }) => {
                     {experiences.map((experience) => (
                         <li key={experience.id}>
                             <ExperienceItem />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    );
+};
+const Award = () => {
+    return (
+        <>
+            {" "}
+            <div className="experience-user">
+                <div className="before-circle"></div>
+            </div>
+            <div className="experience-content">
+                <div className="timeline-content">
+                    <p className="exp-year">Date</p>
+                    <h4 className="exp-title">Award Title</h4>
+                    <p>Text</p>
+                </div>
+            </div>
+        </>
+    );
+};
+const Awards = ({ awards }) => {
+    return (
+        <div className="widget awards-widget">
+            <h4 className="widget-title">Awards</h4>
+            <div className="experience-box">
+                <ul className="experience-list">
+                    {awards.map((award) => (
+                        <li key={award.id}>
+                            <Award />
                         </li>
                     ))}
                 </ul>

@@ -41,7 +41,6 @@ Route::get('verify/email/{token}', function ($token) {
     }
     // TODO: Check email to be verified
     $account->markEmailAsVerified();
-    dump($jwt);
     return "Email verified correctly"; // TODO Create post verification page
 })->name('verify.email');
 

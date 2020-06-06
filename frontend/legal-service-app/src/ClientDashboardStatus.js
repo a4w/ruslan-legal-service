@@ -157,12 +157,35 @@ const AppointmentsListTabs = ({ appointments }) => {
                             <PreviousAppointments appointments={appointments} />
                         </Tab.Pane>
                         <Tab.Pane eventKey="billing">
-                            {" "}
-                            test
-                            {/* <TodayAppointments appointments={appointments} /> */}
+                            <BillingTable appointments={appointments} />
                         </Tab.Pane>
                     </Tab.Content>
                 </Tab.Container>
+            </div>
+        </div>
+    );
+};
+
+const BillingTable = (props) => {
+    return (
+        <div id="pat_billing" class="tab-pane fade">
+            <div class="card card-table mb-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Invoice No</th>
+                                    <th>Doctor</th>
+                                    <th>Amount</th>
+                                    <th>Paid On</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>{props.children}</tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );

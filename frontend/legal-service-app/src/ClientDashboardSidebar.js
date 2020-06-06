@@ -17,7 +17,7 @@ const ClientDashboardSidebar = () => {
                         <h3>Client's name</h3>
                         <div className="client-details">
                             <h5>
-                                <i className="fas fa-phone"></i> 24 Jul Phone
+                                <i className="fas fa-phone"></i> Phone
                             </h5>
                             <h5 className="mb-0">
                                 <i className="fas fa-map-marker-alt"></i> City,

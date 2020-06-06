@@ -4,11 +4,14 @@ import EditPassword from "./EditPassword";
 import EditPersonal, { Content } from "./EditPersonal";
 import LawyerAppointments from "./LawyerAppointments";
 import LawyerClients from "./LawyerClients";
+import LawyerDashboardStatus from "./LawyerDashboardStatus";
 
 const LawyerDashboardTabs = () => {
     return (
         <Tab.Content>
-            <Tab.Pane eventKey="dashboard">test 1</Tab.Pane>
+            <Tab.Pane eventKey="dashboard">
+                <LawyerDashboardStatus />
+            </Tab.Pane>
             <Tab.Pane eventKey="appointments">
                 <LawyerAppointments />
             </Tab.Pane>

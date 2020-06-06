@@ -67,4 +67,15 @@ class AccountController extends Controller
             'message' => 'Updated successfully'
         ];
     }
+
+    public function updateEmail(JSONRequest $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email', 'unique:users'],
+        ]);
+        /** @var $user Account **/
+        $user = Auth::user();
+        $user->update(['unverified_email' => $request->get('email')]);
+        $user->sendEmailVerificationNotification();
+    }
 }

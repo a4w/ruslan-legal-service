@@ -127,12 +127,14 @@ const Overview = () => {
     const courses = [{ id: 1 }, { id: 4 }, { id: 5 }];
     const experiences = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
     const awards = [{ id: 1 }, { id: 4 }, { id: 5 }];
+    const services = ["service 1 ", "service 2", "service 3"];
     return (
         <div className="col-md-12 col-lg-9">
             <Bio />
             <Education courses={courses} />
             <Experience experiences={experiences} />
             <Awards awards={awards} />
+            <Services services={services} />
         </div>
     );
 };
@@ -243,6 +245,18 @@ const Awards = ({ awards }) => {
                     ))}
                 </ul>
             </div>
+        </div>
+    );
+};
+const Services = ({ services }) => {
+    return (
+        <div className="service-list">
+            <h4>Services</h4>
+            <ul className="clearfix">
+                {services.map((service) => (
+                    <li key={service}>{service}</li>
+                ))}
+            </ul>
         </div>
     );
 };

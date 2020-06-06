@@ -77,5 +77,9 @@ class AccountController extends Controller
         $user = Auth::user();
         $user->update(['unverified_email' => $request->get('email')]);
         $user->sendEmailVerificationNotification();
+        return [
+            'error' => 'false',
+            'message' => 'Updated successfully'
+        ];
     }
 }

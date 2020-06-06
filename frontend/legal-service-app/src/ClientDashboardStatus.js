@@ -79,7 +79,7 @@ const Appointment = ({ done }) => {
 };
 const AppointmentsTable = (props) => {
     return (
-        <div className="tab-pane show active" id="upcoming-appointments">
+        <div className="tab-pane" id="upcoming-appointments">
             <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
@@ -126,7 +126,7 @@ const AppointmentsListTabs = ({ appointments }) => {
             <div className="card-body pt-0">
                 <Tab.Container
                     id="appointments-dashboard"
-                    defaultActiveKey="upcoming"
+                    defaultActiveKey="billing"
                 >
                     <Nav className="user-tabs mb-4">
                         <ul
@@ -157,7 +157,7 @@ const AppointmentsListTabs = ({ appointments }) => {
                             <PreviousAppointments appointments={appointments} />
                         </Tab.Pane>
                         <Tab.Pane eventKey="billing">
-                            <BillingTable appointments={appointments} />
+                            <Billings billings={appointments} />
                         </Tab.Pane>
                     </Tab.Content>
                 </Tab.Container>
@@ -165,18 +165,61 @@ const AppointmentsListTabs = ({ appointments }) => {
         </div>
     );
 };
-
+const Billings = ({ billings }) => {
+    return (
+        <BillingTable>
+            {billings.map((bill) => (
+                <BillingTableRow key={bill.id} />
+            ))}
+        </BillingTable>
+    );
+};
+const BillingTableRow = () => {
+    return (
+        <tr>
+            <td>
+                <a href="invoice-view.html">#INV-0010</a>
+            </td>
+            <td>
+                <h2 className="table-avatar">
+                    <a
+                        href="lawyer-profile.html"
+                        className="avatar avatar-sm mr-2"
+                    >
+                        {/* <img className="avatar-img rounded-circle" src="assets/img/doctors/lawyer-thumb-01.jpg" alt="User Image"/> */}
+                        IMG
+                    </a>
+                    <a href="lawyer-profile.html">
+                        Lawyer's name <span>Type</span>
+                    </a>
+                </h2>
+            </td>
+            <td>Price</td>
+            <td>Payment Date</td>
+            <td className="text-right">
+                <div className="table-action">
+                    <button className="btn btn-sm bg-info-light m-1">
+                        <i className="far fa-eye"></i> View
+                    </button>
+                    <button className="btn btn-sm bg-primary-light m-1">
+                        <i className="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </td>
+        </tr>
+    );
+};
 const BillingTable = (props) => {
     return (
-        <div id="pat_billing" class="tab-pane fade">
-            <div class="card card-table mb-0">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-center mb-0">
+        <div id="pat_billing" className="tab-pane">
+            <div className="card card-table mb-0">
+                <div className="card-body">
+                    <div className="table-responsive">
+                        <table className="table table-hover table-center mb-0">
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
-                                    <th>Doctor</th>
+                                    <th>Lawyer</th>
                                     <th>Amount</th>
                                     <th>Paid On</th>
                                     <th></th>

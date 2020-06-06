@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\AccountEmailVerification;
+use App\Notifications\AccountPasswordReset;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,7 +56,6 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function sendEmailVerificationNotification()
     {
         $key = config('app.key');
-        // TODO: include in payload that this is for verification
         $payload = array(
             "iss" => url('/'),
             "aud" => url('/'),
@@ -67,6 +67,22 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         $token = JWT::encode($payload, $key);
         $verify_url = route('verify.email', ['token' => $token]);
         $this->notify(new AccountEmailVerification($verify_url));
+    }
+
+    public function sendPasswordResetNotification()
+    {
+        $key = config('app.key');
+        $payload = array(
+            "iss" => url('/'),
+            "aud" => url('/'),
+            "iat" => now()->unix(),
+            "exp" => now()->addHours(8)->unix(),
+            "sub" => $this->getKey(),
+            "rea" => 'PASSWORD_RESET'
+        );
+        $token = JWT::encode($payload, $key);
+        $reset_url = route('account.reset_password', ['token' => $token]);
+        $this->notify(new AccountPasswordReset($reset_url));
     }
 
     public function setPasswordAttribute($value)

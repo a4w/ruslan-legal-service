@@ -27,3 +27,4 @@ Route::prefix('auth')->group(function () {
 Route::get('/lawyers', 'LawyerController@getLawyersPaginated');
 
 Route::post('/account/reset-password-request', 'AccountController@resetPasswordRequest');
+Route::post('/account/reset-password/{token}', 'AccountController@resetPassword');

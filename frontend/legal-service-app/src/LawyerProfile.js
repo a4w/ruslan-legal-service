@@ -128,6 +128,12 @@ const Overview = () => {
     const experiences = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
     const awards = [{ id: 1 }, { id: 4 }, { id: 5 }];
     const services = ["service 1 ", "service 2", "service 3"];
+    const specializations = [
+        "specializations 1 ",
+        "specializations 2",
+        "specializations 3",
+        "specializations 4",
+    ];
     return (
         <div className="col-md-12 col-lg-9">
             <Bio />
@@ -135,6 +141,7 @@ const Overview = () => {
             <Experience experiences={experiences} />
             <Awards awards={awards} />
             <Services services={services} />
+            <Specializations specializations={specializations} />
         </div>
     );
 };
@@ -260,5 +267,16 @@ const Services = ({ services }) => {
         </div>
     );
 };
-
+const Specializations = ({ specializations }) => {
+    return (
+        <div className="service-list">
+            <h4>Specializations</h4>
+            <ul className="clearfix">
+                {specializations.map((specialization) => (
+                    <li key={specialization}>{specialization}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
 export default LawyerProfile;

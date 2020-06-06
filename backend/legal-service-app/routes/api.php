@@ -28,3 +28,5 @@ Route::get('/lawyers', 'LawyerController@getLawyersPaginated');
 
 Route::post('/account/reset-password-request', 'AccountController@resetPasswordRequest');
 Route::post('/account/reset-password/{token}', 'AccountController@resetPassword');
+
+Route::post('/account/personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');

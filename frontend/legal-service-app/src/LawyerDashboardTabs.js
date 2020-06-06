@@ -5,6 +5,7 @@ import EditPersonal, { Content } from "./EditPersonal";
 import LawyerAppointments from "./LawyerAppointments";
 import LawyerClients from "./LawyerClients";
 import LawyerDashboardStatus from "./LawyerDashboardStatus";
+import LawyerReviews from "./LawyerReviews";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -20,7 +21,9 @@ const LawyerDashboardTabs = () => {
             </Tab.Pane>
             <Tab.Pane eventKey="schedule">test 4</Tab.Pane>
             <Tab.Pane eventKey="invoices">test 5</Tab.Pane>
-            <Tab.Pane eventKey="reviews">test 6</Tab.Pane>
+            <Tab.Pane eventKey="reviews">
+                <LawyerReviews />
+            </Tab.Pane>
             <Tab.Pane eventKey="messages">test 7</Tab.Pane>
             <Tab.Pane eventKey="settings">
                 <EditPersonal />

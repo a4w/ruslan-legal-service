@@ -12,8 +12,8 @@ const ReviewList = ({ comments }) => {
         <div className="lawyer-review review-listing">
             <ul className="comments-list">
                 {comments.map((comment) => (
-                    <li>
-                        <Comment key={comment.id} />
+                    <li key={comment.id}>
+                        <Comment />
                     </li>
                 ))}
             </ul>

@@ -1,13 +1,15 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
 import { Discount } from "./LawyerCardList";
+import Tab from "react-bootstrap/Tab";
+import Nav from "react-bootstrap/Nav";
 
 const LawyerProfile = () => {
     return (
         <div className="content">
             <div className="container">
                 <ProfileCard />
-                <Test />
+                <Details />
             </div>
         </div>
     );
@@ -77,4 +79,32 @@ const ProfileCard = () => {
     );
 };
 
+const Details = () => {
+    return (
+        <div class="card">
+            <div class="card-body pt-0">
+                <Tab.Container id="details" defaultActiveKey="overview">
+                    <NavBar />
+                </Tab.Container>
+            </div>
+        </div>
+    );
+};
+const NavBar = () => {
+    return (
+        <nav class="user-tabs mb-4">
+            <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                <li class="nav-item">
+                    <Nav.Link eventKey="overview">Overview</Nav.Link>
+                </li>
+                <li class="nav-item">
+                    <Nav.Link eventKey="Reviews">Reviews</Nav.Link>
+                </li>
+                <li class="nav-item">
+                    <Nav.Link eventKey="hours">Business Hours</Nav.Link>
+                </li>
+            </ul>
+        </nav>
+    );
+};
 export default LawyerProfile;

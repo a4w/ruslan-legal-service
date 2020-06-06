@@ -53,25 +53,16 @@ const LawyerCard = () => {
                         </div>
                     </div>
                     <div className="lawyer-info-right">
-                        <div className="clini-infos">
+                        <div className="session-infos">
                             <ul>
-                                <li>Feedback</li>
                                 <li>
-                                    <i className="fas fa-map-marker-alt"></i>{" "}
-                                    Lawyer's Location
+                                    <i className="far fa-comment"></i> Feedback
                                 </li>
-                                <li>
-                                    <Countdown
-                                        date={Date.now() + 5000}
-                                        renderer={(props) =>
-                                            LawyerCountDownRenderer({
-                                                ...props,
-                                                cost: 400,
-                                                discount: 100,
-                                            })
-                                        }
-                                    />
-                                </li>
+                                <Discount
+                                    secsTillEnd={5000}
+                                    cost={400}
+                                    costAfterDiscount={100}
+                                />
                             </ul>
                         </div>
                         <div className="session-booking">
@@ -92,6 +83,20 @@ const LawyerCard = () => {
     );
 };
 
+const Discount = ({ secsTillEnd, cost, costAfterDiscount }) => {
+    return (
+        <Countdown
+            date={Date.now() + secsTillEnd}
+            renderer={(props) =>
+                LawyerCountDownRenderer({
+                    ...props,
+                    cost: cost,
+                    discount: costAfterDiscount,
+                })
+            }
+        />
+    );
+};
 const LawyerCountDownRenderer = ({
     days,
     hours,
@@ -104,20 +109,22 @@ const LawyerCountDownRenderer = ({
     if (completed) {
         return (
             <li>
-                <p className="text-lg text-primary">&pound;{cost}</p>
+                <i className="far fa-money-bill-alt"></i>
+                <label className="text-lg text-primary">&pound;{cost}</label>
             </li>
         );
     } else {
         return (
             <>
                 <li>
-                    <p className="text-lg text-success">
+                    <i className="far fa-money-bill-alt"></i>
+                    <label className="text-lg text-success">
                         &pound;{discount}
                         &nbsp;
                         <strike className="text-lg text-danger">
                             &pound;{cost}
                         </strike>
-                    </p>
+                    </label>
                 </li>
                 <li>
                     Ends in <strong>{days}</strong>{" "}
@@ -135,3 +142,4 @@ const LawyerCountDownRenderer = ({
 };
 
 export default LawyerCardList;
+export { LawyerCard };

@@ -142,4 +142,4 @@ const LawyerCountDownRenderer = ({
 };
 
 export default LawyerCardList;
-export { LawyerCard };
+export { Discount };

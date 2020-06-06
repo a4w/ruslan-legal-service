@@ -87,8 +87,11 @@ const Details = () => {
                 <Tab.Container id="details" defaultActiveKey="overview">
                     <NavBar />
                     <Tab.Content>
-                        <div class="tab-content pt-0">
-                            <Tab.Pane eventKey="overview"> soon </Tab.Pane>
+                        <div className="tab-content pt-0">
+                            <Tab.Pane eventKey="overview">
+                                {" "}
+                                <Overview />{" "}
+                            </Tab.Pane>
                             <Tab.Pane eventKey="reviews">
                                 <LawyerReviews />
                             </Tab.Pane>
@@ -119,4 +122,21 @@ const NavBar = () => {
         </nav>
     );
 };
+
+const Overview = () => {
+    return (
+        <div className="col-md-12 col-lg-9">
+            <Bio />
+        </div>
+    );
+};
+const Bio = () => {
+    return (
+        <div className="widget about-widget">
+            <h4 className="widget-title">About Me</h4>
+            <p>Text. Bio. Wtvr</p>
+        </div>
+    );
+};
+
 export default LawyerProfile;

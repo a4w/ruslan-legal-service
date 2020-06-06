@@ -8,6 +8,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
@@ -21,7 +22,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'phone'
+        'name', 'surname', 'unverified_email', 'password', 'phone'
     ];
 
     /**
@@ -30,7 +31,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'refresh_token',
+        'password', 'refresh_token', 'unverified_email'
     ];
 
     /**
@@ -66,7 +67,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         );
         $token = JWT::encode($payload, $key);
         $verify_url = route('verify.email', ['token' => $token]);
-        $this->notify(new AccountEmailVerification($verify_url));
+        Notification::route('mail', $this->getEmailForVerification())->notify(new AccountEmailVerification($verify_url));
     }
 
     public function sendPasswordResetNotification()
@@ -98,5 +99,29 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Mark the given user's email as verified.
+     *
+     * @return bool
+     */
+    public function markEmailAsVerified()
+    {
+        return $this->forceFill([
+            'email_verified_at' => $this->freshTimestamp(),
+            'email' => $this->unverified_email,
+            'unverified_email' => null
+        ])->save();
+    }
+
+    /**
+     * Get the email address that should be used for verification.
+     *
+     * @return string
+     */
+    public function getEmailForVerification()
+    {
+        return $this->unverified_email;
     }
 }

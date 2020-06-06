@@ -8,7 +8,7 @@ const LawyerDashboard = () => {
     return (
         <div className="row">
             {" "}
-            <Tab.Container id="dashboard" defaultActiveKey="dashboard">
+            <Tab.Container id="dashboard" defaultActiveKey="reviews">
                 <div className="col-md-5 col-lg-4 col-xl-3">
                     <StickyBox offsetTop={20} offsetBottom={20}>
                         <LawyerDashboardSidebar />

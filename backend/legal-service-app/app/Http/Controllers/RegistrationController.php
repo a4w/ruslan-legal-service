@@ -19,8 +19,11 @@ class RegistrationController extends Controller
             'password' => ['required', 'min:8'],
             'phone' => ['required']
         ]);
+        $data = $request->only('name', 'surname', 'email', 'password', 'phone');
+        $data['unverified_email'] = $data['email'];
+        unset($data['email']);
         // Insert
-        $account = Account::create($request->only('name', 'surname', 'email', 'password', 'phone'));
+        $account = Account::create($data);
         $account->client()->save(Client::make());
         event(new Registered($account));
         return ['error' => false, 'message' => 'User added successfully'];
@@ -35,8 +38,11 @@ class RegistrationController extends Controller
             'password' => ['required', 'min:8'],
             'phone' => ['required']
         ]);
+        $data = $request->only('name', 'surname', 'email', 'password', 'phone');
+        $data['unverified_email'] = $data['email'];
+        unset($data['email']);
         // Insert
-        $account = Account::create($request->only('name', 'surname', 'email', 'password', 'phone'));
+        $account = Account::create($data);
         $account->lawyer()->save(Lawyer::make());
         event(new Registered($account));
 

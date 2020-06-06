@@ -6,6 +6,7 @@ use App\Account;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AccountController extends Controller
@@ -48,6 +49,22 @@ class AccountController extends Controller
         $user->save();
         return [
             'message' => 'Password updated successfully'
+        ];
+    }
+
+    public function savePersonalInfo(JSONRequest $request)
+    {
+        $request->validate([
+            'name' => ['required'],
+            'surname' => ['required'],
+            'phone' => ['required']
+        ]);
+        /** @var $user Account **/
+        $user = Auth::user();
+        $user->update($request->only(['name', 'surname', 'phone']));
+        return [
+            'error' => 'false',
+            'message' => 'Updated successfully'
         ];
     }
 }

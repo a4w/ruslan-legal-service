@@ -86,11 +86,17 @@ const Details = () => {
             <div className="card-body pt-0">
                 <Tab.Container id="details" defaultActiveKey="overview">
                     <NavBar />
-                    <Tab.Pane eventKey="overview"></Tab.Pane>
-                    <Tab.Pane eventKey="reviews">
-                        <LawyerReviews />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="hours"></Tab.Pane>
+                    <Tab.Content>
+                        <div class="tab-content pt-0">
+                            <Tab.Pane eventKey="overview"> soon </Tab.Pane>
+                            <Tab.Pane eventKey="reviews">
+                                <LawyerReviews />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="hours">
+                                {" Hours will be added when it's time 🌚🌚"}
+                            </Tab.Pane>
+                        </div>
+                    </Tab.Content>
                 </Tab.Container>
             </div>
         </div>

@@ -44,3 +44,8 @@ Route::get('verify/email/{token}', function ($token) {
     }
     return "Email verified correctly"; // TODO Create post verification page
 })->name('verify.email');
+
+Route::get('account/reset-password/{token}', function ($token) {
+    // TODO: Redirect to correct page
+    redirect('/' . $token);
+})->name('account.reset_password');

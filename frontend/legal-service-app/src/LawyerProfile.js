@@ -1,6 +1,7 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
 import { Discount } from "./LawyerCardList";
+import LawyerReviews from "./LawyerReviews";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 
@@ -60,7 +61,7 @@ const ProfileCard = () => {
                                     City, Country
                                 </li>
                                 <Discount
-                                    secsTillEnd={5000}
+                                    secsTillEnd={0}
                                     cost={400}
                                     costAfterDiscount={100}
                                 />
@@ -81,10 +82,15 @@ const ProfileCard = () => {
 
 const Details = () => {
     return (
-        <div class="card">
-            <div class="card-body pt-0">
+        <div className="card">
+            <div className="card-body pt-0">
                 <Tab.Container id="details" defaultActiveKey="overview">
                     <NavBar />
+                    <Tab.Pane eventKey="overview"></Tab.Pane>
+                    <Tab.Pane eventKey="reviews">
+                        <LawyerReviews />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="hours"></Tab.Pane>
                 </Tab.Container>
             </div>
         </div>
@@ -92,15 +98,15 @@ const Details = () => {
 };
 const NavBar = () => {
     return (
-        <nav class="user-tabs mb-4">
-            <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-                <li class="nav-item">
+        <nav className="user-tabs mb-4">
+            <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
+                <li className="nav-item">
                     <Nav.Link eventKey="overview">Overview</Nav.Link>
                 </li>
-                <li class="nav-item">
-                    <Nav.Link eventKey="Reviews">Reviews</Nav.Link>
+                <li className="nav-item">
+                    <Nav.Link eventKey="reviews">Reviews</Nav.Link>
                 </li>
-                <li class="nav-item">
+                <li className="nav-item">
                     <Nav.Link eventKey="hours">Business Hours</Nav.Link>
                 </li>
             </ul>

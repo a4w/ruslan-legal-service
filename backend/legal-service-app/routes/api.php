@@ -30,3 +30,4 @@ Route::post('/account/reset-password-request', 'AccountController@resetPasswordR
 Route::post('/account/reset-password/{token}', 'AccountController@resetPassword');
 
 Route::post('/account/personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
+Route::post('/account/update-email', 'AccountController@updateEmail')->middleware('auth:api');

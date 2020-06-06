@@ -25,7 +25,6 @@ const LawyerDashboardTabs = () => {
             <Tab.Pane eventKey="settings">
                 <EditPersonal />
             </Tab.Pane>
-            <Tab.Pane eventKey="social-media">test 9</Tab.Pane>
             <Tab.Pane eventKey="change-password">
                 <Content>
                     <EditPassword />

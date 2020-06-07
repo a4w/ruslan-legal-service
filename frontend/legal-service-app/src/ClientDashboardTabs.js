@@ -3,6 +3,7 @@ import Tab from "react-bootstrap/Tab";
 import EditPassword from "./EditPassword";
 import EditPersonal, { Content } from "./EditPersonal";
 import ClientDashboardStatus from "./ClientDashboardStatus";
+import ProfileSettings from "./ProfileSettings";
 
 const ClientDashboardTabs = () => {
     return (
@@ -11,7 +12,9 @@ const ClientDashboardTabs = () => {
                 <ClientDashboardStatus />
             </Tab.Pane>
             <Tab.Pane eventKey="messages">test</Tab.Pane>
-            <Tab.Pane eventKey="settings">test</Tab.Pane>
+            <Tab.Pane eventKey="settings">
+                <ProfileSettings />
+            </Tab.Pane>
             <Tab.Pane eventKey="change-password">
                 <Content>
                     <EditPassword />

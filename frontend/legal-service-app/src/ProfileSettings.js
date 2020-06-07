@@ -5,13 +5,15 @@ import EditBasicInfo from "./EditBasicInfo";
 
 const ProfileSettings = () => {
     return (
-        <>
-            <EditBasicInfo />
-            <hr></hr>
-            <EditEmail />
-            <hr></hr>
-            <EditAddress />
-        </>
+        <div className="card">
+            <div className="card-body">
+                <EditBasicInfo />
+                <hr></hr>
+                <EditEmail />
+                <hr></hr>
+                <EditAddress />
+            </div>
+        </div>
     );
 };
 

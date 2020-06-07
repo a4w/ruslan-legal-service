@@ -31,10 +31,10 @@ const EditPassword = () => {
     };
 
     return (
-        <div class="card">
-            <div class="card-body">
+        <div className="card">
+            <div className="card-body">
                 <form onSubmit={OnSubmitHandler}>
-                    <div class="form-group">
+                    <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Old Password"}
                             name={"oldPassword"}
@@ -45,7 +45,7 @@ const EditPassword = () => {
                             disabled={true}
                         />
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"New Password"}
                             name={"newPassword"}
@@ -55,7 +55,7 @@ const EditPassword = () => {
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Confirm New Password"}
                             name={"passwordConfirm"}
@@ -65,10 +65,10 @@ const EditPassword = () => {
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
-                    <div class="submit-section">
+                    <div className="submit-section">
                         <button
                             type="submit"
-                            class="btn btn-primary submit-btn"
+                            className="btn btn-primary submit-btn"
                         >
                             Save Changes
                         </button>

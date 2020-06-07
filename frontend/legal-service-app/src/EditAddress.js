@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { editAddressValidations } from "./Validations";
+import { FaSpinner } from "react-icons/fa";
 const EditAddress = () => {
     const initAddress = {
         address: "",
@@ -94,11 +95,19 @@ const EditAddress = () => {
                         />
                     </div>
                 </div>
-            </div>
-            <div className="submit-section">
-                <button type="submit" className="btn btn-primary submit-btn">
-                    Save Changes
-                </button>
+                <div className="submit-section col-sm-12 col-lg-2 col-md-3">
+                    <button
+                        type="submit"
+                        disabled={isSaving}
+                        className={
+                            "btn btn-primary submit-btn" +
+                            (isSaving ? "cursor-not-allowed" : "")
+                        }
+                    >
+                        {isSaving && <FaSpinner className="icon-spin" />}
+                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
+                    </button>
+                </div>
             </div>
         </form>
     );

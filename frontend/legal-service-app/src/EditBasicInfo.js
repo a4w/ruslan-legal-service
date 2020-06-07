@@ -96,7 +96,7 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-sm-12 col-lg-2 col-md-3 submit-section">
+                <div className="submit-section">
                     <button
                         type="submit"
                         disabled={isSaving}

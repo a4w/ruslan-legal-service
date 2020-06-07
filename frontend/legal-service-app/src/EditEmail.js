@@ -37,7 +37,7 @@ const EditEmail = ({ email }) => {
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="submit-section col-sm-12 col-lg-2 col-md-3">
+                <div className="submit-section">
                     <button
                         type="submit"
                         disabled={isSaving}

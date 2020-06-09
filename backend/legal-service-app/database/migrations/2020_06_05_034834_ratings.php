@@ -14,6 +14,7 @@ class Ratings extends Migration
     public function up()
     {
         Schema::create('ratings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('appointment_id')->constrained('appointments');
             $table->unsignedSmallInteger('rating');
             $table->string('comment');

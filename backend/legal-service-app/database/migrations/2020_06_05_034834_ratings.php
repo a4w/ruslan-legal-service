@@ -17,6 +17,7 @@ class Ratings extends Migration
             $table->foreignId('appointment_id')->constrained('appointments');
             $table->unsignedSmallInteger('rating');
             $table->string('comment');
+            $table->timestamps();
         });
     }
 

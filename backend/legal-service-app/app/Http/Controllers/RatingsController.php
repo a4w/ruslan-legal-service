@@ -22,12 +22,12 @@ class RatingsController extends Controller
         $appointment = Appointment::find($appointment_id);
         if ($user == $appointment->client) {
             // Add rating
-            $rating = Rating::make([
-                'rating' => $request->get('rating'),
-                'comment' => $request->get('comment', null),
-            ]);
+            if ($appointment->rating === null) {
+                $appointment->rating()->save(Rating::make($request->only('rating', 'comment')));
+            } else {
+                $appointment->rating->update($request->only('rating', 'comment'));
+            }
 
-            $appointment->rating()->save($rating);
             return ["error" => false];
         } else {
             return ["error" => true, "message" => "Unauthorized to rate appointment"];

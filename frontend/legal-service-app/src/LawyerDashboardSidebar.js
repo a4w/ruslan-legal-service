@@ -72,12 +72,6 @@ const LawyerDashboardSidebar = () => {
                                 </Nav.Link>
                             </li>
                             <li>
-                                <Nav.Link eventKey="social-media">
-                                    <i className="fas fa-share-alt"></i>
-                                    <span>Social Media</span>
-                                </Nav.Link>
-                            </li>
-                            <li>
                                 <Nav.Link eventKey="change-password">
                                     <i className="fas fa-lock"></i>
                                     <span>Change Password</span>

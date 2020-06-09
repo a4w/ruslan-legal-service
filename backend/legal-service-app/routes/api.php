@@ -25,3 +25,10 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::get('/lawyers', 'LawyerController@getLawyersPaginated');
+
+Route::post('/account/reset-password-request', 'AccountController@resetPasswordRequest');
+Route::post('/account/reset-password/{token}', 'AccountController@resetPassword');
+
+Route::post('/account/personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
+Route::post('/account/update-email', 'AccountController@updateEmail')->middleware('auth:api');
+Route::post('/account/update-password', 'AccountController@updatePassword')->middleware('auth:api');

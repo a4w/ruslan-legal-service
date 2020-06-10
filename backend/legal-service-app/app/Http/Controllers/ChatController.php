@@ -6,6 +6,7 @@ use App\Account;
 use App\Chat;
 use App\ChatParticipent;
 use App\Http\Requests\JSONRequest;
+use App\Message;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -45,5 +46,8 @@ class ChatController extends Controller
                 'message' => 'unauthorized'
             ];
         }
+        $message = Message::make($request->only('content'));
+        $message->sender()->associate($user);
+        $chat->messages()->save($message);
     }
 }

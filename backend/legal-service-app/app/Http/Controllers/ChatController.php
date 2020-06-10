@@ -38,6 +38,9 @@ class ChatController extends Controller
 
     public function sendMessage(Chat $chat, JSONRequest $request)
     {
+        $request->validate([
+            'content' => ['required', 'min:1']
+        ]);
         $user = Auth::user();
         $participents = $chat->participents;
         if (!$participents->contains($user)) {

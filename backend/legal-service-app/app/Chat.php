@@ -8,6 +8,6 @@ class Chat extends Model
 {
     public function participents()
     {
-        return $this->hasMany(ChatParticipent::class);
+        return $this->belongsToMany(Account::class, 'chat_participents', 'chat_id', 'user_id');
     }
 }

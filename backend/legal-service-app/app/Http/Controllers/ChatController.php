@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Chat;
-use App\ChatParticipent;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -26,12 +25,8 @@ class ChatController extends Controller
         if ($chat === null) {
             // Create chat
             $chat = Chat::create();
-            $p1 = ChatParticipent::make();
-            $p1->account()->associate($user_1);
-            $p2 = ChatParticipent::make();
-            $p2->account()->associate($user_2);
-            $chat->participents()->save($p1);
-            $chat->participents()->save($p2);
+            $chat->participents()->attach($user_1);
+            $chat->participents()->attach($user_2);
             return $chat->id;
         } else {
             return $chat->id;

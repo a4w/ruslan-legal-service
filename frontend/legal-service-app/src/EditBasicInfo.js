@@ -3,7 +3,6 @@ import { editBasicInfoValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
-import EditEmail from "./EditEmail.js";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -34,12 +33,37 @@ const EditBasicInfo = () => {
     };
 
     return (
-        <>
-            <form onSubmit={OnSubmitHandler}>
-                <div className="form-row">
-                    <div className="col-lg-6 col-md-6 col-sm-12">
+        <form onSubmit={OnSubmitHandler}>
+            <div className="row form-row">
+                <div className="col-12 col-md-12">
+                    <div className="form-group">
+                        <div className="change-avatar">
+                            <div className="profile-img">
+                                {/* <img
+                                    src="assets/img/patients/patient.jpg"
+                                    alt="User"
+                                /> */}
+                                IMG
+                            </div>
+                            <div className="upload-img">
+                                <div className="change-photo-btn">
+                                    <span>
+                                        <i className="fa fa-upload"></i> Upload
+                                        Photo
+                                    </span>
+                                    <input type="file" className="upload" />
+                                </div>
+                                <small className="form-text text-muted">
+                                    Allowed JPG, GIF or PNG. Max size of 2MB
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"name"}
+                            placeholder={"First Name"}
                             name={"name"}
                             value={user.name}
                             type={"text"}
@@ -47,9 +71,11 @@ const EditBasicInfo = () => {
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
-                    <div className="col-lg-6 col-md-6 col-sm-12">
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"surname"}
+                            placeholder={"Last Name"}
                             name={"surname"}
                             value={user.surname}
                             type={"text"}
@@ -58,10 +84,10 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="form-row">
-                    <div className="col-lg-6 col-md-6 col-sm-12">
+                <div className="col-sm-12 col-lg-10 col-md-9">
+                    <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"Telegpone Number"}
+                            placeholder={"Telephone Number"}
                             name={"phone"}
                             value={user.phone}
                             type={"text"}
@@ -69,30 +95,22 @@ const EditBasicInfo = () => {
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
-                    <div className="col-lg-4 col-md-5 col-sm-12">
-                        <button
-                            type="submit"
-                            disabled={isSaving}
-                            className={
-                                "btn btn-primary search-btn btn-block btn-lg" +
-                                (isSaving ? "cursor-not-allowed" : "")
-                            }
-                        >
-                            {isSaving && <FaSpinner className="icon-spin" />}
-                            <i
-                                className="fas fa-check"
-                                style={{
-                                    display: isSaving ? "none" : "inline-block",
-                                }}
-                            ></i>{" "}
-                            <span>&nbsp;{isSaving ? "" : "Save"}</span>
-                        </button>
-                    </div>
                 </div>
-            </form>
-            <hr></hr>
-            <EditEmail email={"test"} />
-        </>
+                <div className="col-sm-12 col-lg-2 col-md-3 submit-section">
+                    <button
+                        type="submit"
+                        disabled={isSaving}
+                        className={
+                            "btn btn-primary submit-btn" +
+                            (isSaving ? "cursor-not-allowed" : "")
+                        }
+                    >
+                        {isSaving && <FaSpinner className="icon-spin" />}
+                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
+                    </button>
+                </div>
+            </div>
+        </form>
     );
 };
 

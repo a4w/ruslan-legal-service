@@ -16,6 +16,7 @@ import Home from "./Home";
 import LawyerCompleteRegisteration from "./LawyerCompleteRegisteration";
 import LawyerDashboard from "./LawyerDashboard";
 import LawyerProfile from "./LawyerProfile";
+import ClientDashboard from "./ClientDashboard";
 
 function App() {
     return (
@@ -49,6 +50,9 @@ function App() {
                 </Route>
                 <Route exact path="/profile">
                     <LawyerProfile />
+                </Route>
+                <Route exact path="/client-dashboard">
+                    <ClientDashboard />
                 </Route>
             </Switch>
         </Router>

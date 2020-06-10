@@ -146,7 +146,7 @@ export const editAddressValidations = (data, field) => {
         });
         const zip = data.zip.toString();
         test("zip", `${zip} is not a valid zip code`, () => {
-            enforce(parseInt(zip)).isNumeric();
+            enforce(parseInt(zip)).isNotEmpty();
         });
     });
 };

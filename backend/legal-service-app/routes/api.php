@@ -33,4 +33,4 @@ Route::post('/account/personal-info', 'AccountController@savePersonalInfo')->mid
 Route::post('/account/update-email', 'AccountController@updateEmail')->middleware('auth:api');
 Route::post('/account/update-password', 'AccountController@updatePassword')->middleware('auth:api');
 
-Route::post('/chat/{user}/{user}', 'ChatController@getChat');
+Route::post('/chat/{account1_id}/{account2_id}', 'ChatController@getChat');

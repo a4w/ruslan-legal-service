@@ -17,6 +17,7 @@ import LawyerCompleteRegisteration from "./LawyerCompleteRegisteration";
 import LawyerDashboard from "./LawyerDashboard";
 import LawyerProfile from "./LawyerProfile";
 import ClientDashboard from "./ClientDashboard";
+import ForgotPassword from "./ForgotPassword";
 
 function App() {
     return (
@@ -53,6 +54,11 @@ function App() {
                 </Route>
                 <Route exact path="/client-dashboard">
                     <ClientDashboard />
+                </Route>
+                <Route exact path="/forgot-password">
+                    <NavBar />
+                    <ForgotPassword />
+                    <Footer />
                 </Route>
             </Switch>
         </Router>

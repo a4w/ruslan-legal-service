@@ -104,6 +104,13 @@ class LawyerController extends Controller
 
     public function updateSchedule(JSONRequest $request)
     {
+        $request->validate([
+            'slot_length' => ['required', 'IN:30,45,60,75,90'],
+            'enable_discount' => ['required', 'boolean'],
+            'discount_type' => ['exclude_if:enable_discount,false', 'required', 'IN:FIXED,PERCENT'],
+            'discount_value' => ['exclude_if:enable_discount,false', 'required', 'min:0', 'numeric'],
+            'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s']
+        ]);
         $day_mapping = [
             'sunday' => Carbon::SUNDAY,
             'monday' => Carbon::MONDAY,

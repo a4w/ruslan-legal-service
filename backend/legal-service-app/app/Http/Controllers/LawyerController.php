@@ -112,32 +112,28 @@ class LawyerController extends Controller
             'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s'],
             'price_per_slot' => ['required', 'numeric', 'min:0']
         ]);
-        $day_mapping = [
-            'sunday' => Carbon::SUNDAY,
-            'monday' => Carbon::MONDAY,
-            'tuesday' => Carbon::TUESDAY,
-            'wednesday' => Carbon::WEDNESDAY,
-            'thursday' => Carbon::THURSDAY,
-            'friday' => Carbon::FRIDAY,
-            'saturday' => Carbon::SATURDAY
-        ];
-        $lawyer = Auth::user()->lawyer;
+        /** @var Account **/
+        $user = Auth::user();
+        if (!$user->isLawyer()) {
+            return ["error" => true, "message" => "unauthorized"];
+        }
+        $lawyer = $user->lawyer;
         $incoming_schedule = $request->get('schedule');
         // Set the schedule
         $schedule = array([], [], [], [], [], [], []);
         $slot_length = $lawyer->slot_length;
         foreach ($incoming_schedule as $day => $slots) {
-            $day_idx = $day_mapping[Str::lower($day)] ?? null;
-            if ($day_idx === null) {
-                return ['error' => true, 'message' => 'Malformed request'];
-            }
-            foreach ($slots as $slot) {
-                try {
-                    $slot = AppointmentHelper::clockToMinutes($slot);
-                } catch (Exception $e) {
+            try {
+                $day_idx = AppointmentHelper::dayToIndex($day);
+                if ($day_idx === null) {
                     return ['error' => true, 'message' => 'Malformed request'];
                 }
-                $schedule[$day_idx][] = (int) ($slot / $slot_length);
+                foreach ($slots as $slot) {
+                    $slot = AppointmentHelper::clockToMinutes($slot);
+                    $schedule[$day_idx][] = (int) ($slot / $slot_length);
+                }
+            } catch (Exception $e) {
+                return ['error' => true, 'message' => 'Malformed request'];
             }
         }
         if (count($schedule) !== 7) {

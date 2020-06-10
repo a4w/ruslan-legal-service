@@ -7,6 +7,9 @@ use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 
 class LawyerController extends Controller
@@ -97,5 +100,41 @@ class LawyerController extends Controller
         }
         $output['data'] = $data;
         return $output;
+    }
+
+    public function updateSchedule(JSONRequest $request)
+    {
+        $day_mapping = [
+            'sunday' => Carbon::SUNDAY,
+            'monday' => Carbon::MONDAY,
+            'tuesday' => Carbon::TUESDAY,
+            'wednesday' => Carbon::WEDNESDAY,
+            'thursday' => Carbon::THURSDAY,
+            'friday' => Carbon::FRIDAY,
+            'saturday' => Carbon::SATURDAY
+        ];
+        $lawyer = Auth::user()->lawyer;
+        $incoming_schedule = $request->get('schedule');
+        // Set the schedule
+        $schedule = array([], [], [], [], [], [], []);
+        $slot_length = $lawyer->slot_length;
+        foreach ($incoming_schedule as $day => $slots) {
+            $day_idx = $day_mapping[Str::lower($day)] ?? null;
+            if ($day_idx === null) {
+                return ['error' => true, 'message' => 'Malformed request'];
+            }
+            foreach ($slots as $slot) {
+                try {
+                    $slot = AppointmentHelper::clockToMinutes($slot);
+                } catch (Exception $e) {
+                    return ['error' => true, 'message' => 'Malformed request'];
+                }
+                $schedule[$day_idx][] = (int) ($slot / $slot_length);
+            }
+        }
+        if (count($schedule) !== 7) {
+            return ['error' => true, 'message' => 'Malformed request'];
+        }
+        return $schedule;
     }
 }

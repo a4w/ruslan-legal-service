@@ -107,9 +107,10 @@ class LawyerController extends Controller
         $request->validate([
             'slot_length' => ['required', 'IN:30,45,60,75,90'],
             'enable_discount' => ['required', 'boolean'],
-            'discount_type' => ['exclude_if:enable_discount,false', 'required', 'IN:FIXED,PERCENT'],
+            'percent_discount' => ['exclude_if:enable_discount,false', 'required', 'boolean'],
             'discount_value' => ['exclude_if:enable_discount,false', 'required', 'min:0', 'numeric'],
-            'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s']
+            'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s'],
+            'price_per_slot' => ['required', 'numeric', 'min:0']
         ]);
         $day_mapping = [
             'sunday' => Carbon::SUNDAY,
@@ -142,6 +143,19 @@ class LawyerController extends Controller
         if (count($schedule) !== 7) {
             return ['error' => true, 'message' => 'Malformed request'];
         }
-        return $schedule;
+        // Save fields
+        $lawyer->schedule = $schedule;
+        $lawyer->slot_length = $request->get('slot_length');
+        $lawyer->price_per_slot = $request->get('price_per_slot');
+        if ($request->get('enable_discount', false)) {
+            $lawyer->discount = $request->get('discount_value');
+            $lawyer->is_percent_discount = $request->get('percent_discount');
+            $lawyer->discount_end = $request->get('discount_end');
+        } else {
+            $lawyer->discount = null;
+        }
+        $lawyer->save();
+
+        return ['error' => false, 'message' => 'success'];
     }
 }

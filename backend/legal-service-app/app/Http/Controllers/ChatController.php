@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Account;
 use App\Chat;
 use App\ChatParticipent;
-use App\Http\Requests\JSONRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function getChat($u1, $u2, JSONRequest $request)
+    public function getChat($u1, $u2)
     {
         $user_1 = Account::find($u1);
         $user_2 = Account::find($u2);

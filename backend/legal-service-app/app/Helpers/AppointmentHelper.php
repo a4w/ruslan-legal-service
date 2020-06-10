@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -11,6 +12,16 @@ class AppointmentHelper
     public static $DATE_FORMAT = 'Y-m-d';
     public static $TIME_FORMAT = 'H:i';
     public const MINUTES_PER_DAY = 60 * 24;
+
+    protected const DAY_MAPPING = [
+        'sunday' => Carbon::SUNDAY,
+        'monday' => Carbon::MONDAY,
+        'tuesday' => Carbon::TUESDAY,
+        'wednesday' => Carbon::WEDNESDAY,
+        'thursday' => Carbon::THURSDAY,
+        'friday' => Carbon::FRIDAY,
+        'saturday' => Carbon::SATURDAY
+    ];
 
     public static function minutesToClock($minutes)
     {
@@ -28,5 +39,23 @@ class AppointmentHelper
             throw new Exception("Clock is not properly formated");
         }
         return 60 * $hour + $minutes;
+    }
+
+    public static function dayToIndex($day)
+    {
+        $day_idx = AppointmentHelper::DAY_MAPPING[Str::lower($day)] ?? null;
+        if ($day_idx === null) {
+            throw new Exception("Day is not valid");
+        }
+        return $day_idx;
+    }
+
+    public static function indexToDay($index)
+    {
+        $day = array_search($index, AppointmentHelper::DAY_MAPPING);
+        if ($day === false) {
+            throw new Exception("Day index is not valid");
+        }
+        return $day;
     }
 }

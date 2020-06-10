@@ -34,3 +34,4 @@ Route::post('/account/update-email', 'AccountController@updateEmail')->middlewar
 Route::post('/account/update-password', 'AccountController@updatePassword')->middleware('auth:api');
 
 Route::post('/chat/{account1_id}/{account2_id}', 'ChatController@getChat')->middleware('auth:api');
+Route::post('/chat/{chat}', 'ChatController@sendMessage')->middleware('auth:api');

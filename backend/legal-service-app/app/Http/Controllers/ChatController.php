@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Chat;
+use App\ChatParticipent;
+use App\Http\Requests\JSONRequest;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -30,6 +32,18 @@ class ChatController extends Controller
             return $chat->id;
         } else {
             return $chat->id;
+        }
+    }
+
+    public function sendMessage(Chat $chat, JSONRequest $request)
+    {
+        $user = Auth::user();
+        $participents = $chat->participents;
+        if (!$participents->contains($user)) {
+            return [
+                'error' => true,
+                'message' => 'unauthorized'
+            ];
         }
     }
 }

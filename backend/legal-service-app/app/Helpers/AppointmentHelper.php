@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 
 class AppointmentHelper
 {
-    public static $DATETIME_FORMAT = 'Y-m-d H:i:s';
-    public static $DATE_FORMAT = 'Y-m-d';
-    public static $TIME_FORMAT = 'H:i';
+    public const DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const DATE_FORMAT = 'Y-m-d';
+    public const TIME_FORMAT = 'H:i';
     public const MINUTES_PER_DAY = 60 * 24;
 
     protected const DAY_MAPPING = [

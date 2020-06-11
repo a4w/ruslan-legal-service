@@ -57,4 +57,18 @@ class ChatController extends Controller
             'message' => 'success'
         ];
     }
+
+    public function getMessages(Chat $chat)
+    {
+        $user = Auth::user();
+        $participents = $chat->participents;
+        if (!$participents->contains($user)) {
+            return [
+                'error' => true,
+                'message' => 'unauthorized'
+            ];
+        }
+        $messages = $chat->messages()->select(['id', 'content', 'sender_id', 'created_at'])->get();
+        return $messages;
+    }
 }

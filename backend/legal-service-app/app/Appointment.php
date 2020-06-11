@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
 
+    protected $fillable = [
+        'appointment_time', 'status', 'price', 'duration'
+    ];
+
     protected $casts = [
         'appointment_time' => 'datetime',
     ];

@@ -32,6 +32,7 @@ Route::post('/account/reset-password/{token}', 'AccountController@resetPassword'
 Route::post('/account/personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
 Route::post('/account/update-email', 'AccountController@updateEmail')->middleware('auth:api');
 Route::post('/account/update-password', 'AccountController@updatePassword')->middleware('auth:api');
+Route::post('/rate/{appointment_id}', 'RatingsController@rateAppointment')->middleware('auth:api');
 
 Route::post('/lawyer/update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
 Route::get('lawyer/{lawyer}', 'LawyerController@fetchLawyer');

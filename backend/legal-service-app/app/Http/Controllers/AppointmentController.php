@@ -69,8 +69,6 @@ class AppointmentController extends Controller
             $appointment->lawyer()->associate($lawyer);
             $appointment->client()->associate($user);
             $appointments[] = $appointment;
-            // $appointment->save();
-            // TODO: Have a job to remove held appointments after some time
         }
 
         // Create payment intent

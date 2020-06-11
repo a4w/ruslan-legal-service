@@ -10,6 +10,11 @@ class Lawyer extends Model
     protected $hidden = [
         'schedule'
     ];
+
+    protected $casts = [
+        'schedule' => 'json'
+    ];
+
     public $timestamps = false;
 
     public function account()

@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'stripe_api_key' => env('STRIPE_API_KEY', 'NONO'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

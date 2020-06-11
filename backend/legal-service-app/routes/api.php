@@ -34,3 +34,4 @@ Route::post('/account/update-email', 'AccountController@updateEmail')->middlewar
 Route::post('/account/update-password', 'AccountController@updatePassword')->middleware('auth:api');
 
 Route::post('/appointment/{lawyer}/select-slots', 'AppointmentController@selectSlots');
+Route::post('/lawyer/update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');

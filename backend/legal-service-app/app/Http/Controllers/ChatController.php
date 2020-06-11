@@ -68,7 +68,7 @@ class ChatController extends Controller
                 'message' => 'unauthorized'
             ];
         }
-        $messages = $chat->messages()->select(['id', 'content', 'sender_id', 'created_at'])->get();
+        $messages = $chat->messages()->select(['id', 'message_type', 'content', 'sender_id', 'created_at'])->get();
         return $messages;
     }
 }

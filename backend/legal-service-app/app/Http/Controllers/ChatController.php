@@ -52,5 +52,9 @@ class ChatController extends Controller
         $message = Message::make($request->only('content'));
         $message->sender()->associate($user);
         $chat->messages()->save($message);
+        return [
+            'error' => false,
+            'message' => 'success'
+        ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
@@ -18,8 +17,7 @@ class LawyerController extends Controller
         $length = (int) $request->get('length', 10);
 
         // This can be cached (and should be)
-        $lawyers = Lawyer::with(['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'])
-            ->where('slot_length', '<>', null)
+        $lawyers = Lawyer::where('slot_length', '<>', null)
             ->limit($length)
             ->skip($offset)
             ->get();
@@ -97,5 +95,10 @@ class LawyerController extends Controller
         }
         $output['data'] = $data;
         return $output;
+    }
+
+    public function fetchLawyer(Lawyer $lawyer)
+    {
+        return $lawyer;
     }
 }

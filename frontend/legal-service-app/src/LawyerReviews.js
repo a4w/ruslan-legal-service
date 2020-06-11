@@ -2,16 +2,20 @@ import React from "react";
 import StarRatings from "react-star-ratings";
 
 const LawyerReviews = () => {
-    return <ReviewList />;
+    const comments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+
+    return <ReviewList comments={comments} />;
 };
 
-const ReviewList = () => {
+const ReviewList = ({ comments }) => {
     return (
         <div className="lawyer-review review-listing">
             <ul className="comments-list">
-                <li>
-                    <Comment />
-                </li>
+                {comments.map((comment) => (
+                    <li key={comment.id}>
+                        <Comment />
+                    </li>
+                ))}
             </ul>
         </div>
     );

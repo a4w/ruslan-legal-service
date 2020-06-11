@@ -1,30 +1,30 @@
 import React, { useState } from "react";
-import { editBasicInfoValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
+import { editAddressValidations } from "./Validations";
 import { FaSpinner } from "react-icons/fa";
-
-const EditBasicInfo = () => {
-    const initUser = {
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
+const EditAddress = () => {
+    const initAddress = {
+        address: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "",
     };
 
-    const [user, setUser] = useState(initUser);
+    const [address, setAddress] = useState(initAddress);
     const [isSaving, setSaving] = useState(false);
-    const [errors, , runValidation] = useValidation(editBasicInfoValidation);
+    const [errors, , runValidation] = useValidation(editAddressValidations);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
-        setUser(nextUser);
+        const nextUser = { ...address, [fieldName]: event.target.value };
+        setAddress(nextUser);
         runValidation(nextUser, fieldName);
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        runValidation(user).then(async (hasErrors, _) => {
+        runValidation(address).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 console.log("safe");
                 setSaving(true);
@@ -35,39 +35,14 @@ const EditBasicInfo = () => {
     return (
         <form onSubmit={OnSubmitHandler}>
             <div className="row form-row">
-                <div className="col-12 col-md-12">
-                    <div className="form-group">
-                        <div className="change-avatar">
-                            <div className="profile-img">
-                                {/* <img
-                                    src="assets/img/patients/patient.jpg"
-                                    alt="User"
-                                /> */}
-                                IMG
-                            </div>
-                            <div className="upload-img">
-                                <div className="change-photo-btn">
-                                    <span>
-                                        <i className="fa fa-upload"></i> Upload
-                                        Photo
-                                    </span>
-                                    <input type="file" className="upload" />
-                                </div>
-                                <small className="form-text text-muted">
-                                    Allowed JPG, GIF or PNG. Max size of 2MB
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12 col-md-6">
+                <div className="col-12">
                     <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"First Name"}
-                            name={"name"}
-                            value={user.name}
+                            placeholder={"Address"}
+                            name={"address"}
+                            value={address.address}
                             type={"text"}
-                            errors={errors.name}
+                            errors={errors.address}
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
@@ -75,23 +50,47 @@ const EditBasicInfo = () => {
                 <div className="col-12 col-md-6">
                     <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"Last Name"}
-                            name={"surname"}
-                            value={user.surname}
+                            placeholder={"City"}
+                            name={"city"}
+                            value={address.city}
                             type={"text"}
-                            errors={errors.surname}
+                            errors={errors.city}
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
                 </div>
-                <div className="col-sm-12 col-lg-10 col-md-9">
+                <div className="col-12 col-md-6">
                     <div className="form-group">
                         <ErrorMessageInput
-                            placeholder={"Telephone Number"}
-                            name={"phone"}
-                            value={user.phone}
+                            placeholder={"State"}
+                            name={"state"}
+                            value={address.state}
                             type={"text"}
-                            errors={errors.phone}
+                            errors={errors.state}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"Zip Code"}
+                            name={"zip"}
+                            value={address.zip}
+                            type={"text"}
+                            errors={errors.zip}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"Country"}
+                            name={"country"}
+                            value={address.country}
+                            type={"text"}
+                            errors={errors.country}
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>
@@ -113,5 +112,4 @@ const EditBasicInfo = () => {
         </form>
     );
 };
-
-export default EditBasicInfo;
+export default EditAddress;

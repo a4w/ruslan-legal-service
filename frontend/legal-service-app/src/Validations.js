@@ -101,10 +101,10 @@ export const editBasicInfoValidation = (data, field) => {
     });
 };
 export const editEmailValidations = (data, field) => {
-    return validate("editBasicInfo", () => {
+    return validate("EditEmail", () => {
         vest.only(field);
         test("email", "This field is required", () => {
-            enforce(data.email.toString()).isNotEmpty();
+            enforce(data.email.toString()).isNotEmpty()                .matches(/[^@]+@[^.]+\..+/g);
         });
         const trimmedEmail = truncate(data.email.toString(), 15);
         test("email", `${trimmedEmail} is not valid email address`, () => {
@@ -133,5 +133,20 @@ export const LawyerInfoValidations = (data, field) => {
                 enforce(data.practiceAreas).isNotEmpty();
             }
         );
+    });
+};
+
+export const editAddressValidations = (data, field) => {
+    return validate("EditAddress", () => {
+        vest.only(field);
+        ["address", "city", "country", "zip", "state"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+        const zip = data.zip.toString();
+        test("zip", `${zip} is not a valid zip code`, () => {
+            enforce(parseInt(zip)).isNotEmpty();
+        });
     });
 };

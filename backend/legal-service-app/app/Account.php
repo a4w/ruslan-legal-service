@@ -115,6 +115,16 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         ])->save();
     }
 
+    public function isLawyer()
+    {
+        return $this->lawer !== null;
+    }
+
+    public function isClient()
+    {
+        return $this->client !== null;
+    }
+
     /**
      * Get the email address that should be used for verification.
      *

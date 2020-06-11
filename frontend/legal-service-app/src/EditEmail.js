@@ -5,7 +5,7 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 
 const EditEmail = ({ email }) => {
-    const [user, setUser] = useState({ email: email });
+    const [user, setUser] = useState({ email: email ? email : "" });
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editEmailValidations);
 
@@ -26,8 +26,8 @@ const EditEmail = ({ email }) => {
 
     return (
         <form onSubmit={OnSubmitHandler}>
-            <div className="form-row">
-                <div className="col-lg-9 col-md-9 col-sm-12">
+            <div className="row form-row">
+                <div className="col-sm-12 col-lg-10 col-md-9">
                     <ErrorMessageInput
                         placeholder={"Email"}
                         name={"email"}
@@ -37,23 +37,17 @@ const EditEmail = ({ email }) => {
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="submit-section">
                     <button
                         type="submit"
                         disabled={isSaving}
                         className={
-                            "btn btn-primary btn-block btn-lg" +
+                            "btn btn-primary submit-btn" +
                             (isSaving ? "cursor-not-allowed" : "")
                         }
                     >
                         {isSaving && <FaSpinner className="icon-spin" />}
-                        <i
-                            className="fas fa-check"
-                            style={{
-                                display: isSaving ? "none" : "inline-block",
-                            }}
-                        ></i>{" "}
-                        <span>&nbsp;{isSaving ? "" : "Save"}</span>
+                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
                     </button>
                 </div>
             </div>

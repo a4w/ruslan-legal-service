@@ -60,10 +60,19 @@ class AppointmentController extends Controller
                 ];
             }
             // All is good create and put em on hold
+            $original_price = $lawyer->price_per_slot;
+            $discounted_price = $original_price;
+            if (Carbon::now()->lte($lawyer->discount_end)) {
+                if ($lawyer->is_percent_discount) {
+                    $discounted_price -= $lawyer->discount / 100 * $original_price;
+                } else {
+                    $discounted_price -= $lawyer->discount;
+                }
+            }
             $appointment = Appointment::make([
                 'appointment_time' => $slot_datetime,
                 'status' => 'ON_HOLD',
-                'price' => $lawyer->price_per_slot, // TODO: Account for discount
+                'price' => $discounted_price,
                 'duration' => $lawyer->slot_length
             ]);
             $total_price += $appointment->price;

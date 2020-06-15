@@ -12,7 +12,9 @@ class Lawyer extends Model
     ];
 
     protected $casts = [
-        'schedule' => 'json'
+        'schedule' => 'json',
+        'is_percent_discount' => 'bool',
+        'discount_end' => 'datetime'
     ];
 
     public $timestamps = false;

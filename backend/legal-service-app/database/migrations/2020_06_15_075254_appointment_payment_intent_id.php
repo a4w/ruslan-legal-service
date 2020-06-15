@@ -14,7 +14,7 @@ class AppointmentPaymentIntentId extends Migration
     public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->string('payment_intent_id', 50);
+            $table->string('payment_intent_id', 50)->index('appointments_payment_intent_index');
         });
     }
 
@@ -26,6 +26,7 @@ class AppointmentPaymentIntentId extends Migration
     public function down()
     {
         Schema::table('appointments', function (Blueprint $table) {
+            $table->dropIndex('appointments_payment_intent_index');
             $table->dropColumn(['payment_intent_id']);
         });
     }

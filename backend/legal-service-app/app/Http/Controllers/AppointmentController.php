@@ -88,6 +88,7 @@ class AppointmentController extends Controller
                 'currency' => 'usd'
             ]);
             foreach ($appointments as $appointment) {
+                $appointment->payment_intent_id = $paymentIntent->id;
                 $appointment->save();
             }
             return [

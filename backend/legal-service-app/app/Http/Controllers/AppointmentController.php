@@ -84,8 +84,8 @@ class AppointmentController extends Controller
         Stripe::setApiKey(config('app.stripe_api_key'));
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount' => $total_price,
-                'currency' => 'usd'
+                'amount' => $total_price * 100, // Stripe uses this stupid way to avoid rounding errors
+                'currency' => 'gbp'
             ]);
             foreach ($appointments as $appointment) {
                 $appointment->payment_intent_id = $paymentIntent->id;

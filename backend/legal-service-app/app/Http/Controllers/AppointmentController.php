@@ -28,6 +28,7 @@ class AppointmentController extends Controller
                 'message' => 'Not available'
             ];
         }
+        dump($user->lawyer);
         $user = $user->client;
         /**
             Validate that slots are available
@@ -86,7 +87,6 @@ class AppointmentController extends Controller
                 'client_secret' => $paymentIntent->client_secret
             ];
         } catch (Exception $e) {
-            dump($e);
             return [
                 'error' => true,
                 'message' => 'Error creating payment'

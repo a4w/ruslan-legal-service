@@ -28,7 +28,6 @@ class AppointmentController extends Controller
                 'message' => 'Not available'
             ];
         }
-        dump($user->lawyer);
         $user = $user->client;
         /**
             Validate that slots are available

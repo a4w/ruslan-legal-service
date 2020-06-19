@@ -1,5 +1,6 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
+import { NavTab } from "react-router-tabs";
 
 const LawyerDashboardSidebar = () => {
     return (
@@ -23,65 +24,65 @@ const LawyerDashboardSidebar = () => {
                     <div className="dashboard-menu">
                         <ul>
                             <li>
-                                <Nav.Link eventKey="dashboard">
+                                <NavTab exact to="/dashboard/status">
                                     <i className="fas fa-columns"></i>
                                     <span> Dashboard</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="appointments">
+                                <NavTab exact to="/dashboard/appointments">
                                     <i className="fas fa-calendar-check"></i>
                                     <span>Appointments</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="clients">
+                                <NavTab exact to="/dashboard/clients">
                                     <i className="fas fa-user-injured"></i>
                                     <span>My Clients</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="schedule">
+                                <NavTab exact to="/dashboard/schedule">
                                     <i className="fas fa-hourglass-start"></i>
                                     <span>Schedule Timings</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="invoices">
+                                <NavTab exact to="/dashboard/invoices">
                                     <i className="fas fa-file-invoice"></i>
                                     <span>Invoices</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="reviews">
+                                <NavTab exact to="/dashboard/reviews">
                                     <i className="fas fa-star"></i>
                                     <span>Reviews</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="messages">
+                                <NavTab exact to="/dashboard/messages">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
                                     <small className="unread-msg">23</small>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="settings">
+                                <NavTab exact to="/dashboard/settings">
                                     <i className="fas fa-user-cog"></i>
                                     <span>Profile Settings</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="change-password">
+                                <NavTab exact to="/dashboard/change-password">
                                     <i className="fas fa-lock"></i>
                                     <span>Change Password</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="logout">
+                                <NavTab exact to="/dashboard/logout">
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                         </ul>
                     </div>

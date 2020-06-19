@@ -1,5 +1,6 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
+import { NavTab } from "react-router-tabs";
 
 const ClientDashboardSidebar = () => {
     return (
@@ -32,35 +33,35 @@ const ClientDashboardSidebar = () => {
                     <div className="dashboard-menu">
                         <ul>
                             <li>
-                                <Nav.Link eventKey="dashboard">
+                                <NavTab to="/client-dashboard/status">
                                     <i className="fas fa-columns"></i>
                                     <span> Dashboard</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="messages">
+                                <NavTab to="/client-dashboard/messages">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
                                     <small className="unread-msg">23</small>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="settings">
+                                <NavTab to="/client-dashboard/settings">
                                     <i className="fas fa-user-cog"></i>
                                     <span>Profile Settings</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="change-password">
+                                <NavTab to="/client-dashboard/change-password">
                                     <i className="fas fa-lock"></i>
                                     <span>Change Password</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li>
-                                <Nav.Link eventKey="logout">
+                                <NavTab to="/client-dashboard/logout">
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                         </ul>
                     </div>

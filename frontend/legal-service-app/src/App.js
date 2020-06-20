@@ -56,9 +56,7 @@ function App() {
                         <ClientDashboard />
                     </Route>
                     <Route exact path="/forgot-password">
-                        <NavBar />
                         <ForgotPassword />
-                        <Footer />
                     </Route>
                 </Switch>
                 <Footer />

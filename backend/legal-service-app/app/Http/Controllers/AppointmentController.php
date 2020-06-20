@@ -18,7 +18,7 @@ class AppointmentController extends Controller
     {
         $request->validate([
             'slots' => ['required', 'array', 'min:1'],
-            'slots.*.datetime' => ['required', 'date_format:Y-m-d H:i:s', 'after:today'],
+            'slots.*.datetime' => ['required', 'date_format:Y-m-d H:i:s', 'after_or_equal:now'],
         ]);
         /** @var Account */
         $user = Auth::user();

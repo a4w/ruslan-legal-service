@@ -7,6 +7,7 @@ use App\Client;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Illuminate\Auth\Events\Registered;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationController extends Controller
 {
@@ -26,7 +27,10 @@ class RegistrationController extends Controller
         $account = Account::create($data);
         $account->client()->save(Client::make());
         event(new Registered($account));
-        return ['error' => false, 'message' => 'User added successfully'];
+        return response()->json([
+            'error' => false,
+            'message' => 'User added successfully'
+        ], 200);
     }
 
     public function registerLawyer(JSONRequest $request)
@@ -46,6 +50,9 @@ class RegistrationController extends Controller
         $account->lawyer()->save(Lawyer::make());
         event(new Registered($account));
 
-        return ['error' => false, 'message' => 'User added successfully'];
+        return response()->json([
+            'error' => false,
+            'message' => 'User added successfully'
+        ], 200);
     }
 }

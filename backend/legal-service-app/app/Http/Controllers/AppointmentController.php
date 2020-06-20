@@ -11,6 +11,9 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use Twilio\Jwt\AccessToken;
+use Twilio\Jwt\Grants\VideoGrant;
+use Twilio\Rest\Client;
 
 class AppointmentController extends Controller
 {
@@ -102,5 +105,72 @@ class AppointmentController extends Controller
                 'message' => 'Error creating payment'
             ];
         }
+    }
+    public function getRoomAccessToken(Appointment $appointment)
+    {
+        if ($appointment->status !== 'UPCOMING') {
+            return [
+                'error' => true,
+                'message' => 'Appointment not paid'
+            ];
+        }
+        // Check if a participant in this appointment
+        $user = Auth::user();
+        if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
+            return [
+                'error' => true,
+                'message' => 'Unauthorized'
+            ];
+        }
+        // Check time
+        $LOOSE_MINUTES = 1; // Allow joining minutes early
+        /** @var Carbon */
+        $time = $appointment->appointment_time;
+        if (false && now()->lt($time->subMinute($LOOSE_MINUTES))) {
+            // Time has not came
+            return [
+                'error' => true,
+                'message' => 'Appointment time has not came'
+            ];
+        }
+        // All is good, Check if room already created
+        $room_sid = $appointment->room_sid;
+        if ($room_sid === null) {
+            $appointment->createRoom();
+        }
+        // Verify room is present
+        $sid    = config('app.twilio_account_sid');
+        $token  = config('app.twilio_auth_token');
+        $twilio = new Client($sid, $token);
+        try {
+            $twilio->video->rooms($appointment->room_sid)->fetch();
+        } catch (Exception $e) {
+            // Recreate room
+            $appointment->createRoom();
+        }
+        $room = $twilio->video->rooms($appointment->room_sid)->fetch();
+
+
+        // Required for all Twilio access tokens
+        $twilioApiKey = config('app.twilio_api_key_sid');
+        $twilioApiSecret = config('app.twilio_api_key_secret');
+
+        // A unique identifier for this user
+        $identity = $user->name . ' ' . $user->surname;
+
+        // Create access token, which we will serialize and send to the client
+        $token = new AccessToken($sid, $twilioApiKey, $twilioApiSecret, 3600, $identity);
+
+        // Create Video grant
+        $videoGrant = new VideoGrant();
+        $videoGrant->setRoom($room->sid);
+        // Add grant to token
+        $token->addGrant($videoGrant);
+
+        // render token to string
+        return [
+            'error' => false,
+            'access_token' => $token->toJWT()
+        ];
     }
 }

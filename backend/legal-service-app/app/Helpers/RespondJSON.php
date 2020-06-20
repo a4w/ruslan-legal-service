@@ -30,45 +30,45 @@ class RespondJSON
         return self::with([]);
     }
 
-    public static function success()
+    public static function success($extra = [])
     {
         return self::with([
             'message' => 'Success'
-        ]);
+        ] + $extra);
     }
 
-    public static function unauthorized()
+    public static function unauthorized($extra = [])
     {
-        return self::with([], self::UNAUTHORIZED, 401);
+        return self::with($extra, self::UNAUTHORIZED, 401);
     }
 
-    public static function forbidden()
+    public static function forbidden($extra = [])
     {
-        return self::with([], self::FORBIDDEN, 403);
+        return self::with($extra, self::FORBIDDEN, 403);
     }
 
-    public static function tokenExpired()
+    public static function tokenExpired($extra = [])
     {
-        return self::with([], self::TOKEN_EXPIRED, 410);
+        return self::with($extra, self::TOKEN_EXPIRED, 410);
     }
 
-    public static function unknownError()
+    public static function unknownError($extra = [])
     {
-        return self::with([], self::UNKNOWN_ERROR, 422);
+        return self::with($extra, self::UNKNOWN_ERROR, 422);
     }
 
-    public static function malformedRequest()
+    public static function malformedRequest($extra = [])
     {
-        return self::with([], self::MALFORMED_REQUEST, 400);
+        return self::with($extra, self::MALFORMED_REQUEST, 400);
     }
 
-    public static function gone()
+    public static function gone($extra = [])
     {
-        return self::with([], self::RESOURCE_GONE, 410);
+        return self::with($extra, self::RESOURCE_GONE, 410);
     }
 
-    public static function failedDependency()
+    public static function failedDependency($extra = [])
     {
-        return self::with([], self::FAILED_DEPENDENCY, 410);
+        return self::with($extra, self::FAILED_DEPENDENCY, 410);
     }
 }

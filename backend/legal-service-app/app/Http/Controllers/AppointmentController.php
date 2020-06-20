@@ -13,7 +13,6 @@ use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
-use Twilio\Rest\Client;
 
 class AppointmentController extends Controller
 {
@@ -139,7 +138,7 @@ class AppointmentController extends Controller
             $appointment->createRoom();
         }
         // Verify room is present
-        $twilio = resolve(Client::class);
+        $twilio = resolve(\Twilio\Rest\Client::class);
         try {
             $twilio->video->rooms($appointment->room_sid)->fetch();
         } catch (Exception $e) {

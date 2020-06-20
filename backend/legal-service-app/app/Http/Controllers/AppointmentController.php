@@ -81,7 +81,7 @@ class AppointmentController extends Controller
         }
 
         // Create payment intent
-        // TODO Account for commision
+        // TODO Account for commission
         Stripe::setApiKey(config('app.stripe_api_key'));
         try {
             $paymentIntent = PaymentIntent::create([

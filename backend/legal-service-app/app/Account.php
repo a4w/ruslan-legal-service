@@ -117,7 +117,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
 
     public function isLawyer()
     {
-        return $this->lawer !== null;
+        return $this->lawyer !== null;
     }
 
     public function isClient()

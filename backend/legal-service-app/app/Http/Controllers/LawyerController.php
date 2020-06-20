@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 
 class LawyerController extends Controller
@@ -54,7 +53,7 @@ class LawyerController extends Controller
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
 
-        $output['from'] = now()->format(AppointmentHelper::$DATETIME_FORMAT);
+        $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
         $output['days'] = $days_to_show;
 
         // Fetch lawyer data
@@ -64,14 +63,14 @@ class LawyerController extends Controller
         $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
         foreach ($appointments as $appointment) {
-            $appointments_check[$appointment->appointment_time->format(AppointmentHelper::$DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::$TIME_FORMAT)] = true;
+            $appointments_check[$appointment->appointment_time->format(AppointmentHelper::DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::TIME_FORMAT)] = true;
         }
 
         // Process schedule
         $data = array();
         $current = new Carbon($from_date);
         for ($d = 0; $d < $days_to_show; ++$d) {
-            $formated_date = $current->format(AppointmentHelper::$DATE_FORMAT);
+            $formated_date = $current->format(AppointmentHelper::DATE_FORMAT);
             $day = array(
                 'name' => $current->dayName,
                 'date' => $formated_date

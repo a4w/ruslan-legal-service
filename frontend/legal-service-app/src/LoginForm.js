@@ -1,15 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {loginValidation} from "./Validations";
+import { loginValidation } from "./Validations";
 import useValidation from "./useValidation";
 import { request, setAccessToken, setRefreshToken } from "./Axios";
 import { FaSpinner } from "react-icons/fa";
 import history from "./History";
+import { Link } from "react-router-dom";
 
 export const LoginTokens = React.createContext();
 
-const LoginForm = ({setRegister, hideModal}) => {
+const LoginForm = ({ setRegister, hideModal }) => {
     const initUser = {
         email: "",
         password: "",
@@ -47,7 +48,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                     .finally(() => {
                         setLoggingIn(false);
                         hideModal();
-                        history.push('/');
+                        history.push("/");
                     });
             }
         });
@@ -97,12 +98,13 @@ const LoginForm = ({setRegister, hideModal}) => {
                     </div>
                     <div className="col">
                         <div className="text-right">
-                            <a
+                            <Link
                                 className="forgot-link"
-                                href="forgot-password.html"
+                                to="forgot-password"
+                                onClick={hideModal}
                             >
                                 Forgot Password ?
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -133,8 +135,8 @@ const LoginForm = ({setRegister, hideModal}) => {
                         </a>
                     </div>
                 </div>
-                <div className='text-center dont-have'>
-                    Don’t have an account? 
+                <div className="text-center dont-have">
+                    Don’t have an account?
                     <a
                         href="//"
                         onClick={(event) => {
@@ -142,7 +144,8 @@ const LoginForm = ({setRegister, hideModal}) => {
                             setRegister(true);
                         }}
                     >
-                        {" "}Register
+                        {" "}
+                        Register
                     </a>
                 </div>
             </form>

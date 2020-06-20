@@ -1,7 +1,35 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import ModalPopUp from "./Modal";
 
 const Footer = () => {
+    const Register = () => {
+        const [modalShow, setModalShow] = useState(false);
+        return (
+            <>
+                <a onClick={() => setModalShow(true)}>Register</a>
+                <ModalPopUp
+                    register={true}
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
+            </>
+        );
+    };
+    const Login = () => {
+        const [modalShow, setModalShow] = useState(false);
+        return (
+            <>
+                <a onClick={() => setModalShow(true)}>Login</a>
+                <ModalPopUp
+                    register={false}
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                />
+            </>
+        );
+    };
     return (
         <footer className="footer">
             <div className="footer-top">
@@ -9,41 +37,39 @@ const Footer = () => {
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-about">
-                                <div className="footer-logo">
-                                    <img src="assets/img/footer-logo.png" alt="logo" />
-                                </div>
                                 <div className="footer-about-content">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                        do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.{" "}
-                                    </p>
+                                    <div className="footer-logo">
+                                        <p className="menu-logo" to="/">
+                                            <b>Lawbe</b>.co.uk
+                                        </p>
+                                    </div>
+                                    <p>Describtion</p>
                                     <div className="social-icon">
                                         <ul>
                                             <li>
-                                                <a href="#" target="_blank">
+                                                <Link href="#" target="_blank">
                                                     <i className="fab fa-facebook-f"></i>{" "}
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
-                                                <a href="#" target="_blank">
+                                                <Link href="#" target="_blank">
                                                     <i className="fab fa-twitter"></i>{" "}
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
-                                                <a href="#" target="_blank">
+                                                <Link href="#" target="_blank">
                                                     <i className="fab fa-linkedin-in"></i>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
-                                                <a href="#" target="_blank">
+                                                <Link href="#" target="_blank">
                                                     <i className="fab fa-instagram"></i>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
-                                                <a href="#" target="_blank">
+                                                <Link href="#" target="_blank">
                                                     <i className="fab fa-dribbble"></i>{" "}
-                                                </a>
+                                                </Link>
                                             </li>
                                         </ul>
                                     </div>
@@ -52,44 +78,54 @@ const Footer = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Patients</h2>
+                                <h2 className="footer-title">For Clients</h2>
                                 <ul>
                                     <li>
-                                        <a href="search.html">Search for Doctors</a>
+                                        <Link to="/list">
+                                            Search for Lawyers
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="login.html">Login</a>
+                                        <Login />
                                     </li>
                                     <li>
-                                        <a href="register.html">Register</a>
+                                        <Register />
                                     </li>
                                     <li>
-                                        <a href="booking.html">Booking</a>
+                                        <Link to="/book">Booking</Link>
                                     </li>
                                     <li>
-                                        <a href="client-dashboard.html">Patient Dashboard</a>
+                                        <Link to="/client-dashboard">
+                                            Client Dashboard
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Doctors</h2>
+                                <h2 className="footer-title">For Lawyers</h2>
                                 <ul>
                                     <li>
-                                        <a href="appointments.html">Appointments</a>
+                                        <Link to="/dashboard/appointments">
+                                            Appointments
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="chat.html">Chat</a>
+                                        <Link to="/dashboard/messages">
+                                            Chat
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="login.html">Login</a>
+                                        <Login />
                                     </li>
                                     <li>
-                                        <a href="lawyer-register.html">Register</a>
+                                        <Register />
                                     </li>
                                     <li>
-                                        <a href="lawyer-dashboard.html">Doctor Dashboard</a>
+                                        <Link to="/dashboard">
+                                            Lawyer Dashboard
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -103,19 +139,16 @@ const Footer = () => {
                                         <span>
                                             <i className="fas fa-map-marker-alt"></i>
                                         </span>
-                                        <p>
-                                            {" "}
-                      3556 Beech Street, San Francisco, California, CA 94108{" "}
-                                        </p>
+                                        <p>Company location</p>
                                     </div>
                                     <p>
                                         <i className="fas fa-phone-alt"></i>
-                    +1 315 369 5943
-                  </p>
+                                        Contact number
+                                    </p>
                                     <p className="mb-0">
                                         <i className="fas fa-envelope"></i>
-                    doccure@example.com
-                  </p>
+                                        contact email
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -130,18 +163,22 @@ const Footer = () => {
                             <div className="col-md-6 col-lg-6">
                                 <div className="copyright-text">
                                     <p className="mb-0">
-                                        &copy; 2020 Doccure. All rights reserved.
-                  </p>
+                                        &copy; 2020 Lawbe. All rights reserved.
+                                    </p>
                                 </div>
                             </div>
                             <div className="col-md-6 col-lg-6">
                                 <div className="copyright-menu">
                                     <ul className="policy-menu">
                                         <li>
-                                            <a href="term-condition.html">Terms and Conditions</a>
+                                            <Link href="term-condition.html">
+                                                Terms and Conditions
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a href="privacy-policy.html">Policy</a>
+                                            <Link href="privacy-policy.html">
+                                                Policy
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>

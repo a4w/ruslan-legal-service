@@ -7,7 +7,6 @@ use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -44,6 +43,7 @@ class AuthController extends Controller
     {
         auth()->logout();
         return response()->json([
+            'error' => false,
             'message' => 'Successfully logged out'
         ]);
     }
@@ -91,6 +91,13 @@ class AuthController extends Controller
 
     protected function respondUnauthorized()
     {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(
+            [
+                'error' => true,
+                'error_id' => 'UNAUTHORIZED',
+                'message' => 'Wrong credentials supplied'
+            ],
+            401
+        );
     }
 }

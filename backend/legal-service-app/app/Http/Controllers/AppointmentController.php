@@ -141,7 +141,7 @@ class AppointmentController extends Controller
         // Verify room is present
         $sid    = config('app.twilio_account_sid');
         $token  = config('app.twilio_auth_token');
-        $twilio = new Client($sid, $token);
+        $twilio = resolve(Client::class);
         try {
             $twilio->video->rooms($appointment->room_sid)->fetch();
         } catch (Exception $e) {

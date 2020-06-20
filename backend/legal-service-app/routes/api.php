@@ -42,7 +42,7 @@ Route::post('/chat/{account1_id}/{account2_id}', 'ChatController@getChat')->midd
 Route::post('/chat/{chat}', 'ChatController@sendMessage')->middleware('auth:api');
 Route::get('/chat/{chat}', 'ChatController@getMessages')->middleware('auth:api');
 Route::post('/appointment/{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
-Route::post('/appointment/{appointment}/getRoomAccessToken', 'AppointmentController@selectSlots')->middleware('auth:api');
+Route::post('/appointment/{appointment}/getRoomAccessToken', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
 
 Route::post('/payment-status-webhook', function (JSONRequest $request) {
     $intent_id = $request->input('data.object.id');

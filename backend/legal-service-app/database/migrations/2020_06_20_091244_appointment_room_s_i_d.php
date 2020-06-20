@@ -14,7 +14,7 @@ class AppointmentRoomSID extends Migration
     public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->string('room_sid')->index('appointments_room_sid_index');
+            $table->string('room_sid')->index('appointments_room_sid_index')->nullable();
         });
     }
 

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RespondJSON
 {
+    // Error Reasons
     const UNAUTHORIZED = 'UNAUTHORIZED';
     const NO_ERROR = 'NO_ERROR';
     const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
@@ -13,7 +14,8 @@ class RespondJSON
     const FORBIDDEN = 'FORBIDDEN';
     const MALFORMED_REQUEST = 'MALFORMED_REQUEST';
     const RESOURCE_GONE = 'RESOURCE_GONE';
-    const FAILED_DEPENDENCY = 'FAILED_DEPENDENCY';
+    const PAYMENT_REQUIRED = 'PAYMENT_REQUIRED';
+
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
     {
@@ -67,8 +69,8 @@ class RespondJSON
         return self::with($extra, self::RESOURCE_GONE, 410);
     }
 
-    public static function failedDependency($extra = [])
+    public static function paymentRequired($extra = [])
     {
-        return self::with($extra, self::FAILED_DEPENDENCY, 410);
+        return self::with($extra, self::PAYMENT_REQUIRED, 402);
     }
 }

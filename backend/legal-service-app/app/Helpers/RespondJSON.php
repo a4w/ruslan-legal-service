@@ -15,6 +15,7 @@ class RespondJSON
     const MALFORMED_REQUEST = 'MALFORMED_REQUEST';
     const RESOURCE_GONE = 'RESOURCE_GONE';
     const PAYMENT_REQUIRED = 'PAYMENT_REQUIRED';
+    const CONFLICT = 'CONFLICT';
 
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
@@ -72,5 +73,10 @@ class RespondJSON
     public static function paymentRequired($extra = [])
     {
         return self::with($extra, self::PAYMENT_REQUIRED, 402);
+    }
+
+    public static function conflict($extra = [])
+    {
+        return self::with($extra, self::CONFLICT, 409);
     }
 }

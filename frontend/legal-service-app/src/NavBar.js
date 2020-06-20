@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ModalPopUp from "./Modal";
-import LoginForm from "./LoginForm";
 
 const NavBar = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -68,6 +67,7 @@ const NavBar = () => {
                         <ModalPopUp
                             show={modalShow}
                             onHide={() => setModalShow(false)}
+                            register={true}
                         />
                     </li>
                 </ul>

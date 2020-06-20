@@ -139,8 +139,6 @@ class AppointmentController extends Controller
             $appointment->createRoom();
         }
         // Verify room is present
-        $sid    = config('app.twilio_account_sid');
-        $token  = config('app.twilio_auth_token');
         $twilio = resolve(Client::class);
         try {
             $twilio->video->rooms($appointment->room_sid)->fetch();
@@ -152,14 +150,16 @@ class AppointmentController extends Controller
 
 
         // Required for all Twilio access tokens
-        $twilioApiKey = config('app.twilio_api_key_sid');
-        $twilioApiSecret = config('app.twilio_api_key_secret');
+        $sid    = config('app.twilio_account_sid');
+        $token  = config('app.twilio_auth_token');
+        $apiKey = config('app.twilio_api_key_sid');
+        $apiSecret = config('app.twilio_api_key_secret');
 
         // A unique identifier for this user
         $identity = $user->name . ' ' . $user->surname;
 
         // Create access token, which we will serialize and send to the client
-        $token = new AccessToken($sid, $twilioApiKey, $twilioApiSecret, 3600, $identity);
+        $token = new AccessToken($sid, $apiKey, $apiSecret, 3600, $identity);
 
         // Create Video grant
         $videoGrant = new VideoGrant();

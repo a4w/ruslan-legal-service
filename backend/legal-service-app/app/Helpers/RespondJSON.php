@@ -8,6 +8,7 @@ class RespondJSON
 {
     const UNAUTHORIZED = 'UNAUTHORIZED';
     const NO_ERROR = 'NO_ERROR';
+    const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
     {
@@ -34,5 +35,10 @@ class RespondJSON
     public static function unauthorized()
     {
         return self::with([], self::UNAUTHORIZED, 401);
+    }
+
+    public static function tokenExpired()
+    {
+        return self::with([], self::TOKEN_EXPIRED, 410);
     }
 }

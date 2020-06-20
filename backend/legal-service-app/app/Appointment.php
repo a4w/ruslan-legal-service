@@ -33,9 +33,7 @@ class Appointment extends Model
     public function createRoom()
     {
         // Create the room
-        $sid    = config('app.twilio_account_sid');
-        $token  = config('app.twilio_auth_token');
-        $twilio = new Client($sid, $token);
+        $twilio = resolve('Twilio\Rest\Client');
         $room = $twilio->video->v1->rooms
             ->create(
                 [

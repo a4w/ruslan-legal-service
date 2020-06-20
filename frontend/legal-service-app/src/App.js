@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch } from "react-router-dom";
+import { Route, Router, Switch, BrowserRouter } from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -21,47 +21,49 @@ import ForgotPassword from "./ForgotPassword";
 
 function App() {
     return (
-        <Router history={history}>
-            <Switch>
-                <Route exact path="/">
-                    <NavBar />
-                    <Home />
-                    <Footer />
-                </Route>
-                <Route exact path="/list">
-                    <LawyerList />
-                </Route>
-                <Route exact path="/book">
-                    <AppointmentTimeForm lawyer_id="1" />
-                </Route>
-                <Route exact path="/blogs">
-                    <Blogs />
-                </Route>
-                <Route exact path="/reset">
-                    <ResetPassword />
-                </Route>
-                <Route exact path="/edit">
-                    <EditPersonal />
-                </Route>
-                <Route exact path="/complete-registeration">
-                    <LawyerCompleteRegisteration />
-                </Route>
-                <Route exact path="/dashboard">
-                    <LawyerDashboard />
-                </Route>
-                <Route exact path="/profile">
-                    <LawyerProfile />
-                </Route>
-                <Route exact path="/client-dashboard">
-                    <ClientDashboard />
-                </Route>
-                <Route exact path="/forgot-password">
-                    <NavBar />
-                    <ForgotPassword />
-                    <Footer />
-                </Route>
-            </Switch>
-        </Router>
+        <BrowserRouter>
+            <Router history={history}>
+                <NavBar />
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route exact path="/list">
+                        <LawyerList />
+                    </Route>
+                    <Route exact path="/book">
+                        <AppointmentTimeForm lawyer_id="1" />
+                    </Route>
+                    <Route exact path="/blogs">
+                        <Blogs />
+                    </Route>
+                    <Route exact path="/reset">
+                        <ResetPassword />
+                    </Route>
+                    <Route exact path="/edit">
+                        <EditPersonal />
+                    </Route>
+                    <Route exact path="/complete-registeration">
+                        <LawyerCompleteRegisteration />
+                    </Route>
+                    <Route exact path="/dashboard">
+                        <LawyerDashboard />
+                    </Route>
+                    <Route exact path="/profile">
+                        <LawyerProfile />
+                    </Route>
+                    <Route exact path="/client-dashboard">
+                        <ClientDashboard />
+                    </Route>
+                    <Route exact path="/forgot-password">
+                        <NavBar />
+                        <ForgotPassword />
+                        <Footer />
+                    </Route>
+                </Switch>
+                <Footer />
+            </Router>
+        </BrowserRouter>
     );
 }
 

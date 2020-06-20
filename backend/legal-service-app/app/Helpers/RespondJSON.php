@@ -11,6 +11,7 @@ class RespondJSON
     const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
     const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
     const FORBIDDEN = 'FORBIDDEN';
+    const MALFORMED_REQUEST = 'MALFORMED_REQUEST';
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
     {
@@ -52,5 +53,10 @@ class RespondJSON
     public static function unknownError()
     {
         return self::with([], self::UNKNOWN_ERROR, 422);
+    }
+
+    public static function malformedRequest()
+    {
+        return self::with([], self::MALFORMED_REQUEST, 400);
     }
 }

@@ -155,7 +155,7 @@ class AppointmentController extends Controller
         $apiSecret = config('app.twilio_api_key_secret');
 
         // A unique identifier for this user
-        $identity = $user->name . ' ' . $user->surname;
+        $identity = $user->id;
 
         // Create access token, which we will serialize and send to the client
         $token = new AccessToken($sid, $apiKey, $apiSecret, 3600, $identity);

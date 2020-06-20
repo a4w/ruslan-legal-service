@@ -126,7 +126,7 @@ class AppointmentController extends Controller
         $LOOSE_MINUTES = 1; // Allow joining minutes early
         /** @var Carbon */
         $time = $appointment->appointment_time;
-        if (false && now()->lt($time->subMinute($LOOSE_MINUTES))) {
+        if (now()->lt($time->subMinute($LOOSE_MINUTES))) {
             // Time has not came
             return [
                 'error' => true,

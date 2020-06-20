@@ -18,4 +18,21 @@ class RespondJSON
         );
         return response()->json($arr, $status);
     }
+
+    public static function noData()
+    {
+        return self::with([]);
+    }
+
+    public static function success()
+    {
+        return self::with([
+            'message' => 'Success'
+        ]);
+    }
+
+    public static function unauthorized()
+    {
+        return self::with([], self::UNAUTHORIZED, 401);
+    }
 }

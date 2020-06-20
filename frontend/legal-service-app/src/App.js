@@ -46,13 +46,13 @@ function App() {
                     <Route exact path="/complete-registeration">
                         <LawyerCompleteRegisteration />
                     </Route>
-                    <Route exact path="/dashboard">
+                    <Route path="/dashboard">
                         <LawyerDashboard />
                     </Route>
                     <Route exact path="/profile">
                         <LawyerProfile />
                     </Route>
-                    <Route exact path="/client-dashboard">
+                    <Route path="/client-dashboard">
                         <ClientDashboard />
                     </Route>
                     <Route exact path="/forgot-password">

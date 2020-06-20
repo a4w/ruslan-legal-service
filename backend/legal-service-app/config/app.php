@@ -124,6 +124,8 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'stripe_api_key' => env('STRIPE_API_KEY'),
+    'twilio_sid' => env('TWILIO_SID'),
+    'twilio_auth_token' => env('TWILIO_AUTH_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------

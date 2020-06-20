@@ -52,7 +52,6 @@ Route::post('/payment-status-webhook', function (JSONRequest $request) {
         return;
     }
     // Find appointments associated with this intent
-    /** */
     $appointments = Appointment::where('payment_intent_id', $intent_id)->get();
     // Verify amount
     $total = 0;

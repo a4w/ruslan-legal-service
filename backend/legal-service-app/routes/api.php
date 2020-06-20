@@ -12,7 +12,7 @@ Route::prefix('register')->group(function () {
 Route::prefix('auth')->group(function () {
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
-    Route::post('refreshCurrentToken', 'AuthController@refreshCurrentToken');
+    Route::post('refresh-current-token', 'AuthController@refreshCurrentToken');
     Route::post('refresh', 'AuthController@refresh');
 });
 
@@ -43,9 +43,8 @@ Route::prefix('rating')->group(function () {
 
 Route::prefix('appointment')->group(function () {
     Route::post('{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
-    Route::post('{appointment}/getRoomAccessToken', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
+    Route::post('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
 });
-
 
 
 

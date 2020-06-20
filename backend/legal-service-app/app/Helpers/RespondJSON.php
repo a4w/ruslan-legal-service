@@ -12,6 +12,8 @@ class RespondJSON
     const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
     const FORBIDDEN = 'FORBIDDEN';
     const MALFORMED_REQUEST = 'MALFORMED_REQUEST';
+    const RESOURCE_GONE = 'RESOURCE_GONE';
+    const FAILED_DEPENDENCY = 'FAILED_DEPENDENCY';
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
     {
@@ -58,5 +60,15 @@ class RespondJSON
     public static function malformedRequest()
     {
         return self::with([], self::MALFORMED_REQUEST, 400);
+    }
+
+    public static function gone()
+    {
+        return self::with([], self::RESOURCE_GONE, 410);
+    }
+
+    public static function failedDependency()
+    {
+        return self::with([], self::FAILED_DEPENDENCY, 410);
     }
 }

@@ -51,7 +51,7 @@ function App() {
                     <Route path="/dashboard">
                         <LawyerDashboard />
                     </Route>
-                    <Route exact path="/profile">
+                    <Route path="/profile/:LawyerId">
                         <LawyerProfile />
                     </Route>
                     <Route path="/client-dashboard">
@@ -63,7 +63,7 @@ function App() {
                     <Route exact path="/chat">
                         <ChatPage />
                     </Route>
-                    <Route path="/book-lawyer">
+                    <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
                     </Route>
                 </Switch>

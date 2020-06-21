@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 const LawyerCardList = ({ lawyers }) => {
     if (lawyers)
         return lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawer={lawyer} />
+            <LawyerCard key={lawyer.id} lawyer={lawyer} />
         ));
     else return <LawyerCard />;
 };
 
-const LawyerCard = () => {
+const LawyerCard = ({lawyer}) => {
     return (
         <div className="card">
             <div className="card-body">
@@ -71,8 +71,8 @@ const LawyerCard = () => {
                             <Link
                                 className="view-pro-btn"
                                 to={{
-                                    pathname: "/profile",
-                                    state: { detail: "test data" },
+                                    pathname: `/profile/${lawyer.id}`,
+                                    state: { lawyer: lawyer },
                                 }}
                             >
                                 View Profile
@@ -81,7 +81,7 @@ const LawyerCard = () => {
                             <Link
                                 className="apt-btn"
                                 to={{
-                                    pathname: "/book-lawyer",
+                                    pathname: `/book-lawyer/${lawyer.id}`,
                                     state: { lawyer_id: "1" },
                                 }}
                             >

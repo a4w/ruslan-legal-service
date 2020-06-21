@@ -210,10 +210,8 @@ const Overview = ({lawyer}) => {
         years_licenced,
     } = { ...lawyer };
     const specializations = [
-        "specializations 1 ",
-        "specializations 2",
-        "specializations 3",
-        "specializations 4",
+        `Regulated By: ${regulator}`,
+        `Years licenced: ${years_licenced}`,
     ];
     return (
         <div className="col-md-12 col-lg-9">
@@ -266,7 +264,7 @@ const Education = ({ course, institution, graduation_year }) => {
 const Specializations = ({ specializations }) => {
     return (
         <div className="service-list">
-            <h4>Specializations</h4>
+            <h4>More</h4>
             <ul className="clearfix">
                 {specializations.map((specialization) => (
                     <li key={specialization}>{specialization}</li>

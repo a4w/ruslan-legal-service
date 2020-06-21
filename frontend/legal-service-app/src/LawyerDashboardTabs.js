@@ -7,35 +7,46 @@ import LawyerInvoice from "./LawyerInvoice";
 import LawyerClients from "./LawyerClients";
 import LawyerDashboardStatus from "./LawyerDashboardStatus";
 import LawyerReviews from "./LawyerReviews";
+import { Route, Switch, Redirect } from "react-router-dom";
+import History from "./History";
 
 const LawyerDashboardTabs = () => {
     return (
-        <Tab.Content>
-            <Tab.Pane eventKey="dashboard">
+        <Switch>
+            <Route exact path="/dashboard">
+                <Redirect replace to="/dashboard/status" />
+            </Route>
+            <Route exact path="/dashboard/status">
                 <LawyerDashboardStatus />
-            </Tab.Pane>
-            <Tab.Pane eventKey="appointments">
+            </Route>
+            <Route exact path="/dashboard/appointments">
                 <LawyerAppointments />
-            </Tab.Pane>
-            <Tab.Pane eventKey="clients">
+            </Route>
+            <Route exact path="/dashboard/clients">
                 <LawyerClients />
-            </Tab.Pane>
-            <Tab.Pane eventKey="schedule">test 4</Tab.Pane>
-            <Tab.Pane eventKey="reviews">
+            </Route>
+            <Route exact path="/dashboard/schedule">
+                test 4
+            </Route>
+            <Route exact path="/dashboard/invoices">
+                test 5
+            </Route>
+            <Route exact path="/dashboard/reviews">
                 <LawyerReviews />
-            </Tab.Pane>
-            <Tab.Pane eventKey="invoices">
-                <LawyerInvoice />
-            </Tab.Pane>
-            <Tab.Pane eventKey="messages">test 7</Tab.Pane>
-            <Tab.Pane eventKey="settings">
+            </Route>
+            <Route exact path="/dashboard/messages">
+                test 7
+            </Route>
+            <Route exact path="/dashboard/settings">
                 <EditPersonal />
-            </Tab.Pane>
-            <Tab.Pane eventKey="change-password">
+            </Route>
+            <Route exact path="/dashboard/change-password">
                 <EditPassword />
-            </Tab.Pane>
-            <Tab.Pane eventKey="logout">test 11</Tab.Pane>
-        </Tab.Content>
+            </Route>
+            <Route exact path="/dashboard/logout">
+                test 11
+            </Route>
+        </Switch>
     );
 };
 export default LawyerDashboardTabs;

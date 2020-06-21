@@ -1,18 +1,19 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BlogList = ({ blogs }) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
                 {blogs.map((blog) => (
-                    <Blog key={blog.id} lawer={blog} />
+                    <Blog key={blog.id} id={blog.id} />
                 ))}
             </div>
         );
     else return <Blog />;
 };
 
-const Blog = () => {
+const Blog = ({ id }) => {
     return (
         <div className="col-lg-4 col-md-6 col-sm-12">
             <div className="blog grid-blog">
@@ -33,7 +34,7 @@ const Blog = () => {
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <a href="//">Title</a>
+                        <Link to={`/blogs/${id}`}>Title</Link>
                     </h3>
                     <p className="mb-0">Preview</p>
                 </div>

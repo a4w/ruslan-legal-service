@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import BlogDetails from "./BlogDetails";
 
 const Blogs = () => {
     const init = [];
@@ -16,23 +18,32 @@ const Blogs = () => {
         // here will be the first loaded blogs call
     }, []);
     return (
-        <div class="content">
-            <div class="container">
-                <div className="row">
-                    <div className="col-lg-8 col-md-12">
-                        <BlogList blogs={blogs} />
-                    </div>
-                    <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                        <StickyBox offsetTop={20} offsetBottom={20}>
-                            <Search setBlogs={setBlogs} />
-                            <LatestBlogs latest={test} />
-                            <Catagories />
-                            <TagsList />
-                        </StickyBox>
+        <BrowserRouter>
+            <div class="content">
+                <div class="container">
+                    <div className="row">
+                        <div className="col-lg-8 col-md-12">
+                            <Switch>
+                                <Route exact path="/blogs">
+                                    <BlogList blogs={blogs} />
+                                </Route>
+                                <Route path="/blogs/:blogId">
+                                    <BlogDetails />
+                                </Route>
+                            </Switch>
+                        </div>
+                        <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
+                            <StickyBox offsetTop={20} offsetBottom={20}>
+                                <Search setBlogs={setBlogs} />
+                                <LatestBlogs latest={test} />
+                                <Catagories />
+                                <TagsList />
+                            </StickyBox>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </BrowserRouter>
     );
 };
 

@@ -18,6 +18,7 @@ import LawyerDashboard from "./LawyerDashboard";
 import LawyerProfile from "./LawyerProfile";
 import ClientDashboard from "./ClientDashboard";
 import ForgotPassword from "./ForgotPassword";
+import LawyerBooking from "./LawyerBooking";
 
 function App() {
     return (
@@ -34,7 +35,7 @@ function App() {
                     <Route exact path="/book">
                         <AppointmentTimeForm lawyer_id="1" />
                     </Route>
-                    <Route exact path="/blogs">
+                    <Route path="/blogs">
                         <Blogs />
                     </Route>
                     <Route exact path="/reset">
@@ -57,6 +58,9 @@ function App() {
                     </Route>
                     <Route exact path="/forgot-password">
                         <ForgotPassword />
+                    </Route>
+                    <Route path="/book-lawyer">
+                        <LawyerBooking />
                     </Route>
                 </Switch>
                 <Footer />

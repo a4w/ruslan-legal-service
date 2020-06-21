@@ -172,7 +172,7 @@ const Details = ({ lawyer, match }) => {
                                 <LawyerReviews />
                             </Route>
                             <Route path={`${path}/hours`}>
-                               <AppointmentTimeForm/>
+                               <AppointmentTimeForm lawyer_id={match.params.LawyerId}/>
                             </Route>
                         </div>
                     </Switch>

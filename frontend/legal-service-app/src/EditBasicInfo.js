@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from "react";
-import {editBasicInfoValidation} from "./Validations";
+import React, { useState, useEffect } from "react";
+import { editBasicInfoValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {FaSpinner} from "react-icons/fa";
-import {request} from "./Axios";
+import { FaSpinner } from "react-icons/fa";
+import { request } from "./Axios";
+import { toast } from "react-toastify";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -12,7 +13,7 @@ const EditBasicInfo = () => {
         email: "",
         phone: "",
         profile_picture_url: "",
-        profile_picture: "",
+        profile_picture: null,
     };
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
@@ -24,15 +25,13 @@ const EditBasicInfo = () => {
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
-        }).catch((error) => {
-
-        });
+            setUser({ ...response.profile_data, profile_picture_url: response.profile_data.profile_picture });
+        }).catch((error) => { });
     }, []);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = {...user, [fieldName]: event.target.value};
+        const nextUser = { ...user, [fieldName]: event.target.value };
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };
@@ -47,22 +46,21 @@ const EditBasicInfo = () => {
                 method: 'POST',
                 data: user
             }).then((response) => {
-                // Ok
-            }).catch((error) => {
-
-            });
-            const formData = new FormData();
-            const file = user.profile_picture;
-            formData.append('profile_picture', file);
-            request({
-                url: 'account/upload-profile-picture',
-                method: 'POST',
-                data: formData
-            }).then((response) => {
                 setSaving(false);
+                toast.success("Profile updated successfully!");
             }).catch((error) => {
-
             });
+            if (user.profile_picture !== null) {
+                const formData = new FormData();
+                const file = user.profile_picture;
+                formData.append('profile_picture', file);
+                request({
+                    url: 'account/upload-profile-picture',
+                    method: 'POST',
+                    data: formData
+                }).then((response) => {
+                }).catch((error) => { });
+            }
         });
     };
 
@@ -71,7 +69,7 @@ const EditBasicInfo = () => {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setUser({...user, profile_picture_url: e.target.result, profile_picture: input.files[0]});
+                setUser({ ...user, profile_picture_url: e.target.result, profile_picture: input.files[0] });
             };
             reader.readAsDataURL(input.files[0]);
         }

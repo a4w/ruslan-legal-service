@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Ratings extends Migration
+class MessageTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class Ratings extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('appointment_id')->constrained('appointments');
-            $table->unsignedSmallInteger('rating');
-            $table->string('comment');
-            $table->timestamps();
+        Schema::table('messages', function (Blueprint $table) {
+            $table->enum('message_type', ['TEXT', 'FILE']);
         });
     }
 
@@ -29,6 +25,8 @@ class Ratings extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ratings');
+        Schema::table('messages', function (Blueprint $table) {
+            $table->dropColumn('message_type');
+        });
     }
 }

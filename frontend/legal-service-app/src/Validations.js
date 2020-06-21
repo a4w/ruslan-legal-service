@@ -104,7 +104,7 @@ export const editEmailValidations = (data, field) => {
     return validate("EditEmail", () => {
         vest.only(field);
         test("email", "This field is required", () => {
-            enforce(data.email.toString()).isNotEmpty();
+            enforce(data.email.toString()).isNotEmpty()                .matches(/[^@]+@[^.]+\..+/g);
         });
         const trimmedEmail = truncate(data.email.toString(), 15);
         test("email", `${trimmedEmail} is not valid email address`, () => {
@@ -146,7 +146,7 @@ export const editAddressValidations = (data, field) => {
         });
         const zip = data.zip.toString();
         test("zip", `${zip} is not a valid zip code`, () => {
-            enforce(parseInt(zip)).isNumeric();
+            enforce(parseInt(zip)).isNotEmpty();
         });
     });
 };

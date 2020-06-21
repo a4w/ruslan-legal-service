@@ -7,9 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Lawyer extends Model
 {
     protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year'];
+    protected $with = ['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'];
     protected $hidden = [
         'schedule'
     ];
+
+    protected $casts = [
+        'schedule' => 'json',
+        'is_percent_discount' => 'bool',
+        'discount_end' => 'datetime'
+    ];
+
     public $timestamps = false;
 
     public function account()

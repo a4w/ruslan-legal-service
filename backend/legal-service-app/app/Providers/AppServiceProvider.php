@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-
+use Twilio\Rest\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $twilio_client = new Client(config('app.twilio_account_sid'), config('app.twilio_auth_token'));
+        $this->app->instance('Twilio\Rest\Client', $twilio_client);
     }
 
     /**
@@ -25,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191); 
+        Schema::defaultStringLength(191);
     }
 }

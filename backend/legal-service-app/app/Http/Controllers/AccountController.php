@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
@@ -16,9 +17,7 @@ class AccountController extends Controller
         // Get user to reset his password
         $user = Account::firstWhere('email', $request->get('email'));
         $user->sendPasswordResetNotification();
-        return [
-            'success' => true
-        ];
+        return RespondJSON::success();
     }
 
     public function resetPassword($token, JSONRequest $request)
@@ -27,29 +26,18 @@ class AccountController extends Controller
         try {
             $jwt = JWT::decode($token, $key, array('HS256'));
         } catch (TokenExpiredException $e) {
-            return [
-                'error' => 'true',
-                'message' => 'Reset token expired'
-            ];
+            return RespondJSON::tokenExpired();
         } catch (Exception $e) {
-            return [
-                'error' => 'true',
-                'message' => 'Error occurred'
-            ];
+            return RespondJSON::unknownError();
         }
         if ($jwt->rea !== 'PASSWORD_RESET') {
-            return [
-                'error' => 'true',
-                'message' => 'Error occurred'
-            ];
+            return RespondJSON::unknownError();
         }
         $user = Account::find($jwt->sub);
         // All OK, reset password
         $user->password = $request->get('new_password');
         $user->save();
-        return [
-            'message' => 'Password updated successfully'
-        ];
+        return RespondJSON::success();
     }
 
     public function savePersonalInfo(JSONRequest $request)
@@ -62,10 +50,7 @@ class AccountController extends Controller
         /** @var $user Account **/
         $user = Auth::user();
         $user->update($request->only(['name', 'surname', 'phone']));
-        return [
-            'error' => 'false',
-            'message' => 'Updated successfully'
-        ];
+        return RespondJSON::success();
     }
 
     public function updateEmail(JSONRequest $request)
@@ -77,10 +62,7 @@ class AccountController extends Controller
         $user = Auth::user();
         $user->update(['unverified_email' => $request->get('email')]);
         $user->sendEmailVerificationNotification();
-        return [
-            'error' => 'false',
-            'message' => 'Updated successfully'
-        ];
+        return RespondJSON::success();
     }
 
     public function updatePassword(JSONRequest $request)
@@ -91,13 +73,10 @@ class AccountController extends Controller
         ]);
         $user = Auth::user();
         if (!Auth::validate(['email' => $user->email, 'password' => $request->get('old_password')])) {
-            return ['error' => true, 'message' => 'unauthorized'];
+            return RespondJSON::unauthorized();
         }
         $user->password = $request->get('new_password');
         $user->save();
-        return [
-            'error' => 'false',
-            'message' => 'Updated successfully'
-        ];
+        return RespondJSON::success();
     }
 }

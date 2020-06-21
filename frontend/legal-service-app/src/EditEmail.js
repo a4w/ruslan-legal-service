@@ -44,7 +44,7 @@ const EditEmail = ({email}) => {
                 }).catch((error) => {
                     if (error.response.status === 422) {
                         // Email is already taken
-                        addError(['email'], {'email': 'Email is taken'});
+                        addError(['email'], {'email': ['Email is taken']});
                     }
                 }).finally(() => {
                     setSaving(false);

@@ -102,4 +102,12 @@ class AccountController extends Controller
             'profile_data' => $user
         ]);
     }
+
+    public function saveAddress(JSONRequest $request)
+    {
+        /** @var $user Account **/
+        $user = Auth::user();
+        $user->update($request->only(['address', 'city', 'state', 'zip_code', 'country']));
+        return RespondJSON::success();
+    }
 }

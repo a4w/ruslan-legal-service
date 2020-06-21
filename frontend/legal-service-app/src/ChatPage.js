@@ -77,35 +77,35 @@ const ChatPage = () => {
     };
     return (
         <>
-            <div className="row">
-                <div className="col-xl-12">
-                    <div className="chat-window">
-                        <div className="chat-cont-left">
-                            <div className="chat-header">
-                                <span>Chats</span>
-                            </div>
-                            <ChatUserList chats={chats} onChatSelection={(index) => setSelectedChat(index)} />
+            <div className="row no-gutters">
+                <div className="col-xs-12 col-md-6 col-lg-4">
+                    <div className="chat-cont-left w-100">
+                        <div className="chat-header">
+                            <span>Chats</span>
                         </div>
-                        <div className="chat-cont-right">
-                            <div className="chat-header">
-                                <div class="media-body">
-                                    <div class="user-name">{selectedChat !== null && chats[selectedChat].other_name}</div>
-                                </div>
+                        <ChatUserList chats={chats} onChatSelection={(index) => setSelectedChat(index)} />
+                    </div>
+                </div>
+                <div className="col-xs-12 col-md-6 col-lg-8">
+                    <div className="chat-cont-right w-100">
+                        <div className="chat-header">
+                            <div class="media-body">
+                                <div class="user-name">{selectedChat !== null && chats[selectedChat].other_name}</div>
                             </div>
-                            <MessagesList messages={messages} />
-                            <div className="chat-footer">
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <div className="btn-file btn">
-                                            <FaPaperclip />
-                                            <input type="file" />
-                                        </div>
+                        </div>
+                        <MessagesList messages={messages} />
+                        <div className="chat-footer">
+                            <div className="input-group">
+                                <div className="input-group-prepend">
+                                    <div className="btn-file btn">
+                                        <FaPaperclip />
+                                        <input type="file" />
                                     </div>
-                                    <input value={message} onChange={(e) => {setMessage(e.target.value)}} type="text" className="input-msg-send form-control" placeholder="Type something" />
-                                    <div className="input-group-append">
-                                        <button type="button" className="btn msg-send-btn" onClick={handleMessageSend}><i
-                                            className="fab fa-telegram-plane"></i></button>
-                                    </div>
+                                </div>
+                                <input value={message} onChange={(e) => {setMessage(e.target.value)}} type="text" className="input-msg-send form-control" placeholder="Type something" />
+                                <div className="input-group-append">
+                                    <button type="button" className="btn msg-send-btn" onClick={handleMessageSend}><i
+                                        className="fab fa-telegram-plane"></i></button>
                                 </div>
                             </div>
                         </div>

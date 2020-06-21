@@ -157,4 +157,14 @@ class LawyerController extends Controller
     {
         return RespondJSON::with(['lawyer' => $lawyer]);
     }
+
+    public function fetchMe()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::with(['lawyer' => $user->lawyer]);
+    }
 }

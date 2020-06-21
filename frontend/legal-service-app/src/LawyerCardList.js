@@ -81,8 +81,7 @@ const LawyerCard = () => {
                             <Link
                                 className="apt-btn"
                                 to={{
-                                    pathname: "/book",
-                                    pathname: "/book",
+                                    pathname: "/book-lawyer",
                                     state: { lawyer_id: "1" },
                                 }}
                             >

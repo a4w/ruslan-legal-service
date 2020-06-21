@@ -14,7 +14,7 @@ const LawyerCardList = ({ lawyers, setPopUp }) => {
 
 const LawyerCard = ({ lawyer, setPopUp }) => {
     return (
-        <div className="card" onMouseEnter={() => setPopUp(lawyer)}>
+        <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">

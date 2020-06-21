@@ -41,7 +41,6 @@ const LawyerCompleteRegisteration = ({}) => {
                 bio: "",
             };
             const data = response.lawyer;
-            nextLawyer.type = data.lawyer_type.type;
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
@@ -52,7 +51,6 @@ const LawyerCompleteRegisteration = ({}) => {
             nextLawyer.bio = data.biography;
             setLawyer(nextLawyer);
         }).catch((error) => {
-
         });
     }, []);
     const OnSubmitHandler = (event) => {
@@ -78,9 +76,32 @@ const LawyerCompleteRegisteration = ({}) => {
         setLawyer(newData);
         validate(newData, name);
     };
+    // Those need to be fetched from database
+    const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
+    const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+    const [accreditationsOptions, setAccreditationOptions] = useState([]);
+
+    useEffect(() => {
+        // here fetch lawyer data with current session and setLawyer
+        request({
+            url: 'lawyer/types',
+            method: 'GET'
+        }).then((response) => {
+            const types = response.types.map((type, i) => {
+                return {
+                    label: type.type,
+                    value: type.id,
+                    name: "type"
+                };
+            });
+            setLawyerTypeOptions(types);
+        }).catch((error) => {
+        });
+    }, []);
+
     const typeOptions = [
-        {value: "Solicitor", label: "Solicitor", name: "type"},
-        {value: "Barrister", label: "Barrister", name: "type"},
+        {value: "solicitor", label: "Solicitor", name: "type"},
+        {value: "barrister", label: "Barrister", name: "type"},
         {value: "other", label: "Other", name: "type"},
     ];
     const practiceAreasOptions = [
@@ -93,6 +114,7 @@ const LawyerCompleteRegisteration = ({}) => {
         {value: "2", label: "Accreditation 2", name: "accreditations"},
         {value: "3", label: "Accreditation 3", name: "accreditations"},
     ];
+
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
@@ -102,7 +124,7 @@ const LawyerCompleteRegisteration = ({}) => {
                         errors={errors.type}
                         value={lawyer.type}
                         placeholder={"Select type.."}
-                        options={typeOptions}
+                        options={lawyerTypeOptions}
                         OnChangeHandler={OnSelectHandler}
                     />
                 </div>

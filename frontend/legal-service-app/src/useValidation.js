@@ -38,7 +38,7 @@ const useValidation = (vest) => {
             console.log(_errors[field]);
             nextErrors = {
                 ...nextErrors,
-                [field]: [...errors[field], _errors[field]],
+                [field]: _errors[field],
             };
         }
         setErrors(nextErrors);

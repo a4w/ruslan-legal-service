@@ -3,37 +3,38 @@ import React from "react";
 const BlogDetails = () => {
     return <ShareSection />;
 };
+
 const ShareSection = () => {
     return (
-        <div class="card blog-share clearfix">
-            <div class="card-header">
-                <h4 class="card-title">Share the post</h4>
+        <div className="card blog-share clearfix">
+            <div className="card-header">
+                <h4 className="card-title">Share the post</h4>
             </div>
-            <div class="card-body">
-                <ul class="social-share">
+            <div className="card-body">
+                <ul className="social-share">
                     <li>
                         <a href="#" title="Facebook">
-                            <i class="fab fa-facebook"></i>
+                            <i className="fab fa-facebook"></i>
                         </a>
                     </li>
                     <li>
                         <a href="#" title="Twitter">
-                            <i class="fab fa-twitter"></i>
+                            <i className="fab fa-twitter"></i>
                         </a>
                     </li>
                     <li>
                         <a href="#" title="Linkedin">
-                            <i class="fab fa-linkedin"></i>
+                            <i className="fab fa-linkedin"></i>
                         </a>
                     </li>
                     <li>
                         <a href="#" title="Google Plus">
-                            <i class="fab fa-google-plus"></i>
+                            <i className="fab fa-google-plus"></i>
                         </a>
                     </li>
                     <li>
                         <a href="#" title="Youtube">
-                            <i class="fab fa-youtube"></i>
+                            <i className="fab fa-youtube"></i>
                         </a>
                     </li>
                 </ul>

@@ -31,6 +31,7 @@ Route::prefix('lawyer')->group(function () {
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
     Route::get('all', 'LawyerController@getLawyersPaginated');
     Route::get('types', 'LawyerController@getLawyerTypes');
+    Route::get('practice-areas', 'LawyerController@getPracticeAreas');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 

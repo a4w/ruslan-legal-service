@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use App\LawyerType;
+use App\PracticeArea;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,5 +173,10 @@ class LawyerController extends Controller
     public function getLawyerTypes()
     {
         return RespondJSON::success(['types' => LawyerType::all()]);
+    }
+
+    public function getPracticeAreas()
+    {
+        return RespondJSON::success(['types' => PracticeArea::all()]);
     }
 }

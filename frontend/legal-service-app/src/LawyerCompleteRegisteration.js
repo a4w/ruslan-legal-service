@@ -7,7 +7,7 @@ import {request} from "./Axios"
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
-        type: "",
+        type: [],
         other: "",
         regulatedBy: "",
         yearLicensed: "",
@@ -21,15 +21,62 @@ const LawyerCompleteRegisteration = ({}) => {
 
     const [lawyer, setLawyer] = useState(init);
     const [errors, , validate] = useValidation(LawyerInfoValidations);
+    const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
+    const [accreditationOptions, setAccreditationOptions] = useState([]);
+    const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
 
     useEffect(() => {
-        // here fetch lawyer data with current session and setLawyer
         request({
-            url: 'lawyer/me',
+            url: 'lawyer/types',
             method: 'GET'
         }).then((response) => {
+            let types = response.types.map((type, i) => {
+                return {
+                    label: type.type,
+                    value: type.id,
+                    name: "type"
+                };
+            });
+            types.push({
+                label: 'Other',
+                value: 0,
+                name: 'type'
+            });
+            setLawyerTypeOptions(types);
+            return request({
+                url: 'lawyer/practice-areas',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const areas = response.areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id,
+                    name: 'practiceAreas'
+                };
+            });
+            setPracticeAreaOptions(areas);
+
+            return request({
+                url: 'lawyer/accreditations',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const accreditations = response.accreditations.map((accreditation, i) => {
+                return {
+                    label: accreditation.accreditation,
+                    value: accreditation.id,
+                    name: 'accreditation'
+                };
+            });
+            setAccreditationOptions(accreditations);
+            return request({
+                url: 'lawyer/me',
+                method: 'GET'
+            });
+        }).then((response) => {
             const nextLawyer = {
-                type: "",
+                type: [0],
                 other: "",
                 regulatedBy: "",
                 yearLicensed: "",
@@ -41,6 +88,8 @@ const LawyerCompleteRegisteration = ({}) => {
                 bio: "",
             };
             const data = response.lawyer;
+            // Set type
+            nextLawyer.type[0] = data.lawyer_type_id;
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
@@ -76,44 +125,7 @@ const LawyerCompleteRegisteration = ({}) => {
         setLawyer(newData);
         validate(newData, name);
     };
-    // Those need to be fetched from database
-    const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
-    const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
-    const [accreditationsOptions, setAccreditationOptions] = useState([]);
 
-    useEffect(() => {
-        // here fetch lawyer data with current session and setLawyer
-        request({
-            url: 'lawyer/types',
-            method: 'GET'
-        }).then((response) => {
-            const types = response.types.map((type, i) => {
-                return {
-                    label: type.type,
-                    value: type.id,
-                    name: "type"
-                };
-            });
-            setLawyerTypeOptions(types);
-        }).catch((error) => {
-        });
-    }, []);
-
-    const typeOptions = [
-        {value: "solicitor", label: "Solicitor", name: "type"},
-        {value: "barrister", label: "Barrister", name: "type"},
-        {value: "other", label: "Other", name: "type"},
-    ];
-    const practiceAreasOptions = [
-        {value: "1", label: "area1", name: "practiceAreas"},
-        {value: "2", label: "area2", name: "practiceAreas"},
-        {value: "3", label: "area3", name: "practiceAreas"},
-    ];
-    const accreditationOptions = [
-        {value: "1", label: "Accreditation 1", name: "accreditations"},
-        {value: "2", label: "Accreditation 2", name: "accreditations"},
-        {value: "3", label: "Accreditation 3", name: "accreditations"},
-    ];
 
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
@@ -130,7 +142,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
-                        disabled={lawyer.type !== "other"}
+                        disabled={lawyer.type !== 0}
                         errors={errors.other}
                         type={"text"}
                         name="other"
@@ -198,7 +210,7 @@ const LawyerCompleteRegisteration = ({}) => {
                         className="floating"
                         value={lawyer.practiceAreas}
                         placeholder="Select practice areas"
-                        options={practiceAreasOptions}
+                        options={practiceAreaOptions}
                         OnChangeHandler={MultiselectHandler}
                     />
                 </div>

@@ -7,12 +7,32 @@ import { Link } from "react-router-dom";
 const LawyerCardList = ({ lawyers }) => {
     if (lawyers)
         return lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawer={lawyer} />
+            <LawyerCard key={lawyer.id} lawyer={lawyer} />
         ));
     else return <LawyerCard />;
 };
-
-const LawyerCard = () => {
+// accreditations: Array []
+// biography: null
+// course: null
+// discount: null
+// discount_end: null
+// discount_ends_in: null
+// graduation_year: null
+// id: 1
+// institution: null
+// is_percent_discount: null
+// lawyer_type: null
+// lawyer_type_id: null
+// practice_areas: Array []
+// price_per_slot: null
+// ratings_average: 0
+// ratings_count: 0
+// regulator: null
+// regulator_id: null
+// slot_length: 3
+// user_id: 2
+// years_licenced: null
+const LawyerCard = ({ lawyer }) => {
     return (
         <div className="card">
             <div className="card-body">
@@ -23,7 +43,11 @@ const LawyerCard = () => {
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
-                                <strong>Lawyer's Name</strong>
+                                <strong>
+                                    {lawyer.account.name +
+                                        " " +
+                                        lawyer.account.surname}
+                                </strong>
                             </h4>
                             <p className="lawyer-education">
                                 Years Expert . Education

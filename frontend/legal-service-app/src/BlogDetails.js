@@ -1,7 +1,13 @@
 import React from "react";
 
 const BlogDetails = () => {
-    return <AboutAuthor />;
+    return (
+        <div class="blog-view">
+            <Post />
+            <ShareSection />
+            <AboutAuthor />
+        </div>
+    );
 };
 const AboutAuthor = () => {
     return (
@@ -13,13 +19,7 @@ const AboutAuthor = () => {
                 <div class="about-author">
                     <div class="about-author-img">
                         <div class="author-img-wrap">
-                            <a href="doctor-profile.html">
-                                <img
-                                    class="img-fluid rounded-circle"
-                                    alt=""
-                                    src="assets/img/doctors/doctor-thumb-02.jpg"
-                                />
-                            </a>
+                            <a href="doctor-profile.html">Profile pic</a>
                         </div>
                     </div>
                     <div class="author-details">

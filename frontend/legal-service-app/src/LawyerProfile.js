@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import History from "./History";
 import { request } from "./Axios";
-// import "./Tabs.css";
+import "./Tabs.css";
 
 const LawyerProfile = ({ match }) => {
     const initLawyer = {
@@ -50,12 +50,14 @@ const LawyerProfile = ({ match }) => {
     }, []);
 
     return (
-        <div className="content">
-            <div className="container">
-                <ProfileCard lawyer={lawyer} match={match} />
-                <Details lawyer={lawyer} match={match} />
+        <BrowserRouter>
+            <div className="content">
+                <div className="container">
+                    <ProfileCard lawyer={lawyer} match={match} />
+                    <Details lawyer={lawyer} match={match} />
+                </div>
             </div>
-        </div>
+        </BrowserRouter>
     );
 };
 
@@ -152,48 +154,46 @@ const ProfileCard = ({ lawyer }) => {
 };
 
 const Details = ({ lawyer, match }) => {
-    const path = match.path;
+    const path = match.url;
     console.log(match);
 
     return (
         <div className="card">
             <div className="card-body pt-0">
-                <BrowserRouter>
                     <NavBar lawyer={lawyer} match={match} />
                     <Switch>
                         <div className="tab-content pt-0">
-                            <Route path={`/${path}/overview`}>
+                            <Route path={`${path}/overview`}>
                                 {" "}
                                 <Overview />{" "}
                             </Route>
-                            <Route path={`/${path}/reviews`}>
+                            <Route path={`${path}/reviews`}>
                                 <LawyerReviews />
                             </Route>
-                            <Route path={`/${path}/hours`}>
+                            <Route path={`${path}/hours`}>
                                 {" Hours will be added when it's time 🌚🌚"}
                             </Route>
                         </div>
                     </Switch>
-                </BrowserRouter>
             </div>
         </div>
     );
 };
 const NavBar = ({ match }) => {
-    const path = match.path;
+    const path = match.url;
     console.log(path);
 
     return (
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <Link to={`/${path}/overview`}>Overview</Link>
+                    <Link to={`${path}/overview`}>Overview</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to={`/${path}/reviews`}>Reviews</Link>
+                    <Link to={`${path}/reviews`}>Reviews</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to={`/${path}/hours`}>Business Hours</Link>
+                    <Link to={`${path}/hours`}>Business Hours</Link>
                 </li>
             </ul>
         </nav>

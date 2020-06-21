@@ -12,6 +12,7 @@ import {
 import History from "./History";
 import { request } from "./Axios";
 import "./Tabs.css";
+import AppointmentTimeForm from "./AppointmentTimeForm";
 
 const LawyerProfile = ({ match }) => {
     const initLawyer = {
@@ -171,7 +172,7 @@ const Details = ({ lawyer, match }) => {
                                 <LawyerReviews />
                             </Route>
                             <Route path={`${path}/hours`}>
-                                {" Hours will be added when it's time 🌚🌚"}
+                               <AppointmentTimeForm/>
                             </Route>
                         </div>
                     </Switch>

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import ErrorMessageSelect from "./ErrorMessageSelect";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
-import { LawyerInfoValidations } from "./Validations";
+import {LawyerInfoValidations} from "./Validations";
+import {request} from "./Axios"
 
-const LawyerCompleteRegisteration = ({lawyerData}) => {
+const LawyerCompleteRegisteration = ({}) => {
     const init = {
-        type: [],
+        type: "",
         other: "",
         regulatedBy: "",
         yearLicensed: "",
@@ -17,45 +18,80 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
         accreditations: [],
         bio: "",
     };
-    const [lawyer, setLawyer] = useState(lawyerData === null? init : lawyerData);
+
+    const [lawyer, setLawyer] = useState(init);
     const [errors, , validate] = useValidation(LawyerInfoValidations);
+
+    useEffect(() => {
+        // here fetch lawyer data with current session and setLawyer
+        request({
+            url: 'lawyer/me',
+            method: 'GET'
+        }).then((response) => {
+            const nextLawyer = {
+                type: "",
+                other: "",
+                regulatedBy: "",
+                yearLicensed: "",
+                education: "",
+                graduation: "",
+                course: "",
+                practiceAreas: [],
+                accreditations: [],
+                bio: "",
+            };
+            const data = response.lawyer;
+            nextLawyer.type = data.lawyer_type.type;
+            nextLawyer.regulatedBy = data.regulator.regulator;
+            nextLawyer.yearLicensed = data.years_licenced;
+            nextLawyer.education = data.institution;
+            nextLawyer.graduation = data.graduation_year;
+            nextLawyer.course = data.course;
+            nextLawyer.practiceAreas = data.practiceAreas;
+            nextLawyer.accreditations = data.accreditations;
+            nextLawyer.bio = data.biography;
+            setLawyer(nextLawyer);
+        }).catch((error) => {
+
+        });
+    }, []);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         validate(lawyer);
         console.log("submitting");
     };
-    const OnChangeHandler = ({ target: { value, name } }) => {
-        const newData = { ...lawyer, [name]: value };
+    const OnChangeHandler = ({target: {value, name}}) => {
+        const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         console.log(lawyer);
         console.log("Validating: ", name, " with: ", newData);
         validate(newData, name);
     };
-    const OnSelectHandler = ([{ value, name }]) => {
-        const newData = { ...lawyer, [name]: value };
+    const OnSelectHandler = ([{value, name}]) => {
+        const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         validate(newData, name);
     };
     const MultiselectHandler = (values) => {
-        const [{ name }] = values;
-        const newData = { ...lawyer, [name]: values };
+        const [{name}] = values;
+        const newData = {...lawyer, [name]: values};
         setLawyer(newData);
         validate(newData, name);
     };
     const typeOptions = [
-        { value: "solicitor", label: "Solicitor", name: "type" },
-        { value: "barrister", label: "Barrister", name: "type" },
-        { value: "other", label: "Other", name: "type" },
+        {value: "Solicitor", label: "Solicitor", name: "type"},
+        {value: "Barrister", label: "Barrister", name: "type"},
+        {value: "other", label: "Other", name: "type"},
     ];
     const practiceAreasOptions = [
-        { value: "1", label: "area1", name: "practiceAreas" },
-        { value: "2", label: "area2", name: "practiceAreas" },
-        { value: "3", label: "area3", name: "practiceAreas" },
+        {value: "1", label: "area1", name: "practiceAreas"},
+        {value: "2", label: "area2", name: "practiceAreas"},
+        {value: "3", label: "area3", name: "practiceAreas"},
     ];
     const accreditationOptions = [
-        { value: "1", label: "Accreditation 1", name: "accreditations" },
-        { value: "2", label: "Accreditation 2", name: "accreditations" },
-        { value: "3", label: "Accreditation 3", name: "accreditations" },
+        {value: "1", label: "Accreditation 1", name: "accreditations"},
+        {value: "2", label: "Accreditation 2", name: "accreditations"},
+        {value: "3", label: "Accreditation 3", name: "accreditations"},
     ];
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
@@ -162,7 +198,7 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
                         <textarea
                             className="form-control"
                             name="bio"
-                            style={{ minHeight: "100px" }}
+                            style={{minHeight: "100px"}}
                             form="regForm"
                             value={lawyer.bio}
                             onChange={OnChangeHandler}

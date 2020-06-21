@@ -4,6 +4,7 @@ import { Discount } from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
 
 const LawyerProfile = () => {
     return (
@@ -69,9 +70,16 @@ const ProfileCard = () => {
                         </div>
                         <div className="lawyer-action"></div>
                         <div className="session-booking">
-                            <a className="apt-btn" href="booking.html">
+                            <Link
+                                className="apt-btn"
+                                to={{
+                                    pathname: "/book",
+                                    pathname: "/book",
+                                    state: { lawyer_id: "1" },
+                                }}
+                            >
                                 Book Appointment
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

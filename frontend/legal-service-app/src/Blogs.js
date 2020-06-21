@@ -16,17 +16,21 @@ const Blogs = () => {
         // here will be the first loaded blogs call
     }, []);
     return (
-        <div className="row">
-            <div className="col-lg-8 col-md-12">
-                <BlogList blogs={blogs} />
-            </div>
-            <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                <StickyBox offsetTop={20} offsetBottom={20}>
-                    <Search setBlogs={setBlogs} />
-                    <LatestBlogs latest={test} />
-                    <Catagories />
-                    <TagsList />
-                </StickyBox>
+        <div class="content">
+            <div class="container">
+                <div className="row">
+                    <div className="col-lg-8 col-md-12">
+                        <BlogList blogs={blogs} />
+                    </div>
+                    <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
+                        <StickyBox offsetTop={20} offsetBottom={20}>
+                            <Search setBlogs={setBlogs} />
+                            <LatestBlogs latest={test} />
+                            <Catagories />
+                            <TagsList />
+                        </StickyBox>
+                    </div>
+                </div>
             </div>
         </div>
     );

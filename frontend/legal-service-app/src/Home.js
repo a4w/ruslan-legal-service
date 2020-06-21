@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-dropdown-select";
+import History from "./History";
 
 const Home = () => {
     const [location, setLocation] = useState({ value: null, label: "" });
@@ -25,6 +26,12 @@ const Home = () => {
     ];
     const OnSubmitHandler = (event) => {
         event.preventDefault();
+        History.push("/list");
+        // History.push({
+        //     pathname: '/template',
+        //     search: '?query=abc',
+        //     state: { detail: response.data }
+        //   })
     };
     return (
         <section className="section section-search">

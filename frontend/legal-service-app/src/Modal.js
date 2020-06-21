@@ -4,7 +4,7 @@ import RegisterationForm from "./RegisterationForm";
 import LoginForm from "./LoginForm";
 
 const ModalPopUp = (props) => {
-    const [register, setRegister] = useState(true);
+    const [register, setRegister] = useState(props.register);
     return (
         <Modal
             {...props}
@@ -14,7 +14,7 @@ const ModalPopUp = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                {getTitle(register)}
+                    {getTitle(register)}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -24,7 +24,8 @@ const ModalPopUp = (props) => {
     );
 };
 const getBody = (register, setRegister, hide) => {
-    if (register) return <RegisterationForm setRegister={setRegister} hideModal={hide} />;
+    if (register)
+        return <RegisterationForm setRegister={setRegister} hideModal={hide} />;
     else return <LoginForm setRegister={setRegister} hideModal={hide} />;
 };
 const getTitle = (register) => {

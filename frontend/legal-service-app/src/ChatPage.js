@@ -1,84 +1,26 @@
 import React, {useState, useEffect} from "react"
 import {FaCogs, FaPaperclip} from "react-icons/fa";
 import {request} from "./Axios"
+import ChatUserList from "./ChatUserList"
+import MessagesList from "./MessagesList"
 
-
-const ChatUserListItem = ({chat_id, other_name}) => {
-    return (
-        <a href="javascript:void(0);" class="media">
-            <div class="media-body">
-                <div>
-                    <div class="user-name">{other_name}</div>
-                </div>
-            </div>
-        </a>
-    );
-};
-
-const ChatUserList = ({chats}) => {
-    return (
-        <>
-            <div class="chat-users-list">
-                <div class="chat-scroll">
-                    {chats.map((chat, i) => {
-                        return (<ChatUserListItem chat_id={chat.id} other_name={chat.other_name} />);
-                    })}
-                </div>
-            </div>
-        </>
-    );
-};
-const MessagesList = ({}) => {
-    return (
-        <>
-            <div class="chat-body">
-                <div class="chat-scroll">
-                    <ul class="list-unstyled">
-                        <Message isOutgoing={true} content="Hello" timestamp="2020-05-01 00:00:00" />
-                        <Message isOutgoing={false} content="Hi" timestamp="2020-05-01 00:00:00" />
-                    </ul>
-                </div>
-            </div>
-        </>
-    );
-};
-const Message = ({isOutgoing, content, timestamp}) => {
-    return (
-        <>
-            <li className={"media " + (isOutgoing ? "sent" : "received")}>
-                <div class="media-body">
-                    <div class="msg-box">
-                        <div>
-                            <p>{content}</p>
-                            <ul class="chat-msg-info">
-                                <li>
-                                    <div class="chat-time">
-                                        <span>{timestamp}</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-        </>
-    );
-};
 
 const ChatPage = () => {
     const [selectedChat, setSelectedChat] = useState(null);
-    const [chats, setChats] = useState([]);
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [isFetching, setIsFetching] = useState(false);
+
     // Load chats from server
+    const [chats, setChats] = useState([]);
     useEffect(() => {
         request({
             url: '/chat/all',
             method: 'GET'
         }).then((response) => {
-            console.log(response.chats);
-            const chats = response.chats.map((chat, i) => {
+            const chats = response.chats.map((chat, _) => {
                 return {
-                    chat_id: chat.id,
+                    id: chat.id,
                     other_name: chat.participents[0].name
                 };
             });
@@ -87,47 +29,87 @@ const ChatPage = () => {
             console.log(error);
         });
     }, []);
-    const handleChatSelection = (chat_id) => {
-        // Update chat
+
+
+    // Load chat messages on chat change
+    useEffect(() => {
+        loadMessages();
+        const interval_id = setInterval(() => {
+            loadMessages();
+        }, 3000);
+        return () => {
+            clearInterval(interval_id);
+        };
+    }, [selectedChat]);
+
+    const loadMessages = (since = null) => {
+        if (selectedChat !== null && !isFetching) {
+            setIsFetching(true);
+            // Chat id
+            const chat_id = chats[selectedChat].id;
+            request({
+                url: `/chat/${chat_id}`,
+                method: 'GET'
+            }).then((response) => {
+                setMessages(response.messages);
+            }).catch((error) => {
+                console.log(error);
+            }).finally(() => {
+                setIsFetching(false);
+            });
+        }
+    };
+
+    const handleMessageSend = () => {
+        const chat_id = chats[selectedChat].id;
+        request({
+            url: `/chat/${chat_id}`,
+            method: 'POST',
+            data: {
+                content: message
+            }
+        }).then((_) => {
+            loadMessages();
+            setMessage("");
+        }).catch((error) => {
+            console.log(error);
+        });
     };
     return (
         <>
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="chat-window">
-                        <div class="chat-cont-left">
-                            <div class="chat-header">
+            <div className="row">
+                <div className="col-xl-12">
+                    <div className="chat-window">
+                        <div className="chat-cont-left">
+                            <div className="chat-header">
                                 <span>Chats</span>
                             </div>
-                            <ChatUserList chats={chats} onChatSelection={handleChatSelection} />
+                            <ChatUserList chats={chats} onChatSelection={(index) => setSelectedChat(index)} />
                         </div>
-                        <div class="chat-cont-right">
-                            <div class="chat-header">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <div class="user-name">Dr. Darren Elder</div>
-                                        <div class="user-status">online</div>
-                                    </div>
+                        <div className="chat-cont-right">
+                            <div className="chat-header">
+                                <div class="media-body">
+                                    <div class="user-name">{selectedChat !== null && chats[selectedChat].other_name}</div>
                                 </div>
-                                <div class="chat-options">
+                                <div className="chat-options">
                                     <a href="javascript:void(0)">
                                         <FaCogs />
                                     </a>
                                 </div>
                             </div>
-                            <MessagesList />
-                            <div class="chat-footer">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="btn-file btn">
+                            <MessagesList messages={messages} />
+                            <div className="chat-footer">
+                                <div className="input-group">
+                                    <div className="input-group-prepend">
+                                        <div className="btn-file btn">
                                             <FaPaperclip />
                                             <input type="file" />
                                         </div>
                                     </div>
-                                    <input type="text" class="input-msg-send form-control" placeholder="Type something" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn msg-send-btn"><i
-                                            class="fab fa-telegram-plane"></i></button>
+                                    <input value={message} onChange={(e) => {setMessage(e.target.value)}} type="text" className="input-msg-send form-control" placeholder="Type something" />
+                                    <div className="input-group-append">
+                                        <button type="button" className="btn msg-send-btn" onClick={handleMessageSend}><i
+                                            className="fab fa-telegram-plane"></i></button>
                                     </div>
                                 </div>
                             </div>

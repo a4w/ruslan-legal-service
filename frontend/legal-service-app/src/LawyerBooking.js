@@ -1,6 +1,7 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
+import AppointmentTimeForm from "./AppointmentTimeForm";
 
 const LawyerBooking = () => {
     return (
@@ -9,6 +10,7 @@ const LawyerBooking = () => {
                 <div class="row">
                     <div class="col-12">
                         <LawyerCard />
+                        <AppointmentTimeForm />
                     </div>
                 </div>
             </div>

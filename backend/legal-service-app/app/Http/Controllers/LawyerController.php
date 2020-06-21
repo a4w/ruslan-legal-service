@@ -6,9 +6,11 @@ use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
+use App\Helpers\RespondJSON;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LawyerController extends Controller
 {
@@ -18,7 +20,7 @@ class LawyerController extends Controller
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
 
-        // This can be cached (and should be)
+        // TODO: This can be cached (and should be)
         $lawyers = Lawyer::where('slot_length', '<>', null)
             ->limit($length)
             ->skip($offset)
@@ -33,7 +35,7 @@ class LawyerController extends Controller
             $lawyer['discount_ends_in'] = $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : null;
             unset($lawyer['ratings']);
         }
-        return $lawyers;
+        return RespondJSON::with(['lawyers' => $lawyers]);
     }
 
     public function fetchSchedule($id, JSONRequest $request)
@@ -41,7 +43,7 @@ class LawyerController extends Controller
         // Get lawyer
         $lawyer = Lawyer::find($id);
         if (!$lawyer->isAvailable()) {
-            return ['error' => 'Lawyer not available'];
+            return RespondJSON::unknownError();
         }
         $schedule = json_decode($lawyer->schedule, true);
 
@@ -95,8 +97,8 @@ class LawyerController extends Controller
             $data[] = $day;
             $current->addDay();
         }
-        $output['data'] = $data;
-        return $output;
+        $output['slots'] = $data;
+        return RespondJSON::with(['schedule' => $output]);
     }
 
     public function updateSchedule(JSONRequest $request)
@@ -112,7 +114,7 @@ class LawyerController extends Controller
         /** @var Account **/
         $user = Auth::user();
         if (!$user->isLawyer()) {
-            return ["error" => true, "message" => "unauthorized"];
+            return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
         $incoming_schedule = $request->get('schedule');
@@ -123,18 +125,18 @@ class LawyerController extends Controller
             try {
                 $day_idx = AppointmentHelper::dayToIndex($day);
                 if ($day_idx === null) {
-                    return ['error' => true, 'message' => 'Malformed request'];
+                    return RespondJSON::malformedRequest();
                 }
                 foreach ($slots as $slot) {
                     $slot = AppointmentHelper::clockToMinutes($slot);
                     $schedule[$day_idx][] = (int) ($slot / $slot_length);
                 }
             } catch (Exception $e) {
-                return ['error' => true, 'message' => 'Malformed request'];
+                return RespondJSON::malformedRequest();
             }
         }
         if (count($schedule) !== 7) {
-            return ['error' => true, 'message' => 'Malformed request'];
+            return RespondJSON::malformedRequest();
         }
         // Save fields
         $lawyer->schedule = $schedule;
@@ -149,10 +151,10 @@ class LawyerController extends Controller
         }
         $lawyer->save();
 
-        return ['error' => false, 'message' => 'success'];
+        return RespondJSON::success();
     }
     public function fetchLawyer(Lawyer $lawyer)
     {
-        return $lawyer;
+        return RespondJSON::with(['lawyer' => $lawyer]);
     }
 }

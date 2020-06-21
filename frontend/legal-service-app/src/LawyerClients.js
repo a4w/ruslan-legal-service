@@ -11,7 +11,7 @@ const LawyerClients = () => {
         { id: 7 },
     ];
     return (
-        <div class="row row-grid">
+        <div className="row row-grid">
             <ClientCardList clients={clients} />
         </div>
     );

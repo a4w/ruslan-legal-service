@@ -1,24 +1,27 @@
 import React from "react";
-import Tab from "react-bootstrap/Tab";
 import EditPassword from "./EditPassword";
 import ClientDashboardStatus from "./ClientDashboardStatus";
 import ProfileSettings from "./ProfileSettings";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 const ClientDashboardTabs = () => {
     return (
-        <Tab.Content>
-            <Tab.Pane eventKey="dashboard">
+        <Switch>
+            <Route exact path="/client-dashboard">
+                <Redirect replace to="/client-dashboard/status" />
+            </Route>
+            <Route path="/client-dashboard/status">
                 <ClientDashboardStatus />
-            </Tab.Pane>
-            <Tab.Pane eventKey="messages">test</Tab.Pane>
-            <Tab.Pane eventKey="settings">
+            </Route>
+            <Route path="/client-dashboard/messages">test</Route>
+            <Route path="/client-dashboard/settings">
                 <ProfileSettings />
-            </Tab.Pane>
-            <Tab.Pane eventKey="change-password">
+            </Route>
+            <Route path="/client-dashboard/change-password">
                 <EditPassword />
-            </Tab.Pane>
-            <Tab.Pane eventKey="logout">test</Tab.Pane>
-        </Tab.Content>
+            </Route>
+            <Route path="/client-dashboard/logout">test</Route>
+        </Switch>
     );
 };
 export default ClientDashboardTabs;

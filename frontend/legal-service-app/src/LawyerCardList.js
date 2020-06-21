@@ -1,6 +1,8 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
 import Countdown, { zeroPad } from "react-countdown";
+import History from "./History";
+import { Link } from "react-router-dom";
 
 const LawyerCardList = ({ lawyers }) => {
     if (lawyers)
@@ -66,15 +68,26 @@ const LawyerCard = () => {
                             </ul>
                         </div>
                         <div className="session-booking">
-                            <a
+                            <Link
                                 className="view-pro-btn"
-                                href="lawyer-profile.html"
+                                to={{
+                                    pathname: "/profile",
+                                    state: { detail: "test data" },
+                                }}
                             >
                                 View Profile
-                            </a>
-                            <a className="apt-btn" href="booking.html">
+                            </Link>
+
+                            <Link
+                                className="apt-btn"
+                                to={{
+                                    pathname: "/book",
+                                    pathname: "/book",
+                                    state: { lawyer_id: "1" },
+                                }}
+                            >
                                 Book Appointment
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

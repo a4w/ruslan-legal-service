@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaSearch } from "react-icons/fa";
 import StickyBox from "react-sticky-box";
+import "./Calendar.css";
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
@@ -178,9 +179,7 @@ const PopUp = ({ lawyer }) => {
                     </div>
                     <div className="card-body">
                         <p className="card-text">Lawyer Bio</p>
-                        <a className="card-link" href="#">
-                            Card link
-                        </a>
+                        <AvgCalendar />
                     </div>
                 </div>
             </div>
@@ -188,4 +187,55 @@ const PopUp = ({ lawyer }) => {
     );
 };
 
+const AvgCalendar = () => {
+    return (
+        <table className="calender">
+            <thead>
+                <tr>
+                    <th></th>
+                    {GetDates().map((day) => (
+                        <th key={day}>{day}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Morning</td>
+                </tr>
+                <tr>
+                    <td>Afternoon</td>
+                </tr>
+                <tr>
+                    <td>Evening</td>
+                </tr>
+                <tr>
+                    <td>Night</td>
+                </tr>
+            </tbody>
+        </table>
+    );
+    return <div className="popup-calender-cell">test</div>;
+};
+function GetDates(startDate = new Date(), daysToAdd = 6) {
+    var aryDates = [];
+    for (var i = 0; i <= daysToAdd; i++) {
+        var currentDate = new Date();
+        currentDate.setDate(startDate.getDate() + i);
+        aryDates.push(DayAsString(currentDate.getDay()));
+    }
+
+    return aryDates;
+}
+function DayAsString(dayIndex) {
+    var weekdays = new Array(7);
+    weekdays[0] = "Sun";
+    weekdays[1] = "Mon";
+    weekdays[2] = "Tue";
+    weekdays[3] = "Wed";
+    weekdays[4] = "Thu";
+    weekdays[5] = "Fri";
+    weekdays[6] = "Sat";
+
+    return weekdays[dayIndex];
+}
 export default LawyerList;

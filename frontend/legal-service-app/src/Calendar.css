@@ -1,0 +1,35 @@
+table {
+    font-size: larger;
+    flex-direction: column;
+    margin-bottom: 16px;
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    border-spacing: 0.5rem;
+}
+th,
+td {
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    flex-grow: 1;
+    padding: 8px 10px;
+    border: 1px solid #fff;
+    margin-top: -1px;
+    margin-left: -1px;
+    overflow: hidden;
+}
+
+/* th,
+td {
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    border: 1px solid #fff;
+    padding: 0;
+    width: 37px;
+    margin-top: -1px;
+    margin-left: -1px;
+    background-color: #f8f8f8;
+} */

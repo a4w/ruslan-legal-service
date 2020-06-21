@@ -4219,23 +4219,23 @@ html.menu-opened body {
 .chat-cont-left .chat-users-list {
     background-color: #fff;
 }
-.chat-cont-left .chat-users-list a.media {
+.chat-cont-left .chat-users-list div.media {
     border-bottom: 1px solid #f0f0f0;
     padding: 10px 15px;
     transition: all 0.2s ease 0s;
 }
-.chat-cont-left .chat-users-list a.media:last-child {
+.chat-cont-left .chat-users-list div.media:last-child {
     border-bottom: 0;
 }
-.chat-cont-left .chat-users-list a.media .media-img-wrap {
+.chat-cont-left .chat-users-list div.media .media-img-wrap {
     margin-right: 15px;
     position: relative;
 }
-.chat-cont-left .chat-users-list a.media .media-img-wrap .avatar {
+.chat-cont-left .chat-users-list div.media .media-img-wrap .avatar {
     height: 45px;
     width: 45px;
 }
-.chat-cont-left .chat-users-list a.media .media-img-wrap .status {
+.chat-cont-left .chat-users-list div.media .media-img-wrap .status {
     bottom: 7px;
     height: 10px;
     right: 4px;
@@ -4243,7 +4243,7 @@ html.menu-opened body {
     width: 10px;
     border: 2px solid #fff;
 }
-.chat-cont-left .chat-users-list a.media .media-body {
+.chat-cont-left .chat-users-list div.media .media-body {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -4251,36 +4251,36 @@ html.menu-opened body {
     -webkit-justify-content: space-between;
     -ms-flex-pack: space-between;
 }
-.chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name,
-.chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+.chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name,
+.chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
     max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name {
+.chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name {
     color: #272b41;
     text-transform: capitalize;
 }
-.chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+.chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
     color: #8a8a8a;
     font-size: 14px;
     line-height: 24px;
 }
-.chat-cont-left .chat-users-list a.media .media-body > div:last-child {
+.chat-cont-left .chat-users-list div.media .media-body > div:last-child {
     text-align: right;
 }
-.chat-cont-left .chat-users-list a.media .media-body > div:last-child .last-chat-time {
+.chat-cont-left .chat-users-list div.media .media-body > div:last-child .last-chat-time {
     color: #8a8a8a;
     font-size: 13px;
 }
-.chat-cont-left .chat-users-list a.media:hover {
+.chat-cont-left .chat-users-list div.media:hover {
     background-color: #f5f5f6;
 }
-.chat-cont-left .chat-users-list a.media.read-chat .media-body > div:last-child .last-chat-time {
+.chat-cont-left .chat-users-list div.media.read-chat .media-body > div:last-child .last-chat-time {
     color: #8a8a8a;
 }
-.chat-cont-left .chat-users-list a.media.active {
+.chat-cont-left .chat-users-list div.media.active {
     background-color: #f5f5f6;
 }
 .chat-cont-right {
@@ -6442,8 +6442,8 @@ html.menu-opened body {
 }
 
 @media only screen and (max-width: 1399px) {
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name,
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name,
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
         max-width: 180px;
     }
     .row.row-grid {
@@ -6467,8 +6467,8 @@ html.menu-opened body {
         padding-left: 20px;
         padding-right: 20px;
     }
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name,
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name,
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
         max-width: 150px;
     }
     .chat-cont-left {
@@ -6760,8 +6760,8 @@ html.menu-opened body {
         margin: 0 15px;
         padding: 15px;
     }
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name,
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name,
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
         max-width: 250px;
     }
     .chat-window .chat-cont-right .chat-header .media .media-body {
@@ -7310,8 +7310,8 @@ html.menu-opened body {
     .session-booking a.apt-btn {
         width: 100%;
     }
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-name,
-    .chat-cont-left .chat-users-list a.media .media-body > div:first-child .user-last-chat {
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-name,
+    .chat-cont-left .chat-users-list div.media .media-body > div:first-child .user-last-chat {
         max-width: 160px;
     }
     .section-features, .section-features, .section-specialities {
@@ -7391,14 +7391,14 @@ html.menu-opened body {
     color: #fff;
     background-color: #09dca4;
     border-color: #959595;
-} 
+}
 
 .dashboard-widget .nav .nav-link.active, .show>.nav-link {
     color: #0de0fe;
-} 
+}
 .dashboard-widget .nav .nav-link:hover {
     color: #0de0fe;
-} 
+}
 
 .tab-form {
     background-color: #fff;

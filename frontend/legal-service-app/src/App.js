@@ -34,7 +34,7 @@ function App() {
                     <Route exact path="/book">
                         <AppointmentTimeForm lawyer_id="1" />
                     </Route>
-                    <Route exact path="/blogs">
+                    <Route path="/blogs">
                         <Blogs />
                     </Route>
                     <Route exact path="/reset">

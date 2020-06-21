@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { editBasicInfoValidation } from "./Validations";
+import React, {useState} from "react";
+import {editBasicInfoValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { FaSpinner } from "react-icons/fa";
+import {FaSpinner} from "react-icons/fa";
+import {request} from "./Axios";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -10,6 +11,8 @@ const EditBasicInfo = () => {
         surname: "",
         email: "",
         phone: "",
+        profile_picture_url: "",
+        profile_picture: "",
     };
 
     const [user, setUser] = useState(initUser);
@@ -18,7 +21,7 @@ const EditBasicInfo = () => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };
@@ -26,10 +29,45 @@ const EditBasicInfo = () => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                console.log("safe");
                 setSaving(true);
             }
+            request({
+                url: 'account/personal-info',
+                method: 'POST',
+                data: user
+            }).then((response) => {
+                // Ok
+            }).catch((error) => {
+
+            });
+            const formData = new FormData();
+            const file = user.profile_picture;
+            formData.append('profile_picture', file);
+            request({
+                url: 'account/upload-profile-picture',
+                method: 'POST',
+                data: formData
+            }).then((response) => {
+                // Ok
+            }).catch((error) => {
+
+            });
         });
+    };
+
+    const showSelectedPicture = (e) => {
+        const input = e.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setUser({...user, profile_picture_url: e.target.result, profile_picture: input.files[0]});
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    const handleSubmit = () => {
+
     };
 
     return (
@@ -39,11 +77,10 @@ const EditBasicInfo = () => {
                     <div className="form-group">
                         <div className="change-avatar">
                             <div className="profile-img">
-                                {/* <img
-                                    src="assets/img/patients/patient.jpg"
+                                <img
+                                    src={user.profile_picture_url}
                                     alt="User"
-                                /> */}
-                                IMG
+                                />
                             </div>
                             <div className="upload-img">
                                 <div className="change-photo-btn">
@@ -51,7 +88,7 @@ const EditBasicInfo = () => {
                                         <i className="fa fa-upload"></i> Upload
                                         Photo
                                     </span>
-                                    <input type="file" className="upload" />
+                                    <input type="file" accept="image/png,image/jpeg,image/jpg,image/gif" onChange={showSelectedPicture} className="upload" />
                                 </div>
                                 <small className="form-text text-muted">
                                     Allowed JPG, GIF or PNG. Max size of 2MB
@@ -100,6 +137,7 @@ const EditBasicInfo = () => {
                     <button
                         type="submit"
                         disabled={isSaving}
+                        onClick={handleSubmit}
                         className={
                             "btn btn-primary submit-btn" +
                             (isSaving ? "cursor-not-allowed" : "")

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import ModalPopUp from "./Modal";
 
 const Footer = () => {
@@ -47,27 +47,27 @@ const Footer = () => {
                                     <div className="social-icon">
                                         <ul>
                                             <li>
-                                                <Link href="#" target="_blank">
+                                                <Link to="#" target="_blank">
                                                     <i className="fab fa-facebook-f"></i>{" "}
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link href="#" target="_blank">
+                                                <Link to="#" target="_blank">
                                                     <i className="fab fa-twitter"></i>{" "}
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link href="#" target="_blank">
+                                                <Link to="#" target="_blank">
                                                     <i className="fab fa-linkedin-in"></i>
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link href="#" target="_blank">
+                                                <Link to="#" target="_blank">
                                                     <i className="fab fa-instagram"></i>
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link href="#" target="_blank">
+                                                <Link to="#" target="_blank">
                                                     <i className="fab fa-dribbble"></i>{" "}
                                                 </Link>
                                             </li>
@@ -171,12 +171,12 @@ const Footer = () => {
                                 <div className="copyright-menu">
                                     <ul className="policy-menu">
                                         <li>
-                                            <Link href="term-condition.html">
+                                            <Link to="term-condition.html">
                                                 Terms and Conditions
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="privacy-policy.html">
+                                            <Link to="privacy-policy.html">
                                                 Policy
                                             </Link>
                                         </li>

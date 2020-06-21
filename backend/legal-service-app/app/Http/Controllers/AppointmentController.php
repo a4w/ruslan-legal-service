@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 use App\Helpers\AppointmentHelper;
+use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
@@ -25,10 +26,7 @@ class AppointmentController extends Controller
         /** @var Account */
         $user = Auth::user();
         if ($user->isLawyer()) {
-            return [
-                'error' => true,
-                'message' => 'Not available'
-            ];
+            return RespondJSON::forbidden();
         }
         $user = $user->client;
         /**
@@ -44,10 +42,7 @@ class AppointmentController extends Controller
             // Check 1
             $appointment = $lawyer->appointments()->where('appointment_time', $slot_datetime)->first();
             if ($appointment !== null) {
-                return [
-                    'error' => true,
-                    'message' => 'Appointment is not available'
-                ];
+                return RespondJSON::gone();
             }
             // Check 2
             $slot_weekday = AppointmentHelper::dayToIndex($slot_datetime->dayName);
@@ -55,10 +50,7 @@ class AppointmentController extends Controller
             $slot_index = $slot_time / $lawyer->slot_length;
             $lawyer_schedule = $lawyer->schedule;
             if (array_search($slot_index, $lawyer_schedule[$slot_weekday]) === false) {
-                return [
-                    'error' => true,
-                    'message' => 'Appointment is not available'
-                ];
+                return RespondJSON::gone();
             }
             // All is good create and put em on hold
             $original_price = $lawyer->price_per_slot;
@@ -94,32 +86,20 @@ class AppointmentController extends Controller
                 $appointment->payment_intent_id = $paymentIntent->id;
                 $appointment->save();
             }
-            return [
-                'error' => false,
-                'client_secret' => $paymentIntent->client_secret
-            ];
+            return RespondJSON::with(['client_secret' => $paymentIntent->client_secret]);
         } catch (Exception $e) {
-            return [
-                'error' => true,
-                'message' => 'Error creating payment'
-            ];
+            return RespondJSON::unknownError();
         }
     }
     public function getRoomAccessToken(Appointment $appointment)
     {
         if ($appointment->status !== 'UPCOMING') {
-            return [
-                'error' => true,
-                'message' => 'Appointment not paid'
-            ];
+            return RespondJSON::paymentRequired();
         }
         // Check if a participant in this appointment
         $user = Auth::user();
         if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
-            return [
-                'error' => true,
-                'message' => 'Unauthorized'
-            ];
+            return RespondJSON::forbidden();
         }
         // Check time
         $LOOSE_MINUTES = 1; // Allow joining minutes early
@@ -127,10 +107,7 @@ class AppointmentController extends Controller
         $time = $appointment->appointment_time;
         if (now()->lt($time->subMinute($LOOSE_MINUTES))) {
             // Time has not came
-            return [
-                'error' => true,
-                'message' => 'Appointment time has not came'
-            ];
+            return RespondJSON::conflict();
         }
         // All is good, Check if room already created
         $room_sid = $appointment->room_sid;
@@ -167,9 +144,6 @@ class AppointmentController extends Controller
         $token->addGrant($videoGrant);
 
         // render token to string
-        return [
-            'error' => false,
-            'access_token' => $token->toJWT()
-        ];
+        return RespondJSON::success(['access_token' => $token->toJWT()]);
     }
 }

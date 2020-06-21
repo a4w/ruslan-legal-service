@@ -91,11 +91,6 @@ const ChatPage = () => {
                                 <div class="media-body">
                                     <div class="user-name">{selectedChat !== null && chats[selectedChat].other_name}</div>
                                 </div>
-                                <div className="chat-options">
-                                    <a href="javascript:void(0)">
-                                        <FaCogs />
-                                    </a>
-                                </div>
                             </div>
                             <MessagesList messages={messages} />
                             <div className="chat-footer">

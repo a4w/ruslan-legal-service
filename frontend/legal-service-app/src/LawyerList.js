@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
@@ -6,30 +6,41 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaSearch } from "react-icons/fa";
 import StickyBox from "react-sticky-box";
+import { request } from "./Axios";
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
+    const [offset, setOffset] = useState(0);
+    const [length, setLength] = useState(2);
+    const [lawyers, setLawyers] = useState([]);
     const SortHandler = ([{ value }]) => {
         setSortBy(value);
         console.log("sort by: ", value);
     };
-    const lawyers = [
-        {
-            id: "1",
-        },
-        {
-            id: "2",
-        },
-        {
-            id: "3",
-        },
-        {
-            id: "4",
-        },
-        {
-            id: "5",
-        },
-    ];
+    useEffect(() => {
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+            data: { offset: offset, length: length },
+        })
+            .then((data) => {
+                setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    }, []);
+    const GetMore = (e) => {
+        e.preventDefault();
+        setOffset(offset + length);
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+            data: { offset: offset, length: length },
+        })
+            .then((data) => {
+                setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    };
     return (
         <div>
             <LawyerListHeader
@@ -44,6 +55,15 @@ function LawyerList() {
                 <div className="row">
                     <div className="col-md-12 col-lg-8 col-xl-9">
                         <LawyerCardList lawyers={lawyers} />
+                        <div className="load-more text-center">
+                            <a
+                                className="btn btn-primary btn-sm"
+                                href="//"
+                                onClick={GetMore}
+                            >
+                                Load More
+                            </a>
+                        </div>
                     </div>
                     <div className="col-md-12 col-lg-4 col-xl-3">
                         <div>

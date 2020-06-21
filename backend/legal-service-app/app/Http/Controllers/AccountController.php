@@ -7,6 +7,7 @@ use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
@@ -51,6 +52,18 @@ class AccountController extends Controller
         $user = Auth::user();
         $user->update($request->only(['name', 'surname', 'phone']));
         return RespondJSON::success();
+    }
+
+    public function uploadProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        // Upload profile image
+        $path = $request->file('profile_picture')->store('profile_pictures');
+        $user = Auth::user();
+        $user->profile_picture = $path;
+        $user->save();
     }
 
     public function updateEmail(JSONRequest $request)

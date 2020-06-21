@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch } from "react-router-dom";
+import {Route, Router, Switch} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -18,6 +18,7 @@ import LawyerDashboard from "./LawyerDashboard";
 import LawyerProfile from "./LawyerProfile";
 import ClientDashboard from "./ClientDashboard";
 import ForgotPassword from "./ForgotPassword";
+import ChatPage from "./ChatPage";
 
 function App() {
     return (
@@ -58,6 +59,12 @@ function App() {
                 <Route exact path="/forgot-password">
                     <NavBar />
                     <ForgotPassword />
+                    <Footer />
+                </Route>
+
+                <Route exact path="/chat">
+                    <NavBar />
+                    <ChatPage />
                     <Footer />
                 </Route>
             </Switch>

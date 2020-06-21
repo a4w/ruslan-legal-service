@@ -2,9 +2,14 @@
 
 namespace App\Console;
 
+use App\Appointment;
 use App\DeleteOldHeldAppointments;
+use App\UpdateFinishedAppointments;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
+use Twilio\Rest\Client;
 
 class Kernel extends ConsoleKernel
 {
@@ -27,6 +32,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(new DeleteOldHeldAppointments)->everyFifteenMinutes();
+        // End appointments
+        $schedule->call(new UpdateFinishedAppointments)->everyMinute();
     }
 
     /**

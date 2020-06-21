@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -21,7 +21,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (!$token = auth()->attempt($credentials)) {
-            return $this->respondUnauthorized();
+            return RespondJSON::unauthorized();
         }
         $refresh_token = null;
         if ($request->get('refresh_token') === true) {
@@ -43,9 +43,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        return RespondJSON::success();
     }
 
     public function refresh(JSONRequest $request)
@@ -59,11 +57,11 @@ class AuthController extends Controller
         try {
             $jwt = JWT::decode($refresh_token, $key, array('HS256'));
         } catch (Exception $e) {
-            return $this->respondUnauthorized();
+            return RespondJSON::unauthorized();
         }
         $user = Account::find($jwt->sub);
         if ($user === null) {
-            return $this->respondUnauthorized();
+            return RespondJSON::unauthorized();
         }
         // Create new login token from $user
         $token = JWTAuth::fromUser($user);
@@ -86,11 +84,6 @@ class AuthController extends Controller
                 'refresh_token' => $refresh_token
             ];
         }
-        return response()->json($response);
-    }
-
-    protected function respondUnauthorized()
-    {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return RespondJSON::with($response);
     }
 }

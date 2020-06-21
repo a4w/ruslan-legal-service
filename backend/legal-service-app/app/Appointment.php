@@ -29,4 +29,20 @@ class Appointment extends Model
     {
         return $this->hasOne(Rating::class);
     }
+
+    public function createRoom()
+    {
+        // Create the room
+        $twilio = resolve('Twilio\Rest\Client');
+        $room = $twilio->video->v1->rooms
+            ->create(
+                [
+                    "enableTurn" => true,
+                    "type" => "peer-to-peer",
+                    "maxParticipants" => 2
+                ]
+            );
+        $this->room_sid = $room->sid;
+        $this->save();
+    }
 }

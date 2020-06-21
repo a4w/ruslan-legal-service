@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Appointment;
+use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Rating;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +31,9 @@ class RatingsController extends Controller
             } else {
                 $appointment->rating->update($data);
             }
-
-            return ["error" => false];
+            return RespondJSON::success();
         } else {
-            return ["error" => true, "message" => "Unauthorized to rate appointment"];
+            return RespondJSON::forbidden();
         }
     }
 }

@@ -23,10 +23,10 @@ Route::prefix('account')->group(function () {
 });
 
 Route::prefix('lawyer')->group(function () {
-    Route::get('{lawyer}', 'LawyerController@fetchLawyer');
+    Route::get('all', 'LawyerController@getLawyersPaginated');
     Route::post('{id}/schedule', 'LawyerController@fetchSchedule');
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
-    Route::get('all', 'LawyerController@getLawyersPaginated');
+    Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 
 Route::prefix('chat')->group(function () {

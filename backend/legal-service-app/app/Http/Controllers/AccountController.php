@@ -10,6 +10,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AccountController extends Controller
@@ -63,7 +64,7 @@ class AccountController extends Controller
         // Upload profile image
         $path = $request->file('profile_picture')->store('profile_pictures', ['disk' => 'public']);
         $user = Auth::user();
-        $user->profile_picture = Storage::url($path);
+        $user->profile_picture = URL::to('/') . Storage::url($path);
         $user->save();
     }
 
@@ -92,5 +93,13 @@ class AccountController extends Controller
         $user->password = $request->get('new_password');
         $user->save();
         return RespondJSON::success();
+    }
+
+    public function getPersonalInfo()
+    {
+        $user = Auth::user();
+        return RespondJSON::success([
+            'profile_data' => $user
+        ]);
     }
 }

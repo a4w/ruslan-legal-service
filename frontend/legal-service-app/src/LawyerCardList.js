@@ -12,7 +12,7 @@ const LawyerCardList = ({ lawyers }) => {
     else return <LawyerCard />;
 };
 
-const LawyerCard = ({lawyer}) => {
+const LawyerCard = ({ lawyer }) => {
     return (
         <div className="card">
             <div className="card-body">
@@ -64,6 +64,8 @@ const LawyerCard = ({lawyer}) => {
                                     secsTillEnd={5000}
                                     cost={400}
                                     costAfterDiscount={100}
+                                    isPercent={true}
+                                    discount={30}
                                 />
                             </ul>
                         </div>
@@ -95,7 +97,7 @@ const LawyerCard = ({lawyer}) => {
     );
 };
 
-const Discount = ({ secsTillEnd, cost, costAfterDiscount }) => {
+const Discount = ({ secsTillEnd, cost, costAfterDiscount, isPercent, discount }) => {
     return (
         <Countdown
             date={Date.now() + secsTillEnd}
@@ -104,6 +106,8 @@ const Discount = ({ secsTillEnd, cost, costAfterDiscount }) => {
                     ...props,
                     cost: cost,
                     discount: costAfterDiscount,
+                    discountValue:discount,
+                    isPercent:isPercent
                 })
             }
         />
@@ -117,6 +121,8 @@ const LawyerCountDownRenderer = ({
     completed,
     cost,
     discount,
+    isPercent,
+    discountValue
 }) => {
     if (completed) {
         return (
@@ -128,6 +134,14 @@ const LawyerCountDownRenderer = ({
     } else {
         return (
             <>
+                <li>
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <span className="text-md text-success">
+                        {isPercent? 
+                            `There is a ${discountValue}% discount`:
+                            `There is a ${discountValue} discount`}
+                    </span>
+                </li>
                 <li>
                     <i className="far fa-money-bill-alt"></i>
                     <label className="text-lg text-success">

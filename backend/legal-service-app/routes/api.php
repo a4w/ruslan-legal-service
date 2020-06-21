@@ -32,6 +32,7 @@ Route::prefix('lawyer')->group(function () {
     Route::get('all', 'LawyerController@getLawyersPaginated');
     Route::get('types', 'LawyerController@getLawyerTypes');
     Route::get('practice-areas', 'LawyerController@getPracticeAreas');
+    Route::get('accreditations', 'LawyerController@getAccreditations');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 

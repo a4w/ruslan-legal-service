@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Accreditation;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
@@ -177,6 +178,11 @@ class LawyerController extends Controller
 
     public function getPracticeAreas()
     {
-        return RespondJSON::success(['types' => PracticeArea::all()]);
+        return RespondJSON::success(['areas' => PracticeArea::all()]);
+    }
+
+    public function getAccreditations()
+    {
+        return RespondJSON::success(['accreditations' => Accreditation::all()]);
     }
 }

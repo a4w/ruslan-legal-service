@@ -32,6 +32,7 @@ Route::prefix('lawyer')->group(function () {
 
 Route::prefix('chat')->group(function () {
     Route::post('{account1_id}/{account2_id}', 'ChatController@getChat')->middleware('auth:api');
+    Route::get('all', 'ChatController@getChats')->middleware('auth:api');
     Route::post('{chat}', 'ChatController@sendMessage')->middleware('auth:api');
     Route::get('{chat}', 'ChatController@getMessages')->middleware('auth:api');
 });

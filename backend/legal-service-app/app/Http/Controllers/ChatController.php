@@ -58,4 +58,10 @@ class ChatController extends Controller
         $messages = $chat->messages()->select(['id', 'message_type', 'content', 'sender_id', 'created_at'])->get();
         return RespondJSON::with(['messages' => $messages]);
     }
+
+    public function getChats()
+    {
+        $user = Auth::user();
+        return RespondJSON::success(['chats' => $user->chats]);
+    }
 }

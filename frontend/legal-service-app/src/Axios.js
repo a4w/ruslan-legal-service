@@ -4,19 +4,22 @@ import Cookies from "universal-cookie";
 import history from "./History";
 
 const cookie = new Cookies();
+const access_token = cookie.get('access_token');
 const client = axios.create({
     baseURL: Config.api_url,
     headers: {
         "Content-Type": "application/json",
         Accept: "appliation/json",
+        Authorization: `Bearer ${access_token}`
     },
 });
 
 const setAccessToken = (access_token) => {
     console.log("Set Successful!", access_token);
     client.defaults.headers.common.headers = {
-        access_token: `Bearer ${access_token}`,
+        Authorization: `Bearer ${access_token}`,
     };
+    cookie.set("access_token", access_token);
     console.log("Set Successful!", client.defaults.headers.common.headers);
 };
 
@@ -78,4 +81,4 @@ const request = function (options) {
     return client(options).then(onSuccess).catch(onError);
 };
 
-export { request, setAccessToken, setRefreshToken };
+export {request, setAccessToken, setRefreshToken};

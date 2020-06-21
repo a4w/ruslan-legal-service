@@ -14,7 +14,6 @@ const EditBasicInfo = () => {
         profile_picture_url: "",
         profile_picture: "",
     };
-
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editBasicInfoValidation);
@@ -48,7 +47,7 @@ const EditBasicInfo = () => {
                 method: 'POST',
                 data: formData
             }).then((response) => {
-                // Ok
+                setSaving(false);
             }).catch((error) => {
 
             });
@@ -66,9 +65,6 @@ const EditBasicInfo = () => {
         }
     };
 
-    const handleSubmit = () => {
-
-    };
 
     return (
         <form onSubmit={OnSubmitHandler}>
@@ -137,7 +133,6 @@ const EditBasicInfo = () => {
                     <button
                         type="submit"
                         disabled={isSaving}
-                        onClick={handleSubmit}
                         className={
                             "btn btn-primary submit-btn" +
                             (isSaving ? "cursor-not-allowed" : "")

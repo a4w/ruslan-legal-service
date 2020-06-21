@@ -1,38 +1,98 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import StarRatings from "react-star-ratings";
 import { Discount } from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
+import {
+    Link,
+    BrowserRouter,
+    Switch,
+    Route,
+    matchPath,
+} from "react-router-dom";
+import History from "./History";
+import { request } from "./Axios";
+// import "./Tabs.css";
 
-const LawyerProfile = () => {
+const LawyerProfile = ({ match }) => {
+    const initLawyer = {
+        account: { id: 2, name: "", surname: "" },
+        accreditations: [],
+        biography: "",
+        course: "",
+        discount: "",
+        discount_end: "",
+        graduation_year: "",
+        institution: "",
+        is_percent_discount: "",
+        lawyer_type: "",
+        practice_areas: [],
+        price_per_slot: "",
+        ratings: [],
+        regulator: "",
+        slot_length: 3,
+        years_licenced: "",
+    };
+    const [lawyer, setLawyer] = useState(initLawyer);
+    useEffect(() => {
+        if (History.location.state) {
+            setLawyer(History.location.state.lawyer);
+        } else {
+            //fetch lawyer from database
+            const lawyerID = match.params.LawyerId;
+            request({ url: `lawyer/${lawyerID}`, method: "GET" })
+                .then((data) => {
+                    setLawyer(data.lawyer);
+                    console.log(data.lawyer);
+                })
+                .catch((e) => {});
+            console.log();
+        }
+    }, []);
+
     return (
         <div className="content">
             <div className="container">
-                <ProfileCard />
-                <Details />
+                <ProfileCard lawyer={lawyer} match={match} />
+                <Details lawyer={lawyer} match={match} />
             </div>
         </div>
     );
 };
 
-const ProfileCard = () => {
+const ProfileCard = ({ lawyer }) => {
+    console.log("shit in card : ", lawyer);
+
     return (
         <div className="card">
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="lawyer-img">Lawyer's Image</div>
+                        <div className="lawyer-img">
+                            <img
+                                src={lawyer.pp}
+                                className="img-fluid"
+                                alt="Lawyer Profile"
+                            />
+                        </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">Dr. Darren Elder</h4>
+                            <h4 className="lawyer-name">
+                                {" "}
+                                {lawyer.account.name +
+                                    " " +
+                                    lawyer.account.surname}
+                            </h4>
                             <p className="lawyer-speciality">
-                                Area of expertise
+                                {lawyer.practice_areas &&
+                                    lawyer.practice_areas.map((area) => (
+                                        <h6 key={area}>{area}</h6>
+                                    ))}
                             </p>
-                            <p className="lawyer-department">Type?</p>
+                            <p className="lawyer-department">
+                                {lawyer.lawyer_type}
+                            </p>
                             <div className="rating">
                                 <StarRatings
-                                    rating={4}
+                                    rating={lawyer.ratings_average}
                                     starRatedColor="gold"
                                     starDimension="20px"
                                     starSpacing="0px"
@@ -41,12 +101,14 @@ const ProfileCard = () => {
                                 />
                                 &nbsp;
                                 <span className="d-inline-block text-xs average-rating">
-                                    (number of clients rated, percentage)
+                                    ({lawyer.ratings_count})
                                 </span>
                             </div>
                             <div className="session-services">
-                                <span>Service 1 </span>
-                                <span>Service 2</span>
+                                {lawyer.accreditations &&
+                                    lawyer.accreditations.map((acc) => (
+                                        <span key={acc}>{acc}</span>
+                                    ))}
                             </div>
                         </div>
                     </div>
@@ -59,12 +121,14 @@ const ProfileCard = () => {
                                 </li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
-                                    City, Country
+                                    {lawyer.city, lawyer.country}
                                 </li>
                                 <Discount
-                                    secsTillEnd={0}
-                                    cost={400}
+                                    secsTillEnd={lawyer.discount_end}
+                                    cost={lawyer.price_per_slot}
                                     costAfterDiscount={100}
+                                    isPercent={lawyer.is_percent_discount}
+                                    discount={lawyer.discount}
                                 />
                             </ul>
                         </div>
@@ -73,9 +137,8 @@ const ProfileCard = () => {
                             <Link
                                 className="apt-btn"
                                 to={{
-                                    pathname: "/book",
-                                    pathname: "/book",
-                                    state: { lawyer_id: "1" },
+                                    pathname: `/book-lawyer/${lawyer.id}`,
+                                    state: { lawyer_id: lawyer.id },
                                 }}
                             >
                                 Book Appointment
@@ -88,51 +151,64 @@ const ProfileCard = () => {
     );
 };
 
-const Details = () => {
+const Details = ({ lawyer, match }) => {
+    const path = match.path;
+    console.log(match);
+
     return (
         <div className="card">
             <div className="card-body pt-0">
-                <Tab.Container id="details" defaultActiveKey="overview">
-                    <NavBar />
-                    <Tab.Content>
+                <BrowserRouter>
+                    <NavBar lawyer={lawyer} match={match} />
+                    <Switch>
                         <div className="tab-content pt-0">
-                            <Tab.Pane eventKey="overview">
+                            <Route path={`/${path}/overview`}>
                                 {" "}
                                 <Overview />{" "}
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="reviews">
+                            </Route>
+                            <Route path={`/${path}/reviews`}>
                                 <LawyerReviews />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="hours">
+                            </Route>
+                            <Route path={`/${path}/hours`}>
                                 {" Hours will be added when it's time 🌚🌚"}
-                            </Tab.Pane>
+                            </Route>
                         </div>
-                    </Tab.Content>
-                </Tab.Container>
+                    </Switch>
+                </BrowserRouter>
             </div>
         </div>
     );
 };
-const NavBar = () => {
+const NavBar = ({ match }) => {
+    const path = match.path;
+    console.log(path);
+
     return (
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <Nav.Link eventKey="overview">Overview</Nav.Link>
+                    <Link to={`/${path}/overview`}>Overview</Link>
                 </li>
                 <li className="nav-item">
-                    <Nav.Link eventKey="reviews">Reviews</Nav.Link>
+                    <Link to={`/${path}/reviews`}>Reviews</Link>
                 </li>
                 <li className="nav-item">
-                    <Nav.Link eventKey="hours">Business Hours</Nav.Link>
+                    <Link to={`/${path}/hours`}>Business Hours</Link>
                 </li>
             </ul>
         </nav>
     );
 };
 
-const Overview = () => {
-    const course = { id: 1 };
+const Overview = ({lawyer}) => {
+    const {
+        biography,
+        course,
+        graduation_year,
+        institution,
+        regulator,
+        years_licenced,
+    } = { ...lawyer };
     const specializations = [
         "specializations 1 ",
         "specializations 2",
@@ -141,38 +217,43 @@ const Overview = () => {
     ];
     return (
         <div className="col-md-12 col-lg-9">
-            <Bio />
-            <Education course={course} />
+            <Bio bio={biography} />
+            <Education
+                course={course}
+                institution={institution}
+                graduation_year={graduation_year}
+            />
             <Specializations specializations={specializations} />
         </div>
     );
 };
-const Bio = () => {
+const Bio = ({bio}) => {
     return (
         <div className="widget about-widget">
             <h4 className="widget-title">About Me</h4>
-            <p>Text. Bio. Wtvr</p>
+            <p>{bio}</p>
         </div>
     );
 };
-const Education = ({ course }) => {
+
+const Education = ({ course, institution, graduation_year }) => {
     return (
         <div className="widget education-widget">
             <h4 className="widget-title">Education</h4>
             <div className="experience-box">
                 <ul className="experience-list">
-                    <li key={course.id}>
+                    <li>
                         <div className="experience-user">
                             <div className="before-circle"></div>
                         </div>
                         <div className="experience-content">
                             <div className="timeline-content">
                                 <a href="#/" className="name">
-                                    Place
+                                    {institution}
                                 </a>
-                                <div>Degree</div>
+                                <div>{course}</div>
                                 <span className="time">
-                                    start year - end year
+                                    {graduation_year}
                                 </span>
                             </div>
                         </div>

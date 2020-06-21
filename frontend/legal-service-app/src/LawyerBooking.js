@@ -42,13 +42,16 @@ const LawyerCard = () => {
     return (
         <div className="card">
             <div className="card-body">
-                <div className="booking-doc-info">
-                    <a href="doctor-profile.html" className="booking-doc-img">
+                <div className="booking-lawyer-info">
+                    <a
+                        href="lawyer-profile.html"
+                        className="booking-lawyer-img"
+                    >
                         Profile Pic
                     </a>
                     <div className="booking-info">
                         <h4>
-                            <a href="doctor-profile.html">Name</a>
+                            <a href="lawyer-profile.html">Name</a>
                         </h4>
                         <div className="rating">
                             <StarRatings

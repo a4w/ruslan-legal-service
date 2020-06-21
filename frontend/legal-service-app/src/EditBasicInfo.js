@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {editBasicInfoValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
@@ -17,6 +17,18 @@ const EditBasicInfo = () => {
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editBasicInfoValidation);
+
+    useEffect(() => {
+        // Load profile data
+        request({
+            url: 'account/personal-info',
+            method: 'GET'
+        }).then((response) => {
+            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
+        }).catch((error) => {
+
+        });
+    }, []);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;

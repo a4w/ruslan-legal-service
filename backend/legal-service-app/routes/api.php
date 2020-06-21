@@ -26,6 +26,7 @@ Route::prefix('account')->group(function () {
 });
 
 Route::prefix('lawyer')->group(function () {
+    Route::get('me', 'LawyerController@fetchMe')->middleware('auth:api');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
     Route::post('{id}/schedule', 'LawyerController@fetchSchedule');
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');

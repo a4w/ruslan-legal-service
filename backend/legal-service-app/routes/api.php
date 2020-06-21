@@ -20,6 +20,7 @@ Route::prefix('account')->group(function () {
     Route::post('personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
     Route::post('update-email', 'AccountController@updateEmail')->middleware('auth:api');
     Route::post('update-password', 'AccountController@updatePassword')->middleware('auth:api');
+    Route::post('upload-profile-picture', 'AccountController@uploadProfilePicture')->middleware('auth:api');
 });
 
 Route::prefix('lawyer')->group(function () {

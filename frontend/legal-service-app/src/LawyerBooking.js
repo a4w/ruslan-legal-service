@@ -5,14 +5,35 @@ import AppointmentTimeForm from "./AppointmentTimeForm";
 
 const LawyerBooking = () => {
     return (
-        <div class="content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
+        <div className="content">
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
                         <LawyerCard />
+                        <TodayIs />
                         <AppointmentTimeForm />
                     </div>
                 </div>
+            </div>
+        </div>
+    );
+};
+const TodayIs = () => {
+    const date = new Date();
+    const _date = date.toLocaleString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+    const WeekDay = date.toLocaleString("en-GB", {
+        weekday: "long",
+    });
+
+    return (
+        <div class="row">
+            <div class="col-12 col-sm-4 col-md-6">
+                <h4 class="mb-1">{_date}</h4>
+                <p class="text-muted">{WeekDay}</p>
             </div>
         </div>
     );

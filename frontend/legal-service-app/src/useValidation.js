@@ -19,7 +19,7 @@ const useValidation = (vest) => {
     }, [validation]);
 
     const run = (subject, field = false) => {
-        if(!field) {
+        if (!field) {
             setValidation(vest(subject));
         } else {
             setValidation(vest(subject, field));
@@ -35,9 +35,10 @@ const useValidation = (vest) => {
     const addError = (fields, _errors) => {
         let nextErrors = errors;
         for (let field of fields) {
+            console.log(_errors[field]);
             nextErrors = {
                 ...nextErrors,
-                [field]: _errors[field],
+                [field]: [...errors[field], _errors[field]],
             };
         }
         setErrors(nextErrors);

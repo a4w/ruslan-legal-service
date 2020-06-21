@@ -43,12 +43,12 @@ function LawyerList() {
 
             <div className="content">
                 <div className="row">
-                    <div className="col-md-12 col-lg-8 col-xl-9">
+                    <div className="col-md-12 col-lg-8 col-xl-8">
                         <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
                     </div>
-                    <div className="col-md-12 col-lg-4 col-xl-3">
-                        <StickyBox>
-                            <h1>Lawyer's Pop Up</h1>
+                    <div className="col-md-0 col-lg-4 col-xl-4">
+                        <StickyBox offsetTop={80} offsetBottom={20}>
+                            <PopUp lawyer={lawyerPopUp} />
                         </StickyBox>
                     </div>
                 </div>
@@ -158,6 +158,33 @@ const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const PopUp = ({ lawyer }) => {
+    return (
+        lawyer && (
+            <div className="card flex-fill mr-2">
+                <div className="m-2">
+                    <img
+                        alt="Card Image"
+                        src="./undraw_remote_meeting_cbfk.svg"
+                        className="card-img-top"
+                    />
+                    <div className="card-header">
+                        <h5 className="lawyer-name">
+                            {"Lawyer ID: " + lawyer.id}
+                        </h5>
+                    </div>
+                    <div className="card-body">
+                        <p className="card-text">Lawyer Bio</p>
+                        <a className="card-link" href="#">
+                            Card link
+                        </a>
+                    </div>
+                </div>
+            </div>
+        )
     );
 };
 

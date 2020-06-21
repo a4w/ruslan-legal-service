@@ -9,6 +9,7 @@ import StickyBox from "react-sticky-box";
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
+    const [lawyerPopUp, setPopUp] = useState(null);
     const SortHandler = ([{ value }]) => {
         setSortBy(value);
         console.log("sort by: ", value);
@@ -43,12 +44,12 @@ function LawyerList() {
             <div className="content">
                 <div className="row">
                     <div className="col-md-12 col-lg-8 col-xl-9">
-                        <LawyerCardList lawyers={lawyers} />
+                        <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
                     </div>
                     <div className="col-md-12 col-lg-4 col-xl-3">
-                        <div>
+                        <StickyBox>
                             <h1>Lawyer's Pop Up</h1>
-                        </div>
+                        </StickyBox>
                     </div>
                 </div>
             </div>

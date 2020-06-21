@@ -1,46 +1,28 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {FaCogs, FaPaperclip} from "react-icons/fa";
+import {request} from "./Axios"
 
-const ChatUserList = ({}) => {
+
+const ChatUserListItem = ({chat_id, other_name}) => {
+    return (
+        <a href="javascript:void(0);" class="media">
+            <div class="media-body">
+                <div>
+                    <div class="user-name">{other_name}</div>
+                </div>
+            </div>
+        </a>
+    );
+};
+
+const ChatUserList = ({chats}) => {
     return (
         <>
             <div class="chat-users-list">
                 <div class="chat-scroll">
-                    <a href="javascript:void(0);" class="media">
-                        <div class="media-img-wrap">
-                            <div class="avatar avatar-away">
-                                <img src="assets/img/doctors/doctor-thumb-01.jpg" alt="User Image"
-                                    class="avatar-img rounded-circle" />
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <div>
-                                <div class="user-name">Dr. Ruby Perrin</div>
-                                <div class="user-last-chat">Hey, How are you?</div>
-                            </div>
-                            <div>
-                                <div class="last-chat-time block">2 min</div>
-                                <div class="badge badge-success badge-pill">15</div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0);" class="media read-chat">
-                        <div class="media-img-wrap">
-                            <div class="avatar avatar-away">
-                                <img src="assets/img/doctors/doctor-thumb-10.jpg" alt="User Image"
-                                    class="avatar-img rounded-circle" />
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <div>
-                                <div class="user-name">Dr. Olga Barlow</div>
-                                <div class="user-last-chat">Connect the two modules with in 1 day.</div>
-                            </div>
-                            <div>
-                                <div class="last-chat-time block">Friday</div>
-                            </div>
-                        </div>
-                    </a>
+                    {chats.map((chat, i) => {
+                        return (<ChatUserListItem chat_id={chat.id} other_name={chat.other_name} />);
+                    })}
                 </div>
             </div>
         </>
@@ -86,6 +68,25 @@ const Message = ({isOutgoing, content, timestamp}) => {
 
 const ChatPage = () => {
     const [selectedChat, setSelectedChat] = useState(null);
+    const [chats, setChats] = useState([]);
+    // Load chats from server
+    useEffect(() => {
+        request({
+            url: '/chat/all',
+            method: 'GET'
+        }).then((response) => {
+            console.log(response.chats);
+            const chats = response.chats.map((chat, i) => {
+                return {
+                    chat_id: chat.id,
+                    other_name: chat.participents[0].name
+                };
+            });
+            setChats(chats);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, []);
     const handleChatSelection = (chat_id) => {
         // Update chat
     };
@@ -98,7 +99,7 @@ const ChatPage = () => {
                             <div class="chat-header">
                                 <span>Chats</span>
                             </div>
-                            <ChatUserList onChatSelection={handleChatSelection} />
+                            <ChatUserList chats={chats} onChatSelection={handleChatSelection} />
                         </div>
                         <div class="chat-cont-right">
                             <div class="chat-header">

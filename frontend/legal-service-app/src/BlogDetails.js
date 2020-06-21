@@ -1,9 +1,38 @@
 import React from "react";
 
 const BlogDetails = () => {
-    return <ShareSection />;
+    return <AboutAuthor />;
 };
-
+const AboutAuthor = () => {
+    return (
+        <div class="card author-widget clearfix">
+            <div class="card-header">
+                <h4 class="card-title">About Author</h4>
+            </div>
+            <div class="card-body">
+                <div class="about-author">
+                    <div class="about-author-img">
+                        <div class="author-img-wrap">
+                            <a href="doctor-profile.html">
+                                <img
+                                    class="img-fluid rounded-circle"
+                                    alt=""
+                                    src="assets/img/doctors/doctor-thumb-02.jpg"
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="author-details">
+                        <a href="doctor-profile.html" class="blog-author-name">
+                            Lawyer's Name
+                        </a>
+                        <p class="mb-0">Bio....</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 const ShareSection = () => {
     return (
         <div className="card blog-share clearfix">

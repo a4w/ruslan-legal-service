@@ -2,7 +2,7 @@ import React from "react";
 
 const BlogDetails = () => {
     return (
-        <div class="blog-view">
+        <div className="blog-view">
             <Post />
             <ShareSection />
             <AboutAuthor />
@@ -11,22 +11,25 @@ const BlogDetails = () => {
 };
 const AboutAuthor = () => {
     return (
-        <div class="card author-widget clearfix">
-            <div class="card-header">
-                <h4 class="card-title">About Author</h4>
+        <div className="card author-widget clearfix">
+            <div className="card-header">
+                <h4 className="card-title">About Author</h4>
             </div>
-            <div class="card-body">
-                <div class="about-author">
-                    <div class="about-author-img">
-                        <div class="author-img-wrap">
+            <div className="card-body">
+                <div className="about-author">
+                    <div className="about-author-img">
+                        <div className="author-img-wrap">
                             <a href="doctor-profile.html">Profile pic</a>
                         </div>
                     </div>
-                    <div class="author-details">
-                        <a href="doctor-profile.html" class="blog-author-name">
+                    <div className="author-details">
+                        <a
+                            href="doctor-profile.html"
+                            className="blog-author-name"
+                        >
                             Lawyer's Name
                         </a>
-                        <p class="mb-0">Bio....</p>
+                        <p className="mb-0">Bio....</p>
                     </div>
                 </div>
             </div>

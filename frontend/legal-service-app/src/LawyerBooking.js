@@ -1,8 +1,19 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
+import LawyerCardList from "./LawyerCardList";
 
 const LawyerBooking = () => {
-    return <LawyerCard />;
+    return (
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <LawyerCard />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 };
 const LawyerCard = () => {
     return (

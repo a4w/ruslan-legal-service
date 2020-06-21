@@ -67,7 +67,8 @@ const request = function (options) {
                         .catch(onRefreshError);
             } else {
                 // Else push to login
-                history.push("/login");
+                // history.push("/login");
+                // Another error here not login
             }
             console.error("Status:", error.response.status);
             console.error("Data:", error.response.data);
@@ -75,7 +76,7 @@ const request = function (options) {
         } else {
             console.error("Error Message:", error.message);
         }
-        return Promise.reject(error.response.data);
+        return Promise.reject(error);
     };
 
     return client(options).then(onSuccess).catch(onError);

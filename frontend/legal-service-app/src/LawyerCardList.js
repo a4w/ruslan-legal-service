@@ -19,7 +19,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                     <div className="lawyer-info-left">
                         <div className="lawyer-img">
                             <strong>{}</strong>
-                            <img src={lawyer.account.profile_picture} />
+                            <img className="img-fluid" src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">

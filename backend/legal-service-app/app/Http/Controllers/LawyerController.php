@@ -8,8 +8,8 @@ use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LawyerController extends Controller
@@ -158,5 +158,23 @@ class LawyerController extends Controller
     public function fetchLawyer(Lawyer $lawyer)
     {
         return RespondJSON::with(['lawyer' => $lawyer]);
+    }
+
+    public function fetchLawyerAppointments(Request $request)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        // Detect filters
+        $upcoming = $request->get('upcoming', "false") === "true";
+        if ($upcoming) {
+            $appointments = $lawyer->appointments()->where('appointment_time', '>=', now())->get();
+        } else {
+            $appointments = $lawyer->appointments;
+        }
+        return $appointments;
     }
 }

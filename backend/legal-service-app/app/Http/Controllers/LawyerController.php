@@ -31,8 +31,6 @@ class LawyerController extends Controller
             $ratings = collect($lawyer['ratings']);
             $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
             $lawyer['ratings_count'] = $ratings->count();
-            $end_date = new Carbon($lawyer['discount_end']);
-            $lawyer['discount_ends_in'] = $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : null;
             unset($lawyer['ratings']);
         }
         return RespondJSON::with(['lawyers' => $lawyers]);

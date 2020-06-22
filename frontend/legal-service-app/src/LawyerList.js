@@ -1,44 +1,54 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaSearch } from "react-icons/fa";
+import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
+import {request} from "./Axios";
 
 function LawyerList() {
     const [sortBy, setSortBy] = useState(null);
-    const [lawyerPopUp, setPopUp] = useState(null);
-    const SortHandler = ([{ value }]) => {
+    const [offset, setOffset] = useState(0);
+    const [length, setLength] = useState(2);
+    const [lawyers, setLawyers] = useState([]);
+    const SortHandler = ([{value}]) => {
         setSortBy(value);
         console.log("sort by: ", value);
     };
-    const lawyers = [
-        {
-            id: "1",
-        },
-        {
-            id: "2",
-        },
-        {
-            id: "3",
-        },
-        {
-            id: "4",
-        },
-        {
-            id: "5",
-        },
-    ];
+    useEffect(() => {
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+            data: {offset: offset, length: length},
+        })
+            .then((data) => {
+                setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    }, []);
+    const GetMore = (e) => {
+        e.preventDefault();
+        setOffset(offset + length);
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+            data: {offset: offset, length: length},
+        })
+            .then((data) => {
+                setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    };
     return (
         <div>
             <LawyerListHeader
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
-            <StickyBox style={{ zIndex: 6 }}>
+            <StickyBox style={{zIndex: 6}}>
                 <LawyerSearchFilter />
             </StickyBox>
 
@@ -46,6 +56,15 @@ function LawyerList() {
                 <div className="row justify-content-center align-content-center">
                     <div className="col-7">
                         <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
+                        <div className="load-more text-center">
+                            <a
+                                className="btn btn-primary btn-sm"
+                                href="//"
+                                onClick={GetMore}
+                            >
+                                Load More
+                            </a>
+                        </div>
                     </div>
                     <div className="col-5">
                         <StickyBox offsetTop={80} offsetBottom={20}>
@@ -60,10 +79,10 @@ function LawyerList() {
 
 const LawyerSearchFilter = () => {
     const options = [
-        { value: 1, label: "f1" },
-        { value: 2, label: "f2" },
-        { value: 3, label: "f3" },
-        { value: 4, label: "f4" },
+        {value: 1, label: "f1"},
+        {value: 2, label: "f2"},
+        {value: 3, label: "f3"},
+        {value: 4, label: "f4"},
     ];
     const [filter, setFilter] = useState({});
     return (
@@ -75,7 +94,7 @@ const LawyerSearchFilter = () => {
                             className="form-control mb-0"
                             selected={filter.date}
                             onChange={(date) =>
-                                setFilter({ ...filter, date: date })
+                                setFilter({...filter, date: date})
                             }
                             maxDate={new Date()}
                             placeholderText="Available on"
@@ -88,10 +107,10 @@ const LawyerSearchFilter = () => {
                         value={filter.filterOne}
                         placeholder="Filter"
                         options={options}
-                        onChange={([{ value }]) =>
-                            setFilter({ ...filter, filterOne: value })
+                        onChange={([{value}]) =>
+                            setFilter({...filter, filterOne: value})
                         }
-                        style={{ minHeight: "46px" }}
+                        style={{minHeight: "46px"}}
                     />
                 </div>
                 <div className="btn-search col-md-12 col-lg-1 col-xl-1 align-left">
@@ -107,12 +126,12 @@ const LawyerSearchFilter = () => {
     );
 };
 
-const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
+const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
     const options = [
-        { value: "rating", label: "Rating" },
-        { value: "popular", label: "Popular" },
-        { value: "latest", label: "Latest" },
-        { value: "free", label: "Free" },
+        {value: "rating", label: "Rating"},
+        {value: "popular", label: "Popular"},
+        {value: "latest", label: "Latest"},
+        {value: "free", label: "Free"},
     ];
     return (
         <div className="breadcrumb-bar">
@@ -162,7 +181,7 @@ const LawyerListHeader = ({ OnChangeHandler, selectedValue }) => {
     );
 };
 
-const PopUp = ({ lawyer }) => {
+const PopUp = ({lawyer}) => {
     return (
         lawyer && (
             <div className="card flex-fill mr-2">
@@ -171,7 +190,7 @@ const PopUp = ({ lawyer }) => {
                         alt="Card Image"
                         src="./undraw_remote_meeting_cbfk.svg"
                         className="card-img-top"
-                        style={{height:"30%"}}
+                        style={{height: "30%"}}
                     />
                     <div className="card-header">
                         <h5 className="lawyer-name">
@@ -180,7 +199,7 @@ const PopUp = ({ lawyer }) => {
                     </div>
                     <div className="card-body p-0">
                         <p className="card-text">Lawyer Bio</p>
-                        <div style={{ display: "inline" }}>
+                        <div style={{display: "inline"}}>
                             <AvgCalendar />
                         </div>
                     </div>

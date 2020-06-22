@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
+use App\Helpers\RespondJSON;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LawyerController extends Controller
 {
@@ -17,9 +20,8 @@ class LawyerController extends Controller
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
 
-        // This can be cached (and should be)
-        $lawyers = Lawyer::with(['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'])
-            ->where('slot_length', '<>', null)
+        // TODO: This can be cached (and should be)
+        $lawyers = Lawyer::where('slot_length', '<>', null)
             ->limit($length)
             ->skip($offset)
             ->get();
@@ -33,7 +35,7 @@ class LawyerController extends Controller
             $lawyer['discount_ends_in'] = $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : null;
             unset($lawyer['ratings']);
         }
-        return $lawyers;
+        return RespondJSON::with(['lawyers' => $lawyers]);
     }
 
     public function fetchSchedule($id, JSONRequest $request)
@@ -41,7 +43,7 @@ class LawyerController extends Controller
         // Get lawyer
         $lawyer = Lawyer::find($id);
         if (!$lawyer->isAvailable()) {
-            return ['error' => 'Lawyer not available'];
+            return RespondJSON::unknownError();
         }
         $schedule = json_decode($lawyer->schedule, true);
 
@@ -53,7 +55,7 @@ class LawyerController extends Controller
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
 
-        $output['from'] = now()->format(AppointmentHelper::$DATETIME_FORMAT);
+        $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
         $output['days'] = $days_to_show;
 
         // Fetch lawyer data
@@ -63,14 +65,14 @@ class LawyerController extends Controller
         $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
         foreach ($appointments as $appointment) {
-            $appointments_check[$appointment->appointment_time->format(AppointmentHelper::$DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::$TIME_FORMAT)] = true;
+            $appointments_check[$appointment->appointment_time->format(AppointmentHelper::DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::TIME_FORMAT)] = true;
         }
 
         // Process schedule
         $data = array();
         $current = new Carbon($from_date);
         for ($d = 0; $d < $days_to_show; ++$d) {
-            $formated_date = $current->format(AppointmentHelper::$DATE_FORMAT);
+            $formated_date = $current->format(AppointmentHelper::DATE_FORMAT);
             $day = array(
                 'name' => $current->dayName,
                 'date' => $formated_date
@@ -95,7 +97,64 @@ class LawyerController extends Controller
             $data[] = $day;
             $current->addDay();
         }
-        $output['data'] = $data;
-        return $output;
+        $output['slots'] = $data;
+        return RespondJSON::with(['schedule' => $output]);
+    }
+
+    public function updateSchedule(JSONRequest $request)
+    {
+        $request->validate([
+            'slot_length' => ['required', 'IN:30,45,60,75,90'],
+            'enable_discount' => ['required', 'boolean'],
+            'percent_discount' => ['exclude_if:enable_discount,false', 'required', 'boolean'],
+            'discount_value' => ['exclude_if:enable_discount,false', 'required', 'min:0', 'numeric'],
+            'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s'],
+            'price_per_slot' => ['required', 'numeric', 'min:0']
+        ]);
+        /** @var Account **/
+        $user = Auth::user();
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        $incoming_schedule = $request->get('schedule');
+        // Set the schedule
+        $schedule = array([], [], [], [], [], [], []);
+        $slot_length = $lawyer->slot_length;
+        foreach ($incoming_schedule as $day => $slots) {
+            try {
+                $day_idx = AppointmentHelper::dayToIndex($day);
+                if ($day_idx === null) {
+                    return RespondJSON::malformedRequest();
+                }
+                foreach ($slots as $slot) {
+                    $slot = AppointmentHelper::clockToMinutes($slot);
+                    $schedule[$day_idx][] = (int) ($slot / $slot_length);
+                }
+            } catch (Exception $e) {
+                return RespondJSON::malformedRequest();
+            }
+        }
+        if (count($schedule) !== 7) {
+            return RespondJSON::malformedRequest();
+        }
+        // Save fields
+        $lawyer->schedule = $schedule;
+        $lawyer->slot_length = $request->get('slot_length');
+        $lawyer->price_per_slot = $request->get('price_per_slot');
+        if ($request->get('enable_discount', false)) {
+            $lawyer->discount = $request->get('discount_value');
+            $lawyer->is_percent_discount = $request->get('percent_discount');
+            $lawyer->discount_end = $request->get('discount_end');
+        } else {
+            $lawyer->discount = null;
+        }
+        $lawyer->save();
+
+        return RespondJSON::success();
+    }
+    public function fetchLawyer(Lawyer $lawyer)
+    {
+        return RespondJSON::with(['lawyer' => $lawyer]);
     }
 }

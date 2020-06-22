@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Client;
+use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Illuminate\Auth\Events\Registered;
@@ -26,7 +27,7 @@ class RegistrationController extends Controller
         $account = Account::create($data);
         $account->client()->save(Client::make());
         event(new Registered($account));
-        return ['error' => false, 'message' => 'User added successfully'];
+        return RespondJSON::success();
     }
 
     public function registerLawyer(JSONRequest $request)
@@ -45,7 +46,6 @@ class RegistrationController extends Controller
         $account = Account::create($data);
         $account->lawyer()->save(Lawyer::make());
         event(new Registered($account));
-
-        return ['error' => false, 'message' => 'User added successfully'];
+        return RespondJSON::success();
     }
 }

@@ -3,6 +3,7 @@ import Tab from "react-bootstrap/Tab";
 import EditPassword from "./EditPassword";
 import EditPersonal from "./EditPersonal";
 import LawyerAppointments from "./LawyerAppointments";
+import LawyerInvoice from "./LawyerInvoice";
 import LawyerClients from "./LawyerClients";
 import LawyerDashboardStatus from "./LawyerDashboardStatus";
 import LawyerReviews from "./LawyerReviews";

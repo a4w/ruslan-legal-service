@@ -2,15 +2,39 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Lawyer extends Model
 {
     protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year'];
+    protected $with = ['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'];
     protected $hidden = [
         'schedule'
     ];
+
+    protected $casts = [
+        'schedule' => 'json',
+        'is_percent_discount' => 'bool',
+        'discount_end' => 'datetime'
+    ];
+
     public $timestamps = false;
+    protected $appends = array('discounted_price_per_slot');
+
+    public function getDiscountedPricePerSlotAttribute()
+    {
+        $original_price = $this->price_per_slot;
+        $discounted_price = $original_price;
+        if (Carbon::now()->lte($this->discount_end)) {
+            if ($this->is_percent_discount) {
+                $discounted_price -= $this->discount / 100 * $original_price;
+            } else {
+                $discounted_price -= $this->discount;
+            }
+        }
+        return $discounted_price;
+    }
 
     public function account()
     {

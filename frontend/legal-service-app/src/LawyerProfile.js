@@ -166,13 +166,13 @@ const Details = ({lawyer, match}) => {
                     <div className="tab-content pt-0">
                         <Route path={`${path}/overview`}>
                             {" "}
-                            <Overview />{" "}
+                            <Overview lawyer={lawyer} />{" "}
                         </Route>
                         <Route path={`${path}/reviews`}>
-                            <LawyerReviews />
+                            <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <AppointmentTimeForm lawyer_id={match.params.LawyerId} />
+                            <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
                         </Route>
                     </div>
                 </Switch>
@@ -210,8 +210,15 @@ const Overview = ({lawyer}) => {
         regulator,
         years_licenced,
     } = {...lawyer};
+    console.log(biography,
+        course,
+        graduation_year,
+        institution,
+        regulator,
+        years_licenced);
+    
     const specializations = [
-        `Regulated By: ${regulator}`,
+        `Regulated By: ${regulator.regulator}`,
         `Years licenced: ${years_licenced}`,
     ];
     return (

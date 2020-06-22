@@ -53,19 +53,10 @@ class AppointmentController extends Controller
                 return RespondJSON::gone();
             }
             // All is good create and put em on hold
-            $original_price = $lawyer->price_per_slot;
-            $discounted_price = $original_price;
-            if (Carbon::now()->lte($lawyer->discount_end)) {
-                if ($lawyer->is_percent_discount) {
-                    $discounted_price -= $lawyer->discount / 100 * $original_price;
-                } else {
-                    $discounted_price -= $lawyer->discount;
-                }
-            }
             $appointment = Appointment::make([
                 'appointment_time' => $slot_datetime,
                 'status' => 'ON_HOLD',
-                'price' => $discounted_price,
+                'price' => $lawyer->discounted_price_per_slot,
                 'duration' => $lawyer->slot_length
             ]);
             $total_price += $appointment->price;

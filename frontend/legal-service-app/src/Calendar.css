@@ -1,0 +1,27 @@
+table {
+    font-size: larger;
+    flex-direction: column;
+    margin-bottom: 16px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background-color: #f8f8f8;
+    border-spacing: 0.5rem;
+    table-layout:fixed;
+}
+th,
+td {
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    flex-grow: 1;
+    padding: 8px 10px;
+    border: 1px solid #fff;
+    margin-top: -1px;
+    margin-left: -1px;
+    overflow: hidden;
+    min-height: 1.5rem;
+    font-size: 14px;
+}
+

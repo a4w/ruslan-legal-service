@@ -45,7 +45,7 @@ class LawyerController extends Controller
         if (!$lawyer->isAvailable()) {
             return RespondJSON::unknownError();
         }
-        $schedule = json_decode($lawyer->schedule, true);
+        $schedule = $lawyer->schedule;
 
         $output = [];
 
@@ -56,7 +56,7 @@ class LawyerController extends Controller
         $to_date->addDays($days_to_show);
 
         $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
-        $output['days'] = $days_to_show;
+        $output['number_of_days'] = $days_to_show;
 
         // Fetch lawyer data
         $slot_length = $lawyer->slot_length;
@@ -78,6 +78,7 @@ class LawyerController extends Controller
                 'date' => $formated_date
             );
             $slots = $schedule[$current->dayOfWeek];
+            $day['slots'] = [];
             for ($i = 0; $i < count($slots); ++$i) {
                 $start_minute = $slots[$i] * $slot_length;
                 $start_time = AppointmentHelper::minutesToClock($start_minute);
@@ -97,7 +98,8 @@ class LawyerController extends Controller
             $data[] = $day;
             $current->addDay();
         }
-        $output['slots'] = $data;
+        $output['days'] = $data;
+        $output['slot_length'] = $lawyer->slot_length;
         return RespondJSON::with(['schedule' => $output]);
     }
 

@@ -33,10 +33,12 @@ const EditPassword = () => {
                 request({
                     url: "/account/update-password",
                     method: "POST",
-                    data: passwords
-                }).then((data) => {
-                    toast.success("Password changed successfuly");
-                }).catch((error)=>{});
+                    data: passwords,
+                })
+                    .then((data) => {
+                        toast.success("Password changed successfuly");
+                    })
+                    .catch((error) => {});
             }
         });
     };

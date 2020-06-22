@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import StarRatings from "react-star-ratings";
-import { Discount } from "./LawyerCardList";
+import {Discount} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
 import {
     Link,
@@ -10,13 +10,13 @@ import {
     matchPath,
 } from "react-router-dom";
 import History from "./History";
-import { request } from "./Axios";
+import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 
-const LawyerProfile = ({ match }) => {
+const LawyerProfile = ({match}) => {
     const initLawyer = {
-        account: { id: 2, name: "", surname: "" },
+        account: {id: 2, name: "", surname: ""},
         accreditations: [],
         biography: "",
         course: "",
@@ -40,7 +40,7 @@ const LawyerProfile = ({ match }) => {
         } else {
             //fetch lawyer from database
             const lawyerID = match.params.LawyerId;
-            request({ url: `lawyer/${lawyerID}`, method: "GET" })
+            request({url: `lawyer/${lawyerID}`, method: "GET"})
                 .then((data) => {
                     setLawyer(data.lawyer);
                     console.log(data.lawyer);
@@ -62,7 +62,7 @@ const LawyerProfile = ({ match }) => {
     );
 };
 
-const ProfileCard = ({ lawyer }) => {
+const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
 
     return (
@@ -87,11 +87,11 @@ const ProfileCard = ({ lawyer }) => {
                             <p className="lawyer-speciality">
                                 {lawyer.practice_areas &&
                                     lawyer.practice_areas.map((area) => (
-                                        <h6 key={area}>{area}</h6>
+                                        <h6 key={area.id}>{area.area}</h6>
                                     ))}
                             </p>
                             <p className="lawyer-department">
-                                {lawyer.lawyer_type}
+                                {lawyer.lawyer_type.type}
                             </p>
                             <div className="rating">
                                 <StarRatings
@@ -141,7 +141,7 @@ const ProfileCard = ({ lawyer }) => {
                                 className="apt-btn"
                                 to={{
                                     pathname: `/book-lawyer/${lawyer.id}`,
-                                    state: { lawyer_id: lawyer.id },
+                                    state: {lawyer_id: lawyer.id},
                                 }}
                             >
                                 Book Appointment
@@ -154,33 +154,33 @@ const ProfileCard = ({ lawyer }) => {
     );
 };
 
-const Details = ({ lawyer, match }) => {
+const Details = ({lawyer, match}) => {
     const path = match.url;
     console.log(match);
 
     return (
         <div className="card">
             <div className="card-body pt-0">
-                    <NavBar lawyer={lawyer} match={match} />
-                    <Switch>
-                        <div className="tab-content pt-0">
-                            <Route path={`${path}/overview`}>
-                                {" "}
-                                <Overview />{" "}
-                            </Route>
-                            <Route path={`${path}/reviews`}>
-                                <LawyerReviews />
-                            </Route>
-                            <Route path={`${path}/hours`}>
-                               <AppointmentTimeForm lawyer_id={match.params.LawyerId}/>
-                            </Route>
-                        </div>
-                    </Switch>
+                <NavBar lawyer={lawyer} match={match} />
+                <Switch>
+                    <div className="tab-content pt-0">
+                        <Route path={`${path}/overview`}>
+                            {" "}
+                            <Overview />{" "}
+                        </Route>
+                        <Route path={`${path}/reviews`}>
+                            <LawyerReviews />
+                        </Route>
+                        <Route path={`${path}/hours`}>
+                            <AppointmentTimeForm lawyer_id={match.params.LawyerId} />
+                        </Route>
+                    </div>
+                </Switch>
             </div>
         </div>
     );
 };
-const NavBar = ({ match }) => {
+const NavBar = ({match}) => {
     const path = match.url;
     console.log(path);
 
@@ -209,7 +209,7 @@ const Overview = ({lawyer}) => {
         institution,
         regulator,
         years_licenced,
-    } = { ...lawyer };
+    } = {...lawyer};
     const specializations = [
         `Regulated By: ${regulator}`,
         `Years licenced: ${years_licenced}`,
@@ -235,7 +235,7 @@ const Bio = ({bio}) => {
     );
 };
 
-const Education = ({ course, institution, graduation_year }) => {
+const Education = ({course, institution, graduation_year}) => {
     return (
         <div className="widget education-widget">
             <h4 className="widget-title">Education</h4>
@@ -262,7 +262,7 @@ const Education = ({ course, institution, graduation_year }) => {
         </div>
     );
 };
-const Specializations = ({ specializations }) => {
+const Specializations = ({specializations}) => {
     return (
         <div className="service-list">
             <h4>More</h4>

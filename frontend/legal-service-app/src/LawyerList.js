@@ -14,6 +14,7 @@ function LawyerList() {
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(2);
     const [lawyers, setLawyers] = useState([]);
+    const [lawyerPopUp, setPopUp] = useState(null);
     const SortHandler = ([{value}]) => {
         setSortBy(value);
         console.log("sort by: ", value);
@@ -186,21 +187,14 @@ const PopUp = ({lawyer}) => {
         lawyer && (
             <div className="card flex-fill mr-2">
                 <div className="m-2">
-                    <img
-                        alt="Card Image"
-                        src="./undraw_remote_meeting_cbfk.svg"
-                        className="card-img-top"
-                        style={{height: "30%"}}
-                    />
                     <div className="card-header">
                         <h5 className="lawyer-name">
-                            {"Lawyer ID: " + lawyer.id}
+                            {lawyer.account.name} {lawyer.account.surname}
                         </h5>
                     </div>
                     <div className="card-body p-0">
-                        <p className="card-text">Lawyer Bio</p>
                         <div style={{display: "inline"}}>
-                            <AvgCalendar />
+                            <AvgCalendar lawyer={lawyer} />
                         </div>
                     </div>
                 </div>
@@ -209,29 +203,89 @@ const PopUp = ({lawyer}) => {
     );
 };
 
-const AvgCalendar = () => {
+const AvgCalendar = ({lawyer}) => {
+    // Get availability
+    const [days, setDays] = useState([]);
+    let initAvail = [];
+    for (let i = 0; i < 7; ++i) {
+        initAvail.push([]);
+        for (let j = 0; j < 4; ++j) {
+            initAvail[i].push(0);
+        }
+    }
+    const [availability, setAvailability] = useState(initAvail);
+    useEffect(() => {
+        if (lawyer !== null) {
+            request({
+                url: `lawyer/${lawyer.id}/schedule`,
+                method: 'POST',
+                data: {
+                    days_to_show: 7
+                }
+            }).then((response) => {
+                console.log(response);
+                const nextDays = response.schedule.slots.map((day, i) => {
+                    return day.name;
+                });
+                setDays(nextDays);
+                // Calculate availability
+                const nextAvailability = initAvail.slice();
+                response.schedule.slots.map((day, i) => {
+                    if (day.slots) {
+                        for (let j = 0; j < day.slots.length; ++j) {
+                            const time = day.slots[j].from;
+                            if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
+                                nextAvailability[i][0]++;
+                            } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
+                                nextAvailability[i][1]++;
+                            } else if (time >= "12:00" && time < "18:00" && !day.slots[j].reserved) {
+                                nextAvailability[i][2]++;
+                            } else if (!day.slots[j].reserved) {
+                                nextAvailability[i][3]++;
+                            }
+                        }
+                    }
+                });
+                setAvailability(nextAvailability);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [lawyer]);
     return (
         <table className="calender">
             <thead>
                 <tr>
                     <th colspan="2"></th>
-                    {GetDates().map((day) => (
-                        <th key={day}>{day}</th>
+                    {days.map((day) => (
+                        <th key={day}>{day.substr(0, 3)}</th>
                     ))}
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td colspan="2">Morning</td>
+                    {availability.map((a, i) => {
+                        return (<td>{a[0]}</td>);
+                    })}
                 </tr>
                 <tr>
                     <td colspan="2">Afternoon</td>
+                    {availability.map((a, i) => {
+                        return (<td>{a[1]}</td>);
+                    })}
                 </tr>
                 <tr>
                     <td colspan="2">Evening</td>
+                    {availability.map((a, i) => {
+                        return (<td>{a[2]}</td>);
+                    })}
                 </tr>
                 <tr>
                     <td colspan="2">Night</td>
+                    {availability.map((a, i) => {
+                        return (<td>{a[3]}</td>);
+                    })}
                 </tr>
             </tbody>
         </table>

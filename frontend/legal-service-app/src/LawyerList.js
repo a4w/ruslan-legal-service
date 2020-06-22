@@ -214,6 +214,7 @@ const AvgCalendar = ({lawyer}) => {
         }
     }
     const [availability, setAvailability] = useState(initAvail);
+    const [slotLength, setSlotLength] = useState(1);
     useEffect(() => {
         if (lawyer !== null) {
             request({
@@ -224,25 +225,24 @@ const AvgCalendar = ({lawyer}) => {
                 }
             }).then((response) => {
                 console.log(response);
-                const nextDays = response.schedule.slots.map((day, i) => {
+                const nextDays = response.schedule.days.map((day, i) => {
                     return day.name;
                 });
                 setDays(nextDays);
+                setSlotLength(response.schedule.slot_length);
                 // Calculate availability
                 const nextAvailability = initAvail.slice();
-                response.schedule.slots.map((day, i) => {
-                    if (day.slots) {
-                        for (let j = 0; j < day.slots.length; ++j) {
-                            const time = day.slots[j].from;
-                            if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
-                                nextAvailability[i][0]++;
-                            } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
-                                nextAvailability[i][1]++;
-                            } else if (time >= "12:00" && time < "18:00" && !day.slots[j].reserved) {
-                                nextAvailability[i][2]++;
-                            } else if (!day.slots[j].reserved) {
-                                nextAvailability[i][3]++;
-                            }
+                response.schedule.days.map((day, i) => {
+                    for (let j = 0; j < day.slots.length; ++j) {
+                        const time = day.slots[j].from;
+                        if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
+                            nextAvailability[i][0]++;
+                        } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
+                            nextAvailability[i][1]++;
+                        } else if (time >= "12:00" && time < "18:00" && !day.slots[j].reserved) {
+                            nextAvailability[i][2]++;
+                        } else if (!day.slots[j].reserved) {
+                            nextAvailability[i][3]++;
                         }
                     }
                 });
@@ -266,25 +266,29 @@ const AvgCalendar = ({lawyer}) => {
                 <tr>
                     <td colspan="2">Morning</td>
                     {availability.map((a, i) => {
-                        return (<td>{a[0]}</td>);
+                        const brightness = (a[0] * slotLength) / (6 * 60);
+                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Afternoon</td>
                     {availability.map((a, i) => {
-                        return (<td>{a[1]}</td>);
+                        const brightness = (a[1] * slotLength) / (6 * 60);
+                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Evening</td>
                     {availability.map((a, i) => {
-                        return (<td>{a[2]}</td>);
+                        const brightness = (a[2] * slotLength) / (6 * 60);
+                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Night</td>
                     {availability.map((a, i) => {
-                        return (<td>{a[3]}</td>);
+                        const brightness = (a[3] * slotLength) / (6 * 60);
+                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
             </tbody>

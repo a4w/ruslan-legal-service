@@ -33,6 +33,8 @@ const LawyerProfile = ({match}) => {
         regulator: "",
         slot_length: 3,
         years_licenced: "",
+        discount_ends_in: 0,
+        discounted_price_per_slot: 0
     };
     const [lawyer, setLawyer] = useState(initLawyer);
     useEffect(() => {
@@ -128,9 +130,9 @@ const ProfileCard = ({lawyer}) => {
                                     {lawyer.city, lawyer.country}
                                 </li>
                                 <Discount
-                                    secsTillEnd={lawyer.discount_end}
+                                    secsTillEnd={lawyer.discount_ends_in}
                                     cost={lawyer.price_per_slot}
-                                    costAfterDiscount={100}
+                                    costAfterDiscount={lawyer.discounted_price_per_slot}
                                     isPercent={lawyer.is_percent_discount}
                                     discount={lawyer.discount}
                                 />

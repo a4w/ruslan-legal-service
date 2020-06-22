@@ -4,10 +4,11 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import {LawyerInfoValidations} from "./Validations";
 import {request} from "./Axios"
+import {toast} from "react-toastify"
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
-        type: [],
+        type: 0,
         other: "",
         regulatedBy: "",
         yearLicensed: "",
@@ -70,7 +71,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 return {
                     label: accreditation.accreditation,
                     value: accreditation.id,
-                    name: 'accreditation'
+                    name: 'accreditations'
                 };
             });
             setAccreditationOptions(accreditations);
@@ -80,7 +81,7 @@ const LawyerCompleteRegisteration = ({}) => {
             });
         }).then((response) => {
             const nextLawyer = {
-                type: [0],
+                type: 0,
                 other: "",
                 regulatedBy: "",
                 yearLicensed: "",
@@ -93,10 +94,10 @@ const LawyerCompleteRegisteration = ({}) => {
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type = [{value: data.lawyer_type_id, label: data.lawyer_type.type}];
+            nextLawyer.type = {value: data.lawyer_type_id, label: data.lawyer_type.type};
             // Shitty code from a shitty person
             if (data.lawyer_type_id > 2) {
-                nextLawyer.type = [{value: 0, label: "Other"}];
+                nextLawyer.type = {value: 0, label: "Other"};
                 nextLawyer.other = data.lawyer_type.type;
             }
             nextLawyer.regulatedBy = data.regulator.regulator;
@@ -129,42 +130,45 @@ const LawyerCompleteRegisteration = ({}) => {
             }
             // Assuming validation works otherwise another check is needed here
             const data = {
-                lawyer_type_id: lawyer.type[0].value,
-                lawyer_type: lawyer.type[0].label,
-                regulatedBy: lawyer.regulatedBy,
-                yearLicensed: lawyer.yearLicensed,
-                education: lawyer.education,
+                lawyer_type_id: lawyer.type.value,
+                lawyer_type: lawyer.other,
+                regulator: lawyer.regulatedBy,
+                year_licensed: lawyer.yearLicensed,
+                institution: lawyer.education,
                 graduation: lawyer.graduation,
                 course: lawyer.course,
-                practiceAreas: lawyer.practiceAreas.map((area, i) => {
+                practice_areas: lawyer.practiceAreas.map((area, i) => {
                     return area.value;
                 }),
                 accreditations: lawyer.accreditations.map((accreditation, i) => {
                     return accreditation.value;
                 }),
-                bio: lawyer.bio,
+                biography: lawyer.bio,
             };
-            /*request({
-                url: 'lawyer',
+            request({
+                url: 'lawyer/me',
                 method: 'POST',
                 data: data
-            });*/
+            }).then((response) => {
+                toast.success("Profile updated successfully");
+            }).catch((error) => {});
         });
     };
     const OnChangeHandler = ({target: {value, name}}) => {
+        console.log(name, value[0]);
         const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         console.log(lawyer);
         console.log("Validating: ", name, " with: ", newData);
         validate(newData, name);
     };
-    const OnSelectHandler = ([{value, name}]) => {
-        const newData = {...lawyer, [name]: value};
+    const OnSelectHandler = ({name, values}) => {
+        const newData = {...lawyer, [name]: values[0]};
         setLawyer(newData);
         validate(newData, name);
     };
-    const MultiselectHandler = (values) => {
-        const [{name}] = values;
+    const MultiselectHandler = ({name, values}) => {
+        console.log(name, values);
         const newData = {...lawyer, [name]: values};
         setLawyer(newData);
         validate(newData, name);
@@ -186,7 +190,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
-                        disabled={lawyer.type.length > 0 && lawyer.type[0].value !== 0}
+                        disabled={lawyer.type.value !== 0}
                         errors={errors.other}
                         type={"text"}
                         name="other"

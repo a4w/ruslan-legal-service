@@ -3,6 +3,8 @@ import { editEmailValidations } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { request } from "./Axios";
+import { toast } from "react-toastify";
+import History from "./History";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -20,7 +22,9 @@ const ForgotPassword = () => {
                 request({ url: "/account/reset-password-request", method: "POST" })
                     .then((data) => {
                         console.log("reset successful");
+                        toast.success("Password reset successfully");
                         
+                        // History.push("/");
                     })
                     .catch((error) => {});
             }

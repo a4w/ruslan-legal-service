@@ -84,7 +84,7 @@ const ResetPassword = ()=>{
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-md-7 col-lg-6 login-left">
                                     <img
-                                        src="/undraw_my_password_d6kg.svg"
+                                        src="./undraw_dev_productivity_umsq.svg"
                                         className="img-fluid"
                                         alt="Fogot Password"
                                     />

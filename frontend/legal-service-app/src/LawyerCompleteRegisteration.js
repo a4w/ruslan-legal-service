@@ -123,8 +123,33 @@ const LawyerCompleteRegisteration = ({}) => {
     }, []);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        validate(lawyer);
-        console.log("submitting");
+        validate(lawyer).then(async (hasErrors) => {
+            if (hasErrors) {
+                return;
+            }
+            // Assuming validation works otherwise another check is needed here
+            const data = {
+                lawyer_type_id: lawyer.type[0].value,
+                lawyer_type: lawyer.type[0].label,
+                regulatedBy: lawyer.regulatedBy,
+                yearLicensed: lawyer.yearLicensed,
+                education: lawyer.education,
+                graduation: lawyer.graduation,
+                course: lawyer.course,
+                practiceAreas: lawyer.practiceAreas.map((area, i) => {
+                    return area.value;
+                }),
+                accreditations: lawyer.accreditations.map((accreditation, i) => {
+                    return accreditation.value;
+                }),
+                bio: lawyer.bio,
+            };
+            /*request({
+                url: 'lawyer',
+                method: 'POST',
+                data: data
+            });*/
+        });
     };
     const OnChangeHandler = ({target: {value, name}}) => {
         const newData = {...lawyer, [name]: value};

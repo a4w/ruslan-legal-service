@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { editEmailValidations } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
+import { request } from "./Axios";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -16,6 +17,12 @@ const ForgotPassword = () => {
         runValidation({ email: email }).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 console.log("safe");
+                request({ url: "/account/reset-password-request", method: "POST" })
+                    .then((data) => {
+                        console.log("reset successful");
+                        
+                    })
+                    .catch((error) => {});
             }
         });
     };

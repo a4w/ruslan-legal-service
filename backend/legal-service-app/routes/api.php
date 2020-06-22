@@ -17,6 +17,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('account')->group(function () {
     Route::post('reset-password-request', 'AccountController@resetPasswordRequest');
     Route::post('reset-password/{token}', 'AccountController@resetPassword');
+
     Route::post('personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
     Route::get('personal-info', 'AccountController@getPersonalInfo')->middleware('auth:api');
     Route::post('update-email', 'AccountController@updateEmail')->middleware('auth:api');

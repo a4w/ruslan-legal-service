@@ -8,6 +8,7 @@ class LawyerType extends Model
 {
     protected $table = 'lawyer_types';
     public $timestamps = false;
+    protected $fillable = ['type'];
 
     public function lawyers()
     {

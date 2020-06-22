@@ -185,4 +185,53 @@ class LawyerController extends Controller
     {
         return RespondJSON::success(['accreditations' => Accreditation::all()]);
     }
+
+    public function updateProfile(JSONRequest $request)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        $request->validate([
+            'lawyer_type_id' => ['required', 'IN:0,1,2'],
+            'lawyer_type' => ['exclude_unless:lawyer_type_id,0', 'required'],
+            'regulator' => ['required'],
+            'year_licensed' => ['required', 'numeric'],
+            'institution' => ['required'],
+            'graduation' => ['required', 'numeric'],
+            'course' => ['required'],
+            'practice_areas' => ['required', 'array', 'min:1'],
+            'practice_areas.*' => ['required', 'numeric', 'exists:practice_areas,id'],
+            'accreditations' => ['required', 'array', 'min:1'],
+            'accreditations.*' => ['required', 'numeric', 'exists:accreditations,id'],
+        ]);
+        $lawyer->update($request->only(['biography', 'years_licenced', 'institution', 'course', 'graduation_year']));
+        // Lawyer type
+        if ($request->get('lawyer_type_id') === 0) {
+            $type = LawyerType::create([
+                'type' => $request->get('lawyer_type')
+            ]);
+            $lawyer->lawyer_type()->associate($type);
+        } else {
+            $type = LawyerType::find($request->get('lawyer_type_id'));
+            $lawyer->lawyer_type()->associate($type);
+        }
+        // Lawyer practice areas
+        $practice_areas = $request->get('practice_areas');
+        $lawyer->practice_areas()->detach();
+        foreach ($practice_areas as $area) {
+            $lawyer->practice_areas()->attach(PracticeArea::find($area));
+        }
+
+        // Lawyer accreditations
+        $accreditations = $request->get('accreditations');
+        $lawyer->accreditations()->detach();
+        foreach ($accreditations as $accreditation) {
+            $lawyer->accreditations()->attach(Accreditation::find($accreditation));
+        }
+        $lawyer->save();
+        return RespondJSON::success();
+    }
 }

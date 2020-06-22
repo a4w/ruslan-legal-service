@@ -8,6 +8,7 @@ import {
     Switch,
     Route,
     matchPath,
+    Redirect,
 } from "react-router-dom";
 import History from "./History";
 import {request} from "./Axios";
@@ -164,6 +165,10 @@ const Details = ({lawyer, match}) => {
                 <NavBar lawyer={lawyer} match={match} />
                 <Switch>
                     <div className="tab-content pt-0">
+                        <Route exact path={`${path}`}>
+                            {" "}
+                            <Redirect to={`${path}/overview`} />
+                        </Route>
                         <Route path={`${path}/overview`}>
                             {" "}
                             <Overview lawyer={lawyer} />{" "}
@@ -210,12 +215,6 @@ const Overview = ({lawyer}) => {
         regulator,
         years_licenced,
     } = {...lawyer};
-    console.log(biography,
-        course,
-        graduation_year,
-        institution,
-        regulator,
-        years_licenced);
     
     const specializations = [
         `Regulated By: ${regulator.regulator}`,

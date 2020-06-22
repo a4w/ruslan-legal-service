@@ -175,6 +175,6 @@ class LawyerController extends Controller
         } else {
             $appointments = $lawyer->appointments;
         }
-        return $appointments;
+        return RespondJSON::success(['appointments' => $appointments]);
     }
 }

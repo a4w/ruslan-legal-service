@@ -45,7 +45,7 @@ class LawyerController extends Controller
         if (!$lawyer->isAvailable()) {
             return RespondJSON::unknownError();
         }
-        $schedule = json_decode($lawyer->schedule, true);
+        $schedule = $lawyer->schedule;
 
         $output = [];
 

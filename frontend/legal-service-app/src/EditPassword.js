@@ -19,15 +19,13 @@ const EditPassword = () => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
         runValidation(nextUser, name);
-        if (name === "newPassword" && nextUser.passwordConfirm !== "")
-            runValidation(nextUser, "passwordConfirm");
     };
 
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                passwords = {
+                const passwords = {
                     new_password: user.newPassword,
                     old_password: user.oldPassword,
                 };
@@ -38,7 +36,7 @@ const EditPassword = () => {
                     data: passwords
                 }).then((data) => {
                     toast.success("Password changed successfuly");
-                });
+                }).catch((error)=>{});
             }
         });
     };

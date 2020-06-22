@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import { resetPasswordValidation } from "./Validations";
+import { request } from "./Axios";
+import { toast } from "react-toastify";
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = (props) => {
+    const {match} = {...props};
+    
     const initUser = {
         newPassword: "",
         passwordConfirm: "",
@@ -27,6 +31,13 @@ const ResetPasswordForm = () => {
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 console.log("safe");
+                request({
+                    url: `/account/reset-password/${match.params.Token}`,
+                    method: "POST",
+                    data: { new_password: user.newPassword },
+                }).then((data) => {
+                    toast.success("Password Reset successfuly");
+                });
             }
         });
     };

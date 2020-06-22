@@ -63,8 +63,10 @@ export const resetPasswordValidation = (data, field) => {
 export const editPasswordValidation = (data, field) => {
     return validate("EditPassword", () => {
         vest.only(field);
-        test("newPassword", "This field is required", () => {
-            enforce(data.newPassword.toString()).isNotEmpty();
+        ["newPassword", "passwordConfirm", "oldPassword"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
         });
 
         test(
@@ -83,6 +85,9 @@ export const editPasswordValidation = (data, field) => {
             enforce(
                 data.newPassword.toString() !== data.oldPassword.toString()
             ).isTruthy();
+        });
+        test("oldPassword", "Password should be atleast 8 characters long", () => {
+            enforce(data.password.toString()).longerThanOrEquals(8);
         });
     });
 };

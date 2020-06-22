@@ -104,7 +104,7 @@ export const editEmailValidations = (data, field) => {
     return validate("EditEmail", () => {
         vest.only(field);
         test("email", "This field is required", () => {
-            enforce(data.email.toString()).isNotEmpty().matches(/[^@]+@[^.]+\..+/g);
+            enforce(data.email.toString()).isNotEmpty();
         });
         const trimmedEmail = truncate(data.email.toString(), 15);
         test("email", `${trimmedEmail} is not valid email address`, () => {

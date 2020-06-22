@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { editEmailValidations } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
@@ -9,7 +9,7 @@ const ForgotPassword = () => {
 
     const OnChangeHandler = (event) => {
         setEmail(event.target.value);
-        runValidation({ email: email }, "email");
+        runValidation({ email: event.target.value }, "email");
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -21,10 +21,10 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div class="content" style={{ backgroundColor: "#ffffff" }}>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8 offset-md-2">
+        <div className="content" style={{ backgroundColor: "#ffffff" }}>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-8 offset-md-2">
                         <div className="account-content">
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-md-7 col-lg-6 login-left">

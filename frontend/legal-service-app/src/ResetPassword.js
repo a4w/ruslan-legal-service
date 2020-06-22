@@ -41,13 +41,6 @@ const ResetPasswordForm = (props) => {
             }
         });
     };
-
-    // const style = {
-    //     backgroundColor: "#fff",
-    //     border: "1px solid #f0f0f0",
-    //     borderRadius: "5px",
-    //     padding: "25px",
-    // };
     return (
         <div className="align-items-center justify-content-center m-1">
             <div className="m-3">

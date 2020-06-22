@@ -86,9 +86,6 @@ export const editPasswordValidation = (data, field) => {
                 data.newPassword.toString() !== data.oldPassword.toString()
             ).isTruthy();
         });
-        test("oldPassword", "Password should be atleast 8 characters long", () => {
-            enforce(data.password.toString()).longerThanOrEquals(8);
-        });
     });
 };
 export const editBasicInfoValidation = (data, field) => {

@@ -11,8 +11,8 @@ use App\Helpers\RespondJSON;
 use App\LawyerType;
 use App\PracticeArea;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LawyerController extends Controller
@@ -48,7 +48,7 @@ class LawyerController extends Controller
         if (!$lawyer->isAvailable()) {
             return RespondJSON::unknownError();
         }
-        $schedule = json_decode($lawyer->schedule, true);
+        $schedule = $lawyer->schedule;
 
         $output = [];
 
@@ -59,7 +59,7 @@ class LawyerController extends Controller
         $to_date->addDays($days_to_show);
 
         $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
-        $output['days'] = $days_to_show;
+        $output['number_of_days'] = $days_to_show;
 
         // Fetch lawyer data
         $slot_length = $lawyer->slot_length;
@@ -81,6 +81,7 @@ class LawyerController extends Controller
                 'date' => $formated_date
             );
             $slots = $schedule[$current->dayOfWeek];
+            $day['slots'] = [];
             for ($i = 0; $i < count($slots); ++$i) {
                 $start_minute = $slots[$i] * $slot_length;
                 $start_time = AppointmentHelper::minutesToClock($start_minute);
@@ -100,7 +101,8 @@ class LawyerController extends Controller
             $data[] = $day;
             $current->addDay();
         }
-        $output['slots'] = $data;
+        $output['days'] = $data;
+        $output['slot_length'] = $lawyer->slot_length;
         return RespondJSON::with(['schedule' => $output]);
     }
 
@@ -160,7 +162,7 @@ class LawyerController extends Controller
     {
         return RespondJSON::with(['lawyer' => $lawyer]);
     }
-
+  
     public function fetchMe()
     {
         /** @var Account */
@@ -233,5 +235,23 @@ class LawyerController extends Controller
         }
         $lawyer->save();
         return RespondJSON::success();
+    }
+
+    public function fetchLawyerAppointments(Request $request)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        // Detect filters
+        $upcoming = $request->get('upcoming', "false") === "true";
+        if ($upcoming) {
+            $appointments = $lawyer->appointments()->where('appointment_time', '>=', now())->get();
+        } else {
+            $appointments = $lawyer->appointments;
+        }
+        return RespondJSON::success(['appointments' => $appointments]);
     }
 }

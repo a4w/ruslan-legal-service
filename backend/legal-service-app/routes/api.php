@@ -35,6 +35,7 @@ Route::prefix('lawyer')->group(function () {
     Route::get('types', 'LawyerController@getLawyerTypes');
     Route::get('practice-areas', 'LawyerController@getPracticeAreas');
     Route::get('accreditations', 'LawyerController@getAccreditations');
+    Route::get('appointments', 'LawyerController@fetchLawyerAppointments')->middleware('auth:api');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 
@@ -47,6 +48,7 @@ Route::prefix('chat')->group(function () {
 
 Route::prefix('rating')->group(function () {
     Route::post('/rate/{appointment_id}', 'RatingsController@rateAppointment')->middleware('auth:api');
+    Route::get('{lawyer}', 'RatingsController@getLawyerRatings');
 });
 
 Route::prefix('appointment')->group(function () {

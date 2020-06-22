@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { editAddressValidations } from "./Validations";
-import { FaSpinner } from "react-icons/fa";
+import {editAddressValidations} from "./Validations";
+import {FaSpinner} from "react-icons/fa";
+import {request} from "./Axios";
+import {toast} from 'react-toastify';
 const EditAddress = () => {
     const initAddress = {
         address: "",
         city: "",
         state: "",
-        zip: "",
+        zip_code: "",
         country: "",
     };
 
@@ -16,18 +18,39 @@ const EditAddress = () => {
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editAddressValidations);
 
+    useEffect(() => {
+        // Load profile data
+        request({
+            url: 'account/personal-info',
+            method: 'GET'
+        }).then((response) => {
+            setAddress({...response.profile_data});
+        }).catch((error) => {
+        });
+    }, []);
+
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...address, [fieldName]: event.target.value };
-        setAddress(nextUser);
-        runValidation(nextUser, fieldName);
+        const nextAddress = {...address, [fieldName]: event.target.value};
+        setAddress(nextAddress);
+        runValidation(nextAddress, fieldName);
     };
+
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         runValidation(address).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                console.log("safe");
                 setSaving(true);
+                request({
+                    url: 'account/update-address',
+                    method: 'POST',
+                    data: address
+                }).then((response) => {
+                    toast.success("Address updated successfully");
+                }).catch((error) => {
+                }).finally(() => {
+                    setSaving(false);
+                });
             }
         });
     };
@@ -75,10 +98,10 @@ const EditAddress = () => {
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Zip Code"}
-                            name={"zip"}
-                            value={address.zip}
+                            name={"zip_code"}
+                            value={address.zip_code}
                             type={"text"}
-                            errors={errors.zip}
+                            errors={errors.zip_code}
                             OnChangeHandler={OnChangeHandler}
                         />
                     </div>

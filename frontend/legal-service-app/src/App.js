@@ -20,10 +20,13 @@ import ClientDashboard from "./ClientDashboard";
 import ForgotPassword from "./ForgotPassword";
 import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (
         <BrowserRouter>
+            <ToastContainer />
             <Router history={history}>
                 <NavBar />
                 <Switch>

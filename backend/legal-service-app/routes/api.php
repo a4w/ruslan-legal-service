@@ -18,15 +18,18 @@ Route::prefix('account')->group(function () {
     Route::post('reset-password-request', 'AccountController@resetPasswordRequest');
     Route::post('reset-password/{token}', 'AccountController@resetPassword');
     Route::post('personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
+    Route::get('personal-info', 'AccountController@getPersonalInfo')->middleware('auth:api');
     Route::post('update-email', 'AccountController@updateEmail')->middleware('auth:api');
     Route::post('update-password', 'AccountController@updatePassword')->middleware('auth:api');
+    Route::post('upload-profile-picture', 'AccountController@uploadProfilePicture')->middleware('auth:api');
+    Route::post('update-address', 'AccountController@saveAddress')->middleware('auth:api');
 });
 
 Route::prefix('lawyer')->group(function () {
-    Route::get('{lawyer}', 'LawyerController@fetchLawyer');
+    Route::get('all', 'LawyerController@getLawyersPaginated');
     Route::post('{id}/schedule', 'LawyerController@fetchSchedule');
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
-    Route::get('all', 'LawyerController@getLawyersPaginated');
+    Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 
 Route::prefix('chat')->group(function () {

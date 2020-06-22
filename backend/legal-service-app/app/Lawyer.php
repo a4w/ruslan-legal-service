@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Lawyer extends Model
@@ -19,6 +20,21 @@ class Lawyer extends Model
     ];
 
     public $timestamps = false;
+    protected $appends = array('discounted_price_per_slot');
+
+    public function getDiscountedPricePerSlotAttribute()
+    {
+        $original_price = $this->price_per_slot;
+        $discounted_price = $original_price;
+        if (Carbon::now()->lte($this->discount_end)) {
+            if ($this->is_percent_discount) {
+                $discounted_price -= $this->discount / 100 * $original_price;
+            } else {
+                $discounted_price -= $this->discount;
+            }
+        }
+        return $discounted_price;
+    }
 
     public function account()
     {

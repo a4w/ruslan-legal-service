@@ -1,39 +1,43 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
-import Countdown, { zeroPad } from "react-countdown";
+import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-const LawyerCardList = ({ lawyers }) => {
+const LawyerCardList = ({lawyers, setPopUp}) => {
     if (lawyers)
         return lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawyer={lawyer} />
+            <LawyerCard key={lawyer.id} setPopUp={setPopUp} lawyer={lawyer} />
         ));
     else return <LawyerCard />;
 };
-
-const LawyerCard = ({ lawyer }) => {
+const LawyerCard = ({lawyer, setPopUp}) => {
     return (
-        <div className="card">
+        <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
                         <div className="lawyer-img">
-                            <strong>Lawyer's Image</strong>
+                            <strong>{}</strong>
+                            <img src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
-                                <strong>Lawyer's Name</strong>
+                                <strong>
+                                    {lawyer.account.name +
+                                        " " +
+                                        lawyer.account.surname}
+                                </strong>
                             </h4>
                             <p className="lawyer-education">
-                                Years Expert . Education
+                                {lawyer.years_licenced} Years . {lawyer.institution}
                             </p>
                             <p className="lawyer-department">
-                                <strong>Lawyer's expertise</strong>
+                                <strong>{lawyer.lawyer_type.type}</strong>
                             </p>
                             <div className="rating">
                                 <StarRatings
-                                    rating={4}
+                                    rating={lawyer.ratings_average}
                                     starRatedColor="gold"
                                     starDimension="20px"
                                     starSpacing="0px"
@@ -42,30 +46,26 @@ const LawyerCard = ({ lawyer }) => {
                                 />
                                 &nbsp;
                                 <span className="d-inline-block text-xs average-rating">
-                                    (number of clients rated, percentage)
+                                    ({lawyer.ratings_count})
                                 </span>
                             </div>
                             <div className="session-details">
-                                <div>Lawyers Bio</div>
+                                <div>{lawyer.biography}</div>
                             </div>
                             <div className="session-services">
-                                <span>Expertise 1</span>
-                                <span> Expertise 2</span>
+                                {lawyer.practice_areas.map((area, i) => {
+                                    return (<span key={area.id}>{area.area}</span>);
+                                })}
                             </div>
                         </div>
                     </div>
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
-                                <li>
-                                    <i className="far fa-comment"></i> Feedback
-                                </li>
                                 <Discount
-                                    secsTillEnd={5000}
-                                    cost={400}
-                                    costAfterDiscount={100}
-                                    isPercent={true}
-                                    discount={30}
+                                    secsTillEnd={lawyer.discount_ends_in}
+                                    cost={lawyer.price_per_slot}
+                                    costAfterDiscount={lawyer.discounted_price_per_slot}
                                 />
                             </ul>
                         </div>
@@ -74,7 +74,7 @@ const LawyerCard = ({ lawyer }) => {
                                 className="view-pro-btn"
                                 to={{
                                     pathname: `/profile/${lawyer.id}`,
-                                    state: { lawyer: lawyer },
+                                    state: {lawyer: lawyer},
                                 }}
                             >
                                 View Profile
@@ -84,7 +84,7 @@ const LawyerCard = ({ lawyer }) => {
                                 className="apt-btn"
                                 to={{
                                     pathname: `/book-lawyer/${lawyer.id}`,
-                                    state: { lawyer_id: "1" },
+                                    state: {lawyer_id: "1"},
                                 }}
                             >
                                 Book Appointment
@@ -97,7 +97,7 @@ const LawyerCard = ({ lawyer }) => {
     );
 };
 
-const Discount = ({ secsTillEnd, cost, costAfterDiscount, isPercent, discount }) => {
+const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) => {
     return (
         <Countdown
             date={Date.now() + secsTillEnd}
@@ -106,8 +106,8 @@ const Discount = ({ secsTillEnd, cost, costAfterDiscount, isPercent, discount })
                     ...props,
                     cost: cost,
                     discount: costAfterDiscount,
-                    discountValue:discount,
-                    isPercent:isPercent
+                    discountValue: discount,
+                    isPercent: isPercent
                 })
             }
         />
@@ -137,8 +137,8 @@ const LawyerCountDownRenderer = ({
                 <li>
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
                     <span className="text-md text-success">
-                        {isPercent? 
-                            `There is a ${discountValue}% discount`:
+                        {isPercent ?
+                            `There is a ${discountValue}% discount` :
                             `There is a ${discountValue} discount`}
                     </span>
                 </li>
@@ -168,4 +168,4 @@ const LawyerCountDownRenderer = ({
 };
 
 export default LawyerCardList;
-export { Discount };
+export {Discount};

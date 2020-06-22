@@ -187,11 +187,6 @@ const PopUp = ({lawyer}) => {
         lawyer && (
             <div className="card flex-fill mr-2">
                 <div className="m-2">
-                    <div className="card-header">
-                        <h5 className="lawyer-name">
-                            {lawyer.account.name} {lawyer.account.surname}
-                        </h5>
-                    </div>
                     <div className="card-body p-0">
                         <div style={{display: "inline"}}>
                             <AvgCalendar lawyer={lawyer} />

@@ -6,6 +6,7 @@ use App\Account;
 use App\Appointment;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
+use App\Lawyer;
 use App\Rating;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,5 +36,11 @@ class RatingsController extends Controller
         } else {
             return RespondJSON::forbidden();
         }
+    }
+
+    public function getLawyerRatings(Lawyer $lawyer)
+    {
+        $ratings = $lawyer->ratings;
+        return RespondJSON::success(['ratings' => $ratings]);
     }
 }

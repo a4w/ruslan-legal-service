@@ -22,6 +22,7 @@ import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LawyerRating from "./LawyerRating";
 
 function App() {
     return (
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/book-lawyer">
                         <LawyerBooking />
                     </Route>
+                    <Route exact path="/rate" component={LawyerRating}/>
                 </Switch>
                 <Footer />
             </Router>

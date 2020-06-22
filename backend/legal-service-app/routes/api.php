@@ -18,8 +18,11 @@ Route::prefix('account')->group(function () {
     Route::post('reset-password-request', 'AccountController@resetPasswordRequest');
     Route::post('reset-password/{token}', 'AccountController@resetPassword');
     Route::post('personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
+    Route::get('personal-info', 'AccountController@getPersonalInfo')->middleware('auth:api');
     Route::post('update-email', 'AccountController@updateEmail')->middleware('auth:api');
     Route::post('update-password', 'AccountController@updatePassword')->middleware('auth:api');
+    Route::post('upload-profile-picture', 'AccountController@uploadProfilePicture')->middleware('auth:api');
+    Route::post('update-address', 'AccountController@saveAddress')->middleware('auth:api');
 });
 
 Route::prefix('lawyer')->group(function () {
@@ -31,6 +34,7 @@ Route::prefix('lawyer')->group(function () {
 
 Route::prefix('chat')->group(function () {
     Route::post('{account1_id}/{account2_id}', 'ChatController@getChat')->middleware('auth:api');
+    Route::get('all', 'ChatController@getChats')->middleware('auth:api');
     Route::post('{chat}', 'ChatController@sendMessage')->middleware('auth:api');
     Route::get('{chat}', 'ChatController@getMessages')->middleware('auth:api');
 });

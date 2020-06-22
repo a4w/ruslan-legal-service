@@ -1,16 +1,31 @@
-import React, { useState } from "react";
-import { editEmailValidations } from "./Validations";
+import React, {useState, useEffect} from "react";
+import {editEmailValidations} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { FaSpinner } from "react-icons/fa";
+import {FaSpinner} from "react-icons/fa";
+import {request} from "./Axios";
+import {toast} from 'react-toastify';
 
-const EditEmail = ({ email }) => {
-    const [user, setUser] = useState({ email: email ? email : "" });
+const EditEmail = ({email}) => {
+    const [user, setUser] = useState({email: email ? email : ""});
     const [isSaving, setSaving] = useState(false);
-    const [errors, , runValidation] = useValidation(editEmailValidations);
+    const [errors, addError, runValidation] = useValidation(editEmailValidations);
+
+    useEffect(() => {
+        // Load profile data
+        request({
+            url: 'account/personal-info',
+            method: 'GET'
+        }).then((response) => {
+            // This will set the email field
+            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
+        }).catch((error) => {
+
+        });
+    }, []);
 
     const OnChangeHandler = (event) => {
-        const nextUser = { email: event.target.value };
+        const nextUser = {email: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, "email");
     };
@@ -18,8 +33,22 @@ const EditEmail = ({ email }) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                console.log("safe");
                 setSaving(true);
+                request({
+                    url: 'account/update-email',
+                    method: 'POST',
+                    data: user
+                }).then((response) => {
+                    // Notify of success and requirement of verifying the email
+                    toast.info("Email updated successfully, please verify the email in order to complete the update");
+                }).catch((error) => {
+                    if (error.response.status === 422) {
+                        // Email is already taken
+                        addError(['email'], {'email': ['Email is taken']});
+                    }
+                }).finally(() => {
+                    setSaving(false);
+                });
             }
         });
     };

@@ -22,7 +22,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'unverified_email', 'password', 'phone'
+        'name', 'surname', 'unverified_email', 'password', 'phone', 'address', 'city', 'state', 'zip_code', 'country'
     ];
 
     /**
@@ -31,7 +31,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'refresh_token', 'unverified_email'
+        'password', 'refresh_token', 'unverified_email', 'pivot'
     ];
 
     /**
@@ -133,5 +133,10 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function getEmailForVerification()
     {
         return $this->unverified_email;
+    }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_participents', 'user_id', 'chat_id');
     }
 }

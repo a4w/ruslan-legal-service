@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { loginValidation } from "./Validations";
+import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import { request, setAccessToken, setRefreshToken } from "./Axios";
-import { FaSpinner } from "react-icons/fa";
+import {request, setAccessToken, setRefreshToken} from "./Axios";
+import {FaSpinner} from "react-icons/fa";
 import history from "./History";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export const LoginTokens = React.createContext();
 
-const LoginForm = ({ setRegister, hideModal }) => {
+const LoginForm = ({setRegister, hideModal}) => {
     const initUser = {
         email: "",
         password: "",
@@ -19,8 +19,8 @@ const LoginForm = ({ setRegister, hideModal }) => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
-    const OnChangeHandler = ({ target: { name, value } }) => {
-        const nextUser = { ...user, [name]: value };
+    const OnChangeHandler = ({target: {name, value}}) => {
+        const nextUser = {...user, [name]: value};
         setUser(nextUser);
         runValidation(nextUser, name);
     };
@@ -30,12 +30,14 @@ const LoginForm = ({ setRegister, hideModal }) => {
             if (!hasErrors) {
                 setLoggingIn(true);
                 const url = "/auth/login";
-                request({ url: url, method: "POST", data: user })
+                request({url: url, method: "POST", data: user})
                     .then((data) => {
                         console.log("success", data);
-                        if (user.access_token)
+                        if (data.access_token) {
+                            console.log("Setting shit");
                             setAccessToken(data.access_token);
-                        if (user.refresh_token)
+                        }
+                        if (data.refresh_token)
                             setRefreshToken(data.refresh_token);
                     })
                     .catch((_errors) => {
@@ -47,7 +49,7 @@ const LoginForm = ({ setRegister, hideModal }) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        hideModal();
+                        //hideModal();
                         history.push("/");
                     });
             }

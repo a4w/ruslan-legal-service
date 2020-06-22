@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { editBasicInfoValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
+import { request } from "./Axios";
+import { toast } from "react-toastify";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -10,11 +12,22 @@ const EditBasicInfo = () => {
         surname: "",
         email: "",
         phone: "",
+        profile_picture_url: "",
+        profile_picture: null,
     };
-
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editBasicInfoValidation);
+
+    useEffect(() => {
+        // Load profile data
+        request({
+            url: 'account/personal-info',
+            method: 'GET'
+        }).then((response) => {
+            setUser({ ...response.profile_data, profile_picture_url: response.profile_data.profile_picture });
+        }).catch((error) => { });
+    }, []);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
@@ -26,11 +39,42 @@ const EditBasicInfo = () => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
-                console.log("safe");
                 setSaving(true);
+            }
+            request({
+                url: 'account/personal-info',
+                method: 'POST',
+                data: user
+            }).then((response) => {
+                setSaving(false);
+                toast.success("Profile updated successfully!");
+            }).catch((error) => {
+            });
+            if (user.profile_picture !== null) {
+                const formData = new FormData();
+                const file = user.profile_picture;
+                formData.append('profile_picture', file);
+                request({
+                    url: 'account/upload-profile-picture',
+                    method: 'POST',
+                    data: formData
+                }).then((response) => {
+                }).catch((error) => { });
             }
         });
     };
+
+    const showSelectedPicture = (e) => {
+        const input = e.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setUser({ ...user, profile_picture_url: e.target.result, profile_picture: input.files[0] });
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
 
     return (
         <form onSubmit={OnSubmitHandler}>
@@ -39,11 +83,10 @@ const EditBasicInfo = () => {
                     <div className="form-group">
                         <div className="change-avatar">
                             <div className="profile-img">
-                                {/* <img
-                                    src="assets/img/patients/patient.jpg"
+                                <img
+                                    src={user.profile_picture_url}
                                     alt="User"
-                                /> */}
-                                IMG
+                                />
                             </div>
                             <div className="upload-img">
                                 <div className="change-photo-btn">
@@ -51,7 +94,7 @@ const EditBasicInfo = () => {
                                         <i className="fa fa-upload"></i> Upload
                                         Photo
                                     </span>
-                                    <input type="file" className="upload" />
+                                    <input type="file" accept="image/png,image/jpeg,image/jpg,image/gif" onChange={showSelectedPicture} className="upload" />
                                 </div>
                                 <small className="form-text text-muted">
                                     Allowed JPG, GIF or PNG. Max size of 2MB

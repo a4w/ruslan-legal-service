@@ -7,7 +7,10 @@ use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AccountController extends Controller
@@ -53,6 +56,18 @@ class AccountController extends Controller
         return RespondJSON::success();
     }
 
+    public function uploadProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        // Upload profile image
+        $path = $request->file('profile_picture')->store('profile_pictures', ['disk' => 'public']);
+        $user = Auth::user();
+        $user->profile_picture = URL::to('/') . Storage::url($path);
+        $user->save();
+    }
+
     public function updateEmail(JSONRequest $request)
     {
         $request->validate([
@@ -77,6 +92,22 @@ class AccountController extends Controller
         }
         $user->password = $request->get('new_password');
         $user->save();
+        return RespondJSON::success();
+    }
+
+    public function getPersonalInfo()
+    {
+        $user = Auth::user();
+        return RespondJSON::success([
+            'profile_data' => $user
+        ]);
+    }
+
+    public function saveAddress(JSONRequest $request)
+    {
+        /** @var $user Account **/
+        $user = Auth::user();
+        $user->update($request->only(['address', 'city', 'state', 'zip_code', 'country']));
         return RespondJSON::success();
     }
 }

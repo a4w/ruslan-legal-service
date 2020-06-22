@@ -4,14 +4,14 @@ import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
 
-const LawyerCardList = ({lawyers}) => {
+const LawyerCardList = ({lawyers, setPopUp}) => {
     if (lawyers)
         return lawyers.map((lawyer) => (
-            <LawyerCard key={lawyer.id} lawyer={lawyer} />
+            <LawyerCard key={lawyer.id} setPopUp={setPopUp} lawyer={lawyer} />
         ));
     else return <LawyerCard />;
 };
-const LawyerCard = ({lawyer}) => {
+const LawyerCard = ({lawyer, setPopUp}) => {
     return (
         <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
             <div className="card-body">

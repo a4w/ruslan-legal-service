@@ -22,11 +22,11 @@ const ErrorMessageSelect = ({
                 multi={multi}
                 name={name}
                 className="floating"
-                value={value}
+                values={multi ? value : [value]}
                 style={selectStyle}
                 placeholder={placeholder}
                 options={options}
-                onChange={OnChangeHandler}
+                onChange={(values) => {OnChangeHandler({name, values})}}
             />
             {errors.length > 0 && (
                 <label className="text-danger ml-2 font-weight-light text-xs">

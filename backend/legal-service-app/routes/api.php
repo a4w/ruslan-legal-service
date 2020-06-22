@@ -17,6 +17,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('account')->group(function () {
     Route::post('reset-password-request', 'AccountController@resetPasswordRequest');
     Route::post('reset-password/{token}', 'AccountController@resetPassword');
+
     Route::post('personal-info', 'AccountController@savePersonalInfo')->middleware('auth:api');
     Route::get('personal-info', 'AccountController@getPersonalInfo')->middleware('auth:api');
     Route::post('update-email', 'AccountController@updateEmail')->middleware('auth:api');
@@ -26,9 +27,14 @@ Route::prefix('account')->group(function () {
 });
 
 Route::prefix('lawyer')->group(function () {
-    Route::get('all', 'LawyerController@getLawyersPaginated');
+    Route::get('me', 'LawyerController@fetchMe')->middleware('auth:api');
+    Route::post('me', 'LawyerController@updateProfile')->middleware('auth:api');
     Route::post('{id}/schedule', 'LawyerController@fetchSchedule');
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
+    Route::get('all', 'LawyerController@getLawyersPaginated');
+    Route::get('types', 'LawyerController@getLawyerTypes');
+    Route::get('practice-areas', 'LawyerController@getPracticeAreas');
+    Route::get('accreditations', 'LawyerController@getAccreditations');
     Route::get('appointments', 'LawyerController@fetchLawyerAppointments')->middleware('auth:api');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });

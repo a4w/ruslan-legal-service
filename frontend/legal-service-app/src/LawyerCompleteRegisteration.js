@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import ErrorMessageSelect from "./ErrorMessageSelect";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
-import { LawyerInfoValidations } from "./Validations";
+import {LawyerInfoValidations} from "./Validations";
+import {request} from "./Axios"
+import {toast} from "react-toastify"
 
-const LawyerCompleteRegisteration = ({lawyerData}) => {
+const LawyerCompleteRegisteration = ({}) => {
     const init = {
-        type: [],
+        type: 0,
         other: "",
         regulatedBy: "",
         yearLicensed: "",
@@ -17,46 +19,162 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
         accreditations: [],
         bio: "",
     };
-    const [lawyer, setLawyer] = useState(lawyerData === null? init : lawyerData);
+
+    const [lawyer, setLawyer] = useState(init);
     const [errors, , validate] = useValidation(LawyerInfoValidations);
+    const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
+    const [accreditationOptions, setAccreditationOptions] = useState([]);
+    const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+
+    useEffect(() => {
+        request({
+            url: 'lawyer/types',
+            method: 'GET'
+        }).then((response) => {
+            let types = response.types.filter((_, i) => {
+                if (i < 2) {
+                    return true;
+                }
+            }).map((type, _) => {
+                return {
+                    label: type.type,
+                    value: type.id,
+                    name: "type"
+                };
+            });
+            types.push({
+                label: 'Other',
+                value: 0,
+                name: 'type'
+            });
+            setLawyerTypeOptions(types);
+            return request({
+                url: 'lawyer/practice-areas',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const areas = response.areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id,
+                    name: 'practiceAreas'
+                };
+            });
+            setPracticeAreaOptions(areas);
+
+            return request({
+                url: 'lawyer/accreditations',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const accreditations = response.accreditations.map((accreditation, i) => {
+                return {
+                    label: accreditation.accreditation,
+                    value: accreditation.id,
+                    name: 'accreditations'
+                };
+            });
+            setAccreditationOptions(accreditations);
+            return request({
+                url: 'lawyer/me',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const nextLawyer = {
+                type: 0,
+                other: "",
+                regulatedBy: "",
+                yearLicensed: "",
+                education: "",
+                graduation: "",
+                course: "",
+                practiceAreas: [],
+                accreditations: [],
+                bio: "",
+            };
+            const data = response.lawyer;
+            // Set type
+            nextLawyer.type = {value: data.lawyer_type_id, label: data.lawyer_type.type};
+            // Shitty code from a shitty person
+            if (data.lawyer_type_id > 2) {
+                nextLawyer.type = {value: 0, label: "Other"};
+                nextLawyer.other = data.lawyer_type.type;
+            }
+            nextLawyer.regulatedBy = data.regulator.regulator;
+            nextLawyer.yearLicensed = data.years_licenced;
+            nextLawyer.education = data.institution;
+            nextLawyer.graduation = data.graduation_year;
+            nextLawyer.course = data.course;
+            nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id
+                };
+            });
+            nextLawyer.accreditations = data.accreditations.map((accreditation, i) => {
+                return {
+                    label: accreditation.accreditation,
+                    value: accreditation.id
+                };
+            });
+            nextLawyer.bio = data.biography;
+            setLawyer(nextLawyer);
+        }).catch((error) => {
+        });
+    }, []);
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        validate(lawyer);
-        console.log("submitting");
+        validate(lawyer).then(async (hasErrors) => {
+            if (hasErrors) {
+                return;
+            }
+            // Assuming validation works otherwise another check is needed here
+            const data = {
+                lawyer_type_id: lawyer.type.value,
+                lawyer_type: lawyer.other,
+                regulator: lawyer.regulatedBy,
+                year_licensed: lawyer.yearLicensed,
+                institution: lawyer.education,
+                graduation: lawyer.graduation,
+                course: lawyer.course,
+                practice_areas: lawyer.practiceAreas.map((area, i) => {
+                    return area.value;
+                }),
+                accreditations: lawyer.accreditations.map((accreditation, i) => {
+                    return accreditation.value;
+                }),
+                biography: lawyer.bio,
+            };
+            request({
+                url: 'lawyer/me',
+                method: 'POST',
+                data: data
+            }).then((response) => {
+                toast.success("Profile updated successfully");
+            }).catch((error) => {});
+        });
     };
-    const OnChangeHandler = ({ target: { value, name } }) => {
-        const newData = { ...lawyer, [name]: value };
+    const OnChangeHandler = ({target: {value, name}}) => {
+        console.log(name, value[0]);
+        const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         console.log(lawyer);
         console.log("Validating: ", name, " with: ", newData);
         validate(newData, name);
     };
-    const OnSelectHandler = ([{ value, name }]) => {
-        const newData = { ...lawyer, [name]: value };
+    const OnSelectHandler = ({name, values}) => {
+        const newData = {...lawyer, [name]: values[0]};
         setLawyer(newData);
         validate(newData, name);
     };
-    const MultiselectHandler = (values) => {
-        const [{ name }] = values;
-        const newData = { ...lawyer, [name]: values };
+    const MultiselectHandler = ({name, values}) => {
+        console.log(name, values);
+        const newData = {...lawyer, [name]: values};
         setLawyer(newData);
         validate(newData, name);
     };
-    const typeOptions = [
-        { value: "solicitor", label: "Solicitor", name: "type" },
-        { value: "barrister", label: "Barrister", name: "type" },
-        { value: "other", label: "Other", name: "type" },
-    ];
-    const practiceAreasOptions = [
-        { value: "1", label: "area1", name: "practiceAreas" },
-        { value: "2", label: "area2", name: "practiceAreas" },
-        { value: "3", label: "area3", name: "practiceAreas" },
-    ];
-    const accreditationOptions = [
-        { value: "1", label: "Accreditation 1", name: "accreditations" },
-        { value: "2", label: "Accreditation 2", name: "accreditations" },
-        { value: "3", label: "Accreditation 3", name: "accreditations" },
-    ];
+
+
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
             <div className="form-row">
@@ -66,13 +184,13 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
                         errors={errors.type}
                         value={lawyer.type}
                         placeholder={"Select type.."}
-                        options={typeOptions}
+                        options={lawyerTypeOptions}
                         OnChangeHandler={OnSelectHandler}
                     />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
-                        disabled={lawyer.type !== "other"}
+                        disabled={lawyer.type.value !== 0}
                         errors={errors.other}
                         type={"text"}
                         name="other"
@@ -140,7 +258,7 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
                         className="floating"
                         value={lawyer.practiceAreas}
                         placeholder="Select practice areas"
-                        options={practiceAreasOptions}
+                        options={practiceAreaOptions}
                         OnChangeHandler={MultiselectHandler}
                     />
                 </div>
@@ -162,7 +280,7 @@ const LawyerCompleteRegisteration = ({lawyerData}) => {
                         <textarea
                             className="form-control"
                             name="bio"
-                            style={{ minHeight: "100px" }}
+                            style={{minHeight: "100px"}}
                             form="regForm"
                             value={lawyer.bio}
                             onChange={OnChangeHandler}

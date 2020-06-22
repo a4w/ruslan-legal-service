@@ -89,14 +89,24 @@ const LawyerCompleteRegisteration = ({}) => {
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type[0] = data.lawyer_type_id;
+            nextLawyer.type = [{value: data.lawyer_type_id, label: data.lawyer_type.type}];
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
             nextLawyer.graduation = data.graduation_year;
             nextLawyer.course = data.course;
-            nextLawyer.practiceAreas = data.practiceAreas;
-            nextLawyer.accreditations = data.accreditations;
+            nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id
+                };
+            });
+            nextLawyer.accreditations = data.accreditations.map((accreditation, i) => {
+                return {
+                    label: accreditation.accreditation,
+                    value: accreditation.id
+                };
+            });
             nextLawyer.bio = data.biography;
             setLawyer(nextLawyer);
         }).catch((error) => {

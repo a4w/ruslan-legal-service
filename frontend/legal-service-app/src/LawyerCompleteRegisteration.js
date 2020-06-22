@@ -30,7 +30,11 @@ const LawyerCompleteRegisteration = ({}) => {
             url: 'lawyer/types',
             method: 'GET'
         }).then((response) => {
-            let types = response.types.map((type, i) => {
+            let types = response.types.filter((_, i) => {
+                if (i < 2) {
+                    return true;
+                }
+            }).map((type, _) => {
                 return {
                     label: type.type,
                     value: type.id,
@@ -90,6 +94,11 @@ const LawyerCompleteRegisteration = ({}) => {
             const data = response.lawyer;
             // Set type
             nextLawyer.type = [{value: data.lawyer_type_id, label: data.lawyer_type.type}];
+            // Shitty code from a shitty person
+            if (data.lawyer_type_id > 2) {
+                nextLawyer.type = [{value: 0, label: "Other"}];
+                nextLawyer.other = data.lawyer_type.type;
+            }
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
@@ -152,7 +161,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
-                        disabled={lawyer.type !== 0}
+                        disabled={lawyer.type.length > 0 && lawyer.type[0].value !== 0}
                         errors={errors.other}
                         type={"text"}
                         name="other"

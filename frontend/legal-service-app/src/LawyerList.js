@@ -43,11 +43,11 @@ function LawyerList() {
             </StickyBox>
 
             <div className="content">
-                <div className="row">
-                    <div className="col-md-12 col-lg-8 col-xl-8">
+                <div className="row justify-content-center align-content-center">
+                    <div className="col-7">
                         <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
                     </div>
-                    <div className="col-md-0 col-lg-4 col-xl-4">
+                    <div className="col-5">
                         <StickyBox offsetTop={80} offsetBottom={20}>
                             <PopUp lawyer={lawyerPopUp} />
                         </StickyBox>
@@ -171,15 +171,18 @@ const PopUp = ({ lawyer }) => {
                         alt="Card Image"
                         src="./undraw_remote_meeting_cbfk.svg"
                         className="card-img-top"
+                        style={{height:"30%"}}
                     />
                     <div className="card-header">
                         <h5 className="lawyer-name">
                             {"Lawyer ID: " + lawyer.id}
                         </h5>
                     </div>
-                    <div className="card-body">
+                    <div className="card-body p-0">
                         <p className="card-text">Lawyer Bio</p>
-                        <AvgCalendar />
+                        <div style={{ display: "inline" }}>
+                            <AvgCalendar />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,7 +195,7 @@ const AvgCalendar = () => {
         <table className="calender">
             <thead>
                 <tr>
-                    <th></th>
+                    <th colspan="2"></th>
                     {GetDates().map((day) => (
                         <th key={day}>{day}</th>
                     ))}
@@ -200,16 +203,16 @@ const AvgCalendar = () => {
             </thead>
             <tbody>
                 <tr>
-                    <td>Morning</td>
+                    <td colspan="2">Morning</td>
                 </tr>
                 <tr>
-                    <td>Afternoon</td>
+                    <td colspan="2">Afternoon</td>
                 </tr>
                 <tr>
-                    <td>Evening</td>
+                    <td colspan="2">Evening</td>
                 </tr>
                 <tr>
-                    <td>Night</td>
+                    <td colspan="2">Night</td>
                 </tr>
             </tbody>
         </table>

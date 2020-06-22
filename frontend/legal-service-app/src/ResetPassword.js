@@ -74,7 +74,7 @@ const ResetPasswordForm = () => {
         </div>
     );
 };
-const ResetPassword = ()=>{
+const ResetPassword = (props)=>{
     return (
         <div className="content" style={{ backgroundColor: "#ffffff" }}>
             <div className="container-fluid">
@@ -90,7 +90,7 @@ const ResetPassword = ()=>{
                                     />
                                 </div>
                                 <div className="col-md-12 col-lg-6 login-right">
-                                    <ResetPasswordForm />
+                                    <ResetPasswordForm {...props} />
                                 </div>
                             </div>
                         </div>

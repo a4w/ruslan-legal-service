@@ -42,9 +42,7 @@ function App() {
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route exact path="/reset">
-                        <ResetPassword />
-                    </Route>
+                    <Route exact path="/reset/:Token" component={ResetPassword}/>
                     <Route exact path="/edit">
                         <EditPersonal />
                     </Route>

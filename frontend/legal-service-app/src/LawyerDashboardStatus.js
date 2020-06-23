@@ -7,25 +7,23 @@ import {NavTab} from "react-router-tabs";
 import { request } from "./Axios";
 
 const LawyerDashboardStatus = () => {
-    const initUpcoming = [
+    const init = [
         {
             appointment_time: null,
             client_id: null,
             created_at: null,
             duration: null,
-            id: null,
+            id: 1,
             lawyer_id: null,
             payment_intent_id: null,
             price: null,
             room_sid: null,
             status: null,
             updated_at: null,
-        },
+        }
     ];
-    const initToday = initUpcoming;
-
-    const [upcoming, setUpcoming] = useState(initUpcoming);
-    const [today, setToday] = useState(initToday);
+    const [upcoming, setUpcoming] = useState(init);
+    const [today, setToday] = useState(init);
     useEffect(() => {
         request({
             url: "/lawyer/appointments",
@@ -34,7 +32,7 @@ const LawyerDashboardStatus = () => {
         })
             .then((data) => {
                 console.log(data);
-                setUpcoming(data);
+                setUpcoming(data.appointments);
             })
             .catch(() => {});
     }, []);

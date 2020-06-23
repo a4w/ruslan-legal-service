@@ -1,81 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import { BrowserRouter, Route, Link, Redirect, Switch } from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
+import { request } from "./Axios";
 
 const LawyerDashboardStatus = () => {
-    const upcoming = [
+    const initUpcoming = [
         {
-            id: 1,
-            appointment_time: Date.toLocaleString(),
-            status: false,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
+            appointment_time: null,
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: null,
+            lawyer_id: null,
+            payment_intent_id: null,
+            price: null,
+            room_sid: null,
+            status: null,
             updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
-        },
-        {
-            id: 2,
-            appointment_time: Date.toLocaleString(),
-            status: true,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
-            updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
-        },
-        {
-            id: 3,
-            appointment_time: Date.toLocaleString(),
-            status: false,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
-            updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
         },
     ];
-    const today = [
-        {
-            id: 1,
-            appointment_time: Date.toLocaleString(),
-            status: true,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
-            updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
-        },
-        {
-            id: 2,
-            appointment_time: Date.toLocaleString(),
-            status: false,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
-            updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
-        },
-        {
-            id: 3,
-            appointment_time: Date.toLocaleString(),
-            status: true,
-            price: 123.44,
-            duration: 2,
-            created_at: Date.toLocaleString(),
-            updated_at: null,
-            payment_intent_id: 3,
-            room_sid: 3,
-        },
-    ];
+    const initToday = initUpcoming;
+
+    const [upcoming, setUpcoming] = useState(initUpcoming);
+    const [today, setToday] = useState(initToday);
+    useEffect(() => {
+        request({
+            url: "/lawyer/appointments",
+            method: "GET",
+            data: { upcoming: "true" },
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <div className="row">
             <div className="col-12">

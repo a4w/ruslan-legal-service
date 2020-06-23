@@ -3,6 +3,7 @@ import StarRatings from "react-star-ratings";
 
 const LawyerRating = () => {
     const [rating, setRating] = useState(0);
+    const [review, setReview] = useState("");
     const imgStyle = {
         borderRadius: "120px",
         height: "120px",
@@ -33,10 +34,11 @@ const LawyerRating = () => {
                         style={{ display: "flex" }}
                     >
                         <StarRatings
-                            rating={4}
+                            rating={rating}
                             starRatedColor="gold"
                             starDimension="30px"
                             starSpacing="5px"
+                            changeRating={(r, n) => setRating(r)}
                             numberOfStars={5}
                             name="rating"
                         />

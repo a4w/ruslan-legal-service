@@ -43,6 +43,29 @@ const LawyerRating = () => {
                             name="rating"
                         />
                     </div>
+                    <div className="justify-content-center mt-4">
+                        <div
+                            className={
+                                "justify-content-center mt-4 " +
+                                (!review || review === ""
+                                    ? "form-group form-focus"
+                                    : "form-group form-focus focused")
+                            }
+                            style={{ display: "flex" }}
+                        >
+                            <textarea
+                                style={{ minHeight: "100px" }}
+                                className="form-control"
+                                value={review}
+                                onChange={({ target: { value } }) =>
+                                    setReview(value)
+                                }
+                            ></textarea>
+                            <label className="focus-label">
+                                Please write a review
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

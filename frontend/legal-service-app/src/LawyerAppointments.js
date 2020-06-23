@@ -85,25 +85,26 @@ const AppointmentCard = ({ appointment }) => {
                 </a>
                 <div className="profile-det-info">
                     <h3>
-                        <a href="//">Client Name</a>
+                        <a href="//">{account.name + " " + account.surname}</a>
                     </h3>
                     <div className="appointment-details">
                         <h5>
-                            <i className="far fa-calendar-alt"></i> Session Time &
-                            Date
+                            <i className="far fa-calendar-alt"></i>{" "}
+                            {day + " at: " + time}
                         </h5>
                         <h5>
-                            <i className="far fa-clock"></i> Session duration
+                            <i className="far fa-clock"></i>{" "}
+                            {appointment.duration}
                         </h5>
                         <h5>
-                            <i className="fas fa-map-marker-alt"></i> City,
-                            Country
+                            <i className="fas fa-map-marker-alt"></i>{" "}
+                            {account.city + ", " + account.country}
                         </h5>
                         <h5>
-                            <i className="fas fa-envelope"></i> Email
+                            <i className="fas fa-envelope"></i> {account.email}
                         </h5>
                         <h5>
-                            <i className="fas fa-phone"></i> Number
+                            <i className="fas fa-phone"></i> {account.phone}
                         </h5>
                         {rejected !== null && getStatus(rejected, date)}
                     </div>
@@ -133,7 +134,7 @@ const getStatus = (rejected, date) => {
     const dateString = date.toLocaleString("en-GB", {
         year: "numeric",
         month: "long",
-        weekday: "long",
+        day: "numeric",
         hour12: false,
         hour: "numeric",
         minute: "numeric",
@@ -141,7 +142,7 @@ const getStatus = (rejected, date) => {
     return (
         <h5 className="mb-0">
             <i className="fas fa-times"></i>
-            <span className="text-danger">{"Rejected On " + dateString}</span>
+            <span className="text-danger">{" Rejected On " + dateString}</span>
         </h5>
     );
 };

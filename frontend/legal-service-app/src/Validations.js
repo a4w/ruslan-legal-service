@@ -57,6 +57,9 @@ export const resetPasswordValidation = (data, field) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
+            test(elem, "Password should be atleast 8 characters long", () => {
+                enforce(data.newPassword.toString()).longerThanOrEquals(8);
+            });
         });
     });
 };

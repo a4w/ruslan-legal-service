@@ -20,7 +20,8 @@ const LawyerDashboardStatus = () => {
             room_sid: null,
             status: null,
             updated_at: null,
-        }
+            client: { account: { profile_picture: "", name: "", surname: "" } },
+        },
     ];
     return (
         <div className="row">
@@ -30,7 +31,7 @@ const LawyerDashboardStatus = () => {
             <div className="col-12">
                 <h4 class="mb-4">Clients Appoinments</h4>
                 <div class="appointment-tab">
-                    <AppointmentsListTabs upcoming={init} today={init} />
+                    <AppointmentsListTabs upcoming={init} all={init} />
                 </div>
             </div>
         </div>
@@ -59,7 +60,7 @@ const LawyerStatus = () => {
                             <div className="dash-widget-info">
                                 <h6>Total Clients</h6>
                                 <h3>Number</h3>
-                                <p className="text-muted">Till Today</p>
+                                <p className="text-muted">Till All</p>
                             </div>
                         </div>
                     </div>
@@ -75,7 +76,7 @@ const LawyerStatus = () => {
                                 </div>
                             </div>
                             <div className="dash-widget-info">
-                                <h6>Today Clients</h6>
+                                <h6>All Clients</h6>
                                 <h3>Number</h3>
                                 <p className="text-muted">{date}</p>
                             </div>
@@ -106,12 +107,23 @@ const LawyerStatus = () => {
         </div>
     );
 };
-const ListItem = () => {
-    const [cancel, setCancel] = useState(false);
-    const [date, setDate] = useState(null);
+const ListItem = ({appointment}) => {
+    const {client} = {...appointment};
+    const {account} = {...client};
+    const [cancel, setCancel] = useState(appointment.status === "ON HOLD");
+    const appointment_time = new Date(appointment.appointment_time);
+    const day = appointment_time.toLocaleString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+    const time = appointment_time.toLocaleString("en-GB", {
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+    });
     const OnReject = (e) => {
         e.preventDefault();
-        setDate(new Date());
         setCancel(true);
         // The API cancel Rquest will be sent here
     };
@@ -119,21 +131,29 @@ const ListItem = () => {
         <tr>
             <td>
                 <h2 className="table-avatar">
-                    <a
-                        href="client-profile.html"
-                        className="avatar avatar-sm mr-2"
-                    >
-                        Img
+                    <a href="//" className="avatar avatar-sm mr-2">
+                        <img
+                            className="avatar-img rounded-circle"
+                            src={
+                                account.profile_picture
+                                    ? account.profile_picture
+                                    : "/avatar.svg"
+                            }
+                            alt="User"
+                        />
                     </a>
-                    <a href="//">Name </a>
+                    <a href="//">
+                        {account.name + " " + account.surname}
+                        <span>{appointment.payment_intent_id}</span>
+                    </a>
                 </h2>
             </td>
             <td>
-                Session date{" "}
-                <span className="d-block text-info">Session time</span>
+                {day}
+                <span className="d-block text-info">{time}</span>
             </td>
-            <td>{cancel ? "Cancelled" : "Upcoming or Done"}</td>
-            <td className="text-center">paid amount</td>
+            <td>{cancel ? "CANCELLED" : appointment.status}</td>
+            <td className="text-center">{appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
                     {cancel === false && (
@@ -194,13 +214,13 @@ const UpcomingAppointments = ({ appointments }) => {
     return (
         <AppointmentsTable>
             {upcoming.map((appointment) => (
-                <ListItem key={appointment.id} />
+                <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const TodayAppointments = ({ appointments }) => {
-    const [today, setToday] = useState(appointments);
+const AllAppointments = ({ appointments }) => {
+    const [all, setAll] = useState(appointments);
     useEffect(()=>{
         request({
             url: "/lawyer/appointments?upcoming=false",
@@ -208,19 +228,19 @@ const TodayAppointments = ({ appointments }) => {
         })
             .then((data) => {
                 console.log(data);
-                setToday(data.appointments);
+                setAll(data.appointments);
             })
             .catch(() => {});
     },[]);
     return (
         <AppointmentsTable>
-            {today.map((appointment) => (
-                <ListItem key={appointment.id} />
+            {all.map((appointment) => (
+                <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ upcoming, today }) => {
+const AppointmentsListTabs = ({ upcoming, all }) => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -230,7 +250,7 @@ const AppointmentsListTabs = ({ upcoming, today }) => {
                     <NavTab className="nav-link" to={`${path}/upcoming`}>Upcoming</NavTab>
                 </li>
                 <li className="nav-item">
-                    <NavTab className="nav-link" to={`${path}/today`}>Today</NavTab>
+                    <NavTab className="nav-link" to={`${path}/all`}>All</NavTab>
                 </li>
             </ul>
 
@@ -239,8 +259,8 @@ const AppointmentsListTabs = ({ upcoming, today }) => {
                     <Route path={`${path}/upcoming`}>
                         <UpcomingAppointments appointments={upcoming} />
                     </Route>
-                    <Route path={`${path}/today`}>
-                        <TodayAppointments appointments={today} />
+                    <Route path={`${path}/all`}>
+                        <AllAppointments appointments={all} />
                     </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />

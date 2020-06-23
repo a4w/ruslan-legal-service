@@ -46,5 +46,5 @@ Route::get('verify/email/{token}', function ($token) {
 
 Route::get('account/reset-password/{token}', function ($token) {
     // TODO: Redirect to correct page
-    redirect('/' . $token);
+    return redirect(config('app.frontend_url') . '/reset/' . $token);
 })->name('account.reset_password');

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Link, Redirect, Switch } from "react-router-dom";
 import History from "./History";
+import {NavTab} from "react-router-tabs";
 
 const LawyerDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -12,7 +13,10 @@ const LawyerDashboardStatus = () => {
                 <LawyerStatus />
             </div>
             <div className="col-12">
-                <AppointmentsListTabs appointments={appointments} />
+                <h4 class="mb-4">Clients Appoinments</h4>
+                <div class="appointment-tab">
+                    <AppointmentsListTabs appointments={appointments} />
+                </div>
             </div>
         </div>
     );
@@ -134,7 +138,7 @@ const ListItem = () => {
 const AppointmentsTable = (props) => {
     return (
         <div className="tab-pane show active" id="upcoming-appointments">
-            <div className="card card-table mb-0">
+            <div className="card card-table">
                 <div className="card-body">
                     <div className="table-responsive">
                         <table className="table table-hover table-center mb-0">
@@ -178,29 +182,29 @@ const AppointmentsListTabs = ({ appointments }) => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
-        <BrowserRouter id="appointments-dashboard" defaultActiveKey="today">
+        <BrowserRouter>
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                <Nav className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                    <li className="nav-item">
-                        <Link to={`${path}/upcoming`}>Upcoming</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to={`${path}/today`}>Today</Link>
-                    </li>
-                </Nav>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/upcoming`}>Upcoming</NavTab>
+                </li>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/today`}>Today</NavTab>
+                </li>
             </ul>
 
-            <Tab.Content>
-                <Route path={`${path}/upcoming`}>
-                    <UpcomingAppointments appointments={appointments} />
-                </Route>
-                <Route path={`${path}/today`}>
-                    <TodayAppointments appointments={appointments} />
-                </Route>
-                <Route exact path={path}>
-                    <Redirect to={`${path}/upcoming`} />
-                </Route>
-            </Tab.Content>
+            <Switch>
+                <div className="tab-content">
+                    <Route path={`${path}/upcoming`}>
+                        <UpcomingAppointments appointments={appointments} />
+                    </Route>
+                    <Route path={`${path}/today`}>
+                        <TodayAppointments appointments={appointments} />
+                    </Route>
+                    <Route exact path={path}>
+                        <Redirect to={`${path}/upcoming`} />
+                    </Route>
+                </div>
+            </Switch>
         </BrowserRouter>
     );
 };

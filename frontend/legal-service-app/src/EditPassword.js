@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { editPasswordValidation } from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
+import { request } from "./Axios";
+import { toast } from "react-toastify";
 
 const EditPassword = () => {
     const initUser = {
@@ -17,15 +19,26 @@ const EditPassword = () => {
         const nextUser = { ...user, [name]: value };
         setUser(nextUser);
         runValidation(nextUser, name);
-        if (name === "newPassword" && nextUser.passwordConfirm !== "")
-            runValidation(nextUser, "passwordConfirm");
     };
 
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                const passwords = {
+                    new_password: user.newPassword,
+                    old_password: user.oldPassword,
+                };
                 console.log("safe");
+                request({
+                    url: "/account/update-password",
+                    method: "POST",
+                    data: passwords,
+                })
+                    .then((data) => {
+                        toast.success("Password changed successfuly");
+                    })
+                    .catch((error) => {});
             }
         });
     };
@@ -42,7 +55,6 @@ const EditPassword = () => {
                             type={"password"}
                             errors={errors.oldPassword}
                             OnChangeHandler={OnChangeHandler}
-                            disabled={true}
                         />
                     </div>
                     <div className="form-group">

@@ -66,8 +66,10 @@ export const resetPasswordValidation = (data, field) => {
 export const editPasswordValidation = (data, field) => {
     return validate("EditPassword", () => {
         vest.only(field);
-        test("newPassword", "This field is required", () => {
-            enforce(data.newPassword.toString()).isNotEmpty();
+        ["newPassword", "passwordConfirm", "oldPassword"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
         });
 
         test(

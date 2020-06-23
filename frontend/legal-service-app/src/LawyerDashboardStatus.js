@@ -6,7 +6,76 @@ import History from "./History";
 import {NavTab} from "react-router-tabs";
 
 const LawyerDashboardStatus = () => {
-    const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+    const upcoming = [
+        {
+            id: 1,
+            appointment_time: Date.toLocaleString(),
+            status: false,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+        {
+            id: 2,
+            appointment_time: Date.toLocaleString(),
+            status: true,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+        {
+            id: 3,
+            appointment_time: Date.toLocaleString(),
+            status: false,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+    ];
+    const today = [
+        {
+            id: 1,
+            appointment_time: Date.toLocaleString(),
+            status: true,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+        {
+            id: 2,
+            appointment_time: Date.toLocaleString(),
+            status: false,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+        {
+            id: 3,
+            appointment_time: Date.toLocaleString(),
+            status: true,
+            price: 123.44,
+            duration: 2,
+            created_at: Date.toLocaleString(),
+            updated_at: null,
+            payment_intent_id: 3,
+            room_sid: 3,
+        },
+    ];
     return (
         <div className="row">
             <div className="col-12">
@@ -15,7 +84,7 @@ const LawyerDashboardStatus = () => {
             <div className="col-12">
                 <h4 class="mb-4">Clients Appoinments</h4>
                 <div class="appointment-tab">
-                    <AppointmentsListTabs appointments={appointments} />
+                    <AppointmentsListTabs upcoming={upcoming} today={today} />
                 </div>
             </div>
         </div>
@@ -181,7 +250,7 @@ const TodayAppointments = ({ appointments }) => {
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ appointments }) => {
+const AppointmentsListTabs = ({ upcoming, today }) => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -198,10 +267,10 @@ const AppointmentsListTabs = ({ appointments }) => {
             <Switch>
                 <div className="tab-content">
                     <Route path={`${path}/upcoming`}>
-                        <UpcomingAppointments appointments={appointments} />
+                        <UpcomingAppointments appointments={upcoming} />
                     </Route>
                     <Route path={`${path}/today`}>
-                        <TodayAppointments appointments={appointments} />
+                        <TodayAppointments appointments={today} />
                     </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />

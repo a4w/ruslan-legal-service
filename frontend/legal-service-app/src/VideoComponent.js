@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import "./assets/css/VideoComponent.css"
-import {FaCheck, FaPhoneSlash, FaVolumeMute, FaTextWidth, FaFacebookMessenger, FaMailBulk, FaPhoneVolume, FaVolumeOff} from "react-icons/fa"
+import {FaPhoneSlash, FaVolumeMute} from "react-icons/fa"
 import {BsChatSquareQuote} from "react-icons/bs"
 
 

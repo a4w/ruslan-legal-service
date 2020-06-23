@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
+import History from "./History";
 
 const LawyerDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -173,28 +175,33 @@ const TodayAppointments = ({ appointments }) => {
     );
 };
 const AppointmentsListTabs = ({ appointments }) => {
+    const path = "/dashboard/status";
+    // const path = History.location.pathname;
     return (
-        <Tab.Container id="appointments-dashboard" defaultActiveKey="today">
+        <BrowserRouter id="appointments-dashboard" defaultActiveKey="today">
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
                 <Nav className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
                     <li className="nav-item">
-                        <Nav.Link eventKey="upcoming">Upcoming</Nav.Link>
+                        <Link to={`${path}/upcoming`}>Upcoming</Link>
                     </li>
                     <li className="nav-item">
-                        <Nav.Link eventKey="today">Today</Nav.Link>
+                        <Link to={`${path}/today`}>Today</Link>
                     </li>
                 </Nav>
             </ul>
 
             <Tab.Content>
-                <Tab.Pane eventKey="upcoming">
+                <Route path={`${path}/upcoming`}>
                     <UpcomingAppointments appointments={appointments} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="today">
+                </Route>
+                <Route path={`${path}/today`}>
                     <TodayAppointments appointments={appointments} />
-                </Tab.Pane>
+                </Route>
+                <Route exact path={path}>
+                    <Redirect to={`${path}/upcoming`} />
+                </Route>
             </Tab.Content>
-        </Tab.Container>
+        </BrowserRouter>
     );
 };
 export default LawyerDashboardStatus;

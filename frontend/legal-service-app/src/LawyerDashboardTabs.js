@@ -16,7 +16,7 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard">
                 <Redirect replace to="/dashboard/status" />
             </Route>
-            <Route exact path="/dashboard/status">
+            <Route path="/dashboard/status">
                 <LawyerDashboardStatus />
             </Route>
             <Route exact path="/dashboard/appointments">

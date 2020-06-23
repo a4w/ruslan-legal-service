@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
 
+    protected $with = ['client'];
+    
     protected $fillable = [
         'appointment_time', 'status', 'price', 'duration'
     ];

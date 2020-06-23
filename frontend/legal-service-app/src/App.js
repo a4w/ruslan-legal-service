@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch, BrowserRouter } from "react-router-dom";
+import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -22,6 +22,7 @@ import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VideoComponent from "./VideoComponent";
 
 function App() {
     return (
@@ -42,7 +43,7 @@ function App() {
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route exact path="/reset/:Token" component={ResetPassword}/>
+                    <Route exact path="/reset/:Token" component={ResetPassword} />
                     <Route exact path="/edit">
                         <EditPersonal />
                     </Route>
@@ -67,6 +68,9 @@ function App() {
                     </Route>
                     <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
+                    </Route>
+                    <Route exact path="/video">
+                        <VideoComponent />
                     </Route>
                 </Switch>
                 <Footer />

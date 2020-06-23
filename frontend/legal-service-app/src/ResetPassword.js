@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
-import { resetPasswordValidation } from "./Validations";
-import { request } from "./Axios";
-import { toast } from "react-toastify";
+import {resetPasswordValidation} from "./Validations";
+import {request} from "./Axios";
+import {toast} from "react-toastify";
 
 const ResetPasswordForm = (props) => {
     const {match} = {...props};
-    
     const initUser = {
         newPassword: "",
         passwordConfirm: "",
@@ -16,8 +15,8 @@ const ResetPasswordForm = (props) => {
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(resetPasswordValidation);
 
-    const OnChangeHandler = ({ target: { name, value } }) => {
-        const nextUser = { ...user, [name]: value };
+    const OnChangeHandler = ({target: {name, value}}) => {
+        const nextUser = {...user, [name]: value};
         setUser(nextUser);
         runValidation(nextUser, name);
         if (name === "newPassword" && nextUser.passwordConfirm !== "") {
@@ -34,7 +33,7 @@ const ResetPasswordForm = (props) => {
                 request({
                     url: `/account/reset-password/${match.params.Token}`,
                     method: "POST",
-                    data: { new_password: user.newPassword },
+                    data: {new_password: user.newPassword},
                 }).then((data) => {
                     toast.success("Password Reset successfuly");
                 });
@@ -78,9 +77,9 @@ const ResetPasswordForm = (props) => {
         </div>
     );
 };
-const ResetPassword = (props)=>{
+const ResetPassword = (props) => {
     return (
-        <div className="content" style={{ backgroundColor: "#ffffff" }}>
+        <div className="content" style={{backgroundColor: "#ffffff"}}>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-8 offset-md-2">

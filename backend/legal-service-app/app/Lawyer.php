@@ -20,7 +20,13 @@ class Lawyer extends Model
     ];
 
     public $timestamps = false;
-    protected $appends = array('discounted_price_per_slot');
+    protected $appends = array('discount_ends_in', 'discounted_price_per_slot');
+
+    public function getDiscountEndsInAttribute()
+    {
+        $end_date = $this->discount_end;
+        return $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : 0;
+    }
 
     public function getDiscountedPricePerSlotAttribute()
     {

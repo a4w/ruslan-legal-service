@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import StarRatings from "react-star-ratings";
+import {request} from "./Axios";
+import {toast} from "react-toastify";
 
-const LawyerRating = () => {
+const LawyerRating = ({appointment_id = 0}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
     const imgStyle = {
@@ -9,6 +11,20 @@ const LawyerRating = () => {
         height: "120px",
         width: "120px",
         objectFit: "cover",
+    };
+
+    const OnSubmitHandler = (e) => {
+        e.preventDefault();
+        console.log("done");
+        request({ url: `/rating/rate/${appointment_id}`, method: "POST" })
+            .then((data) => {
+                toast.success("Thank You!");
+            })
+            .catch((e) => {
+                toast.error("An error occured");
+            });
+        
+        
     };
     return (
         <div className="content">
@@ -69,6 +85,7 @@ const LawyerRating = () => {
                     <button
                         className="btn btn-primary btn-block btn-lg login-btn "
                         type="submit"
+                        onClick={OnSubmitHandler}
                     >
                         &nbsp;Submit
                     </button>

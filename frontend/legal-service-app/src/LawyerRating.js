@@ -52,6 +52,7 @@ const LawyerRating = ({appointment_id = 0}) => {
                         <StarRatings
                             rating={rating}
                             starRatedColor="gold"
+                            starHoverColor="gold"
                             starDimension="30px"
                             starSpacing="5px"
                             changeRating={(r, n) => setRating(r)}

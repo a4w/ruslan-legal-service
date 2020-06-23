@@ -1,47 +1,67 @@
 import React from "react";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
 import EditBasicInfo from "./EditBasicInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
 import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
+import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
+import { NavTab } from "react-router-tabs";
+import "./Tabs.css";
 
+import history from "./History";
 const EditPersonal = () => {
+    const path = "/dashboard/settings";
+    // const path = history.location.pathname;
     return (
-        <div className="card">
-            <div className="card-body pt-0">
-                <Tab.Container id="personal-info" defaultActiveKey="basic-info">
-                    <Nav className="user-tabs mb-4">
+        <BrowserRouter>
+            <div className="card">
+                <div className="card-body pt-0">
+                    <div className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
                             style={{ width: "100%" }}
                         >
-                            <li className="nav-item">
-                                <Nav.Link eventKey="basic-info">Basic</Nav.Link>
+                            <li>
+                                <NavTab
+                                    exact
+                                    to="/dashboard/settings/basic-info"
+                                >
+                                    Basic
+                                </NavTab>
                             </li>
-                            <li className="nav-item">
-                                <Nav.Link eventKey="lawyer-info">
+                            <li>
+                                <NavTab
+                                    exact
+                                    to="/dashboard/settings/lawyer-info"
+                                >
                                     Lawyer
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                         </ul>
-                    </Nav>
+                    </div>
 
-                    <Tab.Content>
-                        <Tab.Pane eventKey="basic-info">
-                            <EditBasicInfo />
-                            <hr></hr>
-                            <EditEmail />
-                            <hr></hr>
-                            <EditAddress />{" "}
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="lawyer-info">
+                    <Switch>
+                        <Route exact path={path}>
+                            <Redirect
+                                replace
+                                to="/dashboard/settings/lawyer-info"
+                            />
+                        </Route>
+                        <Route path="/dashboard/settings/basic-info">
+                            <div>
+                                <EditBasicInfo />
+                                <hr></hr>
+                                <EditEmail />
+                                <hr></hr>
+                                <EditAddress />{" "}
+                            </div>
+                        </Route>
+                        <Route path="/dashboard/settings/lawyer-info">
                             <EditLawyerInfo />
-                        </Tab.Pane>
-                    </Tab.Content>
-                </Tab.Container>
+                        </Route>
+                    </Switch>
+                </div>
             </div>
-        </div>
+        </BrowserRouter>
     );
 };
 

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Accreditation;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Carbon\Carbon;
 use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
+use App\LawyerType;
+use App\PracticeArea;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +34,6 @@ class LawyerController extends Controller
             $ratings = collect($lawyer['ratings']);
             $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
             $lawyer['ratings_count'] = $ratings->count();
-            $end_date = new Carbon($lawyer['discount_end']);
-            $lawyer['discount_ends_in'] = $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : null;
             unset($lawyer['ratings']);
         }
         return RespondJSON::with(['lawyers' => $lawyers]);
@@ -158,6 +159,80 @@ class LawyerController extends Controller
     public function fetchLawyer(Lawyer $lawyer)
     {
         return RespondJSON::with(['lawyer' => $lawyer]);
+    }
+  
+    public function fetchMe()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::with(['lawyer' => $user->lawyer]);
+    }
+
+    public function getLawyerTypes()
+    {
+        return RespondJSON::success(['types' => LawyerType::all()]);
+    }
+
+    public function getPracticeAreas()
+    {
+        return RespondJSON::success(['areas' => PracticeArea::all()]);
+    }
+
+    public function getAccreditations()
+    {
+        return RespondJSON::success(['accreditations' => Accreditation::all()]);
+    }
+
+    public function updateProfile(JSONRequest $request)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        $request->validate([
+            'lawyer_type_id' => ['required', 'IN:0,1,2'],
+            'lawyer_type' => ['exclude_unless:lawyer_type_id,0', 'required'],
+            'regulator' => ['required'],
+            'year_licensed' => ['required', 'numeric'],
+            'institution' => ['required'],
+            'graduation' => ['required', 'numeric'],
+            'course' => ['required'],
+            'practice_areas' => ['required', 'array', 'min:1'],
+            'practice_areas.*' => ['required', 'numeric', 'exists:practice_areas,id'],
+            'accreditations' => ['required', 'array', 'min:1'],
+            'accreditations.*' => ['required', 'numeric', 'exists:accreditations,id'],
+        ]);
+        $lawyer->update($request->only(['biography', 'years_licenced', 'institution', 'course', 'graduation_year']));
+        // Lawyer type
+        if ($request->get('lawyer_type_id') === 0) {
+            $type = LawyerType::create([
+                'type' => $request->get('lawyer_type')
+            ]);
+            $lawyer->lawyer_type()->associate($type);
+        } else {
+            $type = LawyerType::find($request->get('lawyer_type_id'));
+            $lawyer->lawyer_type()->associate($type);
+        }
+        // Lawyer practice areas
+        $practice_areas = $request->get('practice_areas');
+        $lawyer->practice_areas()->detach();
+        foreach ($practice_areas as $area) {
+            $lawyer->practice_areas()->attach(PracticeArea::find($area));
+        }
+
+        // Lawyer accreditations
+        $accreditations = $request->get('accreditations');
+        $lawyer->accreditations()->detach();
+        foreach ($accreditations as $accreditation) {
+            $lawyer->accreditations()->attach(Accreditation::find($accreditation));
+        }
+        $lawyer->save();
+        return RespondJSON::success();
     }
 
     public function fetchLawyerAppointments(Request $request)

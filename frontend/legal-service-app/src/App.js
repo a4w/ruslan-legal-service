@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
+import { Route, Router, Switch, BrowserRouter } from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -52,9 +52,10 @@ function App() {
                     <Route path="/dashboard">
                         <LawyerDashboard />
                     </Route>
-                    <Route exact path="/profile">
-                        <LawyerProfile />
-                    </Route>
+                    <Route
+                        path="/profile/:LawyerId"
+                        component={LawyerProfile}
+                    />
                     <Route path="/client-dashboard">
                         <ClientDashboard />
                     </Route>
@@ -64,7 +65,7 @@ function App() {
                     <Route exact path="/chat">
                         <ChatPage />
                     </Route>
-                    <Route path="/book-lawyer">
+                    <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
                     </Route>
                 </Switch>

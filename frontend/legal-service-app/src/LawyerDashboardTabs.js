@@ -37,7 +37,7 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/messages">
                 test 7
             </Route>
-            <Route exact path="/dashboard/settings">
+            <Route path="/dashboard/settings">
                 <EditPersonal />
             </Route>
             <Route exact path="/dashboard/change-password">

@@ -66,6 +66,12 @@ const LawyerRating = () => {
                             </label>
                         </div>
                     </div>
+                    <button
+                        className="btn btn-primary btn-block btn-lg login-btn "
+                        type="submit"
+                    >
+                        &nbsp;Submit
+                    </button>
                 </div>
             </div>
         </div>

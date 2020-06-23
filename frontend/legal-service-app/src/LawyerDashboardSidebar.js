@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import { NavTab } from "react-router-tabs";
+import StarRatings from "react-star-ratings";
+import { request } from "./Axios";
 
 const LawyerDashboardSidebar = () => {
+    const [rating, setRating] = useState(0);
+    useEffect(() => {
+        request({
+            url: `/rating/${1}`,
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                // setRating(data);
+            })
+            .catch((e) => {});
+    }, []);
     return (
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
@@ -15,6 +29,14 @@ const LawyerDashboardSidebar = () => {
 
                         <div className="client-details">
                             <h5 className="mb-0">Lawyer's Area of expertice</h5>
+                            <StarRatings
+                                rating={rating}
+                                starRatedColor="gold"
+                                starDimension="20px"
+                                starSpacing="0px"
+                                numberOfStars={5}
+                                name="rating"
+                            />
                         </div>
                     </div>
                 </div>

@@ -130,6 +130,8 @@ return [
     'twilio_api_key_sid' => env('TWILIO_API_KEY_SID'),
     'twilio_api_key_secret' => env('TWILIO_API_KEY_SECRET'),
 
+    'frontend_url' => env('FRONTEND_LINK'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

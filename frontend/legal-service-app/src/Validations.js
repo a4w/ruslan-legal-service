@@ -57,6 +57,9 @@ export const resetPasswordValidation = (data, field) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
+            test(elem, "Password should be atleast 8 characters long", () => {
+                enforce(data.newPassword.toString()).longerThanOrEquals(8);
+            });
         });
     });
 };
@@ -104,7 +107,7 @@ export const editEmailValidations = (data, field) => {
     return validate("EditEmail", () => {
         vest.only(field);
         test("email", "This field is required", () => {
-            enforce(data.email.toString()).isNotEmpty().matches(/[^@]+@[^.]+\..+/g);
+            enforce(data.email.toString()).isNotEmpty();
         });
         const trimmedEmail = truncate(data.email.toString(), 15);
         test("email", `${trimmedEmail} is not valid email address`, () => {

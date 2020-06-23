@@ -16,7 +16,11 @@ const LawyerRating = ({appointment_id = 0}) => {
     const OnSubmitHandler = (e) => {
         e.preventDefault();
         console.log("done");
-        request({ url: `/rating/rate/${appointment_id}`, method: "POST" })
+        request({
+            url: `/rating/rate/${appointment_id}`,
+            method: "POST",
+            data: { rating: rating, comment: review },
+        })
             .then((data) => {
                 toast.success("Thank You!");
             })

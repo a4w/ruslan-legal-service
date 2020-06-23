@@ -138,10 +138,13 @@ const ListItem = () => {
 const AppointmentsTable = (props) => {
     return (
         <div className="tab-pane show active" id="upcoming-appointments">
-            <div className="card card-table">
+            <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <table className="table table-hover table-center mb-0">
+                        <table
+                            className="table table-hover table-center mb-0"
+                            style={{ backgroundColor: "white" }}
+                        >
                             <thead>
                                 <tr>
                                     <th>Client Name</th>

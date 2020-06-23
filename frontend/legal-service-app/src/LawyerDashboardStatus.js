@@ -22,20 +22,6 @@ const LawyerDashboardStatus = () => {
             updated_at: null,
         }
     ];
-    const [upcoming, setUpcoming] = useState(init);
-    const [today, setToday] = useState(init);
-    useEffect(() => {
-        request({
-            url: "/lawyer/appointments",
-            method: "GET",
-            data: { upcoming: "true" },
-        })
-            .then((data) => {
-                console.log(data);
-                setUpcoming(data.appointments);
-            })
-            .catch(() => {});
-    }, []);
     return (
         <div className="row">
             <div className="col-12">
@@ -44,7 +30,7 @@ const LawyerDashboardStatus = () => {
             <div className="col-12">
                 <h4 class="mb-4">Clients Appoinments</h4>
                 <div class="appointment-tab">
-                    <AppointmentsListTabs upcoming={upcoming} today={today} />
+                    <AppointmentsListTabs upcoming={init} today={init} />
                 </div>
             </div>
         </div>
@@ -193,18 +179,42 @@ const AppointmentsTable = (props) => {
 };
 
 const UpcomingAppointments = ({ appointments }) => {
+    const [upcoming, setUpcoming] = useState(appointments);
+    useEffect(()=>{
+        request({
+            url: "/lawyer/appointments?upcoming=true",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data.appointments);
+            })
+            .catch(() => {});
+    },[]);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
+            {upcoming.map((appointment) => (
                 <ListItem key={appointment.id} />
             ))}
         </AppointmentsTable>
     );
 };
 const TodayAppointments = ({ appointments }) => {
+    const [today, setToday] = useState(appointments);
+    useEffect(()=>{
+        request({
+            url: "/lawyer/appointments?upcoming=false",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setToday(data.appointments);
+            })
+            .catch(() => {});
+    },[]);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
+            {today.map((appointment) => (
                 <ListItem key={appointment.id} />
             ))}
         </AppointmentsTable>

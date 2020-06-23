@@ -12,3 +12,22 @@
     bottom:0;
     right:0;
 }
+
+.controls{
+    width: 100%;
+    position: absolute;
+    bottom:0;
+    right:0;
+    left: 0;
+    background-color: #88888844;
+    z-index: 3;
+}
+
+.controls button{
+    margin: 5px;
+}
+
+.controls .buttons{
+    display:block;
+    text-align: center;
+}

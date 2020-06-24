@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import ErrorMessageSelect from "./ErrorMessageSelect"
 import ErrorMessageInput from "./ErrorMessageInput"
 import {ButtonGroup, Button} from "reactstrap"
-import AppointmentTimeForm from "./AppointmentTimeForm"
+import ScheduleSelectionForm from "./ScheduleSelectionForm"
 import StickyBox from "react-sticky-box"
 
 const EditLawyerSchedule = ({}) => {

@@ -24,7 +24,6 @@ class RatingsController extends Controller
         $user = Auth::user()->client;
         $data = $request->only(['rating', 'comment']);
         $data['comment'] = $data['comment'] === null ? '' : trim($data['comment']);
-        dump($appointment->rating);
         if ($user == $appointment->client) {
             // Add rating
             if ($appointment->rating === null) {

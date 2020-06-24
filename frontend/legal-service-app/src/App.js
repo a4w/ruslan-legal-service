@@ -6,7 +6,6 @@ import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import Blogs from "./Blogs";
@@ -25,6 +24,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
+import "./assets/css/style.css";
 
 function App() {
     return (

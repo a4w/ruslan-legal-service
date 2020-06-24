@@ -83,7 +83,7 @@ const EditLawyerSchedule = ({}) => {
                     </StickyBox>
                 </div>
                 <div className="col-9">
-                    <AppointmentTimeForm calender={false} slotLength={scheduleOptions.slot_length} />
+                    <ScheduleSelectionForm calender={false} slotLength={scheduleOptions.slot_length} />
                 </div>
             </div>
         </>

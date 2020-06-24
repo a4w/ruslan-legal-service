@@ -3,7 +3,7 @@ import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
 
-const ScheduleSelectionForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
+const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
 
     const MINUTES_PER_DAY = 60 * 24;
     const minutesToClock = (minutes) => {
@@ -188,4 +188,4 @@ const ScheduleSelectionForm = ({calender = true, slotLength = 60, initialDateTim
     );
 };
 
-export default ScheduleSelectionForm;
+export default AppointmentTimeForm;

@@ -13,6 +13,7 @@ import {
 import History from "./History";
 import {request} from "./Axios";
 import "./Tabs.css";
+import AppointmentTimeForm from "./AppointmentTimeForm";
 
 const LawyerProfile = ({match}) => {
     const initLawyer = {
@@ -38,7 +39,7 @@ const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(initLawyer);
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
-        request({url: `lawyer/${lawyerID}`, method: "GET"})
+        request({ url: `lawyer/${lawyerID}`, method: "GET" })
             .then((data) => {
                 setLawyer(data.lawyer);
                 console.log(data.lawyer);
@@ -173,6 +174,7 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
+                            <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
                         </Route>
                     </div>
                 </Switch>
@@ -210,7 +212,7 @@ const Overview = ({lawyer}) => {
         regulator,
         years_licenced,
     } = {...lawyer};
-
+    
     const specializations = [
         `Regulated By: ${regulator.regulator}`,
         `Years licenced: ${years_licenced}`,

@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import ErrorMessageSelect from "./ErrorMessageSelect"
 import ErrorMessageInput from "./ErrorMessageInput"
 import {ButtonGroup, Button} from "reactstrap"
-import ScheduleSelectionForm from "./ScheduleSelectionForm"
+import AppointmentTimeForm from "./AppointmentTimeForm"
 import StickyBox from "react-sticky-box"
 
 const EditLawyerSchedule = ({}) => {
@@ -83,7 +83,7 @@ const EditLawyerSchedule = ({}) => {
                     </StickyBox>
                 </div>
                 <div className="col-9">
-                    <ScheduleSelectionForm calender={false} slotLength={scheduleOptions.slot_length} />
+                    <AppointmentTimeForm calender={false} slotLength={scheduleOptions.slot_length} />
                 </div>
             </div>
         </>

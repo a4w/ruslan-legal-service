@@ -1,11 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ModalPopUp from "./Modal";
 
 const NavBar = () => {
     const [modalShow, setModalShow] = useState(false);
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const Menu = () => {
+        if (window.innerWidth >= 991) setOpen(true);
+        else setOpen(false)
+    };
+    useEffect(() => {
+        window.addEventListener("resize", Menu);
+
+        return () => window.removeEventListener("resize", Menu);
+    });
     return (
         <header className="header">
             <nav className="navbar navbar-expand-lg header-nav">

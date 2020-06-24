@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
@@ -15,34 +15,35 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
 
     const slotsPerDay = MINUTES_PER_DAY / slotLength;
 
-    let initSlots = [];
-    for (let i = 0; i < slotsPerDay; ++i) {
-        const time_from = i * slotLength;
-        const time_to = time_from + slotLength;
-        initSlots.push({
-            id: i,
-            from: minutesToClock(time_from),
-            to: minutesToClock(time_to),
-        });
-    }
-    let initSchedule = [];
-    let date = moment(initialDateTime);
-    for (let i = 1; i <= numberOfDays; ++i) {
-        const dayIdx = calender ? date.weekday() : i;
-        initSchedule.push({
-            name: moment.weekdays(dayIdx),
-            slots: initSlots.slice(),
-            date: calender ? date.format(Config.momentsjs_default_date_format) : null
-        });
-        date.add(1, "days");
-    }
-
-    const [schedule, setSchedule] = useState({data: initSchedule});
+    const [schedule, setSchedule] = useState(null);
     const [selectedSchedule, setSelectedSchedule] = useState(initialSelectedSlots);
 
-    useEffect(() => {
-        //
-    }, []);
+    const initSchedule = useMemo(() => {
+        let initSlots = [];
+        for (let i = 0; i < slotsPerDay; ++i) {
+            const time_from = i * slotLength;
+            const time_to = time_from + slotLength;
+            initSlots.push({
+                id: i,
+                from: minutesToClock(time_from),
+                to: minutesToClock(time_to),
+            });
+        }
+        let initSchedule = [];
+        let date = moment(initialDateTime);
+        for (let i = 1; i <= numberOfDays; ++i) {
+            const dayIdx = calender ? date.weekday() : i;
+            initSchedule.push({
+                name: moment.weekdays(dayIdx),
+                slots: initSlots.slice(),
+                date: calender ? date.format(Config.momentsjs_default_date_format) : null
+            });
+            date.add(1, "days");
+        }
+        setSchedule({data: initSchedule});
+        return initSchedule;
+    }, [slotLength])
+
 
     const changeFromDateTime = (amount) => {
         if (calender) {
@@ -85,6 +86,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
     const handleContinueClick = (event) => {
         handleSelection(selectedSchedule);
     };
+    console.debug(schedule);
     return (
         <>
             <div className="card booking-schedule">
@@ -103,7 +105,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                                             <i className="fa fa-chevron-left"></i>
                                         </button>
                                     </li>}
-                                    {schedule.data.map((day, i) => {
+                                    {schedule !== null && schedule.data.map((day, i) => {
                                         return (
                                             <li key={i}>
                                                 <span>{day.name}</span>
@@ -137,7 +139,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                         <div className="col-12">
                             <div className="time-slot">
                                 <ul className="clearfix">
-                                    {schedule.data.map((day, i) => {
+                                    {schedule !== null && schedule.data.map((day, i) => {
                                         return (
                                             <li key={day.date}>
                                                 {day.slots.map((slot, j) => {

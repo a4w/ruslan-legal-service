@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch, BrowserRouter } from "react-router-dom";
+import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -71,6 +71,10 @@ function App() {
                     </Route>
                     <Route exact path="/rate">
                         <LawyerRating appointment_id={31} />
+                    </Route>
+
+                    <Route exact path="/cal">
+                        <AppointmentTimeForm />
                     </Route>
                 </Switch>
                 <Footer />

@@ -29,8 +29,8 @@ const LawyerDashboardStatus = () => {
                 <LawyerStatus />
             </div>
             <div className="col-12">
-                <h4 class="mb-4">Clients Appoinments</h4>
-                <div class="appointment-tab">
+                <h4 className="mb-4">Clients Appoinments</h4>
+                <div className="appointment-tab">
                     <AppointmentsListTabs upcoming={init} all={init} />
                 </div>
             </div>

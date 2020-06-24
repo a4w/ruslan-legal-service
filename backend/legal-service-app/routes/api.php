@@ -41,7 +41,7 @@ Route::prefix('chat')->group(function () {
 });
 
 Route::prefix('rating')->group(function () {
-    Route::post('/rate/{appointment_id}', 'RatingsController@rateAppointment')->middleware('auth:api');
+    Route::post('/rate/{appointment}', 'RatingsController@rateAppointment')->middleware('auth:api');
     Route::get('{lawyer}', 'RatingsController@getLawyerRatings');
 });
 

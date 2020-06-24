@@ -23,6 +23,7 @@ import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
+import EditLawyerSchedule from "./EditLawyerSchedule"
 
 function App() {
     return (
@@ -73,8 +74,8 @@ function App() {
                         <LawyerRating appointment_id={31} />
                     </Route>
 
-                    <Route exact path="/cal">
-                        <AppointmentTimeForm />
+                    <Route exact path="/edit-schedule">
+                        <EditLawyerSchedule />
                     </Route>
                 </Switch>
                 <Footer />

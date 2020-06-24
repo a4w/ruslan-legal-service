@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
 import {request} from "./Axios";
 
@@ -16,12 +16,12 @@ const LawyerAppointments = () => {
             room_sid: null,
             status: null,
             updated_at: null,
-            client: { account: { profile_picture: "", name: "", surname: "" } },
+            client: {account: {profile_picture: "", name: "", surname: ""}},
         },
     ];
     const [appointments, setAppointments] = useState(init);
     useEffect(() => {
-        request({ url: "/lawyer/appointments", method: "GET" })
+        request({url: "/lawyer/appointments", method: "GET"})
             .then((data) => {
                 setAppointments(data.appointments);
             })
@@ -35,7 +35,7 @@ const LawyerAppointments = () => {
         </div>
     );
 };
-const AppointmentCard = ({ appointment }) => {
+const AppointmentCard = ({appointment}) => {
     // const [viewDetails, setView] = useState(false);
     const {client} = {...appointment};
     const {account} = {...client};
@@ -88,24 +88,24 @@ const AppointmentCard = ({ appointment }) => {
                         <a href="//">{account.name + " " + account.surname}</a>
                     </h3>
                     <div className="appointment-details">
-                        <h5>
+                        <span className="detail">
                             <i className="far fa-calendar-alt"></i>{" "}
                             {day + " at: " + time}
-                        </h5>
-                        <h5>
+                        </span>
+                        <span className="detail">
                             <i className="far fa-clock"></i>{" "}
                             {appointment.duration}
-                        </h5>
-                        <h5>
+                        </span>
+                        {(account.cite || account.country) && <span className="detail">
                             <i className="fas fa-map-marker-alt"></i>{" "}
-                            {account.city + ", " + account.country}
-                        </h5>
-                        <h5>
+                            {(account.city !== null ? account.city : '-') + ", " + (account.country !== null ? account.country : '-')}
+                        </span>}
+                        <span className="detail">
                             <i className="fas fa-envelope"></i> {account.email}
-                        </h5>
-                        <h5>
+                        </span>
+                        <span className="detail">
                             <i className="fas fa-phone"></i> {account.phone}
-                        </h5>
+                        </span>
                         {rejected !== null && getStatus(rejected, date)}
                     </div>
                 </div>

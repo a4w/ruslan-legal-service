@@ -16,13 +16,29 @@ const ErrorMessageSelect = ({
         color: "#333",
         minHeight: "50px",
     };
+    if (typeof value === "undefined") {
+        value = [];
+    } else if (!multi) {
+        value = [value];
+    }
+    // Handle values
+    let selectedObjects = [];
+
+    for (const option of options) {
+        for (const i of value) {
+            if (option.value === i) {
+                selectedObjects.push(option);
+                break;
+            }
+        }
+    }
     return (
         <div className="form-group">
             <Select
                 multi={multi}
                 name={name}
                 className="floating"
-                values={multi ? value : [value]}
+                values={selectedObjects}
                 style={selectStyle}
                 placeholder={placeholder}
                 options={options}

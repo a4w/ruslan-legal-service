@@ -22,7 +22,15 @@ const ChatPage = () => {
     const [messages, setMessages] = useState([]);
     const [hideChatList, setHide] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
+    const Chats = () => {
+        if (window.innerWidth >= 991) setHide(false);
+        else setHide(true)
+    };
+    useEffect(() => {
+        window.addEventListener("resize", Chats);
 
+        return () => window.removeEventListener("resize", Chats);
+    });
     // Load chats from server
     const [chats, setChats] = useState([]);
     useEffect(() => {

@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import {BrowserRouter, Route, Link, Redirect, Switch} from "react-router-dom";
+import History from "./History";
+import {NavTab} from "react-router-tabs";
+import {request} from "./Axios";
 
 const LawyerDashboardStatus = () => {
-    const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+    const init = [
+        {
+            appointment_time: null,
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 1,
+            lawyer_id: null,
+            payment_intent_id: null,
+            price: null,
+            room_sid: null,
+            status: null,
+            updated_at: null,
+            client: {account: {profile_picture: "", name: "", surname: ""}},
+        },
+    ];
     return (
         <div className="row">
             <div className="col-12">
                 <LawyerStatus />
             </div>
             <div className="col-12">
-                <AppointmentsListTabs appointments={appointments} />
+                <h4 class="mb-4">Clients Appoinments</h4>
+                <div class="appointment-tab">
+                    <AppointmentsListTabs upcoming={init} all={init} />
+                </div>
             </div>
         </div>
     );
@@ -38,7 +60,7 @@ const LawyerStatus = () => {
                             <div className="dash-widget-info">
                                 <h6>Total Clients</h6>
                                 <h3>Number</h3>
-                                <p className="text-muted">Till Today</p>
+                                <p className="text-muted">Till All</p>
                             </div>
                         </div>
                     </div>
@@ -54,7 +76,7 @@ const LawyerStatus = () => {
                                 </div>
                             </div>
                             <div className="dash-widget-info">
-                                <h6>Today Clients</h6>
+                                <h6>All Clients</h6>
                                 <h3>Number</h3>
                                 <p className="text-muted">{date}</p>
                             </div>
@@ -85,12 +107,23 @@ const LawyerStatus = () => {
         </div>
     );
 };
-const ListItem = () => {
-    const [cancel, setCancel] = useState(false);
-    const [date, setDate] = useState(null);
+const ListItem = ({appointment}) => {
+    const {client} = {...appointment};
+    const {account} = {...client};
+    const [cancel, setCancel] = useState(appointment.status === "ON HOLD");
+    const appointment_time = new Date(appointment.appointment_time);
+    const day = appointment_time.toLocaleString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+    const time = appointment_time.toLocaleString("en-GB", {
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+    });
     const OnReject = (e) => {
         e.preventDefault();
-        setDate(new Date());
         setCancel(true);
         // The API cancel Rquest will be sent here
     };
@@ -98,21 +131,29 @@ const ListItem = () => {
         <tr>
             <td>
                 <h2 className="table-avatar">
-                    <a
-                        href="client-profile.html"
-                        className="avatar avatar-sm mr-2"
-                    >
-                        Img
+                    <a href="//" className="avatar avatar-sm mr-2">
+                        <img
+                            className="avatar-img rounded-circle"
+                            src={
+                                account.profile_picture
+                                    ? account.profile_picture
+                                    : "/avatar.svg"
+                            }
+                            alt="User"
+                        />
                     </a>
-                    <a href="//">Name </a>
+                    <a href="//">
+                        {account.name + " " + account.surname}
+                        <span>{appointment.duration} Minutes</span>
+                    </a>
                 </h2>
             </td>
             <td>
-                Session date{" "}
-                <span className="d-block text-info">Session time</span>
+                {day}
+                <span className="d-block text-info">{time}</span>
             </td>
-            <td>{cancel ? "Cancelled" : "Upcoming or Done"}</td>
-            <td className="text-center">paid amount</td>
+            <td>{cancel ? "CANCELLED" : appointment.status}</td>
+            <td className="text-center">{appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
                     {cancel === false && (
@@ -135,7 +176,10 @@ const AppointmentsTable = (props) => {
             <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <table className="table table-hover table-center mb-0">
+                        <table
+                            className="table table-hover table-center mb-0"
+                            style={{backgroundColor: "white"}}
+                        >
                             <thead>
                                 <tr>
                                     <th>Client Name</th>
@@ -154,47 +198,76 @@ const AppointmentsTable = (props) => {
     );
 };
 
-const UpcomingAppointments = ({ appointments }) => {
+const UpcomingAppointments = ({appointments}) => {
+    const [upcoming, setUpcoming] = useState(appointments);
+    useEffect(() => {
+        request({
+            url: "/lawyer/appointments?upcoming=true",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <ListItem key={appointment.id} />
+            {upcoming.map((appointment) => (
+                <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const TodayAppointments = ({ appointments }) => {
+const AllAppointments = ({appointments}) => {
+    const [all, setAll] = useState(appointments);
+    useEffect(() => {
+        request({
+            url: "/lawyer/appointments?upcoming=false",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <ListItem key={appointment.id} />
+            {all.map((appointment) => (
+                <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ appointments }) => {
+const AppointmentsListTabs = ({upcoming, all}) => {
+    const path = "/dashboard/status";
+    // const path = History.location.pathname;
     return (
-        <Tab.Container id="appointments-dashboard" defaultActiveKey="today">
+        <BrowserRouter>
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                <Nav className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                    <li className="nav-item">
-                        <Nav.Link eventKey="upcoming">Upcoming</Nav.Link>
-                    </li>
-                    <li className="nav-item">
-                        <Nav.Link eventKey="today">Today</Nav.Link>
-                    </li>
-                </Nav>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/upcoming`}>Upcoming</NavTab>
+                </li>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/all`}>All</NavTab>
+                </li>
             </ul>
 
-            <Tab.Content>
-                <Tab.Pane eventKey="upcoming">
-                    <UpcomingAppointments appointments={appointments} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="today">
-                    <TodayAppointments appointments={appointments} />
-                </Tab.Pane>
-            </Tab.Content>
-        </Tab.Container>
+            <Switch>
+                <div className="tab-content">
+                    <Route path={`${path}/upcoming`}>
+                        <UpcomingAppointments appointments={upcoming} />
+                    </Route>
+                    <Route path={`${path}/all`}>
+                        <AllAppointments appointments={all} />
+                    </Route>
+                    <Route exact path={path}>
+                        <Redirect to={`${path}/upcoming`} />
+                    </Route>
+                </div>
+            </Switch>
+        </BrowserRouter>
     );
 };
 export default LawyerDashboardStatus;

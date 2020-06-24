@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
+import {request} from "./Axios";
 
 const LawyerAppointments = () => {
-    const clients = [{ id: 1 }, { id: 2 }, { id: 3 }];
+    useEffect(()=>{
+        request({ url: "/lawyer/appointments", method: "GET" })
+            .then((data) => {
+                
+            })
+            .catch((err) => {});
+    },[]);
     return (
         <div className="appointments">
-            {clients.map((client) => (
+            {/* {clients.map((client) => (
                 <AppointmentCard key={client.id} client={client} />
-            ))}
+            ))} */}
         </div>
     );
 };

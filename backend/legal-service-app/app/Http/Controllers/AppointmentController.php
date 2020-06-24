@@ -135,6 +135,6 @@ class AppointmentController extends Controller
         $token->addGrant($videoGrant);
 
         // render token to string
-        return RespondJSON::success(['access_token' => $token->toJWT()]);
+        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid]);
     }
 }

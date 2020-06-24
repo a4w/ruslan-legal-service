@@ -49,8 +49,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        //hideModal();
-                        history.push("/");
+                        hideModal();
                     });
             }
         });

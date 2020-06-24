@@ -2,8 +2,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ModalPopUp from "./Modal";
+import Cookies from "universal-cookie";
 
 const NavBar = () => {
+    const cookie = new Cookies();
+    const logged_in = cookie.get('logged_in');
     const [modalShow, setModalShow] = useState(false);
     return (
         <header className="header">
@@ -40,7 +43,16 @@ const NavBar = () => {
                             <Link to="/blogs">Blogs</Link>
                         </li>
                         <li className="login-link">
-                            <a href="login.html">Login / Signup</a>
+                            <a
+                                href="login.html"
+                                style={{
+                                    visibility: logged_in
+                                        ? "hidden"
+                                        : "visible",
+                                }}
+                            >
+                                Login / Signup
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -61,6 +73,9 @@ const NavBar = () => {
                         <a
                             className="nav-link header-login"
                             onClick={() => setModalShow(true)}
+                            style={{
+                                visibility: logged_in ? "hidden" : "visible",
+                            }}
                         >
                             login / Signup{" "}
                         </a>

@@ -22,6 +22,7 @@ import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LawyerRating from "./LawyerRating";
 
 function App() {
     return (
@@ -42,7 +43,7 @@ function App() {
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route exact path="/reset/:Token" component={ResetPassword}/>
+                    <Route exact path="/reset/:Token" component={ResetPassword} />
                     <Route exact path="/edit">
                         <EditPersonal />
                     </Route>
@@ -67,6 +68,9 @@ function App() {
                     </Route>
                     <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
+                    </Route>
+                    <Route exact path="/rate">
+                        <LawyerRating appointment_id={31} />
                     </Route>
                 </Switch>
                 <Footer />

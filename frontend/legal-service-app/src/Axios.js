@@ -20,6 +20,7 @@ const setAccessToken = (access_token) => {
         Authorization: `Bearer ${access_token}`,
     };
     cookie.set("access_token", access_token);
+    cookie.set("logged_in", true);
     console.log("Set Successful!", client.defaults.headers.common.headers);
 };
 
@@ -38,7 +39,9 @@ const onRefreshSuccess = (response) => {
 const onRefreshError = (error) => {
     // Remove refresh token cookie and redirect to login
     cookie.remove("refresh_token");
-    history.push("/login");
+    cookie.remove("access_token");
+    cookie.remove("logged_in");
+    // should show modal here donno how tho
 };
 const request = function (options) {
     const onSuccess = function (response) {
@@ -49,14 +52,14 @@ const request = function (options) {
 
     const onError = function (error) {
         console.error("Request Failed:", error.config);
-        if (error.response) {
-            const status = error.response.status;
-            if (
-                status === 401 &&
-                client.defaults.headers.common.headers.access_token
-            ) {
+        if (error) {
+            const status = error.response.request.status;
+            console.log("status: ", status);
+            
+            if (status === 401 && !cookie.get("access_token")) {
                 // If there is a refresh token then refresh
                 const refresh_token = cookie.get("refresh_token");
+                console.log("refresh_token: ", refresh_token);
                 if (refresh_token)
                     return client({
                         method: "POST",
@@ -65,9 +68,10 @@ const request = function (options) {
                     })
                         .then(onRefreshSuccess)
                         .catch(onRefreshError);
+                else onRefreshError();
             } else {
                 // Else push to login
-                // history.push("/login");
+                // History.push("/login");
                 // Another error here not login
             }
             console.error("Status:", error.response.status);

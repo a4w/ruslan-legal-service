@@ -7423,3 +7423,13 @@ min-width: 100%;
 .appointment-details .detail{
     display: block;
 }
+.timepicker-container{
+    position: absolute !important;
+    z-index: 50 !important;
+    width: 100% !important;
+}
+.timepicker-container > div{
+    position: absolute !important;
+    z-index: 50 !important;
+    width: 100% !important;
+}

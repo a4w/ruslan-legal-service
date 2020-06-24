@@ -1,29 +1,18 @@
-import React, {useState, useEffect} from "react";
-import {FaArrowCircleRight} from "react-icons/fa";
+import React, {useState, useEffect, useRef} from "react";
+import {FaArrowCircleRight, FaClock} from "react-icons/fa";
 import ErrorMessageSelect from "./ErrorMessageSelect"
 import ErrorMessageInput from "./ErrorMessageInput"
 import {ButtonGroup, Button} from "reactstrap"
 import StickyBox from "react-sticky-box"
 import moment from "moment"
-import {DateTimePicker} from "react-tempusdominus-bootstrap"
+import {DateTimePicker, TimePicker} from "react-tempusdominus-bootstrap"
+import TimeKeeper from 'react-timekeeper';
 import {toast} from "react-toastify";
 
 const ScheduleForm = ({}) => {
 
-    const DATETIME_FORMAT = "Y-MM-DD HH:mm";
-
-    const dayMap = (day) => {
-        const map = {
-            "monday": 0,
-            "tuesday": 1,
-            "wednesday": 2,
-            "thursday": 3,
-            "friday": 4,
-            "saturday": 5,
-            "sunday": 6,
-        };
-        return map[day.toLowerCase()];
-    };
+    const DATETIME_FORMAT = "Y-MM-DD HH:mm:ss";
+    const TIME_FORMAT = "HH:mm";
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
@@ -37,8 +26,11 @@ const ScheduleForm = ({}) => {
     ]);
 
     // Slot properties
+    const time = moment();
+    time.minute(time.minute() - (time.minute() % 5));
     const [slotProperties, setSlotProperties] = useState({
-        time: moment(),
+        time: time,
+        weekday: 0,
         length: 60,
         price: 0,
         discount_type: 0, // 0 -> no discount, 1 -> percent discount, 2 -> percent discount
@@ -46,12 +38,16 @@ const ScheduleForm = ({}) => {
         discount_end: moment().format(DATETIME_FORMAT)
     });
 
+    const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
+    const timePickerObj = useRef(null);
+
     // On load
     useEffect(() => {
         // Load schedule from backend
     }, []);
 
     const handleSelection = ({name, value}) => {
+        console.log(name, value);
         setSlotProperties({...slotProperties, [name]: value});
     };
     const handleChange = (event) => {
@@ -60,7 +56,7 @@ const ScheduleForm = ({}) => {
     };
 
     const handleButtonClick = () => {
-        const dayIdx = dayMap(slotProperties.time.format('dddd'));
+        const dayIdx = slotProperties.weekday;
         // Check if valid
         const end_time = slotProperties.time.clone().add(slotProperties.length, "minutes")
         for (let slot of schedule[dayIdx].slots) {
@@ -72,21 +68,39 @@ const ScheduleForm = ({}) => {
         }
         const nextSchedule = schedule.slice();
         const newSlot = Object.assign({end_time}, slotProperties);
-        console.log(newSlot.end_time.format(DATETIME_FORMAT));
 
         nextSchedule[dayIdx].slots.push(newSlot);
         setSchedule(nextSchedule);
     };
 
+    const handleTimeSelection = (time) => {
+        const clock = ("0" + time.hour).slice(-2) + ":" + time.minute;
+        setSlotProperties({...slotProperties, time: moment(clock, "HH:mm")});
+    };
+
+    const toggleTimePicker = () => {
+        setIsTimeSelectionShown(!isTimeSelectorShown);
+    };
+
     useEffect(() => {
-        console.table(schedule);
-    }, [schedule]);
+        console.debug(slotProperties);
+    }, [slotProperties]);
 
     const slotOptions = [
         {label: '30 minutes', value: 30},
         {label: '45 minutes', value: 45},
         {label: '60 minutes', value: 60},
         {label: '90 minutes', value: 90},
+    ];
+
+    const weekDayOptions = [
+        {label: 'Monday', value: 0},
+        {label: 'Tuesday', value: 1},
+        {label: 'Wednesday', value: 2},
+        {label: 'Thursday', value: 3},
+        {label: 'Friday', value: 4},
+        {label: 'Saturday', value: 5},
+        {label: 'Sunday', value: 6},
     ];
 
     return (
@@ -97,7 +111,26 @@ const ScheduleForm = ({}) => {
                         <div className="p-3">
                             <h4 className="text-center">Add appointment</h4>
                             <div className="form-group">
-                                <DateTimePicker stepping={5} format={DATETIME_FORMAT} icons={{time: 'fa fa-clock'}} onChange={(value) => {setSlotProperties({...slotProperties, time: value.date})}} />
+                                <ErrorMessageSelect
+                                    multi={false}
+                                    name="weekday"
+                                    className="floating"
+                                    value={slotProperties.weekday}
+                                    placeholder="Weekday"
+                                    options={weekDayOptions}
+                                    OnChangeHandler={handleSelection}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
+                                    <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
+                                </button>
+                                {isTimeSelectorShown && <div ref={timePickerObj} className="timepicker-container">
+                                    <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
+                                        <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
+
+                                    </FocusWrapper>
+                                </div>}
                             </div>
                             <div className="form-group">
                                 <ErrorMessageSelect
@@ -199,3 +232,33 @@ const ScheduleForm = ({}) => {
 };
 
 export default ScheduleForm;
+
+function FocusWrapper({children, close}) {
+    const container = useRef(null);
+
+    function handleClick(e) {
+        const wrapper = container.current;
+        const target = e.target;
+        if (!document.contains(target)) {
+            // handles edgecase with time dropdowns
+            // where a dissappearing dropdown isn't part of the wrapper
+            return;
+        }
+        if (!wrapper.contains(target)) {
+            return close();
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("click", handleClick, false);
+        return () => {
+            document.removeEventListener("click", handleClick, false);
+        };
+    }, []);
+
+    return (
+        <div ref={container} style={{display: "inline-block"}}>
+            {children}
+        </div>
+    );
+}

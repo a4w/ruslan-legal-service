@@ -70,7 +70,7 @@ function App() {
                         <LawyerBooking />
                     </Route>
                     <Route exact path="/video">
-                        <VideoComponent />
+                        <VideoComponent appointment_id={32} />
                     </Route>
                 </Switch>
                 <Footer />

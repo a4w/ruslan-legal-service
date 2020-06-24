@@ -23,7 +23,8 @@ import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
-import EditLawyerSchedule from "./EditLawyerSchedule"
+import ScheduleForm from "./ScheduleForm"
+import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
 
 function App() {
     return (
@@ -75,7 +76,7 @@ function App() {
                     </Route>
 
                     <Route exact path="/edit-schedule">
-                        <EditLawyerSchedule />
+                        <ScheduleForm />
                     </Route>
                 </Switch>
                 <Footer />

@@ -42,7 +42,20 @@ const ErrorMessageSelect = ({
                 style={selectStyle}
                 placeholder={placeholder}
                 options={options}
-                onChange={(values) => {OnChangeHandler({name, values})}}
+                onChange={(values) => {
+                    if (multi) {
+                        const realValues = values.map((value) => {
+                            return value.value;
+                        });
+                        return OnChangeHandler({name, values: realValues});
+                    } else {
+                        if (values.length === 1) {
+                            return OnChangeHandler({name, value: values[0].value});
+                        } else {
+                            return OnChangeHandler({name, value: null});
+                        }
+                    }
+                }}
             />
             {errors.length > 0 && (
                 <label className="text-danger ml-2 font-weight-light text-xs">

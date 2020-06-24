@@ -100,6 +100,10 @@ class AppointmentController extends Controller
             // Time has not came
             return RespondJSON::conflict();
         }
+        if (now()->gt($time->addMinutes($appointment->duration))) {
+            // Time has passed
+            return RespondJSON::conflict();
+        }
         // All is good, Check if room already created
         $room_sid = $appointment->room_sid;
         if ($room_sid === null) {

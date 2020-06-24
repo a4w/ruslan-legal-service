@@ -10,7 +10,7 @@ const NavBar = () => {
         <header className="header">
             <nav className="navbar navbar-expand-lg header-nav">
                 <div className="navbar-header">
-                    <a id="mobile_btn" onClick={()=> setOpen(true)} href="#">
+                    <a id="mobile_btn" onClick={() => setOpen(true)} href="#">
                         <span className="bar-icon">
                             <span></span>
                             <span></span>
@@ -21,12 +21,24 @@ const NavBar = () => {
                         <b>Lawbe</b>.co.uk
                     </Link>
                 </div>
-                <div className="main-menu-wrapper" style={{transform: open? "translateX(0px)":"translateX(-260px)"}}>
+                <div
+                    className="main-menu-wrapper"
+                    style={{
+                        transform: open
+                            ? "translateX(0px)"
+                            : "translateX(-260px)",
+                    }}
+                >
                     <div className="menu-header">
                         <Link className="menu-logo" to="/">
                             <b>Lawbe</b>.co.uk
                         </Link>
-                        <a id="menu_close" onClick={()=> setOpen(false)} className="menu-close" href="#">
+                        <a
+                            id="menu_close"
+                            onClick={() => setOpen(false)}
+                            className="menu-close"
+                            href="#"
+                        >
                             <i className="fas fa-times"></i>
                         </a>
                     </div>
@@ -41,7 +53,9 @@ const NavBar = () => {
                             <Link to="/blogs">Blogs</Link>
                         </li>
                         <li className="login-link">
-                            <a href="login.html">Login / Signup</a>
+                            <a href="//" onClick={() => setModalShow(true)}>
+                                Login / Signup
+                            </a>
                         </li>
                     </ul>
                 </div>

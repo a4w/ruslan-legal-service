@@ -8,7 +8,7 @@ const NavBar = () => {
     const cookie = new Cookies();
     const logged_in = cookie.get('logged_in');
     const [modalShow, setModalShow] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)

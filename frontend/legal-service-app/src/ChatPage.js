@@ -28,9 +28,12 @@ const ChatPage = () => {
     };
     useEffect(() => {
         window.addEventListener("resize", Chats);
-
-        return () => window.removeEventListener("resize", Chats);
+        
+        return () => window.removeEventListener("resize", Chats); 
     });
+    const Swipe = () => {
+        if (window.innerWidth <= 991) setHide(true);
+    };
     // Load chats from server
     const [chats, setChats] = useState([]);
     useEffect(() => {
@@ -120,7 +123,7 @@ const ChatPage = () => {
                     </div>
                 </form>
                 <ChatUserList
-                    swipe={() => setHide(true)}
+                    swipe={Swipe}
                     chats={chats}
                     onChatSelection={(index) => setSelectedChat(index)}
                 />

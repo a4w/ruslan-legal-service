@@ -7420,3 +7420,6 @@ html.menu-opened body {
 .dashboard-menu {
 min-width: 100%;
 }
+.appointment-details .detail{
+    display: block;
+}

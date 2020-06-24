@@ -32,6 +32,7 @@
         "react-sticky": "^6.0.3",
         "react-sticky-box": "^0.9.3",
         "react-tempusdominus-bootstrap": "^1.5.0",
+        "react-timekeeper": "^2.1.1",
         "react-toastify": "^6.0.6",
         "reactstrap": "^8.5.0",
         "universal-cookie": "^4.0.3",

@@ -38,19 +38,14 @@ const LawyerProfile = ({match}) => {
     };
     const [lawyer, setLawyer] = useState(initLawyer);
     useEffect(() => {
-        if (History.location.state) {
-            setLawyer(History.location.state.lawyer);
-        } else {
-            //fetch lawyer from database
-            const lawyerID = match.params.LawyerId;
-            request({url: `lawyer/${lawyerID}`, method: "GET"})
-                .then((data) => {
-                    setLawyer(data.lawyer);
-                    console.log(data.lawyer);
-                })
-                .catch((e) => {});
-            console.log();
-        }
+        const lawyerID = match.params.LawyerId;
+        request({ url: `lawyer/${lawyerID}`, method: "GET" })
+            .then((data) => {
+                setLawyer(data.lawyer);
+                console.log(data.lawyer);
+            })
+            .catch((e) => {});
+        console.log();
     }, []);
 
     return (
@@ -113,7 +108,7 @@ const ProfileCard = ({lawyer}) => {
                             <div className="session-services">
                                 {lawyer.accreditations &&
                                     lawyer.accreditations.map((acc) => (
-                                        <span key={acc}>{acc}</span>
+                                        <span key={acc.id}>{acc.accreditation}</span>
                                     ))}
                             </div>
                         </div>

@@ -3,7 +3,7 @@ import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
 
-const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, selectedSlots = []}) => {
+const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
     /*
         This will show the date from today (current hour) -> 7 days ahead (same week day next week)
     */
@@ -22,28 +22,30 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
     for (let i = 0; i < slotsPerDay; ++i) {
         const time_from = i * slotLength;
         const time_to = time_from + slotLength;
-        console.log(minutesToClock(time_to));
         initSlots.push({
             id: i,
             from: minutesToClock(time_from),
-            to: minutesToClock(time_to)
+            to: minutesToClock(time_to),
         });
     }
     let initSchedule = [];
-    for (let i = 1; i <= 7; ++i) {
+    let date = moment(initialDateTime);
+    for (let i = 1; i <= numberOfDays; ++i) {
+        const dayIdx = calender ? date.weekday() : i;
         initSchedule.push({
-            name: moment.weekdays(i),
-            slots: initSlots.slice()
+            name: moment.weekdays(dayIdx),
+            slots: initSlots.slice(),
+            date: calender ? date.format(Config.momentsjs_default_date_format) : null
         });
+        date.add(1, "days");
     }
 
     const [schedule, setSchedule] = useState({data: initSchedule});
+    const [selectedSchedule, setSelectedSchedule] = useState(initialSelectedSlots);
 
     useEffect(() => {
-
+        //
     }, []);
-
-
 
     const changeFromDateTime = (amount) => {
         if (calender) {
@@ -56,30 +58,40 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
         }
     };
 
+    useEffect(() => {
+        console.table(selectedSchedule);
+    }, [selectedSchedule]);
+
     const handleSlotClick = (event) => {
         const button = event.currentTarget;
-        const slot = {
-            day: button.dataset.day,
-            slot_id: button.dataset.slot,
-        };
+        const dayIdx = button.dataset.day;
+        const slotIdx = button.dataset.slot;
+        const slot = schedule.data[dayIdx].slots[slotIdx];
+        // Find day or create it
+        if (typeof selectedSchedule[dayIdx] === "undefined") {
+            selectedSchedule[dayIdx] = {date: schedule.data[dayIdx].date, name: schedule.data[dayIdx].name, selectedSlots: []};
+        }
+        const currentDay = selectedSchedule[dayIdx];
         if (button.classList.contains("selected")) {
             button.classList.remove("selected");
-            const nextSlots = selectedSlots.filter((item) => {
-                if (item.slot_id === slot.slot_id && item.day === slot.day) {
+            const nextSlots = currentDay.selectedSlots.filter((item) => {
+                if (item.id === slot.id) {
                     return false;
                 }
                 return true;
             });
-            //setSelectedSlots(nextSlots);
+            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: nextSlots}};
+            setSelectedSchedule(nextSchedule);
         } else {
             button.classList.add("selected");
-            const nextSlots = [...selectedSlots, slot];
-            //setSelectedSlots(nextSlots);
+            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: [...currentDay.selectedSlots, slot]}};
+            setSelectedSchedule(nextSchedule);
         }
     };
 
     const handleContinueClick = (event) => {
-        console.log(selectedSlots);
+        handleSelection(selectedSchedule);
+        console.log(selectedSchedule);
     };
     return (
         <>
@@ -133,10 +145,10 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                         <div className="col-12">
                             <div className="time-slot">
                                 <ul className="clearfix">
-                                    {schedule.data.map((day) => {
+                                    {schedule.data.map((day, i) => {
                                         return (
                                             <li key={day.date}>
-                                                {day.slots.map((slot) => {
+                                                {day.slots.map((slot, j) => {
                                                     return (
                                                         <button
                                                             key={slot.id}
@@ -146,13 +158,12 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                                                             onClick={
                                                                 handleSlotClick
                                                             }
-                                                            data-day={day.date}
-                                                            data-slot={slot.id}
+                                                            data-day={i}
+                                                            data-slot={j}
                                                             className="timing btn-block"
                                                         >
                                                             <span>
-                                                                {slot.from} -{" "}
-                                                                {slot.to}
+                                                                {slot.from} - {slot.to}
                                                             </span>
                                                         </button>
                                                     );

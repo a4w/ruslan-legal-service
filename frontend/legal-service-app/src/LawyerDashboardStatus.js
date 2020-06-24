@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import { BrowserRouter, Route, Link, Redirect, Switch } from "react-router-dom";
+import {BrowserRouter, Route, Link, Redirect, Switch} from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
-import { request } from "./Axios";
+import {request} from "./Axios";
 
 const LawyerDashboardStatus = () => {
     const init = [
@@ -20,7 +20,7 @@ const LawyerDashboardStatus = () => {
             room_sid: null,
             status: null,
             updated_at: null,
-            client: { account: { profile_picture: "", name: "", surname: "" } },
+            client: {account: {profile_picture: "", name: "", surname: ""}},
         },
     ];
     return (
@@ -144,7 +144,7 @@ const ListItem = ({appointment}) => {
                     </a>
                     <a href="//">
                         {account.name + " " + account.surname}
-                        <span>{appointment.payment_intent_id}</span>
+                        <span>{appointment.duration} Minutes</span>
                     </a>
                 </h2>
             </td>
@@ -178,7 +178,7 @@ const AppointmentsTable = (props) => {
                     <div className="table-responsive">
                         <table
                             className="table table-hover table-center mb-0"
-                            style={{ backgroundColor: "white" }}
+                            style={{backgroundColor: "white"}}
                         >
                             <thead>
                                 <tr>
@@ -198,9 +198,9 @@ const AppointmentsTable = (props) => {
     );
 };
 
-const UpcomingAppointments = ({ appointments }) => {
+const UpcomingAppointments = ({appointments}) => {
     const [upcoming, setUpcoming] = useState(appointments);
-    useEffect(()=>{
+    useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=true",
             method: "GET",
@@ -210,7 +210,7 @@ const UpcomingAppointments = ({ appointments }) => {
                 setUpcoming(data.appointments);
             })
             .catch(() => {});
-    },[]);
+    }, []);
     return (
         <AppointmentsTable>
             {upcoming.map((appointment) => (
@@ -219,9 +219,9 @@ const UpcomingAppointments = ({ appointments }) => {
         </AppointmentsTable>
     );
 };
-const AllAppointments = ({ appointments }) => {
+const AllAppointments = ({appointments}) => {
     const [all, setAll] = useState(appointments);
-    useEffect(()=>{
+    useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",
             method: "GET",
@@ -231,7 +231,7 @@ const AllAppointments = ({ appointments }) => {
                 setAll(data.appointments);
             })
             .catch(() => {});
-    },[]);
+    }, []);
     return (
         <AppointmentsTable>
             {all.map((appointment) => (
@@ -240,7 +240,7 @@ const AllAppointments = ({ appointments }) => {
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ upcoming, all }) => {
+const AppointmentsListTabs = ({upcoming, all}) => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (

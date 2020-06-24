@@ -43,7 +43,7 @@ function App() {
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route exact path="/reset/:Token" component={ResetPassword}/>
+                    <Route exact path="/reset/:Token" component={ResetPassword} />
                     <Route exact path="/edit">
                         <EditPersonal />
                     </Route>
@@ -68,7 +68,9 @@ function App() {
                     <Route path="/book-lawyer">
                         <LawyerBooking />
                     </Route>
-                    <Route exact path="/rate" component={LawyerRating}/>
+                    <Route exact path="/rate">
+                        <LawyerRating appointment_id={31} />
+                    </Route>
                 </Switch>
                 <Footer />
             </Router>

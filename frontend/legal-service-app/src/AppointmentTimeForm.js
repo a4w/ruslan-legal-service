@@ -4,9 +4,6 @@ import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
 
 const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
-    /*
-        This will show the date from today (current hour) -> 7 days ahead (same week day next week)
-    */
 
     const MINUTES_PER_DAY = 60 * 24;
     const minutesToClock = (minutes) => {
@@ -58,10 +55,6 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
         }
     };
 
-    useEffect(() => {
-        console.table(selectedSchedule);
-    }, [selectedSchedule]);
-
     const handleSlotClick = (event) => {
         const button = event.currentTarget;
         const dayIdx = button.dataset.day;
@@ -91,7 +84,6 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
 
     const handleContinueClick = (event) => {
         handleSelection(selectedSchedule);
-        console.log(selectedSchedule);
     };
     return (
         <>

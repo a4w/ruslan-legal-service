@@ -41,6 +41,7 @@ const VideoComponent = ({appointment_id}) => {
             setRoom(room);
         }, error => {
             console.error(`Unable to connect to Room: ${error.message}`);
+            console.log(error);
             toast.error("An error occurred connecting to the room");
         });
 
@@ -96,7 +97,10 @@ const VideoComponent = ({appointment_id}) => {
 
     // Start reading camera
     useEffect(() => {
-        createLocalVideoTrack().then(track => {
+        createLocalVideoTrack({
+            audio: true,
+            video: 640
+        }).then(track => {
             const localMediaContainer = document.getElementById('outgoingVideo');
             localMediaContainer.appendChild(track.attach());
         });

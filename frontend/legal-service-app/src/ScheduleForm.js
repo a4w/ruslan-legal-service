@@ -39,7 +39,6 @@ const ScheduleForm = ({}) => {
     });
 
     const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
-    const timePickerObj = useRef(null);
 
     // On load
     useEffect(() => {
@@ -134,7 +133,7 @@ const ScheduleForm = ({}) => {
                                 <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
                                     <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
                                 </button>
-                                {isTimeSelectorShown && <div ref={timePickerObj} className="timepicker-container">
+                                {isTimeSelectorShown && <div className="timepicker-container">
                                     <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
                                         <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
 

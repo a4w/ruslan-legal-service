@@ -46,7 +46,6 @@ const ScheduleForm = ({}) => {
     }, []);
 
     const handleSelection = ({name, value}) => {
-        console.log(name, value);
         setSlotProperties({...slotProperties, [name]: value});
     };
     const handleChange = (event) => {
@@ -90,9 +89,6 @@ const ScheduleForm = ({}) => {
         setSchedule(nextSchedule);
     }
 
-    useEffect(() => {
-        console.debug(slotProperties);
-    }, [slotProperties]);
 
     const slotOptions = [
         {label: '30 minutes', value: 30},

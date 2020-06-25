@@ -7,6 +7,7 @@ import {request, setAccessToken, setRefreshToken} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import history from "./History";
 import {Link} from "react-router-dom";
+import FacebookButton from "./FacebookButton";
 
 export const LoginTokens = React.createContext();
 
@@ -126,9 +127,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                 </div>
                 <div className="row form-row social-login">
                     <div className="col-6">
-                        <a href="#" className="btn btn-facebook btn-block">
-                            <i className="fab fa-facebook-f mr-1"></i> Login
-                        </a>
+                        <FacebookButton />
                     </div>
                     <div className="col-6">
                         <a href="#" className="btn btn-google btn-block">

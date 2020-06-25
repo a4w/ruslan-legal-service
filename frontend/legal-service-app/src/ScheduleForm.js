@@ -5,9 +5,9 @@ import ErrorMessageInput from "./ErrorMessageInput"
 import {ButtonGroup, Button} from "reactstrap"
 import StickyBox from "react-sticky-box"
 import moment from "moment"
-import {DateTimePicker, TimePicker} from "react-tempusdominus-bootstrap"
 import TimeKeeper from 'react-timekeeper';
 import {toast} from "react-toastify";
+import DatePicker from "react-datepicker";
 
 const ScheduleForm = ({}) => {
 
@@ -35,7 +35,7 @@ const ScheduleForm = ({}) => {
         price: 0,
         discount_type: 0, // 0 -> no discount, 1 -> percent discount, 2 -> percent discount
         discount_amount: 0,
-        discount_end: moment().format(DATETIME_FORMAT)
+        discount_end: new Date()
     });
 
     const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
@@ -170,7 +170,15 @@ const ScheduleForm = ({}) => {
                                 />
                             </div>}
                             {slotProperties.discount_type !== 0 && <div className="form-group">
-                                <DateTimePicker format={DATETIME_FORMAT} icons={{time: 'fa fa-clock'}} onChange={(value) => {setSlotProperties({...slotProperties, discount_end: value.date.format(DATETIME_FORMAT)})}} />
+
+                                <DatePicker
+                                    className="form-control mb-0"
+                                    placeholderText="Available on"
+                                    onChange={(date) => {setSlotProperties({...slotProperties, discount_end: date})}}
+                                    selected={slotProperties.discount_end}
+                                    showTimeSelect
+                                    dateFormat={"Y-MM-dd HH:mm:ss"}
+                                />
                             </div>}
                             <button onClick={handleButtonClick} className="btn btn-block btn-primary">
                                 <FaArrowCircleRight />&nbsp;Add appointment

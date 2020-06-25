@@ -5,6 +5,7 @@ import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 import history from "./History";
+import FacebookButton from "./FacebookButton";
 
 const RegisterationForm = ({ setRegister, hideModal }) => {
     const initUser = {
@@ -147,12 +148,7 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                 </div>
                 <div className="row form-row social-login">
                     <div className="col-6">
-                        <a
-                            href="facebook.com"
-                            className="btn btn-facebook btn-block"
-                        >
-                            <i className="fab fa-facebook-f mr-1"></i> Login
-                        </a>
+                        <FacebookButton register />
                     </div>
                     <div className="col-6">
                         <a

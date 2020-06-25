@@ -6,7 +6,7 @@ import Cookies from "universal-cookie";
 
 const NavBar = () => {
     const cookie = new Cookies();
-    const logged_in = cookie.get('logged_in');
+    const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
     const [modalShow, setModalShow] = useState(false);
     const [open, setOpen] = useState(true);
     const Menu = () => {
@@ -14,8 +14,8 @@ const NavBar = () => {
         else setOpen(false)
     };
     useEffect(() => {
+        setLoggedIn(cookie.get('logged_in'));
         window.addEventListener("resize", Menu);
-
         return () => window.removeEventListener("resize", Menu);
     });
     return (

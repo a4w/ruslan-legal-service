@@ -101,7 +101,7 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/logout">
+                                <NavTab exact to="/logout">
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
                                 </NavTab>

@@ -43,6 +43,12 @@ const onRefreshError = (error) => {
     cookie.remove("logged_in");
     // should show modal here donno how tho
 };
+const LogOut = (error) => {
+    cookie.remove("refresh_token");
+    cookie.remove("access_token");
+    cookie.remove("logged_in");
+    history.push("/");
+};
 const request = function (options) {
     const onSuccess = function (response) {
         console.log("Request Successful!", response);
@@ -86,4 +92,4 @@ const request = function (options) {
     return client(options).then(onSuccess).catch(onError);
 };
 
-export {request, setAccessToken, setRefreshToken};
+export {request, setAccessToken, setRefreshToken, LogOut};

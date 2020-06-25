@@ -11,7 +11,6 @@ import DatePicker from "react-datepicker";
 
 const ScheduleForm = ({}) => {
 
-    const DATETIME_FORMAT = "Y-MM-DD HH:mm:ss";
     const TIME_FORMAT = "HH:mm";
 
     // Schedule (This will contain the selected slots and their data
@@ -248,8 +247,6 @@ function FocusWrapper({children, close}) {
         const wrapper = container.current;
         const target = e.target;
         if (!document.contains(target)) {
-            // handles edgecase with time dropdowns
-            // where a dissappearing dropdown isn't part of the wrapper
             return;
         }
         if (!wrapper.contains(target)) {

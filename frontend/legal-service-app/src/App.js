@@ -24,6 +24,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./assets/css/style.css";
 
 function App() {

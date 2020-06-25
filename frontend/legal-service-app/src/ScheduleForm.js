@@ -8,6 +8,7 @@ import moment from "moment"
 import TimeKeeper from 'react-timekeeper';
 import {toast} from "react-toastify";
 import DatePicker from "react-datepicker";
+import {OverlayTrigger, Popover} from "react-bootstrap"
 
 const ScheduleForm = ({}) => {
 
@@ -80,6 +81,15 @@ const ScheduleForm = ({}) => {
     const toggleTimePicker = () => {
         setIsTimeSelectionShown(!isTimeSelectorShown);
     };
+
+    const handleDeleteSlot = (event) => {
+        const button = event.currentTarget;
+        const dayIdx = button.dataset.day;
+        const slotIdx = button.dataset.slot;
+        const nextSchedule = schedule.slice();
+        nextSchedule[dayIdx].slots.splice(slotIdx, 1);
+        setSchedule(nextSchedule);
+    }
 
     useEffect(() => {
         console.debug(slotProperties);
@@ -213,16 +223,37 @@ const ScheduleForm = ({}) => {
                                         <div className="col" key={day.date}>
                                             {day.slots.map((slot, j) => {
                                                 return (
-                                                    <button
-                                                        key={slot.id}
-                                                        data-day={i}
-                                                        data-slot={j}
-                                                        className="timing btn-block"
+                                                    <OverlayTrigger
+                                                        placement={"bottom"}
+                                                        overlay={
+                                                            <Popover>
+                                                                <Popover.Title as="h3" className="text-center">
+                                                                    {slot.length} minutes
+                                                                </Popover.Title>
+                                                                <Popover.Content>
+                                                                    <span className="slot-info-popover-body"><strong>Price:</strong>&nbsp;{slot.price} GBP</span>
+                                                                    {slot.discount_type !== 0 &&
+                                                                        <>
+                                                                            <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{slotProperties.discount} {slot.discount_type === 1 ? '%' : 'GBP'}</span>
+                                                                            <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{slot.discount_end.toLocaleString()}</span>
+                                                                        </>}
+                                                                    <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>
+                                                                </Popover.Content>
+                                                            </Popover>
+                                                        }
                                                     >
-                                                        <span>
-                                                            {slot.time.format("HH:mm")} - {slot.end_time.format("HH:mm")}
-                                                        </span>
-                                                    </button>
+                                                        <button
+                                                            key={slot.id}
+                                                            data-day={i}
+                                                            data-slot={j}
+                                                            className="timing btn-block"
+                                                            onDoubleClick={handleDeleteSlot}
+                                                        >
+                                                            <span>
+                                                                {slot.time.format("HH:mm")} - {slot.end_time.format("HH:mm")}
+                                                            </span>
+                                                        </button>
+                                                    </OverlayTrigger>
                                                 );
                                             })}
                                         </div>

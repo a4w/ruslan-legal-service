@@ -257,7 +257,7 @@ const ScheduleForm = ({}) => {
                                                                     <span className="slot-info-popover-body"><strong>Price:</strong>&nbsp;{slot.price} GBP</span>
                                                                     {slot.discount_type !== 0 &&
                                                                         <>
-                                                                            <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{slotProperties.discount} {slot.discount_type === 1 ? '%' : 'GBP'}</span>
+                                                                            <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{slot.discount_amount} {slot.discount_type === 1 ? '%' : 'GBP'}</span>
                                                                             <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{slot.discount_end.toLocaleString()}</span>
                                                                         </>}
                                                                     <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>

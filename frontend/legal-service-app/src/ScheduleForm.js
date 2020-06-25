@@ -9,6 +9,8 @@ import TimeKeeper from 'react-timekeeper';
 import {toast} from "react-toastify";
 import DatePicker from "react-datepicker";
 import {OverlayTrigger, Popover} from "react-bootstrap"
+import useValidation from "./useValidation";
+import {slotPropertiesValidation} from "./Validations";
 
 const ScheduleForm = ({}) => {
 
@@ -37,13 +39,15 @@ const ScheduleForm = ({}) => {
         discount_amount: 0,
         discount_end: new Date()
     });
+    // Slot validation
+    const [errors, , runValidation] = useValidation(slotPropertiesValidation);
 
     const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
 
     // On load
     useEffect(() => {
         // Load schedule from backend
-    }, []);
+    }, [slotProperties]);
 
     const handleSelection = ({name, value}) => {
         setSlotProperties({...slotProperties, [name]: value});
@@ -55,21 +59,38 @@ const ScheduleForm = ({}) => {
 
     const handleButtonClick = () => {
         const dayIdx = slotProperties.weekday;
-        // Check if valid
-        const end_time = slotProperties.time.clone().add(slotProperties.length, "minutes")
-        for (let slot of schedule[dayIdx].slots) {
-            if ((slotProperties.time.isSameOrAfter(slot.time) && slotProperties.time.isSameOrBefore(slot.end_time)) ||
-                (end_time.isSameOrAfter(slot.time) && end_time.isSameOrBefore(slot.end_time))) {
-                toast.error("A slot is found within this time range");
+        runValidation(slotProperties).then((hasErrors) => {
+            if (hasErrors) {
                 return;
             }
-        }
-        const nextSchedule = schedule.slice();
-        const newSlot = Object.assign({end_time}, slotProperties);
-
-        nextSchedule[dayIdx].slots.push(newSlot);
-        setSchedule(nextSchedule);
+            // Check if valid
+            const end_time = slotProperties.time.clone().add(slotProperties.length, "minutes")
+            for (let slot of schedule[dayIdx].slots) {
+                if ((slotProperties.time.isSameOrAfter(slot.time) && slotProperties.time.isSameOrBefore(slot.end_time)) ||
+                    (end_time.isSameOrAfter(slot.time) && end_time.isSameOrBefore(slot.end_time))) {
+                    toast.error("A slot is found within this time range");
+                    return;
+                }
+            }
+            const nextSchedule = schedule.slice();
+            const newSlot = Object.assign({end_time}, slotProperties);
+            // Calculate new price
+            if (newSlot.discount_type === 1) {
+                newSlot.price -= newSlot.price * (newSlot.discount_amount / 100);
+            } else if (newSlot.discount_type === 2) {
+                newSlot.price -= newSlot.discount_amount;
+            }
+            nextSchedule[dayIdx].slots.push(newSlot);
+            nextSchedule[dayIdx].slots.sort((a, b) => {
+                return a.time < b.time ? -1 : 1;
+            });
+            setSchedule(nextSchedule);
+        });
     };
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
 
     const handleTimeSelection = (time) => {
         const clock = ("0" + time.hour).slice(-2) + ":" + time.minute;
@@ -154,6 +175,7 @@ const ScheduleForm = ({}) => {
                                     value={slotProperties.price}
                                     OnChangeHandler={handleChange}
                                     placeholder={"Price"}
+                                    errors={errors.price}
                                 />
                             </div>
                             <div className="form-group">
@@ -171,6 +193,7 @@ const ScheduleForm = ({}) => {
                                     value={slotProperties.discount_amount}
                                     OnChangeHandler={handleChange}
                                     placeholder={"Discount"}
+                                    errors={errors.discount_amount}
                                 />
                             </div>}
                             {slotProperties.discount_type !== 0 && <div className="form-group">
@@ -183,6 +206,11 @@ const ScheduleForm = ({}) => {
                                     showTimeSelect
                                     dateFormat={"Y-MM-dd HH:mm:ss"}
                                 />
+                                {errors["discount_end"] && errors["discount_end"].length > 0 &&
+                                    <label className="text-danger ml-2 font-weight-light text-xs">
+                                        {errors["discount_end"][0]}
+                                    </label>
+                                }
                             </div>}
                             <button onClick={handleButtonClick} className="btn btn-block btn-primary">
                                 <FaArrowCircleRight />&nbsp;Add appointment

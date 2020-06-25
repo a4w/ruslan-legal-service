@@ -1,4 +1,5 @@
 import vest, {validate, test, enforce} from "vest";
+import moment from "moment"
 
 export const registrationValidation = (data, field) => {
     return validate("RegistrationForm", () => {
@@ -146,3 +147,28 @@ export const editAddressValidations = (data, field) => {
         vest.only(field);
     });
 };
+
+export const slotPropertiesValidation = (data, field) => {
+    return validate("Slot properties", () => {
+        vest.only(field);
+        test("weekday", "Please select a valid weekday", () => {
+            enforce(data.weekday).isNumeric().greaterThanOrEquals(0).lessThanOrEquals(6);
+        });
+        test("price", "Price must be a non-negative number", () => {
+            enforce(data.price).isNumeric().greaterThanOrEquals(0);
+        });
+        test("discount_amount", "Discount must be a positive value", () => {
+            if (data.discount_type !== 0) {
+                enforce(data.discount_amount).isNumeric().greaterThan(0);
+            }
+        });
+        test("discount_end", "Discount end date must be after at least 6 hours", () => {
+            if (data.discount_type !== 0) {
+                // Convert to moment
+                const end = moment(data.discount_end);
+                return end.isAfter(moment().add(6, "hours"));
+            }
+        });
+    });
+};
+

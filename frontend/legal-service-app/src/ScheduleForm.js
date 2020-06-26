@@ -179,10 +179,10 @@ const ScheduleForm = ({}) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <ButtonGroup className="w-100">
-                                    <Button color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 0})}} active={slotProperties.discount_type === 0}>No discount</Button>
-                                    <Button color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 1})}} active={slotProperties.discount_type === 1}>Percent discount</Button>
-                                    <Button color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 2})}} active={slotProperties.discount_type === 2}>Fixed discount</Button>
+                                <ButtonGroup>
+                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 0})}} active={slotProperties.discount_type === 0}>No discount</Button>
+                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 1})}} active={slotProperties.discount_type === 1}>Percent discount</Button>
+                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 2})}} active={slotProperties.discount_type === 2}>Fixed discount</Button>
                                 </ButtonGroup>
                             </div>
                             {slotProperties.discount_type !== 0 && <div className="form-group">

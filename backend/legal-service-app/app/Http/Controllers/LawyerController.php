@@ -104,6 +104,17 @@ class LawyerController extends Controller
         return RespondJSON::with(['schedule' => $output]);
     }
 
+    public function getWeekSchedule()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        $lawyer = $user->lawyer;
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::success(['schedule' => $lawyer->schedule]);
+    }
+
     public function updateSchedule(JSONRequest $request)
     {
         $request->validate([

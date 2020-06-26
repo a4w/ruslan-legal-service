@@ -109,6 +109,7 @@ class LawyerController extends Controller
         $request->validate([
             'schedule' => ['required', 'array', 'size:7'],
             'schedule.*.slots' => ['array'],
+            'schedule.*.slots.*.weekday' => ['required', 'numeric', 'min:0', 'max:6'],
             'schedule.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
             'schedule.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
             'schedule.*.slots.*.enable_discount' => ['required', 'boolean'],

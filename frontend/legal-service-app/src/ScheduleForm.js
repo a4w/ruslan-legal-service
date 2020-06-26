@@ -47,8 +47,31 @@ const ScheduleForm = ({}) => {
 
     // On load
     useEffect(() => {
-        // Load schedule from backend
-    }, [slotProperties]);
+        request({
+            url: 'lawyer/schedule',
+            method: 'GET'
+        }).then(response => {
+            console.log(response);
+            const nextSchedule = response.schedule.map((day) => {
+                return {
+                    ...day,
+                    slots: day.slots.map(slot => {
+                        const time = moment(slot.time, "HH:mm");
+                        return {
+                            ...slot,
+                            discount_type: slot.enable_discount ? slot.is_percent_discount ? 2 : 1 : 0,
+                            time,
+                            end_time: time.clone().add(slot.length, "minutes"),
+                            discount_end: new Date(slot.discount_end)
+                        };
+                    })
+                };
+            });
+            setSchedule(nextSchedule);
+        }).catch(error => {
+            console.debug(error);
+        });
+    }, []);
 
     const handleSelection = ({name, value}) => {
         setSlotProperties({...slotProperties, [name]: value});
@@ -80,6 +103,10 @@ const ScheduleForm = ({}) => {
                 newSlot.price -= newSlot.price * (newSlot.discount_amount / 100);
             } else if (newSlot.discount_type === 2) {
                 newSlot.price -= newSlot.discount_amount;
+                if (newSlot.price < 0) {
+                    toast.error("Discount is larger than the price");
+                    return;
+                }
             }
             nextSchedule[dayIdx].slots.push(newSlot);
             nextSchedule[dayIdx].slots.sort((a, b) => {
@@ -252,7 +279,7 @@ const ScheduleForm = ({}) => {
                 <div className="col-9">
                     <div className="row">
                         <div className="col-12">
-                            <button className="btn btn-success" onClick={handleSaveClick}>
+                            <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
                                 <FaSave />&nbsp;Save schedule
                                 </button>
                         </div>

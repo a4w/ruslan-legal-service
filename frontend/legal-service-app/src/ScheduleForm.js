@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import {FaArrowCircleRight, FaClock} from "react-icons/fa";
+import {FaArrowCircleRight, FaClock, FaSave} from "react-icons/fa";
 import ErrorMessageSelect from "./ErrorMessageSelect"
 import ErrorMessageInput from "./ErrorMessageInput"
 import {ButtonGroup, Button} from "reactstrap"
@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import useValidation from "./useValidation";
 import {slotPropertiesValidation} from "./Validations";
+import {request} from "./Axios"
 
 const ScheduleForm = ({}) => {
 
@@ -109,6 +110,35 @@ const ScheduleForm = ({}) => {
         nextSchedule[dayIdx].slots.splice(slotIdx, 1);
         setSchedule(nextSchedule);
     }
+
+    const handleSaveClick = () => {
+        const toSend = schedule.map((day) => {
+            let newDay = {
+                ...day, slots: day.slots.map((slot) => {
+                    let newSlots = {
+                        ...slot,
+                        time: slot.time.format(TIME_FORMAT),
+                        enable_discount: (slot.discount_type !== 0),
+                        is_percent_discount: (slot.discount_type === 1),
+
+                    };
+                    delete newSlots.discount_type;
+                    delete newSlots.end_time;
+                    return newSlots;
+                })
+            };
+            return newDay;
+        });
+        request({
+            url: '/lawyer/update-schedule',
+            method: 'POST',
+            data: {schedule: toSend}
+        }).then((response) => {
+            toast.success("Schedule saved successfully");
+        }).catch((error) => {
+            console.debug(error);
+        });
+    };
 
 
     const slotOptions = [
@@ -220,6 +250,13 @@ const ScheduleForm = ({}) => {
                 </div>
 
                 <div className="col-9">
+                    <div className="row">
+                        <div className="col-12">
+                            <button className="btn btn-success" onClick={handleSaveClick}>
+                                <FaSave />&nbsp;Save schedule
+                                </button>
+                        </div>
+                    </div>
                     <div className="card booking-schedule">
                         <div className="schedule-header">
                             <div className="row">

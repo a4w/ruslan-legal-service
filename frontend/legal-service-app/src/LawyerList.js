@@ -19,11 +19,13 @@ function LawyerList(props) {
         setSortBy(value);
         console.log("sort by: ", value);
     };
-    const params = queryString.parse(props.location.search);
+    let params = queryString.parse(props.location.search);
+    params["available_on"] = "2020-06-29";
+    const qs = queryString.stringify(params);
     console.log(params);
     useEffect(() => {
         request({
-            url: "/lawyer/all" + props.location.search,
+            url: "/lawyer/all?" + qs,
             method: "GET",
             data: {offset: offset, length: length},
         })

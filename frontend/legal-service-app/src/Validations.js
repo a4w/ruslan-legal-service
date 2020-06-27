@@ -148,12 +148,9 @@ export const editAddressValidations = (data, field) => {
     });
 };
 
-export const slotPropertiesValidation = (data, field) => {
+export const scheduleSettingValidation = (data, field) => {
     return validate("Slot properties", () => {
         vest.only(field);
-        test("weekday", "Please select a valid weekday", () => {
-            enforce(data.weekday).isNumeric().greaterThanOrEquals(0).lessThanOrEquals(6);
-        });
         test("price", "Price must be a non-negative number", () => {
             enforce(data.price).isNumeric().greaterThanOrEquals(0);
         });

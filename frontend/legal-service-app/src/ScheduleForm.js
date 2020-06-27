@@ -10,7 +10,7 @@ import {toast} from "react-toastify";
 import DatePicker from "react-datepicker";
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import useValidation from "./useValidation";
-import {slotPropertiesValidation} from "./Validations";
+import {scheduleSettingValidation} from "./Validations";
 import {request} from "./Axios"
 
 const ScheduleForm = ({}) => {
@@ -28,6 +28,7 @@ const ScheduleForm = ({}) => {
         {name: "Sunday", slots: []},
     ]);
 
+
     // Slot properties
     const time = moment();
     time.minute(time.minute() - (time.minute() % 5));
@@ -35,13 +36,16 @@ const ScheduleForm = ({}) => {
         time: time,
         weekday: 0,
         length: 60,
+    });
+    const [globalSettings, setGlobalSettings] = useState({
         price: 0,
         discount_type: 0, // 0 -> no discount, 1 -> percent discount, 2 -> percent discount
         discount_amount: 0,
         discount_end: new Date()
     });
-    // Slot validation
-    const [errors, , runValidation] = useValidation(slotPropertiesValidation);
+
+
+    const [errors, , runValidation] = useValidation(scheduleSettingValidation);
 
     const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
 
@@ -73,47 +77,46 @@ const ScheduleForm = ({}) => {
         });
     }, []);
 
+    const calculateDiscountedPrice = (price) => {
+        if (globalSettings.discount_type === 1) {
+            price -= price * (globalSettings.discount_amount / 100);
+        } else {
+            price -= globalSettings.discount_amount;
+        }
+        return price;
+    };
+
     const handleSelection = ({name, value}) => {
         setSlotProperties({...slotProperties, [name]: value});
     };
+
     const handleChange = (event) => {
         const {name, value} = event.target;
         setSlotProperties({...slotProperties, [name]: value});
     };
+    const handleSettingsChange = (event) => {
+        const {name, value} = event.target;
+        setGlobalSettings({...globalSettings, [name]: value});
+    };
 
     const handleButtonClick = () => {
         const dayIdx = slotProperties.weekday;
-        runValidation(slotProperties).then((hasErrors) => {
-            if (hasErrors) {
+        // Check if valid
+        const end_time = slotProperties.time.clone().add(slotProperties.length, "minutes")
+        for (let slot of schedule[dayIdx].slots) {
+            if ((slotProperties.time.isSameOrAfter(slot.time) && slotProperties.time.isSameOrBefore(slot.end_time)) ||
+                (end_time.isSameOrAfter(slot.time) && end_time.isSameOrBefore(slot.end_time))) {
+                toast.error("A slot is found within this time range");
                 return;
             }
-            // Check if valid
-            const end_time = slotProperties.time.clone().add(slotProperties.length, "minutes")
-            for (let slot of schedule[dayIdx].slots) {
-                if ((slotProperties.time.isSameOrAfter(slot.time) && slotProperties.time.isSameOrBefore(slot.end_time)) ||
-                    (end_time.isSameOrAfter(slot.time) && end_time.isSameOrBefore(slot.end_time))) {
-                    toast.error("A slot is found within this time range");
-                    return;
-                }
-            }
-            const nextSchedule = schedule.slice();
-            const newSlot = Object.assign({end_time}, slotProperties);
-            // Calculate new price
-            if (newSlot.discount_type === 1) {
-                newSlot.price -= newSlot.price * (newSlot.discount_amount / 100);
-            } else if (newSlot.discount_type === 2) {
-                newSlot.price -= newSlot.discount_amount;
-                if (newSlot.price < 0) {
-                    toast.error("Discount is larger than the price");
-                    return;
-                }
-            }
-            nextSchedule[dayIdx].slots.push(newSlot);
-            nextSchedule[dayIdx].slots.sort((a, b) => {
-                return a.time < b.time ? -1 : 1;
-            });
-            setSchedule(nextSchedule);
+        }
+        const nextSchedule = schedule.slice();
+        const newSlot = Object.assign({end_time}, slotProperties);
+        nextSchedule[dayIdx].slots.push(newSlot);
+        nextSchedule[dayIdx].slots.sort((a, b) => {
+            return a.time < b.time ? -1 : 1;
         });
+        setSchedule(nextSchedule);
     };
 
     useEffect(() => {
@@ -166,7 +169,6 @@ const ScheduleForm = ({}) => {
             console.debug(error);
         });
     };
-
 
     const slotOptions = [
         {label: '30 minutes', value: 30},
@@ -225,41 +227,45 @@ const ScheduleForm = ({}) => {
                                     OnChangeHandler={handleSelection}
                                 />
                             </div>
+                            <button onClick={handleButtonClick} className="btn btn-block btn-primary">
+                                <FaArrowCircleRight />&nbsp;Add appointment
+                            </button>
+                            <hr />
+                            <h4 className="text-center"> Global appointment settings </h4>
                             <div className="form-group">
                                 <ErrorMessageInput
                                     type={"text"}
                                     name="price"
-                                    value={slotProperties.price}
-                                    OnChangeHandler={handleChange}
-                                    placeholder={"Price"}
+                                    value={globalSettings.price}
+                                    OnChangeHandler={handleSettingsChange}
+                                    placeholder={"Price per hour"}
                                     errors={errors.price}
                                 />
                             </div>
                             <div className="form-group">
                                 <ButtonGroup>
-                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 0})}} active={slotProperties.discount_type === 0}>No discount</Button>
-                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 1})}} active={slotProperties.discount_type === 1}>Percent discount</Button>
-                                    <Button className="btn-sm" color="info" onClick={() => {setSlotProperties({...slotProperties, discount_type: 2})}} active={slotProperties.discount_type === 2}>Fixed discount</Button>
+                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
+                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
+                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
                                 </ButtonGroup>
                             </div>
-                            {slotProperties.discount_type !== 0 && <div className="form-group">
+                            {globalSettings.discount_type !== 0 && <div className="form-group">
                                 <ErrorMessageInput
-                                    disabled={slotProperties.discount_type === 0}
+                                    disabled={globalSettings.discount_type === 0}
                                     type={"text"}
                                     name="discount_amount"
-                                    value={slotProperties.discount_amount}
-                                    OnChangeHandler={handleChange}
+                                    value={globalSettings.discount_amount}
+                                    OnChangeHandler={handleSettingsChange}
                                     placeholder={"Discount"}
                                     errors={errors.discount_amount}
                                 />
                             </div>}
-                            {slotProperties.discount_type !== 0 && <div className="form-group">
-
+                            {globalSettings.discount_type !== 0 && <div className="form-group">
                                 <DatePicker
-                                    className="form-control mb-0"
+                                    className="form-control"
                                     placeholderText="Available on"
-                                    onChange={(date) => {setSlotProperties({...slotProperties, discount_end: date})}}
-                                    selected={slotProperties.discount_end}
+                                    onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
+                                    selected={globalSettings.discount_end}
                                     showTimeSelect
                                     dateFormat={"Y-MM-dd HH:mm:ss"}
                                 />
@@ -269,14 +275,11 @@ const ScheduleForm = ({}) => {
                                     </label>
                                 }
                             </div>}
-                            <button onClick={handleButtonClick} className="btn btn-block btn-primary">
-                                <FaArrowCircleRight />&nbsp;Add appointment
-                            </button>
                         </div>
                     </StickyBox>
                 </div>
 
-                <div className="col-9">
+                <div className="col">
                     <div className="row">
                         <div className="col-12">
                             <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
@@ -309,6 +312,7 @@ const ScheduleForm = ({}) => {
                                     return (
                                         <div className="col" key={day.date}>
                                             {day.slots.map((slot, j) => {
+                                                const discountedPrice = calculateDiscountedPrice((slot.length / 60) * globalSettings.price)
                                                 return (
                                                     <OverlayTrigger
                                                         placement={"bottom"}
@@ -318,11 +322,11 @@ const ScheduleForm = ({}) => {
                                                                     {slot.length} minutes
                                                                 </Popover.Title>
                                                                 <Popover.Content>
-                                                                    <span className="slot-info-popover-body"><strong>Price:</strong>&nbsp;{slot.price} GBP</span>
-                                                                    {slot.discount_type !== 0 &&
+                                                                    <span className="slot-info-popover-body"><strong>Price:</strong>&nbsp;{discountedPrice} GBP</span>
+                                                                    {globalSettings.discount_type !== 0 &&
                                                                         <>
-                                                                            <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{slot.discount_amount} {slot.discount_type === 1 ? '%' : 'GBP'}</span>
-                                                                            <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{slot.discount_end.toLocaleString()}</span>
+                                                                            <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{globalSettings.discount_amount} {globalSettings.discount_type === 1 ? '%' : 'GBP'}</span>
+                                                                            <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{globalSettings.discount_end.toLocaleString()}</span>
                                                                         </>}
                                                                     <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>
                                                                 </Popover.Content>

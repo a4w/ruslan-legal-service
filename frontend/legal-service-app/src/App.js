@@ -26,6 +26,7 @@ import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./assets/css/style.css";
+import LoginModal from "./Login";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                     <Route exact path="/">
                         <Home />
                     </Route>
+                    <Route path="/login" component={LoginModal}/>
                     <Route exact path="/list">
                         <LawyerList />
                     </Route>

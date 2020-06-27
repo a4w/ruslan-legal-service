@@ -44,7 +44,6 @@ const ScheduleForm = ({}) => {
         discount_end: new Date()
     });
 
-
     const [errors, , runValidation] = useValidation(scheduleSettingValidation);
 
     const [isTimeSelectorShown, setIsTimeSelectionShown] = useState(false);
@@ -63,15 +62,20 @@ const ScheduleForm = ({}) => {
                         const time = moment(slot.time, "HH:mm");
                         return {
                             ...slot,
-                            discount_type: slot.enable_discount ? slot.is_percent_discount ? 2 : 1 : 0,
                             time,
-                            end_time: time.clone().add(slot.length, "minutes"),
-                            discount_end: new Date(slot.discount_end)
+                            end_time: time.clone().add(slot.length, "minutes")
                         };
                     })
                 };
             });
             setSchedule(nextSchedule);
+            const nextGlobalSettings = {
+                price: response.price_per_hour,
+                discount_type: response.enable_discount ? response.is_percent_discount ? 1 : 2 : 0,
+                discount_amount: response.discount_amount,
+                discount_end: response.discount_end === null ? new Date() : new Date(response.discount_end)
+            };
+            setGlobalSettings(nextGlobalSettings);
         }).catch(error => {
             console.debug(error);
         });
@@ -94,6 +98,7 @@ const ScheduleForm = ({}) => {
         const {name, value} = event.target;
         setSlotProperties({...slotProperties, [name]: value});
     };
+
     const handleSettingsChange = (event) => {
         const {name, value} = event.target;
         setGlobalSettings({...globalSettings, [name]: value});
@@ -142,27 +147,35 @@ const ScheduleForm = ({}) => {
     }
 
     const handleSaveClick = () => {
-        const toSend = schedule.map((day) => {
-            let newDay = {
-                ...day, slots: day.slots.map((slot) => {
-                    let newSlots = {
-                        ...slot,
-                        time: slot.time.format(TIME_FORMAT),
-                        enable_discount: (slot.discount_type !== 0),
-                        is_percent_discount: (slot.discount_type === 1),
+        const toSend = {
+            schedule: {
+                days: schedule.map((day) => {
+                    let newDay = {
+                        ...day, slots: day.slots.map((slot) => {
+                            let newSlots = {
+                                ...slot,
+                                time: slot.time.format(TIME_FORMAT),
 
+                            };
+                            delete newSlots.end_time;
+                            return newSlots;
+                        })
                     };
-                    delete newSlots.discount_type;
-                    delete newSlots.end_time;
-                    return newSlots;
-                })
-            };
-            return newDay;
-        });
+                    return newDay;
+                }),
+                settings: {
+                    price_per_hour: globalSettings.price,
+                    enable_discount: (globalSettings.discount_type !== 0),
+                    is_percent_discount: (globalSettings.discount_type === 1),
+                    discount_amount: globalSettings.discount_amount,
+                    discount_end: globalSettings.discount_end,
+                }
+            }
+        };
         request({
             url: '/lawyer/update-schedule',
             method: 'POST',
-            data: {schedule: toSend}
+            data: toSend
         }).then((response) => {
             toast.success("Schedule saved successfully");
         }).catch((error) => {

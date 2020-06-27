@@ -11,6 +11,7 @@ const ModalPopUp = (props) => {
             dialogClassName="modal-90w"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            style={{zIndex:"9999"}}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

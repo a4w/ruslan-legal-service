@@ -93,15 +93,16 @@ const NavBar = () => {
                         </div>
                     </li>
                     <li className="nav-item">
-                        <a
+                        <Link
                             className="nav-link header-login"
-                            onClick={() => setModalShow(true)}
-                            style={{
-                                visibility: logged_in ? "hidden" : "visible",
-                            }}
+                            // onClick={() => setModalShow(true)}
+                            // style={{
+                            //     visibility: logged_in ? "hidden" : "visible",
+                            // }}
+                            to="/login"
                         >
                             login / Signup{" "}
-                        </a>
+                        </Link>
                         <ModalPopUp
                             show={modalShow}
                             onHide={() => setModalShow(false)}

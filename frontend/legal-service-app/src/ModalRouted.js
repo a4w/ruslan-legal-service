@@ -9,7 +9,6 @@ const modalStyle = {
     right: 0,
     backgroundColor: "rgba(0,0,0,.2)",
     color: "##FFF",
-    fontSize: "40px",
 };
 const Modal = (props) => {
     return createPortal(

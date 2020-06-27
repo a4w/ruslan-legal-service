@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import Message from "./Message"
 
 // TODO: Save my id
-const me = 33;
+const me = 1;
 
 const MessagesList = ({ messages }) => {
     useEffect(() => {

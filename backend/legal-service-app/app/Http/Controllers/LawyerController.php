@@ -118,16 +118,18 @@ class LawyerController extends Controller
     public function updateSchedule(JSONRequest $request)
     {
         $request->validate([
-            'schedule' => ['required', 'array', 'size:7'],
-            'schedule.*.slots' => ['array'],
-            'schedule.*.slots.*.weekday' => ['required', 'numeric', 'min:0', 'max:6'],
-            'schedule.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
-            'schedule.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
-            'schedule.*.slots.*.enable_discount' => ['required', 'boolean'],
-            'schedule.*.slots.*.is_percent_discount' => ['required', 'boolean'],
-            'schedule.*.slots.*.discount_amount' => ['required', 'min:0', 'numeric'],
-            'schedule.*.slots.*.discount_end' => ['required', 'date'],
-            'schedule.*.slots.*.price' => ['required', 'numeric', 'min:0']
+            'schedule' => ['required', 'array'],
+            'schedule.days' => ['required', 'array', 'size:7'],
+            'schedule.days.*.slots' => ['array'],
+            'schedule.days.*.slots.*.weekday' => ['required', 'numeric', 'min:0', 'max:6'],
+            'schedule.days.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
+            'schedule.days.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
+
+            'schedule.settings.price' => ['required', 'numeric', 'min:0'],
+            'schedule.settings.enable_discount' => ['required', 'boolean'],
+            'schedule.settings.is_percent_discount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'boolean'],
+            'schedule.settings.discount_amount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'min:0', 'numeric'],
+            'schedule.settings.discount_end' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'date'],
         ]);
         /** @var Account **/
         $user = Auth::user();
@@ -135,10 +137,18 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        $incoming_schedule = $request->get('schedule');
+        $incoming_schedule = $request->input('schedule.days');
 
         // Save schedule
         $lawyer->schedule = $incoming_schedule;
+
+        // Save settings
+        $lawyer->price_per_hour = $request->input('schedule.settings.price');
+        $enable_discount = $request->input('schedule.settings.enable_discount');
+        $lawyer->discount = $enable_discount ? $request->input('schedule.settings.discount_amount') : null;
+        $lawyer->is_percent_discount = $request->input('schedule.settings.is_percent_discount', null);
+        $lawyer->discount_end = $request->input('schedule.settings.discount_end', null);
+
         $lawyer->save();
         return RespondJSON::success();
     }

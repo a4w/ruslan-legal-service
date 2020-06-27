@@ -208,7 +208,7 @@ const AvgCalendar = ({lawyer}) => {
         }
     }
     const [availability, setAvailability] = useState(initAvail);
-    const [slotLength, setSlotLength] = useState(1);
+    const [avgSlotLength, setAvgSlotLength] = useState(1);
     useEffect(() => {
         if (lawyer !== null) {
             request({
@@ -223,12 +223,13 @@ const AvgCalendar = ({lawyer}) => {
                     return day.name;
                 });
                 setDays(nextDays);
-                setSlotLength(response.schedule.slot_length);
                 // Calculate availability
                 const nextAvailability = initAvail.slice();
+                let avg = 0;
+                let count = 0;
                 response.schedule.days.map((day, i) => {
                     for (let j = 0; j < day.slots.length; ++j) {
-                        const time = day.slots[j].from;
+                        const time = day.slots[j].time;
                         if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
                             nextAvailability[i][0]++;
                         } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
@@ -238,8 +239,11 @@ const AvgCalendar = ({lawyer}) => {
                         } else if (!day.slots[j].reserved) {
                             nextAvailability[i][3]++;
                         }
+                        avg += day.slots[j].length;
+                        count++;
                     }
                 });
+                setAvgSlotLength(avg / count);
                 setAvailability(nextAvailability);
             }).catch((error) => {
                 console.log(error);
@@ -260,28 +264,28 @@ const AvgCalendar = ({lawyer}) => {
                 <tr>
                     <td colspan="2">Morning</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[0] * slotLength) / (6 * 60);
+                        const brightness = (a[0] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Afternoon</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[1] * slotLength) / (6 * 60);
+                        const brightness = (a[1] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Evening</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[2] * slotLength) / (6 * 60);
+                        const brightness = (a[2] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Night</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[3] * slotLength) / (6 * 60);
+                        const brightness = (a[3] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>

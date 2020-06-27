@@ -59,9 +59,6 @@ class LawyerController extends Controller
         $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
         $output['number_of_days'] = $days_to_show;
 
-        // Fetch lawyer data
-        $slot_length = $lawyer->slot_length;
-
         // Get appointments and pre-process them for fast checking
         $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
@@ -73,15 +70,29 @@ class LawyerController extends Controller
         $data = array();
         $current = new Carbon($from_date);
         for ($d = 0; $d < $days_to_show; ++$d) {
-            $formated_date = $current->format(AppointmentHelper::DATE_FORMAT);
+            $formatted_date = $current->format(AppointmentHelper::DATE_FORMAT);
             $day = array(
                 'name' => $current->dayName,
-                'date' => $formated_date
+                'date' => $formatted_date,
+                'slots' => []
             );
-            $slots = $schedule[$current->dayOfWeek];
-            $day['slots'] = [];
-            for ($i = 0; $i < count($slots); ++$i) {
-                $start_minute = $slots[$i] * $slot_length;
+            $current_day_slots = $schedule[$current->dayOfWeek]['slots'];
+            for ($i = 0; $i < count($current_day_slots); ++$i) {
+                $slot = $current_day_slots[$i];
+                $start_time = new Carbon($slot['time']);
+                $end_time = new Carbon($start_time);
+                $end_time->addMinutes($slot['length']);
+                $is_upcoming = true;
+                if ($current->lt(now())) {
+                    $is_upcoming = false;
+                }
+                $day['slots'][] = [
+                    'time' => $slot['time'],
+                    'length' => $slot['length'],
+                    'to' => $end_time->format('H:i'),
+                    'reserved' => !$is_upcoming || isset($appointments_check[$formatted_date][$slot['time']]),
+                ];
+                /*$start_minute = $slots[$i] * $slot_length;
                 $start_time = AppointmentHelper::minutesToClock($start_minute);
                 $current->setTime($start_minute / 60, $start_minute % 60);
                 $is_upcoming = true;
@@ -93,14 +104,13 @@ class LawyerController extends Controller
                     'id' => $slots[$i],
                     'from' => $start_time,
                     'to' => $end_time,
-                    'reserved' => !$is_upcoming || isset($appointments_check[$formated_date][$start_time])
-                ];
+                    'reserved' => !$is_upcoming || isset($appointments_check[$formatted_date][$start_time])
+                ];*/
             }
             $data[] = $day;
             $current->addDay();
         }
         $output['days'] = $data;
-        $output['slot_length'] = $lawyer->slot_length;
         return RespondJSON::with(['schedule' => $output]);
     }
 

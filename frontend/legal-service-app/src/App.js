@@ -2,11 +2,10 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Route, Router, Switch, BrowserRouter } from "react-router-dom";
+import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import "./assets/css/style.css";
 import LawyerList from "./LawyerList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import Blogs from "./Blogs";
@@ -23,6 +22,10 @@ import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
+import ScheduleForm from "./ScheduleForm"
+import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "./assets/css/style.css";
 
 function App() {
     return (
@@ -71,6 +74,10 @@ function App() {
                     </Route>
                     <Route exact path="/rate">
                         <LawyerRating appointment_id={31} />
+                    </Route>
+
+                    <Route exact path="/edit-schedule">
+                        <ScheduleForm />
                     </Route>
                 </Switch>
                 <Footer />

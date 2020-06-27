@@ -6,6 +6,7 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 import history from "./History";
 import FacebookButton from "./FacebookButton";
+import GoogleButton from "./GoogleButton";
 
 const RegisterationForm = ({ setRegister, hideModal }) => {
     const initUser = {
@@ -151,12 +152,13 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                         <FacebookButton register />
                     </div>
                     <div className="col-6">
-                        <a
+                        {/* <a
                             href="google.com"
                             className="btn btn-google btn-block"
                         >
                             <i className="fab fa-google mr-1"></i> Login
-                        </a>
+                        </a> */}
+                        <GoogleButton register />
                     </div>
                 </div>
             </form>

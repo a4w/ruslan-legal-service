@@ -30,6 +30,7 @@ Route::prefix('lawyer')->group(function () {
     Route::get('me', 'LawyerController@fetchMe')->middleware('auth:api');
     Route::post('me', 'LawyerController@updateProfile')->middleware('auth:api');
     Route::post('{id}/schedule', 'LawyerController@fetchSchedule');
+    Route::get('schedule', 'LawyerController@getWeekSchedule')->middleware('auth:api');
     Route::post('update-schedule', 'LawyerController@updateSchedule')->middleware('auth:api');
     Route::get('all', 'LawyerController@getLawyersPaginated');
     Route::get('types', 'LawyerController@getLawyerTypes');

@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";

@@ -23,8 +23,15 @@ class LawyerController extends Controller
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
 
+        // Filters
+        $location = $request->get('location');
+        $practice_areas = $request->get('practice_areas');
+
         // TODO: This can be cached (and should be)
         $lawyers = Lawyer::where('schedule', '<>', null)
+            ->whereHas('account', function ($query) use ($location) {
+                return $query->where('city', $location);
+            })
             ->limit($length)
             ->skip($offset)
             ->get();

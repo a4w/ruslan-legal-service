@@ -7,7 +7,7 @@ const LoginModal = (props) => {
     return (
         <Modal
             onClick={() => {
-                history.push(props.match.url);
+                history.goBack();
             }}
         >
             <div

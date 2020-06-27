@@ -24,7 +24,7 @@ class LawyerController extends Controller
         $length = (int) $request->get('length', 10);
 
         // TODO: This can be cached (and should be)
-        $lawyers = Lawyer::where('slot_length', '<>', null)
+        $lawyers = Lawyer::where('schedule', '<>', null)
             ->limit($length)
             ->skip($offset)
             ->get();

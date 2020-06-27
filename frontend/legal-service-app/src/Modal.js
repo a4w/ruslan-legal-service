@@ -4,7 +4,7 @@ import RegisterationForm from "./RegisterationForm";
 import LoginForm from "./LoginForm";
 
 const ModalPopUp = (props) => {
-    const [register, setRegister] = useState(props.register);
+    const [register, setRegister] = useState(props.register ? true : false);
     return (
         <Modal
             {...props}

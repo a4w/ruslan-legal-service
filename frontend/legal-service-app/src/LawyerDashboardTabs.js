@@ -43,8 +43,8 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/change-password">
                 <EditPassword />
             </Route>
-            <Route exact path="/dashboard/logout">
-                test 11
+            <Route exact path="/logout">
+                <Redirect replace to="/" />
             </Route>
         </Switch>
     );

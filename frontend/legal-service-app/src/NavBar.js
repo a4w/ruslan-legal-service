@@ -2,17 +2,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ModalPopUp from "./Modal";
+import Cookies from "universal-cookie";
 
 const NavBar = () => {
+    const cookie = new Cookies();
+    const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
     const [modalShow, setModalShow] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)
     };
     useEffect(() => {
+        setLoggedIn(cookie.get('logged_in'));
         window.addEventListener("resize", Menu);
-
         return () => window.removeEventListener("resize", Menu);
     });
     return (
@@ -62,7 +65,15 @@ const NavBar = () => {
                             <Link to="/blogs">Blogs</Link>
                         </li>
                         <li className="login-link">
-                            <a href="//" onClick={() => setModalShow(true)}>
+                            <a
+                                href="//"
+                                onClick={() => setModalShow(true)}
+                                style={{
+                                    visibility: logged_in
+                                        ? "hidden"
+                                        : "visible",
+                                }}
+                            >
                                 Login / Signup
                             </a>
                         </li>
@@ -85,6 +96,9 @@ const NavBar = () => {
                         <a
                             className="nav-link header-login"
                             onClick={() => setModalShow(true)}
+                            style={{
+                                visibility: logged_in ? "hidden" : "visible",
+                            }}
                         >
                             login / Signup{" "}
                         </a>

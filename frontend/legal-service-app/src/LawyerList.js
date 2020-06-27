@@ -131,10 +131,9 @@ const LawyerSearchFilter = () => {
 
 const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
     const options = [
-        {value: "rating", label: "Rating"},
+        {value: "ratings", label: "Rating"},
+        {value: "price", label: "Price"},
         {value: "popular", label: "Popular"},
-        {value: "latest", label: "Latest"},
-        {value: "free", label: "Free"},
     ];
     return (
         <div className="breadcrumb-bar">

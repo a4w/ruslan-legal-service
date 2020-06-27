@@ -7436,3 +7436,6 @@ min-width: 100%;
 .slot-info-popover-body{
     display: block;
 }
+.react-datepicker{
+    width: max-content;
+}

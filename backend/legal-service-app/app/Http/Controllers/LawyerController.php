@@ -28,6 +28,10 @@ class LawyerController extends Controller
         $location = $location === '' ? null : $location;
         $practice_areas = $request->get('practice_areas');
         $practice_areas = $practice_areas === null ? null : explode(',', $practice_areas);
+
+        // Sorting
+        $order_by = $request->get('order', 'price');
+
         // TODO: This can be cached (and should be)
         $lawyers = Lawyer::where('schedule', '<>', null)
             ->whereHas('account', function ($query) use ($location) {
@@ -44,15 +48,34 @@ class LawyerController extends Controller
             })
             ->limit($length)
             ->skip($offset)
-            ->get();
+            ->get()
+            ->each(function (&$item, $key) {
+                $ratings = collect($item['ratings']);
+                $item['ratings_average'] = $ratings->avg('rating') ?? 0;
+                $item['ratings_count'] = $ratings->count();
+                unset($item['ratings']);
+            })
+            ->sortBy(function ($query) use ($order_by) {
+                switch ($order_by) {
+                    case 'ratings':
+                        return -$query->ratings_average;
+                        break;
+                    case 'price':
+                        return $query->discounted_price_per_hour;
+                        break;
+                    case 'popular':
+                        return -$query->ratings_count;
+                        break;
+                }
+            })->values();
 
-        foreach ($lawyers as &$lawyer) {
+        /*foreach ($lawyers as &$lawyer) {
             // Show only average rating
             $ratings = collect($lawyer['ratings']);
             $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
             $lawyer['ratings_count'] = $ratings->count();
             unset($lawyer['ratings']);
-        }
+        }*/
         return RespondJSON::with(['lawyers' => $lawyers]);
     }
 

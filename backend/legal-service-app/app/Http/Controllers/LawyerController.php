@@ -104,15 +104,39 @@ class LawyerController extends Controller
         return RespondJSON::with(['schedule' => $output]);
     }
 
+    public function getWeekSchedule()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        $lawyer = $user->lawyer;
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::success([
+            'schedule' => $lawyer->schedule,
+            'price_per_hour' => $lawyer->price_per_hour,
+            'enable_discount' => $lawyer->discount !== null,
+            'discount_amount' => $lawyer->discount,
+            'is_percent_discount' => $lawyer->is_percent_discount,
+            'discount_end' => $lawyer->discount_end
+        ]);
+    }
+
     public function updateSchedule(JSONRequest $request)
     {
         $request->validate([
-            'slot_length' => ['required', 'IN:30,45,60,75,90'],
-            'enable_discount' => ['required', 'boolean'],
-            'percent_discount' => ['exclude_if:enable_discount,false', 'required', 'boolean'],
-            'discount_value' => ['exclude_if:enable_discount,false', 'required', 'min:0', 'numeric'],
-            'discount_end' => ['exclude_if:enable_discount,false', 'required', 'date_format:Y-m-d H:i:s'],
-            'price_per_slot' => ['required', 'numeric', 'min:0']
+            'schedule' => ['required', 'array'],
+            'schedule.days' => ['required', 'array', 'size:7'],
+            'schedule.days.*.slots' => ['array'],
+            'schedule.days.*.slots.*.weekday' => ['required', 'numeric', 'min:0', 'max:6'],
+            'schedule.days.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
+            'schedule.days.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
+
+            'schedule.settings.price_per_hour' => ['required', 'numeric', 'min:0'],
+            'schedule.settings.enable_discount' => ['required', 'boolean'],
+            'schedule.settings.is_percent_discount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'boolean'],
+            'schedule.settings.discount_amount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'min:0', 'numeric'],
+            'schedule.settings.discount_end' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'date'],
         ]);
         /** @var Account **/
         $user = Auth::user();
@@ -120,47 +144,26 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        $incoming_schedule = $request->get('schedule');
-        // Set the schedule
-        $schedule = array([], [], [], [], [], [], []);
-        $slot_length = $lawyer->slot_length;
-        foreach ($incoming_schedule as $day => $slots) {
-            try {
-                $day_idx = AppointmentHelper::dayToIndex($day);
-                if ($day_idx === null) {
-                    return RespondJSON::malformedRequest();
-                }
-                foreach ($slots as $slot) {
-                    $slot = AppointmentHelper::clockToMinutes($slot);
-                    $schedule[$day_idx][] = (int) ($slot / $slot_length);
-                }
-            } catch (Exception $e) {
-                return RespondJSON::malformedRequest();
-            }
-        }
-        if (count($schedule) !== 7) {
-            return RespondJSON::malformedRequest();
-        }
-        // Save fields
-        $lawyer->schedule = $schedule;
-        $lawyer->slot_length = $request->get('slot_length');
-        $lawyer->price_per_slot = $request->get('price_per_slot');
-        if ($request->get('enable_discount', false)) {
-            $lawyer->discount = $request->get('discount_value');
-            $lawyer->is_percent_discount = $request->get('percent_discount');
-            $lawyer->discount_end = $request->get('discount_end');
-        } else {
-            $lawyer->discount = null;
-        }
-        $lawyer->save();
+        $incoming_schedule = $request->input('schedule.days');
 
+        // Save schedule
+        $lawyer->schedule = $incoming_schedule;
+
+        // Save settings
+        $lawyer->price_per_hour = $request->input('schedule.settings.price_per_hour');
+        $enable_discount = $request->input('schedule.settings.enable_discount');
+        $lawyer->discount = $enable_discount ? $request->input('schedule.settings.discount_amount') : null;
+        $lawyer->is_percent_discount = $request->input('schedule.settings.is_percent_discount', null);
+        $lawyer->discount_end = $request->input('schedule.settings.discount_end', null);
+
+        $lawyer->save();
         return RespondJSON::success();
     }
     public function fetchLawyer(Lawyer $lawyer)
     {
         return RespondJSON::with(['lawyer' => $lawyer]);
     }
-  
+
     public function fetchMe()
     {
         /** @var Account */

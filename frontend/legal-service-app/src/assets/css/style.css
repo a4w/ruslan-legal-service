@@ -3509,7 +3509,7 @@ html.menu-opened body {
     padding-right: 5px;
     width: 14.28%;
 }
-.time-slot li .timing {
+.schedule-cont .timing {
     background-color: #e9e9e9;
     border: 1px solid #e9e9e9;
     border-radius: 3px;
@@ -7422,4 +7422,20 @@ min-width: 100%;
 }
 .appointment-details .detail{
     display: block;
+}
+.timepicker-container{
+    position: absolute !important;
+    z-index: 50 !important;
+    width: 100% !important;
+}
+.timepicker-container > div{
+    position: absolute !important;
+    z-index: 50 !important;
+    width: 100% !important;
+}
+.slot-info-popover-body{
+    display: block;
+}
+.react-datepicker{
+    width: max-content;
 }

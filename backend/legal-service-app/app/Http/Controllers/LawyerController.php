@@ -112,7 +112,14 @@ class LawyerController extends Controller
         if (!$user->isLawyer()) {
             return RespondJSON::forbidden();
         }
-        return RespondJSON::success(['schedule' => $lawyer->schedule]);
+        return RespondJSON::success([
+            'schedule' => $lawyer->schedule,
+            'price_per_hour' => $lawyer->price_per_hour,
+            'enable_discount' => $lawyer->discount !== null,
+            'discount_amount' => $lawyer->discount,
+            'is_percent_discount' => $lawyer->is_percent_discount,
+            'discount_end' => $lawyer->discount_end
+        ]);
     }
 
     public function updateSchedule(JSONRequest $request)
@@ -125,7 +132,7 @@ class LawyerController extends Controller
             'schedule.days.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
             'schedule.days.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
 
-            'schedule.settings.price' => ['required', 'numeric', 'min:0'],
+            'schedule.settings.price_per_hour' => ['required', 'numeric', 'min:0'],
             'schedule.settings.enable_discount' => ['required', 'boolean'],
             'schedule.settings.is_percent_discount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'boolean'],
             'schedule.settings.discount_amount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'min:0', 'numeric'],
@@ -143,7 +150,7 @@ class LawyerController extends Controller
         $lawyer->schedule = $incoming_schedule;
 
         // Save settings
-        $lawyer->price_per_hour = $request->input('schedule.settings.price');
+        $lawyer->price_per_hour = $request->input('schedule.settings.price_per_hour');
         $enable_discount = $request->input('schedule.settings.enable_discount');
         $lawyer->discount = $enable_discount ? $request->input('schedule.settings.discount_amount') : null;
         $lawyer->is_percent_discount = $request->input('schedule.settings.is_percent_discount', null);

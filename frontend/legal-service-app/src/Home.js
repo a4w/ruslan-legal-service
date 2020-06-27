@@ -1,37 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Select from "react-dropdown-select";
 import History from "./History";
 
 const Home = () => {
-    const [location, setLocation] = useState({ value: null, label: "" });
+    const [location, setLocation] = useState({value: null, label: ""});
     const [expertises, setExpertises] = useState([]);
     useEffect(() => {
         console.log("location: ", location);
         console.log("Areas: ", expertises);
     }, [location, expertises]);
     const locationOptions = [
-        { value: "london", label: "London" },
-        { value: "paris", label: "Paris" },
-        { value: "rome", label: "Rome" },
-        { value: "uk", label: "UK" },
+        {value: "london", label: "London"},
+        {value: "paris", label: "Paris"},
+        {value: "rome", label: "Rome"},
+        {value: "uk", label: "UK"},
     ];
     const expertisesOptions = [
-        { value: "bl", label: "Business law" },
-        { value: "crl", label: "Civil rights law" },
-        { value: "cl", label: "Criminal law" },
-        { value: "el", label: "Environmental law" },
-        { value: "fl", label: "Family law" },
-        { value: "hl", label: "Health law" },
-        { value: "il", label: "Immigration law" },
+        {value: "bl", label: "Business law"},
+        {value: "crl", label: "Civil rights law"},
+        {value: "cl", label: "Criminal law"},
+        {value: "el", label: "Environmental law"},
+        {value: "fl", label: "Family law"},
+        {value: "hl", label: "Health law"},
+        {value: "il", label: "Immigration law"},
     ];
     const OnSubmitHandler = (event) => {
         event.preventDefault();
-        History.push("/list");
-        // History.push({
-        //     pathname: '/template',
-        //     search: '?query=abc',
-        //     state: { detail: response.data }
-        //   })
+        //History.push("/list");
+        const areas = expertises.map(area => {
+            return area.value;
+        });
+        const queryString = areas.join(',');
+        History.push({
+            pathname: '/list',
+            search: `?location=${location.value}&practice_areas=${queryString}`,
+            // state: {detail: response.data}
+        })
     };
     return (
         <section className="section section-search">
@@ -53,7 +57,7 @@ const Home = () => {
                                     searchable
                                     options={locationOptions}
                                     onChange={([obj]) => setLocation(obj)}
-                                    style={{ minHeight: "46px" }}
+                                    style={{minHeight: "46px"}}
                                 />
                                 <span className="form-text">
                                     Based on your Location
@@ -68,7 +72,7 @@ const Home = () => {
                                     searchable
                                     options={expertisesOptions}
                                     onChange={(obj) => setExpertises(obj)}
-                                    style={{ minHeight: "46px" }}
+                                    style={{minHeight: "46px"}}
                                 />
                             </div>
                             <button

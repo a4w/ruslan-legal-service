@@ -28,6 +28,7 @@ class LawyerController extends Controller
         $location = $location === '' ? null : $location;
         $practice_areas = $request->get('practice_areas');
         $practice_areas = $practice_areas === null ? null : explode(',', $practice_areas);
+        $available_on = $request->get('available_on');
 
         // Sorting
         $order_by = $request->get('order', 'price');
@@ -49,6 +50,17 @@ class LawyerController extends Controller
             ->limit($length)
             ->skip($offset)
             ->get()
+            ->filter(function ($item) use ($available_on) {
+                if ($available_on === null) {
+                    return true;
+                }
+                // Check if available on selected date
+                $day = new Carbon($available_on);
+                $dayIdx = $day->dayOfWeek;
+                $schedule = $item->schedule;
+                $slots = $schedule[$dayIdx]['slots'];
+                return count($slots) > 0;
+            })
             ->each(function (&$item, $key) {
                 $ratings = collect($item['ratings']);
                 $item['ratings_average'] = $ratings->avg('rating') ?? 0;

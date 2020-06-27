@@ -1,39 +1,46 @@
 import React, {useState, useEffect} from "react";
 import Select from "react-dropdown-select";
 import History from "./History";
+import {request} from "./Axios"
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: ""});
-    const [expertises, setExpertises] = useState([]);
+    const [practiceAreas, setPracticeAreas] = useState([]);
+    const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+
     useEffect(() => {
-        console.log("location: ", location);
-        console.log("Areas: ", expertises);
-    }, [location, expertises]);
+        request({
+            url: 'lawyer/practice-areas',
+            method: 'GET'
+        }).then(response => {
+            const areas = response.areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id,
+                    name: 'practiceAreas'
+                };
+            });
+            setPracticeAreaOptions(areas);
+        });
+    }, []);
+
     const locationOptions = [
         {value: "london", label: "London"},
         {value: "paris", label: "Paris"},
         {value: "rome", label: "Rome"},
         {value: "uk", label: "UK"},
     ];
-    const expertisesOptions = [
-        {value: "bl", label: "Business law"},
-        {value: "crl", label: "Civil rights law"},
-        {value: "cl", label: "Criminal law"},
-        {value: "el", label: "Environmental law"},
-        {value: "fl", label: "Family law"},
-        {value: "hl", label: "Health law"},
-        {value: "il", label: "Immigration law"},
-    ];
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         //History.push("/list");
-        const areas = expertises.map(area => {
+        const areas = practiceAreas.map(area => {
             return area.value;
         });
         const queryString = areas.join(',');
+        const sLocation = location.value === null ? '' : location.value;
         History.push({
             pathname: '/list',
-            search: `?location=${location.value}&practice_areas=${queryString}`,
+            search: (sLocation !== '' || queryString !== '') ? `?location=${sLocation}&practice_areas=${queryString}` : '',
             // state: {detail: response.data}
         })
     };
@@ -68,10 +75,10 @@ const Home = () => {
                                     multi
                                     className="select-form-control"
                                     placeholder="Select Area of Practice"
-                                    value={expertises}
+                                    value={practiceAreas}
                                     searchable
-                                    options={expertisesOptions}
-                                    onChange={(obj) => setExpertises(obj)}
+                                    options={practiceAreaOptions}
+                                    onChange={(obj) => setPracticeAreas(obj)}
                                     style={{minHeight: "46px"}}
                                 />
                             </div>

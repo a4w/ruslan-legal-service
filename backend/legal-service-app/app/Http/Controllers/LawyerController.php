@@ -25,12 +25,22 @@ class LawyerController extends Controller
 
         // Filters
         $location = $request->get('location');
+        $location = $location === '' ? null : $location;
         $practice_areas = $request->get('practice_areas');
-
+        $practice_areas = $practice_areas === null ? null : explode(',', $practice_areas);
         // TODO: This can be cached (and should be)
         $lawyers = Lawyer::where('schedule', '<>', null)
             ->whereHas('account', function ($query) use ($location) {
+                if ($location === null) {
+                    return $query;
+                }
                 return $query->where('city', $location);
+            })
+            ->whereHas('practice_areas', function ($query) use ($practice_areas) {
+                if ($practice_areas === null) {
+                    return $query;
+                }
+                return $query->whereIN('id', $practice_areas);
             })
             ->limit($length)
             ->skip($offset)

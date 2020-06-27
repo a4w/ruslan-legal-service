@@ -7,6 +7,7 @@ import {request, setAccessToken, setRefreshToken} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import history from "./History";
 import {Link} from "react-router-dom";
+import GoogleButton from "./GoogleButton";
 
 export const LoginTokens = React.createContext();
 
@@ -131,9 +132,10 @@ const LoginForm = ({setRegister, hideModal}) => {
                         </a>
                     </div>
                     <div className="col-6">
-                        <a href="#" className="btn btn-google btn-block">
+                        {/* <a href="#" className="btn btn-google btn-block">
                             <i className="fab fa-google mr-1"></i> Login
-                        </a>
+                        </a> */}
+                        <GoogleButton />
                     </div>
                 </div>
                 <div className="text-center dont-have">

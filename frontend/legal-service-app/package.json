@@ -28,6 +28,7 @@
         "react-sticky": "^6.0.3",
         "react-sticky-box": "^0.9.3",
         "react-toastify": "^6.0.6",
+        "stackedit-js": "^1.0.7",
         "universal-cookie": "^4.0.3",
         "vest": "^1.0.9"
     },

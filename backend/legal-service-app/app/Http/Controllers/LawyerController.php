@@ -29,6 +29,7 @@ class LawyerController extends Controller
         $practice_areas = $request->get('practice_areas');
         $practice_areas = $practice_areas === null ? null : explode(',', $practice_areas);
         $available_on = $request->get('available_on');
+        $available_on = $available_on === '' ? null : $available_on;
 
         // Sorting
         $order_by = $request->get('order', 'price');

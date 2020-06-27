@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
@@ -7,8 +7,9 @@ import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
+import queryString from "query-string"
 
-function LawyerList() {
+function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(2);
@@ -18,9 +19,11 @@ function LawyerList() {
         setSortBy(value);
         console.log("sort by: ", value);
     };
+    const params = queryString.parse(props.location.search);
+    console.log(params);
     useEffect(() => {
         request({
-            url: "/lawyer/all",
+            url: "/lawyer/all" + props.location.search,
             method: "GET",
             data: {offset: offset, length: length},
         })
@@ -316,4 +319,4 @@ function DayAsString(dayIndex) {
 
     return weekdays[dayIndex];
 }
-export default LawyerList;
+export default withRouter(LawyerList);

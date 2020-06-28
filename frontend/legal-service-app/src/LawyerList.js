@@ -7,66 +7,55 @@ import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
-import queryString from "query-string"
+import queryString from "query-string";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(2);
-    const [lawyers, setLawyers] = useState([]);
+    const [lawyers, setLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
     const [filter, setFilter] = useState({});
-
-    const SortHandler = ([{value}]) => {
-        setSortBy(value);
-        console.log("sort by: ", value);
-    };
     let params = queryString.parse(props.location.search);
     params["offset"] = offset;
     params["length"] = length;
-    const qs = queryString.stringify(params);
-    console.log(params);
-    console.log("qs", qs);
-    useEffect(() => {
-        request({
-            url: "/lawyer/all?" + qs,
-            method: "GET",
-            data: {offset: offset, length: length},
-        })
-            .then((data) => {
-                setLawyers(data.lawyers);
-            })
-            .catch((_errors) => {});
-    }, []);
-    const GetMore = (e) => {
-        e.preventDefault();
-        setOffset(offset + length);
-        params["offset"] = offset;
-        params["length"] = length;
+    
+    const getList = (params, keep = false) => {
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
             method: "GET",
         })
             .then((data) => {
-                setLawyers([...lawyers, ...data.lawyers]);
+                if (keep) setLawyers([...lawyers, ...data.lawyers]);
+                else setLawyers(data.lawyers);
             })
             .catch((_errors) => {});
     };
+
+    const SortHandler = ([{value}]) => {
+        setSortBy(value);
+        params["order"] = value;
+        getList(params);
+    };
+
+    useEffect(() => {
+        getList(params);        
+    }, []);
+
+    const GetMore = (e) => {
+        e.preventDefault();
+        setOffset(offset + length);
+        params["offset"] = offset + length;
+        params["length"] = length;
+        getList(params, true);
+    };
+
     const filterHandler = ()=>{
         let date = new Date(filter.date);
         date = date.toISOString().slice(0,10);
-        console.log(date);
         params["available_on"] = date;
-        params["filter_by"] = filter.filters;
-        request({
-            url: "/lawyer/all?" + queryString.stringify(params),
-            method: "GET",
-            data: {offset: offset, length: length},
-        })
-            .then((data) => {
-                setLawyers(data.lawyers);
-            })
-            .catch((_errors) => {});
+        // params["filter_by"] = filter.filters;
+        getList(params);
     }
     return (
         <div>
@@ -85,7 +74,7 @@ function LawyerList(props) {
             <div className="content">
                 <div className="row justify-content-center align-content-center">
                     <div className="col-7">
-                        <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
+                        {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
                         <div className="load-more text-center">
                             <a
                                 className="btn btn-primary btn-sm"

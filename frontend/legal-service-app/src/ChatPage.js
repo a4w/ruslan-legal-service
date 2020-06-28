@@ -4,6 +4,7 @@ import {FaCogs, FaPaperclip} from "react-icons/fa";
 import {request} from "./Axios"
 import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
+import {toast} from "react-toastify";
 
 const HideChatListStyle = {
     left: "-100%"
@@ -110,7 +111,9 @@ const ChatPage = () => {
                 data: formData
             }).then((response) => {
                 setFile(null);
-            }).catch((error) => {});
+            }).catch((error) => {
+                toast.error("The maximum file size is 2 MB");
+            });
         }
     };
     return (

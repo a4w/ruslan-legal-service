@@ -284,7 +284,7 @@ const AvgCalendar = ({lawyer}) => {
         <table className="calender">
             <thead>
                 <tr>
-                    <th colspan="2"></th>
+                    <th colSpan="2"></th>
                     {days.map((day) => (
                         <th key={day}>{day.substr(0, 3)}</th>
                     ))}
@@ -292,31 +292,31 @@ const AvgCalendar = ({lawyer}) => {
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2">Morning</td>
+                    <td colSpan="2">Morning</td>
                     {availability.map((a, i) => {
                         const brightness = (a[0] * avgSlotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Afternoon</td>
+                    <td colSpan="2">Afternoon</td>
                     {availability.map((a, i) => {
                         const brightness = (a[1] * avgSlotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Evening</td>
+                    <td colSpan="2">Evening</td>
                     {availability.map((a, i) => {
                         const brightness = (a[2] * avgSlotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Night</td>
+                    <td colSpan="2">Night</td>
                     {availability.map((a, i) => {
                         const brightness = (a[3] * avgSlotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
             </tbody>

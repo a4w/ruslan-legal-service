@@ -125,7 +125,7 @@ const RegisterationForm = () => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className="text-right">
-                    <a
+                    <Link
                         // to={`${getParent(History.location.pathname)}/login`}
                         onClick={() =>
                             History.replace(
@@ -135,7 +135,7 @@ const RegisterationForm = () => {
                         className="forgot-link"
                     >
                         Already have an account?
-                    </a>
+                    </Link>
                 </div>
                 <button
                     className={

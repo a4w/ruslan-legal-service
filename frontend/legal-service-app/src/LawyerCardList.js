@@ -138,7 +138,7 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <i className="fa fa-check-circle" aria-hidden="true"></i>
                     <span className="text-md text-success">
                         {isPercent ?
                             `${discountValue}% discount` :

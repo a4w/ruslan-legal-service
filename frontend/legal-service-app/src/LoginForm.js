@@ -175,3 +175,4 @@ const LoginWrapper = (props) => {
     );
 };
 export default LoginForm;
+export {getParent};

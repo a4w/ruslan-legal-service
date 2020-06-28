@@ -12,7 +12,8 @@ const modalStyle = {
     alignItems: "center",
     justifyContent: "center",
     color: "##FFF",
-    display: "flex"
+    display: "flex",
+    zIndex: "9999"
 };
 const modalHeaderStyles = {
     display: "flex",

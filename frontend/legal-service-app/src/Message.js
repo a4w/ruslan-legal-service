@@ -6,7 +6,8 @@ import {FaDownload} from "react-icons/fa"
 const Message = ({isOutgoing, content, timestamp, type = "text", link = null}) => {
     const handleDownload = () => {
         request({
-            url: link
+            url: link,
+            responseType: 'arraybuffer'
         }).then(data => {
             FileDownload(data, content);
         }).catch(error => {
@@ -44,7 +45,7 @@ const Message = ({isOutgoing, content, timestamp, type = "text", link = null}) =
                         <div className="msg-box">
                             <div>
                                 <div>
-                                    <button className="btn btn-link">
+                                    <button onClick={handleDownload} className="btn btn-link">
                                         <FaDownload /><br />
                                         {content}
                                     </button>

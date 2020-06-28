@@ -34,7 +34,8 @@ function App() {
         <BrowserRouter>
             <ToastContainer />
             <Router history={history}>
-                <NavBar />
+                {/* <NavBar /> */}
+                <Route component={NavBar} />
                 <Route path="(.+)/login">
                     <LoginModal />
                 </Route>
@@ -48,20 +49,20 @@ function App() {
                     <Route path="/home">
                         <Home />
                     </Route>
-                    <Route exact path="/list">
+                    <Route path="/list">
                         <LawyerList />
                     </Route>
-                    <Route exact path="/book">
+                    <Route path="/book">
                         <AppointmentTimeForm lawyer_id="1" />
                     </Route>
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route exact path="/reset/:Token" component={ResetPassword} />
-                    <Route exact path="/edit">
+                    <Route path="/reset/:Token" component={ResetPassword} />
+                    <Route path="/edit">
                         <EditPersonal />
                     </Route>
-                    <Route exact path="/complete-registeration">
+                    <Route path="/complete-registeration">
                         <LawyerCompleteRegisteration />
                     </Route>
                     <Route path="/dashboard">
@@ -74,20 +75,20 @@ function App() {
                     <Route path="/client-dashboard">
                         <ClientDashboard />
                     </Route>
-                    <Route exact path="/forgot-password">
+                    <Route path="/forgot-password">
                         <ForgotPassword />
                     </Route>
-                    <Route exact path="/chat">
+                    <Route path="/chat">
                         <ChatPage />
                     </Route>
                     <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
                     </Route>
-                    <Route exact path="/rate">
+                    <Route path="/rate">
                         <LawyerRating appointment_id={31} />
                     </Route>
 
-                    <Route exact path="/edit-schedule">
+                    <Route path="/edit-schedule">
                         <ScheduleForm />
                     </Route>
                 </Switch>

@@ -64,7 +64,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                         <div className="session-infos">
                             <ul>
                                 <Discount
-                                    secsTillEnd={lawyer.discount_ends_in}
+                                    secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     discount={lawyer.discount}
@@ -103,7 +103,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
 const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) => {
     return (
         <Countdown
-            date={Date.now() + secsTillEnd}
+            date={secsTillEnd}
             renderer={(props) =>
                 LawyerCountDownRenderer({
                     ...props,

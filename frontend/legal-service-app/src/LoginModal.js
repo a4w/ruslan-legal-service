@@ -4,7 +4,7 @@ import Modal from "./ModalRouted";
 
 const LoginModal = (props) => {
     return (
-        <Modal>
+        <Modal header={"Login"}>
             <div style={{ margin: "10px" }}>
                 <LoginForm />
             </div>

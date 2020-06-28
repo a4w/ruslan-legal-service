@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ModalPopUp from "./Modal";
 import Cookies from "universal-cookie";
+import History from "./History";
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -99,7 +100,7 @@ const NavBar = () => {
                             // style={{
                             //     visibility: logged_in ? "hidden" : "visible",
                             // }}
-                            to="/home/login"
+                            to={`${History.location.pathname}/login`}
                         >
                             login / Signup{" "}
                         </Link>

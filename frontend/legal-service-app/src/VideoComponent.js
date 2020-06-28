@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react"
 import "./assets/css/VideoComponent.css"
-import {FaPhoneSlash, FaVolumeMute, FaVolumeOff} from "react-icons/fa"
+import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone} from "react-icons/fa"
 import {BsChatSquareQuote} from "react-icons/bs"
-import {connect, createLocalVideoTrack} from "twilio-video"
+import {connect, createLocalTracks} from "twilio-video"
 import {request} from "./Axios.js"
 import {toast} from "react-toastify"
 
@@ -13,12 +13,34 @@ const VideoComponent = ({appointment_id}) => {
     const [roomSID, setRoomSID] = useState(null);
     const [accessToken, setAccessToken] = useState(null);
     const [room, setRoom] = useState(null);
+    const [localTracks, setLocalTracks] = useState(null);
+
     const handleSoundControl = () => {
         setIsMuted(!isMuted);
     };
     const handleChatToggle = () => {
         setShowChat(!showChat);
     };
+    const handleDisconnection = () => {
+        if (room !== null) {
+            room.disconnect();
+        }
+    };
+
+    useEffect(() => {
+        if (room === null) {
+            return;
+        }
+        if (isMuted) {
+            room.localParticipant.audioTracks.forEach(publication => {
+                publication.track.disable();
+            });
+        } else {
+            room.localParticipant.audioTracks.forEach(publication => {
+                publication.track.enable();
+            });
+        }
+    }, [room, isMuted]);
 
     useEffect(() => {
         request({
@@ -33,10 +55,10 @@ const VideoComponent = ({appointment_id}) => {
     }, []);
 
     useEffect(() => {
-        if (roomSID === null || accessToken === null) {
+        if (roomSID === null || accessToken === null || localTracks === null) {
             return;
         }
-        connect(accessToken, {sid: roomSID, video: {width: 400}, audio: true}).then(room => {
+        connect(accessToken, {sid: roomSID, tracks: localTracks}).then(room => {
             console.log(`Successfully joined a Room: ${room}`);
             setRoom(room);
         }, error => {
@@ -48,12 +70,26 @@ const VideoComponent = ({appointment_id}) => {
         return () => {
             room.disconnet();
         };
-    }, [roomSID, accessToken]);
+    }, [roomSID, accessToken, localTracks]);
 
     useEffect(() => {
         if (room === null) {
             return;
         }
+
+        const attachTrack = (track) => {
+            if (track.kind === "audio") {
+                [...document.getElementsByClassName('incomingAudio')].map((el) => {el.remove()});
+                const elem = track.attach();
+                elem.className = 'incomingAudio';
+                document.getElementById('incomingMedia').appendChild(elem);
+            } else {
+                [...document.getElementsByClassName('incomingVideo')].map((el) => {el.remove()});
+                const elem = track.attach();
+                elem.className = 'incomingVideo';
+                document.getElementById('incomingMedia').appendChild(elem);
+            }
+        };
 
         // Handle participants already in room
         room.participants.forEach(participant => {
@@ -61,12 +97,16 @@ const VideoComponent = ({appointment_id}) => {
 
             participant.tracks.forEach(publication => {
                 if (publication.track) {
-                    document.getElementById('incomingVideo').appendChild(publication.track.attach());
+                    attachTrack(publication.track);
                 }
             });
 
             participant.on('trackSubscribed', track => {
-                document.getElementById('incomingVideo').appendChild(track.attach());
+                attachTrack(track);
+            });
+
+            participant.on('trackSubscribed', track => {
+                attachTrack(track);
             });
         });
 
@@ -76,13 +116,12 @@ const VideoComponent = ({appointment_id}) => {
 
             participant.tracks.forEach(publication => {
                 if (publication.isSubscribed) {
-                    const track = publication.track;
-                    document.getElementById('incomingVideo').appendChild(track.attach());
+                    attachTrack(publication.track);
                 }
             });
 
             participant.on('trackSubscribed', track => {
-                document.getElementById('incomingVideo').appendChild(track.attach());
+                attachTrack(track);
             });
         });
 
@@ -91,18 +130,28 @@ const VideoComponent = ({appointment_id}) => {
             console.log(`Participant "${participant.identity}" has disconnected from the Room`);
         });
 
-
+        room.on('disconnected', room => {
+            // Detach the local media elements
+            room.localParticipant.tracks.forEach(publication => {
+                const attachedElements = publication.track.detach();
+                attachedElements.forEach(element => element.remove());
+            });
+        });
 
     }, [room]);
 
     // Start reading camera
     useEffect(() => {
-        createLocalVideoTrack({
-            audio: true,
-            video: 640
-        }).then(track => {
+        navigator.mediaDevices.enumerateDevices().then(devices => {
+            const videoInput = devices.find(device => device.kind === 'videoinput');
+            const audioInput = devices.find(device => device.kind === 'audioinput');
+            return createLocalTracks({audio: {deviceId: audioInput.deviceId}, video: {deviceId: videoInput.deviceId}});
+        }).then(tracks => {
+            setLocalTracks(tracks);
             const localMediaContainer = document.getElementById('outgoingVideo');
-            localMediaContainer.appendChild(track.attach());
+            tracks.map(track => {
+                localMediaContainer.appendChild(track.attach());
+            });
         });
     }, []);
 
@@ -110,12 +159,12 @@ const VideoComponent = ({appointment_id}) => {
         <>
             <div class="row no-gutters">
                 <div class="col">
-                    <div className="stream" id="incomingVideo">
+                    <div className="stream" id="incomingMedia">
                         <div className="controls">
                             <div className="buttons">
                                 <button class="btn btn-info" onClick={handleChatToggle}><BsChatSquareQuote /></button>
-                                <button class="btn btn-danger"><FaPhoneSlash /></button>
-                                <button class="btn btn-primary" onClick={handleSoundControl}>{isMuted ? <FaVolumeOff /> : <FaVolumeMute />}</button>
+                                <button class="btn btn-danger" onClick={handleDisconnection}><FaPhoneSlash /></button>
+                                <button class="btn btn-primary" onClick={handleSoundControl}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
                             </div>
                         </div>
                         <div className="outgoing" id="outgoingVideo"> </div>

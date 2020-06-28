@@ -12,14 +12,27 @@ import queryString from "query-string";
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
-    const [length, setLength] = useState(2);
+    const [length, setLength] = useState(3);
     const [lawyers, setLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
-    const [filter, setFilter] = useState({});
-    let params = queryString.parse(props.location.search);
-    params["offset"] = offset;
-    params["length"] = length;
+    const [filter, setFilter] = useState({ date: new Date() });
+    const [params, setParams] = useState({
+        ...queryString.parse(props.location.search),
+        offset: offset,
+        length: length,
+    });
+    console.log("params: ", params);
+    console.log("qs: ", queryString.stringify(params));
     
+    const resetOffset = () => {
+        setOffset(0);
+        setParams({
+            ...params,
+            offset: 0,
+            length: length,
+        });
+    };
+
     const getList = (params, keep = false) => {
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
@@ -35,6 +48,8 @@ function LawyerList(props) {
     const SortHandler = ([{value}]) => {
         setSortBy(value);
         params["order"] = value;
+        console.log("Sort: ", params);
+        resetOffset();
         getList(params);
     };
 
@@ -45,15 +60,15 @@ function LawyerList(props) {
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
-        params["offset"] = offset + length;
-        params["length"] = length;
+        setParams({ ...params, offset: offset + length, length: length });
         getList(params, true);
     };
 
     const filterHandler = ()=>{
         let date = new Date(filter.date);
         date = date.toISOString().slice(0,10);
-        params["available_on"] = date;
+        setParams({ ...params, available_on: date });
+        resetOffset();
         // params["filter_by"] = filter.filters;
         getList(params);
     }

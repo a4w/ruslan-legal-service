@@ -22,6 +22,8 @@ function LawyerList(props) {
         console.log("sort by: ", value);
     };
     let params = queryString.parse(props.location.search);
+    params["offset"] = offset;
+    params["length"] = length;
     const qs = queryString.stringify(params);
     console.log(params);
     console.log("qs", qs);
@@ -39,13 +41,14 @@ function LawyerList(props) {
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
+        params["offset"] = offset;
+        params["length"] = length;
         request({
-            url: "/lawyer/all",
+            url: "/lawyer/all?" + queryString.stringify(params),
             method: "GET",
-            data: {offset: offset, length: length},
         })
             .then((data) => {
-                setLawyers(data.lawyers);
+                setLawyers([...lawyers, ...data.lawyers]);
             })
             .catch((_errors) => {});
     };
@@ -54,6 +57,7 @@ function LawyerList(props) {
         date = date.toISOString().slice(0,10);
         console.log(date);
         params["available_on"] = date;
+        params["filter_by"] = filter.filters;
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
             method: "GET",
@@ -129,11 +133,11 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                 <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
                     <Select
                         className="form-control mb-0"
-                        value={filter.filterOne}
+                        value={filter.filters}
                         placeholder="Filter"
                         options={options}
                         onChange={([{value}]) =>
-                            setFilter({...filter, filterOne: value})
+                            setFilter({...filter, filters: value})
                         }
                         style={{minHeight: "46px"}}
                     />

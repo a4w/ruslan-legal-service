@@ -57,9 +57,9 @@ function LawyerList(props) {
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
-        const next = { ...params, offset: offset + length, length: length };
+        const next = { ...params, offset: (offset + length), length: length };
         setParams(next);
-        getList(next);
+        getList(next, true);
     };
 
     const filterHandler = ()=>{
@@ -79,6 +79,7 @@ function LawyerList(props) {
     return (
         <div>
             <LawyerListHeader
+                params={params}
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
@@ -164,7 +165,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     );
 };
 
-const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
+const LawyerListHeader = ({params, OnChangeHandler, selectedValue}) => {
     const options = [
         {value: "ratings", label: "Rating"},
         {value: "price", label: "Price"},
@@ -191,10 +192,6 @@ const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
                                 </li>
                             </ol>
                         </nav>
-                        <h2 className="breadcrumb-title">
-                            [#matches] found for : Lawyers In [Location] Expert
-                            in [Field]
-                        </h2>
                     </div>
                     <div className="col-md-4 col-12 d-md-block d-none">
                         <div className="sort-by">

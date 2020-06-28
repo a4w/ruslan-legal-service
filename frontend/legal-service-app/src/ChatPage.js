@@ -110,9 +110,12 @@ const ChatPage = () => {
                 method: 'POST',
                 data: formData
             }).then((response) => {
-                setFile(null);
+                loadMessages();
+                setMessage("");
             }).catch((error) => {
                 toast.error("The maximum file size is 2 MB");
+            }).finally(() => {
+                setFile(null);
             });
         }
     };

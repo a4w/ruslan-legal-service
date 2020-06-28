@@ -15,7 +15,6 @@ const MessagesList = ({messages}) => {
                 <div className="chat-scroll" id="messages_container">
                     <ul className="list-unstyled">
                         {messages.map((message, _) => {
-                            console.log(message);
                             if (message.message_type === 'TEXT') {
                                 return (<Message isOutgoing={me === message.sender_id} content={message.content} timestamp={message.created_at} />);
                             } else if (message.message_type === 'FILE') {

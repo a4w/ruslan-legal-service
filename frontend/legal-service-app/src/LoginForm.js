@@ -5,12 +5,17 @@ import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
 import {request, setAccessToken, setRefreshToken} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
-import history from "./History";
 import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
+import History from "./History";
 
-export const LoginTokens = React.createContext();
+function getParent(url){
+    const reversed = url.split("").reverse().join("")
+    const n = reversed.indexOf("/");
+    const parent = reversed.substr(n+1);
+    return parent.split("").reverse().join("");
+}
 
 const LoginForm = ({setRegister, hideModal}) => {
     const initUser = {
@@ -21,6 +26,7 @@ const LoginForm = ({setRegister, hideModal}) => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
+    
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
         setUser(nextUser);
@@ -139,16 +145,12 @@ const LoginForm = ({setRegister, hideModal}) => {
                 </div>
                 <div className="text-center dont-have">
                     Don’t have an account?
-                    <a
-                        href="//"
-                        onClick={(event) => {
-                            event.preventDefault();
-                            setRegister(true);
-                        }}
+                    <Link
+                        to={`${getParent(History.location.pathname)}/register`}
                     >
                         {" "}
                         Register
-                    </a>
+                    </Link>
                 </div>
             </form>
         </LoginWrapper>

@@ -101,6 +101,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 const BlogPage = () => {
     const [coverData, setCoverData] = useState({ cover: "", coverFile: "" });
     const [title, setTitle] = useState("");
+    const [tags, selectedTags] = useState([]);
     const showSelectedCover = (e) => {
         const input = e.target;
         if (input.files && input.files[0]) {
@@ -119,60 +120,70 @@ const BlogPage = () => {
         month: "long",
         day: "numeric",
     });
-    const tags = [
+    const tagOptions = [
         { value: "1", label: "tag 1" },
-        { value: "1", label: "tag 2" },
-        { value: "1", label: "tag 3" },
-        { value: "1", label: "tag 4" },
+        { value: "2", label: "tag 2" },
+        { value: "3", label: "tag 3" },
+        { value: "4", label: "tag 4" },
     ];
     return (
         <div className="blog blog-single-post">
-        <div className="blog-image">
-            <img alt="Cover" src={coverData.cover} className="img-fluid" />
-        </div>
-        <h3 className="blog-title">
-            <ErrorMessageInput
-                placeholder="Title.."
-                type="text"
-                OnChangeHandler={({ target: { value } }) => setTitle(value)}
-                value={title}
-            />
-        </h3>
-        <div className="blog-info clearfix">
-            <div className="post-left">
-                <ul>
-                    <li>
-                        <div className="post-author">
-                            <div className="change-photo-btn">
-                                <span>
-                                    <i className="fa fa-upload"></i> Upload
-                                    Photo
-                                </span>
-                                <input
-                                    type="file"
-                                    accept="image/png,image/jpeg,image/jpg,image/gif"
-                                    onChange={showSelectedCover}
-                                    className="upload"
-                                />
+            <div className="blog-image">
+                <img alt="Cover" src={coverData.cover} className="img-fluid" />
+            </div>
+            <h3 className="blog-title">
+                <ErrorMessageInput
+                    placeholder="Title.."
+                    type="text"
+                    OnChangeHandler={({ target: { value } }) => setTitle(value)}
+                    value={title}
+                />
+            </h3>
+            <div className="blog-info clearfix">
+                <div className="post-left">
+                    <ul>
+                        <li>
+                            <div className="post-author">
+                                <div className="change-photo-btn">
+                                    <span>
+                                        <i className="fa fa-upload"></i> Upload
+                                        Photo
+                                    </span>
+                                    <input
+                                        type="file"
+                                        accept="image/png,image/jpeg,image/jpg,image/gif"
+                                        onChange={showSelectedCover}
+                                        className="upload"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <i className="far fa-calendar"></i>
-                        {dateString}
-                    </li>
-                    <li style={{display:"block ruby"}}>
-                        <i className="fa fa-tags"></i>{" "}
-                        <Select options={tags} multi />
-                    </li>
-                </ul>
+                        </li>
+                        <li>
+                            <i className="far fa-calendar"></i>
+                            {dateString}
+                        </li>
+                        <li style={{ display: "block ruby" }}>
+                            <i className="fa fa-tags"></i>{" "}
+                            <Select
+                                options={tagOptions}
+                                multi
+                                searchable
+                                create={true}
+                                values={tags}
+                                onChange={(values) => {
+                                    console.log(values);
+                                    selectedTags(values);
+                                }}
+                            />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div className="blog-content">
+                <WriteBlog />
             </div>
         </div>
-        <div className="blog-content">
-          <WriteBlog />
-          </div>
-    </div>
-);
+    );
 };
 
 export default BlogPage;

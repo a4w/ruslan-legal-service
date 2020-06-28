@@ -129,6 +129,9 @@ return [
 
     'twilio_api_key_sid' => env('TWILIO_API_KEY_SID'),
     'twilio_api_key_secret' => env('TWILIO_API_KEY_SECRET'),
+    'twilio_api_key_secret' => env('TWILIO_API_KEY_SECRET'),
+
+    'google_client_id' => env('GOOGLE_CLIENT_ID'),
 
     'frontend_url' => env('FRONTEND_LINK'),
 

@@ -7,6 +7,9 @@ import { FaSpinner } from "react-icons/fa";
 import history from "./History";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
+import { Link } from "react-router-dom";
+import { getParent } from "./LoginForm";
+import History from "./History";
 
 const RegisterationForm = ({ setRegister, hideModal }) => {
     const initUser = {
@@ -121,16 +124,12 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className="text-right">
-                    <a
-                        href="//"
+                    <Link
+                        to={`${getParent(History.location.pathname)}/login`}
                         className="forgot-link"
-                        onClick={(event) => {
-                            event.preventDefault();
-                            setRegister(false);
-                        }}
                     >
                         Already have an account?
-                    </a>
+                    </Link>
                 </div>
                 <button
                     className={

@@ -143,8 +143,9 @@ const LoginForm = () => {
                 </div>
                 <div className="text-center dont-have">
                     Don’t have an account?
-                    <Link
+                    <a
                         // to={`${getParent(History.location.pathname)}/register`}
+                        href="//"
                         onClick={() =>
                             History.replace(
                                 `${getParent(History.location.pathname)}/register`
@@ -153,7 +154,7 @@ const LoginForm = () => {
                     >
                         {" "}
                         Register
-                    </Link>
+                    </a>
                 </div>
             </form>
         </LoginWrapper>

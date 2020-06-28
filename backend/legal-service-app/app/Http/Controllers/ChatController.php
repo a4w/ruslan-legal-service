@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Chat;
-use App\ChatParticipent;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
@@ -77,11 +78,26 @@ class ChatController extends Controller
         if (!$participants->contains($user)) {
             return RespondJSON::forbidden();
         }
-        $path = $request->file('file')->store("chat_files/{$chat->id}", ['disk' => 'local']);
-        $message = Message::make(['content' => $path]);
-        $message->type = 'FILE';
+        $uid = Str::random(32);
+        $request->file('file')->storeAS("chat_files/{$chat->id}", $uid, ['disk' => 'local']);
+        $message = Message::make(['content' => json_encode([
+            'uid' => $uid,
+            'name' => $request->file('file')->getClientOriginalName()
+        ])]);
+        $message->message_type = 'FILE';
         $message->sender()->associate($user);
         $chat->messages()->save($message);
         return RespondJSON::success();
+    }
+
+    public function getChatFile($mid)
+    {
+        $user = Auth::user();
+        $message = Message::find($mid);
+        $chat = $message->chat;
+        if (!$chat->participants->contains($user)) {
+            return RespondJSON::forbidden();
+        }
+        return Storage::download("chat_files/{$chat->id}/{$message->uid}");
     }
 }

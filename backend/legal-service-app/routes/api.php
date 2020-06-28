@@ -12,6 +12,8 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh-current-token', 'AuthController@refreshCurrentToken');
     Route::post('refresh', 'AuthController@refresh');
+
+    Route::post('google-login', 'AuthController@googleLogin');
 });
 
 Route::prefix('account')->group(function () {

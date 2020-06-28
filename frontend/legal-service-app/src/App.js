@@ -22,7 +22,7 @@ import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
-import WriteBlog from "./WriteBlog";
+import BlogPage from "./WriteBlog";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -81,7 +81,7 @@ function App() {
                         <LawyerRating appointment_id={31} />
                     </Route>
                     <Route path="/write-blog">
-                        <WriteBlog />
+                        <BlogPage />
                     </Route>
                     <Route exact path="/edit-schedule">
                         <ScheduleForm />

@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter} from "react-router-dom";
+import {Route, Router, Switch, BrowserRouter, Redirect} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -26,7 +26,8 @@ import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./assets/css/style.css";
-import LoginModal from "./Login";
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 function App() {
     return (
@@ -36,9 +37,13 @@ function App() {
                 <NavBar />
                 <Switch>
                     <Route exact path="/">
+                        <Redirect to="/home" />
+                    </Route>
+                    <Route path="/home">
+                        <Route path="/home/login" component={LoginModal} />
+                        <Route path="/home/register" component={RegisterModal} />
                         <Home />
                     </Route>
-                    <Route path="/login" component={LoginModal}/>
                     <Route exact path="/list">
                         <LawyerList />
                     </Route>

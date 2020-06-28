@@ -92,7 +92,8 @@ function App() {
                         <ScheduleForm />
                     </Route>
                 </Switch>
-                <Footer />
+                <Route component={Footer} />
+                {/* <Footer /> */}
             </Router>
         </BrowserRouter>
     );

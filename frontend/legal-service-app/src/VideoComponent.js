@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react"
 import "./assets/css/VideoComponent.css"
-import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone} from "react-icons/fa"
+import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone, FaChevronLeft} from "react-icons/fa"
 import {BsChatSquareQuote} from "react-icons/bs"
 import {connect, createLocalTracks} from "twilio-video"
 import {request} from "./Axios.js"
 import {toast} from "react-toastify"
+import ChatPage from "./ChatPage"
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -69,6 +70,8 @@ const VideoComponent = ({appointment_id}) => {
 
         return () => {
             room.disconnet();
+            toast.info("You are now disconnected from the room");
+            // Redirect
         };
     }, [roomSID, accessToken, localTracks]);
 
@@ -128,6 +131,9 @@ const VideoComponent = ({appointment_id}) => {
         // Handle participants disconnecting from the room
         room.once('participantDisconnected', participant => {
             console.log(`Participant "${participant.identity}" has disconnected from the Room`);
+            [...document.getElementsByClassName('incomingAudio')].map((el) => {el.remove()});
+            [...document.getElementsByClassName('incomingVideo')].map((el) => {el.remove()});
+            toast.info("Participant disconnected from the room");
         });
 
         room.on('disconnected', room => {
@@ -171,7 +177,8 @@ const VideoComponent = ({appointment_id}) => {
                     </div>
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none')}>
-                    Chat
+                    <button onClick={handleChatToggle} className="btn btn-link"><FaChevronLeft /></button>
+                    <ChatPage />
                 </div>
             </div>
         </>

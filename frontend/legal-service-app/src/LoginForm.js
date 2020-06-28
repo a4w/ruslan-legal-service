@@ -109,7 +109,7 @@ const LoginForm = ({setRegister, hideModal}) => {
                         <div className="text-right">
                             <Link
                                 className="forgot-link"
-                                to="forgot-password"
+                                to="/forgot-password"
                                 onClick={hideModal}
                             >
                                 Forgot Password ?

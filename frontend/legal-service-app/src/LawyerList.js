@@ -15,14 +15,16 @@ function LawyerList(props) {
     const [length, setLength] = useState(2);
     const [lawyers, setLawyers] = useState([]);
     const [lawyerPopUp, setPopUp] = useState(null);
+    const [filter, setFilter] = useState({});
+
     const SortHandler = ([{value}]) => {
         setSortBy(value);
         console.log("sort by: ", value);
     };
     let params = queryString.parse(props.location.search);
-    params["available_on"] = "2020-06-29";
     const qs = queryString.stringify(params);
     console.log(params);
+    console.log("qs", qs);
     useEffect(() => {
         request({
             url: "/lawyer/all?" + qs,
@@ -47,14 +49,33 @@ function LawyerList(props) {
             })
             .catch((_errors) => {});
     };
+    const filterHandler = ()=>{
+        let date = new Date(filter.date);
+        date = date.toISOString().slice(0,10);
+        console.log(date);
+        params["available_on"] = date;
+        request({
+            url: "/lawyer/all?" + queryString.stringify(params),
+            method: "GET",
+            data: {offset: offset, length: length},
+        })
+            .then((data) => {
+                setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    }
     return (
         <div>
             <LawyerListHeader
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
-            <StickyBox style={{zIndex: 6}}>
-                <LawyerSearchFilter />
+            <StickyBox style={{ zIndex: 6 }}>
+                <LawyerSearchFilter
+                    filter={filter}
+                    setFilter={setFilter}
+                    filterHandler={filterHandler}
+                />
             </StickyBox>
 
             <div className="content">
@@ -82,14 +103,13 @@ function LawyerList(props) {
     );
 }
 
-const LawyerSearchFilter = () => {
+const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     const options = [
         {value: 1, label: "f1"},
         {value: 2, label: "f2"},
         {value: 3, label: "f3"},
         {value: 4, label: "f4"},
     ];
-    const [filter, setFilter] = useState({});
     return (
         <div className="card search-filter">
             <form className="card-body form-row p-2">
@@ -101,7 +121,7 @@ const LawyerSearchFilter = () => {
                             onChange={(date) =>
                                 setFilter({...filter, date: date})
                             }
-                            maxDate={new Date()}
+                            minDate={new Date()}
                             placeholderText="Available on"
                         />
                     </div>
@@ -122,6 +142,7 @@ const LawyerSearchFilter = () => {
                     <button
                         type="button"
                         className="btn btn-block font-weight-bold"
+                        onClick={filterHandler}
                     >
                         <FaSearch />
                     </button>
@@ -170,9 +191,6 @@ const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
                                 <Select
                                     className="select-form-control"
                                     value={selectedValue}
-                                    placeholder={
-                                        selectedValue ? selectedValue : "select"
-                                    }
                                     options={options}
                                     onChange={OnChangeHandler}
                                 />

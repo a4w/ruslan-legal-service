@@ -99,7 +99,7 @@ const NavBar = () => {
                             // style={{
                             //     visibility: logged_in ? "hidden" : "visible",
                             // }}
-                            to="/login"
+                            to="/home/login"
                         >
                             login / Signup{" "}
                         </Link>

@@ -4,13 +4,14 @@ import RegisterationForm from "./RegisterationForm";
 import LoginForm from "./LoginForm";
 
 const ModalPopUp = (props) => {
-    const [register, setRegister] = useState(props.register);
+    const [register, setRegister] = useState(props.register ? true : false);
     return (
         <Modal
             {...props}
             dialogClassName="modal-90w"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            style={{zIndex:"9999"}}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

@@ -4,7 +4,7 @@ import RegisterationForm from "./RegisterationForm";
 
 const RegisterModal = (props) => {
     return (
-        <Modal>
+        <Modal header={"Register"}>
             <div style={{ margin: "10px" }}>
                 <RegisterationForm />
             </div>

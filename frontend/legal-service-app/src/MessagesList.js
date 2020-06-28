@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, {useState, useEffect} from "react"
 import Message from "./Message"
 
 // TODO: Save my id
 const me = 1;
 
-const MessagesList = ({ messages }) => {
+const MessagesList = ({messages}) => {
     useEffect(() => {
         var element = document.getElementById("messages_container");
         element.scrollTop = element.scrollHeight;
@@ -15,7 +15,12 @@ const MessagesList = ({ messages }) => {
                 <div className="chat-scroll" id="messages_container">
                     <ul className="list-unstyled">
                         {messages.map((message, _) => {
-                            return (<Message isOutgoing={me === message.sender_id} content={message.content} timestamp={message.created_at} />);
+                            console.log(message);
+                            if (message.message_type === 'TEXT') {
+                                return (<Message isOutgoing={me === message.sender_id} content={message.content} timestamp={message.created_at} />);
+                            } else if (message.message_type === 'FILE') {
+                                return (<Message type="file" link={message.link} isOutgoing={me === message.sender_id} content={message.content} timestamp={message.created_at} />);
+                            }
                         })}
                     </ul>
                 </div>

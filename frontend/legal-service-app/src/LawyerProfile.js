@@ -125,7 +125,7 @@ const ProfileCard = ({lawyer}) => {
                                     {lawyer.city, lawyer.country}
                                 </li>
                                 <Discount
-                                    secsTillEnd={lawyer.discount_ends_in}
+                                    secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_slot}
                                     costAfterDiscount={lawyer.discounted_price_per_slot}
                                     isPercent={lawyer.is_percent_discount}

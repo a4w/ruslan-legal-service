@@ -19,6 +19,7 @@ const ShowMessageListStyle = {
 const ChatPage = () => {
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
+    const [file, setFile] = useState(null);
     const [messages, setMessages] = useState([]);
     const [hideChatList, setHide] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
@@ -28,8 +29,8 @@ const ChatPage = () => {
     };
     useEffect(() => {
         window.addEventListener("resize", Chats);
-        
-        return () => window.removeEventListener("resize", Chats); 
+
+        return () => window.removeEventListener("resize", Chats);
     });
     const Swipe = () => {
         if (window.innerWidth <= 991) setHide(true);
@@ -44,7 +45,7 @@ const ChatPage = () => {
             const chats = response.chats.map((chat, _) => {
                 return {
                     id: chat.id,
-                    other_name: chat.participents[0].name
+                    other_name: chat.participants[0].name
                 };
             });
             setChats(chats);
@@ -85,18 +86,32 @@ const ChatPage = () => {
 
     const handleMessageSend = () => {
         const chat_id = chats[selectedChat].id;
-        request({
-            url: `/chat/${chat_id}`,
-            method: 'POST',
-            data: {
-                content: message
-            }
-        }).then((_) => {
-            loadMessages();
-            setMessage("");
-        }).catch((error) => {
-            console.log(error);
-        });
+        if (file === null) {
+            request({
+                url: `/chat/${chat_id}`,
+                method: 'POST',
+                data: {
+                    content: message
+                }
+            }).then((_) => {
+                loadMessages();
+                setMessage("");
+            }).catch((error) => {
+                console.log(error);
+            });
+        } else {
+            // Send file
+            const formData = new FormData();
+            const sFile = file;
+            formData.append('file', sFile);
+            request({
+                url: `/chat/${chat_id}/file`,
+                method: 'POST',
+                data: formData
+            }).then((response) => {
+                setFile(null);
+            }).catch((error) => {});
+        }
     };
     return (
         <Container>
@@ -160,11 +175,12 @@ const ChatPage = () => {
                         <div className="input-group-prepend">
                             <div className="btn-file btn">
                                 <FaPaperclip />
-                                <input type="file" />
+                                <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
                             </div>
                         </div>
                         <input
-                            value={message}
+                            value={file === null ? message : file.name}
+                            disabled={file !== null}
                             onChange={(e) => {
                                 setMessage(e.target.value);
                             }}
@@ -188,7 +204,7 @@ const ChatPage = () => {
     );
 };
 
-const Container = (props)=>{
+const Container = (props) => {
     return (
         <div class="content p-0">
             <div class="container-fluid p-0">

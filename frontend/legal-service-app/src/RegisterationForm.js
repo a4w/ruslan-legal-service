@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { getParent } from "./LoginForm";
 import History from "./History";
 
-const RegisterationForm = ({ setRegister, hideModal }) => {
+const RegisterationForm = () => {
     const initUser = {
         name: "",
         surname: "",
@@ -59,8 +59,6 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                     })
                     .finally(() => {
                         setIsRegistering(false);
-                        hideModal();
-                        history.push('/');
                     });
             }
         });
@@ -71,7 +69,10 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
             <div className="login-header">
                 <h5>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <button className="btn btn-link text-right" onClick={UserTypeHandler}>
+                    <button
+                        className="btn btn-link text-right"
+                        onClick={UserTypeHandler}
+                    >
                         {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
                     </button>
                 </h5>
@@ -124,12 +125,17 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                     OnChangeHandler={OnChangeHandler}
                 />
                 <div className="text-right">
-                    <Link
-                        to={`${getParent(History.location.pathname)}/login`}
+                    <a
+                        // to={`${getParent(History.location.pathname)}/login`}
+                        onClick={() =>
+                            History.replace(
+                                `${getParent(History.location.pathname)}/login`
+                            )
+                        }
                         className="forgot-link"
                     >
                         Already have an account?
-                    </Link>
+                    </a>
                 </div>
                 <button
                     className={

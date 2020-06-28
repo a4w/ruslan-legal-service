@@ -21,19 +21,10 @@ function LawyerList(props) {
         offset: offset,
         length: length,
     });
-    console.log("params: ", params);
-    console.log("qs: ", queryString.stringify(params));
     
-    const resetOffset = () => {
-        setOffset(0);
-        setParams({
-            ...params,
-            offset: 0,
-            length: length,
-        });
-    };
-
     const getList = (params, keep = false) => {
+        console.log("params : ", params);
+        console.log("qs: ", queryString.stringify(params));
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
             method: "GET",
@@ -47,10 +38,16 @@ function LawyerList(props) {
 
     const SortHandler = ([{value}]) => {
         setSortBy(value);
-        params["order"] = value;
-        console.log("Sort: ", params);
-        resetOffset();
-        getList(params);
+        setOffset(0);
+        const next = {
+            ...params,
+            offset: 0,
+            length: length,
+            order: value
+        };
+        setParams(next);
+        console.log("Sort: ", next);
+        getList(next);
     };
 
     useEffect(() => {
@@ -60,17 +57,24 @@ function LawyerList(props) {
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
-        setParams({ ...params, offset: offset + length, length: length });
-        getList(params, true);
+        const next = { ...params, offset: offset + length, length: length };
+        setParams(next);
+        getList(next);
     };
 
     const filterHandler = ()=>{
         let date = new Date(filter.date);
         date = date.toISOString().slice(0,10);
-        setParams({ ...params, available_on: date });
-        resetOffset();
+        console.log("date : ", date); 
+        const next = {
+            ...params,
+            available_on: date,
+            offset: 0,
+            length: length,
+        };
+        setParams(next);
         // params["filter_by"] = filter.filters;
-        getList(params);
+        getList(next);       
     }
     return (
         <div>

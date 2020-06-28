@@ -35,13 +35,17 @@ function App() {
             <ToastContainer />
             <Router history={history}>
                 <NavBar />
+                <Route path="(.+)/login">
+                    <LoginModal />
+                </Route>
+                <Route path="(.+)/register">
+                    <RegisterModal />
+                </Route>
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />
                     </Route>
                     <Route path="/home">
-                        <Route path="/home/login" component={LoginModal} />
-                        <Route path="/home/register" component={RegisterModal} />
                         <Home />
                     </Route>
                     <Route exact path="/list">

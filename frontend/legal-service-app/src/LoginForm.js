@@ -17,7 +17,7 @@ function getParent(url){
     return parent.split("").reverse().join("");
 }
 
-const LoginForm = ({setRegister, hideModal}) => {
+const LoginForm = () => {
     const initUser = {
         email: "",
         password: "",
@@ -57,7 +57,6 @@ const LoginForm = ({setRegister, hideModal}) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        hideModal();
                     });
             }
         });
@@ -110,7 +109,6 @@ const LoginForm = ({setRegister, hideModal}) => {
                             <Link
                                 className="forgot-link"
                                 to="/forgot-password"
-                                onClick={hideModal}
                             >
                                 Forgot Password ?
                             </Link>
@@ -146,7 +144,12 @@ const LoginForm = ({setRegister, hideModal}) => {
                 <div className="text-center dont-have">
                     Don’t have an account?
                     <Link
-                        to={`${getParent(History.location.pathname)}/register`}
+                        // to={`${getParent(History.location.pathname)}/register`}
+                        onClick={() =>
+                            History.replace(
+                                `${getParent(History.location.pathname)}/register`
+                            )
+                        }
                     >
                         {" "}
                         Register

@@ -4,7 +4,7 @@ import {Discount} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
 import {
     Link,
-    BrowserRouter,
+    Router,
     Switch,
     Route,
     matchPath,
@@ -39,7 +39,7 @@ const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(initLawyer);
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
-        request({ url: `lawyer/${lawyerID}`, method: "GET" })
+        request({url: `lawyer/${lawyerID}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
                 console.log(data.lawyer);
@@ -49,14 +49,14 @@ const LawyerProfile = ({match}) => {
     }, []);
 
     return (
-        <BrowserRouter>
+        <Router history={History}>
             <div className="content">
                 <div className="container">
                     <ProfileCard lawyer={lawyer} match={match} />
                     <Details lawyer={lawyer} match={match} />
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     );
 };
 
@@ -212,7 +212,7 @@ const Overview = ({lawyer}) => {
         regulator,
         years_licenced,
     } = {...lawyer};
-    
+
     const specializations = [
         `Regulated By: ${regulator.regulator}`,
         `Years licenced: ${years_licenced}`,

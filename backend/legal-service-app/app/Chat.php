@@ -10,8 +10,8 @@ class Chat extends Model
     protected $hidden = [
         'pivot'
     ];
-    protected $with = ['participents'];
-    public function participents()
+    protected $with = ['participants'];
+    public function participants()
     {
         return $this->belongsToMany(Account::class, 'chat_participents', 'chat_id', 'user_id');
     }

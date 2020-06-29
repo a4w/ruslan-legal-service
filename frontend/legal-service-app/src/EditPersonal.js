@@ -3,22 +3,22 @@ import EditBasicInfo from "./EditBasicInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
 import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
-import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import { NavTab } from "react-router-tabs";
+import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {NavTab} from "react-router-tabs";
 import "./Tabs.css";
-
 import history from "./History";
+
 const EditPersonal = () => {
     const path = "/dashboard/settings";
     // const path = history.location.pathname;
     return (
-        <BrowserRouter>
+        <Router history={history}>
             <div className="card">
                 <div className="card-body pt-0">
                     <div className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         >
                             <li>
                                 <NavTab
@@ -61,7 +61,7 @@ const EditPersonal = () => {
                     </Switch>
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     );
 };
 

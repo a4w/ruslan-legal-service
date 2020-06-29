@@ -12,6 +12,8 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh-current-token', 'AuthController@refreshCurrentToken');
     Route::post('refresh', 'AuthController@refresh');
+
+    Route::post('google-login', 'AuthController@googleLogin');
 });
 
 Route::prefix('account')->group(function () {
@@ -41,6 +43,8 @@ Route::prefix('lawyer')->group(function () {
 });
 
 Route::prefix('chat')->group(function () {
+    Route::post('{chat}/file', 'ChatController@sendFile')->middleware('auth:api');
+    Route::get('file/{mid}', 'ChatController@getChatFile')->middleware('auth:api')->name('chat.download_file');
     Route::post('{account1_id}/{account2_id}', 'ChatController@getChat')->middleware('auth:api');
     Route::get('all', 'ChatController@getChats')->middleware('auth:api');
     Route::post('{chat}', 'ChatController@sendMessage')->middleware('auth:api');

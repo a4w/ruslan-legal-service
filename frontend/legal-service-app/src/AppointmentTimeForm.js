@@ -2,8 +2,9 @@ import React, {useState, useEffect, useMemo} from "react";
 import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
+import {request} from "./Axios"
 
-const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
+const AppointmentTimeForm = ({lawyer_id}) => {
 
     const MINUTES_PER_DAY = 60 * 24;
     const minutesToClock = (minutes) => {
@@ -11,82 +12,45 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
         return ("0" + Math.floor(minutes / 60)).substr(-2) + ":" + ("0" + (minutes % 60)).substr(-2);
     };
 
-    const [fromDateTime, setFromDateTime] = useState(initialDateTime);
+    // Calender start
+    const [fromDateTime, setFromDateTime] = useState(moment()); // Default now
 
-    const slotsPerDay = MINUTES_PER_DAY / slotLength;
-
+    // Calender
     const [schedule, setSchedule] = useState(null);
-    const [selectedSchedule, setSelectedSchedule] = useState(initialSelectedSlots);
 
-    const initSchedule = useMemo(() => {
-        let initSlots = [];
-        for (let i = 0; i < slotsPerDay; ++i) {
-            const time_from = i * slotLength;
-            const time_to = time_from + slotLength;
-            initSlots.push({
-                id: i,
-                from: minutesToClock(time_from),
-                to: minutesToClock(time_to),
-            });
-        }
-        let initSchedule = [];
-        let date = moment(initialDateTime);
-        for (let i = 1; i <= numberOfDays; ++i) {
-            const dayIdx = calender ? date.weekday() : i;
-            initSchedule.push({
-                name: moment.weekdays(dayIdx),
-                slots: initSlots.slice(),
-                date: calender ? date.format(Config.momentsjs_default_date_format) : null
-            });
-            date.add(1, "days");
-        }
-        setSchedule({data: initSchedule});
-        return initSchedule;
-    }, [slotLength])
+    useEffect(() => {
+        request({
+            url: `/lawyer/${lawyer_id}/schedule`,
+            method: 'POST',
+            data: {
+                days_to_show: 7
+            }
+        }).then(response => {
+            console.debug(response);
 
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
+
+    // Selected slots
+    const [selectedSchedule, setSelectedSchedule] = useState([]);
 
     const changeFromDateTime = (amount) => {
-        if (calender) {
-            const i_amount = parseInt(amount);
-            setFromDateTime(
-                moment(fromDateTime)
-                    .add(i_amount, "days")
-                    .format(Config.momentsjs_default_date_format)
-            );
-        }
+        const i_amount = parseInt(amount);
+        setFromDateTime(
+            moment(fromDateTime)
+                .add(i_amount, "days")
+                .format(Config.momentsjs_default_date_format)
+        );
     };
 
-    const handleSlotClick = (event) => {
-        const button = event.currentTarget;
-        const dayIdx = button.dataset.day;
-        const slotIdx = button.dataset.slot;
-        const slot = schedule.data[dayIdx].slots[slotIdx];
-        // Find day or create it
-        if (typeof selectedSchedule[dayIdx] === "undefined") {
-            selectedSchedule[dayIdx] = {date: schedule.data[dayIdx].date, name: schedule.data[dayIdx].name, selectedSlots: []};
-        }
-        const currentDay = selectedSchedule[dayIdx];
-        if (button.classList.contains("selected")) {
-            button.classList.remove("selected");
-            const nextSlots = currentDay.selectedSlots.filter((item) => {
-                if (item.id === slot.id) {
-                    return false;
-                }
-                return true;
-            });
-            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: nextSlots}};
-            setSelectedSchedule(nextSchedule);
-        } else {
-            button.classList.add("selected");
-            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: [...currentDay.selectedSlots, slot]}};
-            setSelectedSchedule(nextSchedule);
-        }
-    };
+    const handleSlotClick = (event) => {};
 
     const handleContinueClick = (event) => {
-        handleSelection(selectedSchedule);
     };
-    console.debug(schedule);
+
+
     return (
         <>
             <div className="card booking-schedule">
@@ -95,7 +59,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                         <div className="col-12">
                             <div className="day-slot">
                                 <ul>
-                                    {calender && <li className="left-arrow">
+                                    <li className="left-arrow">
                                         <button
                                             className="btn btn-link"
                                             onClick={() => {
@@ -104,12 +68,12 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                                         >
                                             <i className="fa fa-chevron-left"></i>
                                         </button>
-                                    </li>}
+                                    </li>
                                     {schedule !== null && schedule.data.map((day, i) => {
                                         return (
                                             <li key={i}>
                                                 <span>{day.name}</span>
-                                                {calender && <span className="slot-date">
+                                                {<span className="slot-date">
                                                     {moment(day.date).format(
                                                         "DD MMM"
                                                     )}{" "}
@@ -118,7 +82,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                                             </li>
                                         );
                                     })}
-                                    {calender && <li className="right-arrow">
+                                    <li className="right-arrow">
                                         <button
                                             className="btn btn-link"
                                             onClick={() => {
@@ -127,7 +91,7 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                                         >
                                             <i className="fa fa-chevron-right"></i>
                                         </button>
-                                    </li>}
+                                    </li>
                                 </ul>
                             </div>
                         </div>

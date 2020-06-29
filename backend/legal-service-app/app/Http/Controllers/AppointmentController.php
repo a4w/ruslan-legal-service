@@ -21,7 +21,9 @@ class AppointmentController extends Controller
     {
         $request->validate([
             'slots' => ['required', 'array', 'min:1'],
-            'slots.*.datetime' => ['required', 'date_format:Y-m-d H:i:s', 'after_or_equal:now'],
+            'slots.*.datetime' => ['required', 'date_format:Y-m-d H:i', 'after_or_equal:now'],
+            'slots.*.time' => ['required', 'date_format:H:i'],
+            'slots.*.length' => ['required', 'numeric', 'min:1'],
         ]);
         /** @var Account */
         $user = Auth::user();
@@ -46,18 +48,24 @@ class AppointmentController extends Controller
             }
             // Check 2
             $slot_weekday = AppointmentHelper::dayToIndex($slot_datetime->dayName);
-            $slot_time = AppointmentHelper::clockToMinutes($slot_datetime->format(AppointmentHelper::TIME_FORMAT));
-            $slot_index = $slot_time / $lawyer->slot_length;
-            $lawyer_schedule = $lawyer->schedule;
-            if (array_search($slot_index, $lawyer_schedule[$slot_weekday]) === false) {
+            $slot_time = $slot['time'];
+            $slot_length = $slot['length'];
+            $is_real_slot = false;
+            foreach ($lawyer->schedule[$slot_weekday]['slots'] as $schedule_slot) {
+                if ($schedule_slot['time'] === $slot_time && $schedule_slot['length'] === $slot_length) {
+                    $is_real_slot = true;
+                    break;
+                }
+            }
+            if (!$is_real_slot) {
                 return RespondJSON::gone();
             }
             // All is good create and put em on hold
             $appointment = Appointment::make([
                 'appointment_time' => $slot_datetime,
                 'status' => 'ON_HOLD',
-                'price' => $lawyer->discounted_price_per_slot,
-                'duration' => $lawyer->slot_length
+                'price' => $lawyer->discounted_price_per_hour,
+                'duration' => $slot_length
             ]);
             $total_price += $appointment->price;
             $appointment->lawyer()->associate($lawyer);
@@ -79,6 +87,7 @@ class AppointmentController extends Controller
             }
             return RespondJSON::with(['client_secret' => $paymentIntent->client_secret]);
         } catch (Exception $e) {
+            dump($e);
             return RespondJSON::unknownError();
         }
     }

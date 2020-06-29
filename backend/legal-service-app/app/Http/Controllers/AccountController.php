@@ -26,6 +26,9 @@ class AccountController extends Controller
 
     public function resetPassword($token, JSONRequest $request)
     {
+        $request->validate([
+            'new_password' => ['required', 'min:8'],
+        ]);
         $key = config('app.key');
         try {
             $jwt = JWT::decode($token, $key, array('HS256'));

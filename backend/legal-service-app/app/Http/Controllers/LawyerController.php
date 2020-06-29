@@ -216,7 +216,15 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        $incoming_schedule = $request->input('schedule.days');
+        $incoming_schedule = collect($request->input('schedule.days'))->map(function ($day) {
+            $day['slots'] = collect($day['slots'])->map(function ($slot) {
+                $slot = collect($slot);
+                return $slot->only('time', 'length');
+            });
+            return $day;
+        });
+        dump($incoming_schedule);
+
 
         // Save schedule
         $lawyer->schedule = $incoming_schedule;

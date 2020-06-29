@@ -94,10 +94,10 @@ const LawyerCompleteRegisteration = ({}) => {
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type = {value: data.lawyer_type_id, label: data.lawyer_type.type};
+            nextLawyer.type = data.lawyer_type_id;
             // Shitty code from a shitty person
             if (data.lawyer_type_id > 2) {
-                nextLawyer.type = {value: 0, label: "Other"};
+                nextLawyer.type = 0;
                 nextLawyer.other = data.lawyer_type.type;
             }
             nextLawyer.regulatedBy = data.regulator.regulator;
@@ -106,16 +106,10 @@ const LawyerCompleteRegisteration = ({}) => {
             nextLawyer.graduation = data.graduation_year;
             nextLawyer.course = data.course;
             nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
-                return {
-                    label: area.area,
-                    value: area.id
-                };
+                return area.id;
             });
             nextLawyer.accreditations = data.accreditations.map((accreditation, i) => {
-                return {
-                    label: accreditation.accreditation,
-                    value: accreditation.id
-                };
+                return accreditation.id;
             });
             nextLawyer.bio = data.biography;
             setLawyer(nextLawyer);
@@ -130,19 +124,15 @@ const LawyerCompleteRegisteration = ({}) => {
             }
             // Assuming validation works otherwise another check is needed here
             const data = {
-                lawyer_type_id: lawyer.type.value,
+                lawyer_type_id: lawyer.type,
                 lawyer_type: lawyer.other,
                 regulator: lawyer.regulatedBy,
                 year_licensed: lawyer.yearLicensed,
                 institution: lawyer.education,
                 graduation: lawyer.graduation,
                 course: lawyer.course,
-                practice_areas: lawyer.practiceAreas.map((area, i) => {
-                    return area.value;
-                }),
-                accreditations: lawyer.accreditations.map((accreditation, i) => {
-                    return accreditation.value;
-                }),
+                practice_areas: lawyer.practiceAreas,
+                accreditations: lawyer.accreditations,
                 biography: lawyer.bio,
             };
             request({
@@ -162,8 +152,8 @@ const LawyerCompleteRegisteration = ({}) => {
         console.log("Validating: ", name, " with: ", newData);
         validate(newData, name);
     };
-    const OnSelectHandler = ({name, values}) => {
-        const newData = {...lawyer, [name]: values[0]};
+    const OnSelectHandler = ({name, value}) => {
+        const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         validate(newData, name);
     };
@@ -190,7 +180,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
-                        disabled={lawyer.type.value !== 0}
+                        disabled={lawyer.type !== 0}
                         errors={errors.other}
                         type={"text"}
                         name="other"
@@ -288,12 +278,16 @@ const LawyerCompleteRegisteration = ({}) => {
                     </Label>
                 </div>
             </div>
-            <button
-                className="btn btn-primary btn-block btn-lg login-btn "
-                type="submit"
-            >
-                &nbsp;Save
-            </button>
+            <div className="form-row">
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                    <button
+                        className="btn btn-primary btn-block btn-lg login-btn "
+                        type="submit"
+                    >
+                        &nbsp;Save
+                    </button>
+                </div>
+            </div>
         </form>
     );
 };
@@ -306,6 +300,9 @@ const Label = (props) => {
                     ? "form-group form-focus"
                     : "form-group form-focus focused"
             }
+            style={{
+                height: 'unset'
+            }}
         >
             {props.children}
             <label className="focus-label">{props.label}</label>

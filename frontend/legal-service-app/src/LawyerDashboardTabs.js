@@ -7,7 +7,7 @@ import LawyerInvoice from "./LawyerInvoice";
 import LawyerClients from "./LawyerClients";
 import LawyerDashboardStatus from "./LawyerDashboardStatus";
 import LawyerReviews from "./LawyerReviews";
-import { Route, Switch, Redirect } from "react-router-dom";
+import {Route, Switch, Redirect} from "react-router-dom";
 import History from "./History";
 
 const LawyerDashboardTabs = () => {
@@ -43,7 +43,7 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/change-password">
                 <EditPassword />
             </Route>
-            <Route exact path="/logout">
+            <Route exact path="/dashboard/logout">
                 <Redirect replace to="/" />
             </Route>
         </Switch>

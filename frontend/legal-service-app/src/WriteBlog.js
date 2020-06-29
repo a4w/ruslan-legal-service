@@ -69,7 +69,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
             name: "blog post",
             content: {
                 text: md_content.current.value,
-                html: md_content.current.innerHTML,
+                html: md_preview.current.innerHTML,
             },
         });
     };

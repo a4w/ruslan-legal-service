@@ -5,6 +5,7 @@ import History from "./History";
 import {Link} from "react-router-dom";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
+    console.log(lawyers);
     if (lawyers)
         return lawyers.map((lawyer) => (
             <LawyerCard key={lawyer.id} setPopUp={setPopUp} lawyer={lawyer} />
@@ -64,8 +65,10 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <ul>
                                 <Discount
                                     secsTillEnd={lawyer.discount_ends_in}
-                                    cost={lawyer.price_per_slot}
-                                    costAfterDiscount={lawyer.discounted_price_per_slot}
+                                    cost={lawyer.price_per_hour}
+                                    costAfterDiscount={lawyer.discounted_price_per_hour}
+                                    discount={lawyer.discount}
+                                    isPercent={lawyer.is_percent_discount}
                                 />
                             </ul>
                         </div>
@@ -138,8 +141,8 @@ const LawyerCountDownRenderer = ({
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
                     <span className="text-md text-success">
                         {isPercent ?
-                            `There is a ${discountValue}% discount` :
-                            `There is a ${discountValue} discount`}
+                            `${discountValue}% discount` :
+                            `${discountValue} GBP discount`}
                     </span>
                 </li>
                 <li>

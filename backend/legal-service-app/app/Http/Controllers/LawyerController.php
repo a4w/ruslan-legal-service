@@ -23,19 +23,72 @@ class LawyerController extends Controller
         $offset = $request->get('offset', 0);
         $length = (int) $request->get('length', 10);
 
+        // Filters
+        $location = $request->get('location');
+        $location = $location === '' ? null : $location;
+        $practice_areas = $request->get('practice_areas');
+        $practice_areas = $practice_areas === null ? null : explode(',', $practice_areas);
+        $available_on = $request->get('available_on');
+        $available_on = $available_on === '' ? null : $available_on;
+
+        // Sorting
+        $order_by = $request->get('order', 'price');
+
         // TODO: This can be cached (and should be)
-        $lawyers = Lawyer::where('slot_length', '<>', null)
+        $lawyers = Lawyer::where('schedule', '<>', null)
+            ->whereHas('account', function ($query) use ($location) {
+                if ($location === null) {
+                    return $query;
+                }
+                return $query->where('city', $location);
+            })
+            ->whereHas('practice_areas', function ($query) use ($practice_areas) {
+                if ($practice_areas === null) {
+                    return $query;
+                }
+                return $query->whereIN('id', $practice_areas);
+            })
             ->limit($length)
             ->skip($offset)
-            ->get();
+            ->get()
+            ->filter(function ($item) use ($available_on) {
+                if ($available_on === null) {
+                    return true;
+                }
+                // Check if available on selected date
+                $day = new Carbon($available_on);
+                $dayIdx = $day->dayOfWeek;
+                $schedule = $item->schedule;
+                $slots = $schedule[$dayIdx]['slots'];
+                return count($slots) > 0;
+            })
+            ->each(function (&$item, $key) {
+                $ratings = collect($item['ratings']);
+                $item['ratings_average'] = $ratings->avg('rating') ?? 0;
+                $item['ratings_count'] = $ratings->count();
+                unset($item['ratings']);
+            })
+            ->sortBy(function ($query) use ($order_by) {
+                switch ($order_by) {
+                    case 'ratings':
+                        return -$query->ratings_average;
+                        break;
+                    case 'price':
+                        return $query->discounted_price_per_hour;
+                        break;
+                    case 'popular':
+                        return -$query->ratings_count;
+                        break;
+                }
+            })->values();
 
-        foreach ($lawyers as &$lawyer) {
+        /*foreach ($lawyers as &$lawyer) {
             // Show only average rating
             $ratings = collect($lawyer['ratings']);
             $lawyer['ratings_average'] = $ratings->avg('rating') ?? 0;
             $lawyer['ratings_count'] = $ratings->count();
             unset($lawyer['ratings']);
-        }
+        }*/
         return RespondJSON::with(['lawyers' => $lawyers]);
     }
 
@@ -59,9 +112,6 @@ class LawyerController extends Controller
         $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
         $output['number_of_days'] = $days_to_show;
 
-        // Fetch lawyer data
-        $slot_length = $lawyer->slot_length;
-
         // Get appointments and pre-process them for fast checking
         $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
@@ -73,15 +123,29 @@ class LawyerController extends Controller
         $data = array();
         $current = new Carbon($from_date);
         for ($d = 0; $d < $days_to_show; ++$d) {
-            $formated_date = $current->format(AppointmentHelper::DATE_FORMAT);
+            $formatted_date = $current->format(AppointmentHelper::DATE_FORMAT);
             $day = array(
                 'name' => $current->dayName,
-                'date' => $formated_date
+                'date' => $formatted_date,
+                'slots' => []
             );
-            $slots = $schedule[$current->dayOfWeek];
-            $day['slots'] = [];
-            for ($i = 0; $i < count($slots); ++$i) {
-                $start_minute = $slots[$i] * $slot_length;
+            $current_day_slots = $schedule[$current->dayOfWeek]['slots'];
+            for ($i = 0; $i < count($current_day_slots); ++$i) {
+                $slot = $current_day_slots[$i];
+                $start_time = new Carbon($slot['time']);
+                $end_time = new Carbon($start_time);
+                $end_time->addMinutes($slot['length']);
+                $is_upcoming = true;
+                if ($current->lt(now())) {
+                    $is_upcoming = false;
+                }
+                $day['slots'][] = [
+                    'time' => $slot['time'],
+                    'length' => $slot['length'],
+                    'to' => $end_time->format('H:i'),
+                    'reserved' => !$is_upcoming || isset($appointments_check[$formatted_date][$slot['time']]),
+                ];
+                /*$start_minute = $slots[$i] * $slot_length;
                 $start_time = AppointmentHelper::minutesToClock($start_minute);
                 $current->setTime($start_minute / 60, $start_minute % 60);
                 $is_upcoming = true;
@@ -93,14 +157,13 @@ class LawyerController extends Controller
                     'id' => $slots[$i],
                     'from' => $start_time,
                     'to' => $end_time,
-                    'reserved' => !$is_upcoming || isset($appointments_check[$formated_date][$start_time])
-                ];
+                    'reserved' => !$is_upcoming || isset($appointments_check[$formatted_date][$start_time])
+                ];*/
             }
             $data[] = $day;
             $current->addDay();
         }
         $output['days'] = $data;
-        $output['slot_length'] = $lawyer->slot_length;
         return RespondJSON::with(['schedule' => $output]);
     }
 

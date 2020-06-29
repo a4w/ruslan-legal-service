@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
@@ -7,8 +7,9 @@ import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
+import queryString from "query-string"
 
-function LawyerList() {
+function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(2);
@@ -18,9 +19,13 @@ function LawyerList() {
         setSortBy(value);
         console.log("sort by: ", value);
     };
+    let params = queryString.parse(props.location.search);
+    params["available_on"] = "2020-06-29";
+    const qs = queryString.stringify(params);
+    console.log(params);
     useEffect(() => {
         request({
-            url: "/lawyer/all",
+            url: "/lawyer/all?" + qs,
             method: "GET",
             data: {offset: offset, length: length},
         })
@@ -128,10 +133,9 @@ const LawyerSearchFilter = () => {
 
 const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
     const options = [
-        {value: "rating", label: "Rating"},
+        {value: "ratings", label: "Rating"},
+        {value: "price", label: "Price"},
         {value: "popular", label: "Popular"},
-        {value: "latest", label: "Latest"},
-        {value: "free", label: "Free"},
     ];
     return (
         <div className="breadcrumb-bar">
@@ -208,7 +212,7 @@ const AvgCalendar = ({lawyer}) => {
         }
     }
     const [availability, setAvailability] = useState(initAvail);
-    const [slotLength, setSlotLength] = useState(1);
+    const [avgSlotLength, setAvgSlotLength] = useState(1);
     useEffect(() => {
         if (lawyer !== null) {
             request({
@@ -223,12 +227,13 @@ const AvgCalendar = ({lawyer}) => {
                     return day.name;
                 });
                 setDays(nextDays);
-                setSlotLength(response.schedule.slot_length);
                 // Calculate availability
                 const nextAvailability = initAvail.slice();
+                let avg = 0;
+                let count = 0;
                 response.schedule.days.map((day, i) => {
                     for (let j = 0; j < day.slots.length; ++j) {
-                        const time = day.slots[j].from;
+                        const time = day.slots[j].time;
                         if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
                             nextAvailability[i][0]++;
                         } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
@@ -238,8 +243,11 @@ const AvgCalendar = ({lawyer}) => {
                         } else if (!day.slots[j].reserved) {
                             nextAvailability[i][3]++;
                         }
+                        avg += day.slots[j].length;
+                        count++;
                     }
                 });
+                setAvgSlotLength(avg / count);
                 setAvailability(nextAvailability);
             }).catch((error) => {
                 console.log(error);
@@ -260,28 +268,28 @@ const AvgCalendar = ({lawyer}) => {
                 <tr>
                     <td colspan="2">Morning</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[0] * slotLength) / (6 * 60);
+                        const brightness = (a[0] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Afternoon</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[1] * slotLength) / (6 * 60);
+                        const brightness = (a[1] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Evening</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[2] * slotLength) / (6 * 60);
+                        const brightness = (a[2] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
                     <td colspan="2">Night</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[3] * slotLength) / (6 * 60);
+                        const brightness = (a[3] * avgSlotLength) / (6 * 60);
                         return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
@@ -312,4 +320,4 @@ function DayAsString(dayIndex) {
 
     return weekdays[dayIndex];
 }
-export default LawyerList;
+export default withRouter(LawyerList);

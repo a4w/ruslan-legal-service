@@ -10,10 +10,10 @@ import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
 
-function getParent(url){
+function getParent(url) {
     const reversed = url.split("").reverse().join("")
     const n = reversed.indexOf("/");
-    const parent = reversed.substr(n+1);
+    const parent = reversed.substr(n + 1);
     return parent.split("").reverse().join("");
 }
 
@@ -26,7 +26,7 @@ const LoginForm = () => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
-    
+
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
         setUser(nextUser);
@@ -57,6 +57,7 @@ const LoginForm = () => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
+                        window.location.reload();
                     });
             }
         });

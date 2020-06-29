@@ -151,6 +151,9 @@ const NavBar = () => {
                             <Link className="dropdown-item" to="/dashboard">
                                 Dashboard
                             </Link>
+                            <Link className="dropdown-item" to="/chat">
+                                Messages
+                            </Link>
                             <Link
                                 className="dropdown-item"
                                 to="/dashboard/settings/lawyer-info"

@@ -7,6 +7,7 @@ import History from "./History";
 const NavBar = () => {
     const cookie = new Cookies();
     const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
+    const [menuToggle, setMenuToggle] = useState(false);
     const [open, setOpen] = useState(true);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
@@ -93,7 +94,6 @@ const NavBar = () => {
                     <li className="nav-item">
                         <Link
                             className="nav-link header-login"
-                            // onClick={() => setModalShow(true)}
                             style={{
                                 visibility: logged_in ? "hidden" : "visible",
                             }}
@@ -101,6 +101,57 @@ const NavBar = () => {
                         >
                             login / Signup{" "}
                         </Link>
+                    </li>
+                    <li
+                        className={`nav-item dropdown has-arrow logged-item ${
+                            menuToggle ? "show" : ""
+                        }`}
+                    >
+                        <Link
+                            to="/"
+                            className="dropdown-toggle nav-link"
+                            onClick={() => setMenuToggle(!menuToggle)}
+                        >
+                            <span className="user-img">
+                                <img
+                                    className="rounded-circle"
+                                    src="assets/img/doctors/doctor-thumb-02.jpg"
+                                    width="31"
+                                    alt="user name"
+                                />
+                            </span>
+                        </Link>
+                        <div
+                            className={`dropdown-menu dropdown-menu-right ${
+                                menuToggle ? "show" : ""
+                            }`}
+                        >
+                            <div className="user-header">
+                                <div className="avatar avatar-sm">
+                                    <img
+                                        src="assets/img/doctors/doctor-thumb-02.jpg"
+                                        alt="User Image"
+                                        className="avatar-img rounded-circle"
+                                    />
+                                </div>
+                                <div className="user-text">
+                                    <h6>Darren Elder</h6>
+                                    <p className="text-muted mb-0">Doctor</p>
+                                </div>
+                            </div>
+                            <Link className="dropdown-item" to="/dashboard">
+                                Dashboard
+                            </Link>
+                            <Link
+                                className="dropdown-item"
+                                to="/dashboard/settings/lawyer-info"
+                            >
+                                Profile Settings
+                            </Link>
+                            <Link className="dropdown-item" to="/logout">
+                                Logout
+                            </Link>
+                        </div>
                     </li>
                 </ul>
             </nav>

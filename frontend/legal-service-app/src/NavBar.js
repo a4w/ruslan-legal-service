@@ -9,6 +9,14 @@ const NavBar = () => {
     const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
     const [menuToggle, setMenuToggle] = useState(false);
     const [open, setOpen] = useState(true);
+    const [user, setUser] = useState({
+        name: "",
+        surname: "",
+        email: "",
+        phone: "",
+        profile_picture_url: "",
+        type:"",
+    });
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)
@@ -107,16 +115,16 @@ const NavBar = () => {
                         style={{display: logged_in ? "" : "none"}}
                     >
                         <Link
-                            to="/"
+                            to="#"
                             className="dropdown-toggle nav-link"
                             onClick={() => setMenuToggle(!menuToggle)}
                         >
                             <span className="user-img">
                                 <img
                                     className="rounded-circle"
-                                    src="assets/img/doctors/doctor-thumb-02.jpg"
+                                    src={user.profile_picture_url}
                                     width="31"
-                                    alt="user name"
+                                    alt={user.name}
                                 />
                             </span>
                         </Link>
@@ -128,15 +136,15 @@ const NavBar = () => {
                             <div className="user-header">
                                 <div className="avatar avatar-sm">
                                     <img
-                                        src="assets/img/doctors/doctor-thumb-02.jpg"
+                                        src={user.profile_picture_url}
                                         alt="User Image"
                                         className="avatar-img rounded-circle"
                                     />
                                 </div>
                                 <div className="user-text">
-                                    <h6>Darren Elder</h6>
+                                    <h6>{`${user.name} ${user.surname}`}</h6>
                                     <p className="text-muted mb-0">
-                                        Doctor
+                                        {user.type}
                                     </p>
                                 </div>
                             </div>

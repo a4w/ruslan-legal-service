@@ -1,6 +1,6 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import Stackedit from "stackedit-js";
-import { FaPencilAlt } from "react-icons/fa";
+import {FaPencilAlt} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
 import Select from "react-dropdown-select";
 
@@ -47,7 +47,22 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     const md_preview = useRef(null);
     const md_content = useRef(null);
 
+    const loaderStackEdit = new Stackedit();
+
     const stackedit = new Stackedit();
+    useEffect(() => {
+        loaderStackEdit.openFile({
+            name: "blog post",
+            content: {
+                text: md_initial[0]
+            }
+        }, true);
+
+        loaderStackEdit.on("fileChange", (file) => {
+            md_preview.current.innerHTML = file.content.html;
+        });
+
+    }, []);
 
     const handleClick = () => {
         stackedit.openFile({
@@ -82,15 +97,15 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
                 </button>
                 <textarea
                     className="form-control"
-                    style={{ height: "800px" }}
+                    style={{height: "800px"}}
                     value={md_initial}
                     ref={md_content}
-                    style={{ visibility: "hidden" }}
+                    style={{visibility: "hidden"}}
                 ></textarea>
             </div>
             <div
                 className="p-4"
-                style={{ backgroundColor: "white" }}
+                style={{backgroundColor: "white"}}
                 id="md-preview"
                 ref={md_preview}
             ></div>
@@ -99,7 +114,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 };
 
 const BlogPage = () => {
-    const [coverData, setCoverData] = useState({ cover: "", coverFile: "" });
+    const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const [tags, selectedTags] = useState([]);
     const showSelectedCover = (e) => {
@@ -121,10 +136,10 @@ const BlogPage = () => {
         day: "numeric",
     });
     const tagOptions = [
-        { value: "1", label: "tag 1" },
-        { value: "2", label: "tag 2" },
-        { value: "3", label: "tag 3" },
-        { value: "4", label: "tag 4" },
+        {value: "1", label: "tag 1"},
+        {value: "2", label: "tag 2"},
+        {value: "3", label: "tag 3"},
+        {value: "4", label: "tag 4"},
     ];
     return (
         <div className="blog blog-single-post">
@@ -135,7 +150,7 @@ const BlogPage = () => {
                 <ErrorMessageInput
                     placeholder="Title.."
                     type="text"
-                    OnChangeHandler={({ target: { value } }) => setTitle(value)}
+                    OnChangeHandler={({target: {value}}) => setTitle(value)}
                     value={title}
                 />
             </h3>
@@ -162,7 +177,7 @@ const BlogPage = () => {
                             <i className="far fa-calendar"></i>
                             {dateString}
                         </li>
-                        <li style={{ display: "block ruby" }}>
+                        <li style={{display: "block ruby"}}>
                             <i className="fa fa-tags"></i>{" "}
                             <Select
                                 options={tagOptions}

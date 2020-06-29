@@ -45,8 +45,6 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         });
     }, [fromDateTime]);
 
-    useEffect(() => {console.log(schedule)}, [schedule]);
-
     // Selected slots
     const [selectedSlots, setSelectedSlots] = useState([]);
 

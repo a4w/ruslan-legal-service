@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class AccountController extends Controller
@@ -18,13 +19,16 @@ class AccountController extends Controller
     public function resetPasswordRequest(JSONRequest $request)
     {
         // Get user to reset his password
-        $user = Account::firstWhere('email', $request->get('email'));
+        $user = Account::firstWhere('email', Str::lower($request->get('email')));
         $user->sendPasswordResetNotification();
         return RespondJSON::success();
     }
 
     public function resetPassword($token, JSONRequest $request)
     {
+        $request->validate([
+            'new_password' => ['required', 'min:8'],
+        ]);
         $key = config('app.key');
         try {
             $jwt = JWT::decode($token, $key, array('HS256'));
@@ -75,7 +79,7 @@ class AccountController extends Controller
         ]);
         /** @var $user Account **/
         $user = Auth::user();
-        $user->update(['unverified_email' => $request->get('email')]);
+        $user->update(['unverified_email' => Str::lower($request->get('email'))]);
         $user->sendEmailVerificationNotification();
         return RespondJSON::success();
     }

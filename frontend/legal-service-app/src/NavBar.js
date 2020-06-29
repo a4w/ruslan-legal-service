@@ -103,9 +103,8 @@ const NavBar = () => {
                         </Link>
                     </li>
                     <li
-                        className={`nav-item dropdown has-arrow logged-item ${
-                            menuToggle ? "show" : ""
-                        }`}
+                        className={`nav-item dropdown has-arrow logged-item ${menuToggle ? "show" : ""}`}
+                        style={{display: logged_in ? "" : "none"}}
                     >
                         <Link
                             to="/"
@@ -136,7 +135,9 @@ const NavBar = () => {
                                 </div>
                                 <div className="user-text">
                                     <h6>Darren Elder</h6>
-                                    <p className="text-muted mb-0">Doctor</p>
+                                    <p className="text-muted mb-0">
+                                        Doctor
+                                    </p>
                                 </div>
                             </div>
                             <Link className="dropdown-item" to="/dashboard">

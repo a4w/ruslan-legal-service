@@ -64,7 +64,7 @@ class AppointmentController extends Controller
             $appointment = Appointment::make([
                 'appointment_time' => $slot_datetime,
                 'status' => 'ON_HOLD',
-                'price' => $lawyer->discounted_price_per_hour,
+                'price' => $lawyer->discounted_price_per_hour * ($slot_length / 60),
                 'duration' => $slot_length
             ]);
             $total_price += $appointment->price;

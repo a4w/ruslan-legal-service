@@ -2,11 +2,11 @@ import React from "react";
 import ClientDashboardSidebar from "./ClientDashboardSidebar";
 import StickyBox from "react-sticky-box";
 import ClientDashboardTabs from "./ClientDashboardTabs";
-import { BrowserRouter } from "react-router-dom";
+import {Router} from "react-router-dom";
 
 const ClientDashboard = () => {
     return (
-        <BrowserRouter>
+        <Router>
             <div className="row">
                 <div className="col-md-5 col-lg-4 col-xl-3 mt-4 mb-4">
                     <StickyBox offsetTop={20} offsetBottom={20}>
@@ -17,7 +17,7 @@ const ClientDashboard = () => {
                     <ClientDashboardTabs />
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     );
 };
 export default ClientDashboard;

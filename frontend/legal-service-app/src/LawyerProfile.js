@@ -49,7 +49,7 @@ const LawyerProfile = ({match}) => {
     }, []);
 
     return (
-        <Router>
+        <Router history={History}>
             <div className="content">
                 <div className="container">
                     <ProfileCard lawyer={lawyer} match={match} />

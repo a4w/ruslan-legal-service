@@ -3,10 +3,11 @@ import ClientDashboardSidebar from "./ClientDashboardSidebar";
 import StickyBox from "react-sticky-box";
 import ClientDashboardTabs from "./ClientDashboardTabs";
 import {Router} from "react-router-dom";
+import History from "./History";
 
 const ClientDashboard = () => {
     return (
-        <Router>
+        <Router history={History}>
             <div className="row">
                 <div className="col-md-5 col-lg-4 col-xl-3 mt-4 mb-4">
                     <StickyBox offsetTop={20} offsetBottom={20}>

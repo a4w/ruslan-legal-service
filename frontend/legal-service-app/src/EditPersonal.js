@@ -6,13 +6,13 @@ import EditAddress from "./EditAddress";
 import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
 import {NavTab} from "react-router-tabs";
 import "./Tabs.css";
-
 import history from "./History";
+
 const EditPersonal = () => {
     const path = "/dashboard/settings";
     // const path = history.location.pathname;
     return (
-        <Router>
+        <Router history={history}>
             <div className="card">
                 <div className="card-body pt-0">
                     <div className="user-tabs mb-4">

@@ -87,7 +87,6 @@ class AppointmentController extends Controller
             }
             return RespondJSON::with(['client_secret' => $paymentIntent->client_secret]);
         } catch (Exception $e) {
-            dump($e);
             return RespondJSON::unknownError();
         }
     }

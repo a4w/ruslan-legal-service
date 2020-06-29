@@ -136,6 +136,8 @@ class LawyerController extends Controller
                 $end_time = new Carbon($start_time);
                 $end_time->addMinutes($slot['length']);
                 $is_upcoming = true;
+                $current->setHour($start_time->hour);
+                $current->setMinute($start_time->minute);
                 if ($current->lt(now())) {
                     $is_upcoming = false;
                 }

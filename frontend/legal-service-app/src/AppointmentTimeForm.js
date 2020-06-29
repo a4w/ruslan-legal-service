@@ -33,7 +33,8 @@ const AppointmentTimeForm = ({lawyer_id}) => {
             url: `/lawyer/${lawyer_id}/schedule`,
             method: 'POST',
             data: {
-                days_to_show: 7
+                days_to_show: 7,
+                from: fromDateTime.format(Config.momentsjs_default_datetime_format)
             }
         }).then(response => {
             const nextSchedule = response.schedule.days.map((day) => {
@@ -53,7 +54,7 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         }).catch(error => {
             console.log(error);
         });
-    }, []);
+    }, [fromDateTime]);
 
     useEffect(() => {console.log(schedule)}, [schedule]);
 
@@ -65,7 +66,6 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         setFromDateTime(
             moment(fromDateTime)
                 .add(i_amount, "days")
-                .format(Config.momentsjs_default_date_format)
         );
     };
 
@@ -106,13 +106,24 @@ const AppointmentTimeForm = ({lawyer_id}) => {
                         <div className="col-12">
                             <div className="day-slot">
                                 <ul>
+                                    <li class="left-arrow">
+                                        <button className="btn btn-link" onClick={() => {changeFromDateTime(-1)}}>
+                                            <i class="fa fa-chevron-left"></i>
+                                        </button>
+                                    </li>
                                     {schedule !== null && schedule.days.map((day, i) => {
                                         return (
                                             <li key={i}>
                                                 <span>{day.name}</span>
+                                                <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
                                             </li>
                                         );
                                     })}
+                                    <li class="right-arrow">
+                                        <button className="btn btn-link" onClick={() => {changeFromDateTime(+1)}}>
+                                            <i class="fa fa-chevron-right"></i>
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

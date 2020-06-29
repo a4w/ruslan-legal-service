@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import {Router, Switch, Route} from "react-router-dom";
 import BlogDetails from "./BlogDetails";
+import History from "./History";
 
 const Blogs = () => {
     const init = [];
     const test = [];
     for (let i = 0; i < 30; i++) {
-        init.push({ id: i });
+        init.push({id: i});
     }
     for (let i = 0; i < 10; i++) {
-        test.push({ id: i });
+        test.push({id: i});
     }
     const [blogs, setBlogs] = useState(init);
     useEffect(() => {
         // here will be the first loaded blogs call
     }, []);
     return (
-        <BrowserRouter>
+        <Router history={History}>
             <div class="content">
                 <div class="container">
                     <div className="row">
@@ -43,13 +44,13 @@ const Blogs = () => {
                     </div>
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     );
 };
 
-const Search = ({ setBlogs }) => {
+const Search = ({setBlogs}) => {
     const [searchInput, setSearchInput] = useState("");
-    const OnChangeHandler = ({ target: { value } }) => {
+    const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
     };
     const OnSubmitHandler = (e) => {
@@ -81,7 +82,7 @@ const Search = ({ setBlogs }) => {
     );
 };
 
-const LatestBlogs = ({ latest }) => {
+const LatestBlogs = ({latest}) => {
     return (
         <div className="card post-widget">
             <div className="card-header">
@@ -108,7 +109,7 @@ const LatestBlogCard = () => {
         </>
     );
 };
-const LatestBlogList = ({ latest }) => {
+const LatestBlogList = ({latest}) => {
     return (
         <ul className="latest-posts">
             {latest.map((blog) => (
@@ -119,7 +120,7 @@ const LatestBlogList = ({ latest }) => {
         </ul>
     );
 };
-const Catagories = ({ cats }) => {
+const Catagories = ({cats}) => {
     cats = ["cat 1", "cat 2", "cat 3"];
     return (
         <div className="card category-widget">
@@ -141,7 +142,7 @@ const Catagories = ({ cats }) => {
     );
 };
 
-const TagsList = ({ tags }) => {
+const TagsList = ({tags}) => {
     tags = [
         "Tag 1",
         "Tag 2",

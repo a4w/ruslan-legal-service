@@ -5,12 +5,10 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
 import History from "./History";
-import ModalPopUp from "./Modal";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [errors, , runValidation] = useValidation(editEmailValidations);
-    const [modalShow, setModalShow] = useState(false);
 
     const OnChangeHandler = (event) => {
         setEmail(event.target.value);
@@ -26,7 +24,6 @@ const ForgotPassword = () => {
                     .then((data) => {
                         console.log("reset successful");
                         toast.success("Password reset successfully");
-                        setModalShow(true);
                         // History.push("/");
                     })
                     .catch((error) => {});
@@ -41,11 +38,6 @@ const ForgotPassword = () => {
                     <div className="col-md-8 offset-md-2">
                         <div className="account-content">
                             <div className="row align-items-center justify-content-center">
-                                <ModalPopUp
-                                    show={modalShow}
-                                    onHide={() => setModalShow(false)}
-                                    register={false}
-                                />
                                 <div className="col-md-7 col-lg-6 login-left">
                                     <img
                                         src="/undraw_my_password_d6kg.svg"

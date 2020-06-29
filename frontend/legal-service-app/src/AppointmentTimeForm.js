@@ -37,19 +37,8 @@ const AppointmentTimeForm = ({lawyer_id}) => {
                 from: fromDateTime.format(Config.momentsjs_default_datetime_format)
             }
         }).then(response => {
-            const nextSchedule = response.schedule.days.map((day) => {
-                return {
-                    ...day,
-                    slots: day.slots.map(slot => {
-                        return {
-                            ...slot,
-                            end_time: moment(slot.time, "HH:mm").add(slot.length, "minutes").format("HH:mm")
-                        };
-                    })
-                };
-            });
             response.discount_type = response.enable_discount ? response.is_percent_discount ? 1 : 2 : 0;
-            setSchedule({...response, days: nextSchedule});
+            setSchedule({...response, days: [...response.schedule.days]});
 
         }).catch(error => {
             console.log(error);
@@ -74,7 +63,7 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         const dayIdx = button.dataset.day;
         const slotIdx = button.dataset.slot;
         const slot = schedule.days[dayIdx].slots[slotIdx];
-        slot.date = schedule.days[dayIdx].date;
+        slot.datetime = schedule.days[dayIdx].date + " " + slot.time;
         if (button.classList.contains('selected')) {
             const nextSelectedSlots = selectedSlots.filter(currentSlot => {
                 if (currentSlot == slot) {
@@ -90,11 +79,14 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         }
     };
 
-    useEffect(() => {
-        console.log(selectedSlots);
-    }, [selectedSlots]);
-
     const handleContinueClick = (event) => {
+        request({
+            url: `/appointment/${lawyer_id}/select-slots`,
+            method: 'POST',
+            data: {slots: selectedSlots}
+        }).then(response => {
+        }).catch(error => {
+        });
     };
 
 
@@ -165,7 +157,7 @@ const AppointmentTimeForm = ({lawyer_id}) => {
                                                     onClick={handleSlotClick}
                                                 >
                                                     <span>
-                                                        {slot.time} - {slot.end_time}
+                                                        {slot.time} - {slot.to}
                                                     </span>
                                                 </button>
                                             </OverlayTrigger>

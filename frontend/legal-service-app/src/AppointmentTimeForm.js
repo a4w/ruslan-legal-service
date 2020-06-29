@@ -150,6 +150,7 @@ const AppointmentTimeForm = ({lawyer_id}) => {
                                                 }
                                             >
                                                 <button
+                                                    disabled={slot.reserved}
                                                     key={slot.id}
                                                     data-day={i}
                                                     data-slot={j}

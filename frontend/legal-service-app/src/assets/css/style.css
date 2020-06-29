@@ -7439,3 +7439,7 @@ min-width: 100%;
 .react-datepicker{
     width: max-content;
 }
+.timing:disabled,.timing:disabled:hover{
+    background: #aaa;
+    cursor: not-allowed;
+}

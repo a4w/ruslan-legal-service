@@ -39,9 +39,9 @@ Route::get('verify/email/{token}', function ($token) {
     if ($account === null) {
         return redirect('/');
     }
-    // TODO: Check email to be verified
+    // TODO: Check email to be verified (i.e include email in jwt)
     $account->markEmailAsVerified();
-    return "Email verified correctly"; // TODO Create post verification page
+    return redirect(config('app.frontend_url') . '/home/login');
 })->name('verify.email');
 
 Route::get('account/reset-password/{token}', function ($token) {

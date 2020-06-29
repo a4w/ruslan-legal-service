@@ -164,7 +164,14 @@ class LawyerController extends Controller
             $current->addDay();
         }
         $output['days'] = $data;
-        return RespondJSON::with(['schedule' => $output]);
+        return RespondJSON::with([
+            'schedule' => $output,
+            'price_per_hour' => $lawyer->price_per_hour,
+            'enable_discount' => $lawyer->discount !== null,
+            'discount_amount' => $lawyer->discount,
+            'is_percent_discount' => $lawyer->is_percent_discount,
+            'discount_end' => $lawyer->discount_end
+        ]);
     }
 
     public function getWeekSchedule()

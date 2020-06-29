@@ -43,7 +43,7 @@ class LawyerController extends Controller
     {
         // Get lawyer
         $lawyer = Lawyer::find($id);
-        if (!$lawyer->isAvailable()) {
+        if ($lawyer !== null && !$lawyer->isAvailable()) {
             return RespondJSON::unknownError();
         }
         $schedule = $lawyer->schedule;

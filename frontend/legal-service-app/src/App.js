@@ -31,6 +31,7 @@ import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
+import Calendar from "./Calendar";
 
 const cookie = new Cookies();
 
@@ -112,6 +113,9 @@ function App() {
                     </Route>
                     <Route path="/logout">
                         <Redirect replace to="/" />
+                    </Route>
+                    <Route path="/calendar">
+                        <Calendar/>
                     </Route>
                 </Switch>
                 <Route component={Footer} />

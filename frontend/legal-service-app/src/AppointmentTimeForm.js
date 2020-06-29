@@ -4,14 +4,10 @@ import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
 import {request} from "./Axios"
 import {OverlayTrigger, Popover} from "react-bootstrap"
+import {toast} from "react-toastify";
 
 const AppointmentTimeForm = ({lawyer_id}) => {
 
-    const MINUTES_PER_DAY = 60 * 24;
-    const minutesToClock = (minutes) => {
-        minutes = minutes % MINUTES_PER_DAY
-        return ("0" + Math.floor(minutes / 60)).substr(-2) + ":" + ("0" + (minutes % 60)).substr(-2);
-    };
 
     const calculateDiscountedPrice = (price) => {
         if (schedule.discount_type === 1) {
@@ -78,11 +74,17 @@ const AppointmentTimeForm = ({lawyer_id}) => {
     };
 
     const handleContinueClick = (event) => {
+        if (selectedSlots.length === 0) {
+            toast.error("At least one slot must be selected");
+            return;
+        }
         request({
             url: `/appointment/${lawyer_id}/select-slots`,
             method: 'POST',
             data: {slots: selectedSlots}
         }).then(response => {
+            // Go to checkout with the client secret
+            toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
         }).catch(error => {
         });
     };

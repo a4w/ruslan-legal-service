@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import {BrowserRouter, Route, Link, Redirect, Switch} from "react-router-dom";
-import History from "./History";
+import {Router, Route, Link, Redirect, Switch} from "react-router-dom";
+import history from "./History";
 import {NavTab} from "react-router-tabs";
 import {request} from "./Axios";
 
@@ -244,7 +244,7 @@ const AppointmentsListTabs = ({upcoming, all}) => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
-        <BrowserRouter>
+        <Router history={history}>
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
                 <li className="nav-item">
                     <NavTab className="nav-link" to={`${path}/upcoming`}>Upcoming</NavTab>
@@ -267,7 +267,7 @@ const AppointmentsListTabs = ({upcoming, all}) => {
                     </Route>
                 </div>
             </Switch>
-        </BrowserRouter>
+        </Router>
     );
 };
 export default LawyerDashboardStatus;

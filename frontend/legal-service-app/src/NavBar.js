@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import ModalPopUp from "./Modal";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
+import History from "./History";
 
 const NavBar = () => {
     const cookie = new Cookies();
     const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
-    const [modalShow, setModalShow] = useState(false);
     const [open, setOpen] = useState(true);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
@@ -65,9 +64,8 @@ const NavBar = () => {
                             <Link to="/blogs">Blogs</Link>
                         </li>
                         <li className="login-link">
-                            <a
-                                href="//"
-                                onClick={() => setModalShow(true)}
+                            <Link
+                                to={`${History.location.pathname}/login`}
                                 style={{
                                     visibility: logged_in
                                         ? "hidden"
@@ -75,7 +73,7 @@ const NavBar = () => {
                                 }}
                             >
                                 Login / Signup
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -93,20 +91,16 @@ const NavBar = () => {
                         </div>
                     </li>
                     <li className="nav-item">
-                        <a
+                        <Link
                             className="nav-link header-login"
-                            onClick={() => setModalShow(true)}
+                            // onClick={() => setModalShow(true)}
                             style={{
                                 visibility: logged_in ? "hidden" : "visible",
                             }}
+                            to={`${History.location.pathname}/login`}
                         >
                             login / Signup{" "}
-                        </a>
-                        <ModalPopUp
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                            register={true}
-                        />
+                        </Link>
                     </li>
                 </ul>
             </nav>

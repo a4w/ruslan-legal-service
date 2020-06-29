@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
 import History from "./History";
 
@@ -94,9 +94,9 @@ const NavBar = () => {
                         <Link
                             className="nav-link header-login"
                             // onClick={() => setModalShow(true)}
-                            // style={{
-                            //     visibility: logged_in ? "hidden" : "visible",
-                            // }}
+                            style={{
+                                visibility: logged_in ? "hidden" : "visible",
+                            }}
                             to={`${History.location.pathname}/login`}
                         >
                             login / Signup{" "}

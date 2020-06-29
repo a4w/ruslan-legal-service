@@ -22,6 +22,7 @@ import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LawyerRating from "./LawyerRating";
+import BlogPage from "./WriteBlog";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -65,8 +66,12 @@ function App() {
                     <Route path="/blogs">
                         <Blogs />
                     </Route>
-                    <Route path="/reset/:Token" component={ResetPassword} />
-                    <Route path="/edit">
+                    <Route
+                        exact
+                        path="/reset/:Token"
+                        component={ResetPassword}
+                    />
+                    <Route exact path="/edit">
                         <EditPersonal />
                     </Route>
                     <Route path="/complete-registeration">
@@ -94,8 +99,10 @@ function App() {
                     <Route path="/rate">
                         <LawyerRating appointment_id={31} />
                     </Route>
-
-                    <Route path="/edit-schedule">
+                    <Route path="/write-blog">
+                        <BlogPage />
+                    </Route>
+                    <Route exact path="/edit-schedule">
                         <ScheduleForm />
                     </Route>
                 </Switch>

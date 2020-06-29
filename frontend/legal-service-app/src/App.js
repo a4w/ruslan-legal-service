@@ -28,6 +28,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+import Cookies from "universal-cookie";
+
+const cookie = new Cookies();
 
 function App() {
     return (
@@ -36,9 +39,13 @@ function App() {
             <Router history={history}>
                 {/* <NavBar /> */}
                 <Route component={NavBar} />
-                <Route path="(.+)/login">
-                    <LoginModal />
-                </Route>
+                <Route path="(.+)/login" render={(props) => {
+                    if (cookie.get('logged_in')) {
+                        return <Redirect to={props.match.params[0]} />
+                    } else {
+                        return <LoginModal />
+                    }
+                }} />
                 <Route path="(.+)/register">
                     <RegisterModal />
                 </Route>

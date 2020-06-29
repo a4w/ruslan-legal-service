@@ -70,7 +70,7 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         Notification::route('mail', $this->getEmailForVerification())->notify(new AccountEmailVerification($verify_url));
     }
 
-    public function sendPasswordResetNotification()
+    public function sendPasswordResetNotification($token = null)
     {
         $key = config('app.key');
         $payload = array(

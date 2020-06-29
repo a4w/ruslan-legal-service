@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Chat;
-use App\ChatParticipent;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Message;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
@@ -20,14 +22,14 @@ class ChatController extends Controller
         if ($sender != $user_1 && $sender != $user_2) {
             return RespondJSON::forbidden();
         }
-        $chat = Chat::whereHas('participents', function ($query) use ($user_1, $user_2) {
+        $chat = Chat::whereHas('participants', function ($query) use ($user_1, $user_2) {
             $query->whereIn('user_id', [$user_1->id, $user_2->id]);
         }, '=', 2)->first();
         if ($chat === null) {
             // Create chat
             $chat = Chat::create();
-            $chat->participents()->attach($user_1);
-            $chat->participents()->attach($user_2);
+            $chat->participants()->attach($user_1);
+            $chat->participants()->attach($user_2);
         }
         return RespondJSON::with(['chat_id' => $chat->id]);
     }
@@ -38,8 +40,8 @@ class ChatController extends Controller
             'content' => ['required', 'min:1']
         ]);
         $user = Auth::user();
-        $participents = $chat->participents;
-        if (!$participents->contains($user)) {
+        $participants = $chat->participants;
+        if (!$participants->contains($user)) {
             return RespondJSON::forbidden();
         }
         $message = Message::make($request->only('content'));
@@ -51,8 +53,8 @@ class ChatController extends Controller
     public function getMessages(Chat $chat)
     {
         $user = Auth::user();
-        $participents = $chat->participents;
-        if (!$participents->contains($user)) {
+        $participants = $chat->participants;
+        if (!$participants->contains($user)) {
             return RespondJSON::forbidden();
         }
         $messages = $chat->messages()->select(['id', 'message_type', 'content', 'sender_id', 'created_at'])->get();
@@ -63,5 +65,39 @@ class ChatController extends Controller
     {
         $user = Auth::user();
         return RespondJSON::success(['chats' => $user->chats]);
+    }
+
+    public function sendFile(Chat $chat, Request $request)
+    {
+        $request->validate([
+            'file' => 'required|max:4096'
+        ]);
+        // Upload profile image
+        $user = Auth::user();
+        $participants = $chat->participants;
+        if (!$participants->contains($user)) {
+            return RespondJSON::forbidden();
+        }
+        $uid = Str::random(32);
+        $request->file('file')->storeAS("chat_files/{$chat->id}", $uid, ['disk' => 'local']);
+        $message = Message::make(['content' => json_encode([
+            'uid' => $uid,
+            'name' => $request->file('file')->getClientOriginalName()
+        ])]);
+        $message->message_type = 'FILE';
+        $message->sender()->associate($user);
+        $chat->messages()->save($message);
+        return RespondJSON::success();
+    }
+
+    public function getChatFile($mid)
+    {
+        $user = Auth::user();
+        $message = Message::find($mid);
+        $chat = $message->chat;
+        if (!$chat->participants->contains($user)) {
+            return RespondJSON::forbidden();
+        }
+        return Storage::download("chat_files/{$chat->id}/{$message->uid}");
     }
 }

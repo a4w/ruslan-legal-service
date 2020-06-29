@@ -100,6 +100,10 @@ class AppointmentController extends Controller
             // Time has not came
             return RespondJSON::conflict();
         }
+        if (now()->gt($time->addMinutes($appointment->duration))) {
+            // Time has passed
+            return RespondJSON::conflict();
+        }
         // All is good, Check if room already created
         $room_sid = $appointment->room_sid;
         if ($room_sid === null) {
@@ -108,7 +112,10 @@ class AppointmentController extends Controller
         // Verify room is present
         $twilio = resolve(\Twilio\Rest\Client::class);
         try {
-            $twilio->video->rooms($appointment->room_sid)->fetch();
+            $room = $twilio->video->rooms($appointment->room_sid)->fetch();
+            if ($room->status === "completed") {
+                throw new Exception("Room too old");
+            }
         } catch (Exception $e) {
             // Recreate room
             $appointment->createRoom();
@@ -135,6 +142,6 @@ class AppointmentController extends Controller
         $token->addGrant($videoGrant);
 
         // render token to string
-        return RespondJSON::success(['access_token' => $token->toJWT()]);
+        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid]);
     }
 }

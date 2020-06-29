@@ -58,7 +58,7 @@ Route::prefix('rating')->group(function () {
 
 Route::prefix('appointment')->group(function () {
     Route::post('{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
-    Route::post('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
+    Route::get('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
 });
 
 Route::prefix('webhook')->group(function () {

@@ -21,6 +21,7 @@ import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VideoComponent from "./VideoComponent";
 import LawyerRating from "./LawyerRating";
 import BlogPage from "./WriteBlog";
 import ScheduleForm from "./ScheduleForm"
@@ -95,6 +96,10 @@ function App() {
                     </Route>
                     <Route path="/book-lawyer/:LawyerId">
                         <LawyerBooking />
+                    </Route>
+
+                    <Route exact path="/video">
+                        <VideoComponent appointment_id={32} />
                     </Route>
                     <Route path="/rate">
                         <LawyerRating appointment_id={31} />

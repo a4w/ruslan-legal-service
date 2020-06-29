@@ -38,6 +38,7 @@
         "react-tempusdominus-bootstrap": "^1.5.0",
         "react-timekeeper": "^2.1.1",
         "react-toastify": "^6.0.6",
+        "twilio-video": "^2.5.1",
         "stackedit-js": "^1.0.7",
         "reactstrap": "^8.5.0",
         "universal-cookie": "^4.0.3",

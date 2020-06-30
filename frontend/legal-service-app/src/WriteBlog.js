@@ -161,26 +161,30 @@ const BlogPage = () => {
             console.log(error);
         });
     }, []);
-    const Submit = ()=>{
-        runValidation({title: title, tags:tags}).then((hasErrors, _) => {
-            console.log(errors);
-            
-            // request({
-            //     url: "/blogs/add",
-            //     method: "POST",
-            //     data: {
-            //         title: title,
-            //         body: md_content.current.value,
-            //         tag_id: tags[0].value,
-            //     },
-            // }).then(()=>{
-            //     toast.success("Submitted successfuly");
-            // }).catch(()=>{
-            //     toast.error("An error has occurred");
-            // });
-        });
-        
-    }
+    const Submit = async (e) => {
+        e.preventDefault();
+        runValidation({ title: title, tags: tags }).then(
+            async (hasErrors, _) => {
+                if (!hasErrors) {
+                    request({
+                        url: "/blogs/add",
+                        method: "POST",
+                        data: {
+                            title: title,
+                            body: md_content.current.value,
+                            tag_id: tags.value,
+                        },
+                    })
+                        .then(() => {
+                            toast.success("Submitted successfuly");
+                        })
+                        .catch(() => {
+                            toast.error("An error has occurred");
+                        });
+                }
+            }
+        );
+    };
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">

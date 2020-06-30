@@ -152,4 +152,22 @@ class AppointmentController extends Controller
         // render token to string
         return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid]);
     }
+
+    public function cancelAppointment(Appointment $appointment)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        if (!$appointment->is_cancelable()) {
+            return RespondJSON::gone(['message' => 'Appointment cannot be canceled now']);
+        }
+        // Update appointment to cancelled
+        $appointment->status = 'CANCELLED';
+        $appointment->save();
+        // TODO Refund amount to client
+        return RespondJSON::success();
+    }
 }

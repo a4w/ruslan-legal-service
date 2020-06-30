@@ -15,6 +15,8 @@ class AddBlogTag extends Migration
     {
         Schema::table('blogs', function (Blueprint $table) {
             $table->foreignId('practice_area_id')->constrained('practice_areas');
+            $table->string('cover_photo_path', 4096)->default(null)->nullable()->change();
+            $table->unsignedInteger('views')->default(0)->change();
         });
     }
 

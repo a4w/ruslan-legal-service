@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
 import History from "./History";
+import {LogOut} from "./Axios";
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -15,7 +16,7 @@ const NavBar = () => {
         email: "",
         phone: "",
         profile_picture_url: "",
-        type:"",
+        type: "",
     });
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
@@ -131,7 +132,7 @@ const NavBar = () => {
                         <div
                             className={`dropdown-menu dropdown-menu-right ${
                                 menuToggle ? "show" : ""
-                            }`}
+                                }`}
                         >
                             <div className="user-header">
                                 <div className="avatar avatar-sm">
@@ -160,7 +161,7 @@ const NavBar = () => {
                             >
                                 Profile Settings
                             </Link>
-                            <Link className="dropdown-item" to="/logout">
+                            <Link className="dropdown-item" to="/logout" onClick={LogOut}>
                                 Logout
                             </Link>
                         </div>

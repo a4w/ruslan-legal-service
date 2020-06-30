@@ -94,7 +94,7 @@ function LawyerList(props) {
 
             <div className="content">
                 <div className="row justify-content-center align-content-center">
-                    <div className="col-7">
+                    <div className="col-sm-12 col-md-12 col-lg-7">
                         {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
                         <div className="load-more text-center">
                             <a
@@ -106,7 +106,7 @@ function LawyerList(props) {
                             </a>
                         </div>
                     </div>
-                    <div className="col-5">
+                    <div className="col-sm-0 col-md-0 col-lg-5">
                         <StickyBox offsetTop={80} offsetBottom={20}>
                             <PopUp lawyer={lawyerPopUp} />
                         </StickyBox>

@@ -47,4 +47,12 @@ class Appointment extends Model
         $this->room_sid = $room->sid;
         $this->save();
     }
+
+    public function getIsCancellableAttribute()
+    {
+        $CANCEL_ALLOWED_MINUTES = 6 * 60;
+        /** @var Carbon */
+        $appointment_time = $this->appointment_time;
+        return now()->lt($appointment_time->subMinutes($CANCEL_ALLOWED_MINUTES));
+    }
 }

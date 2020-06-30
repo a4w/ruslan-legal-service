@@ -61,6 +61,13 @@ Route::prefix('appointment')->group(function () {
     Route::get('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
 });
 
+Route::prefix('blogs')->group(function () {
+    Route::get('all', 'BlogsController@getBlogs');
+    Route::get('{lawyer}', 'BlogsController@getLawyerBlogs');
+    Route::post('add', 'BlogsController@addBlogPost')->middleware('auth:api');
+    Route::post('{blog}/upload-cover', 'BlogsController@uploadCover')->middleware('auth:api');
+});
+
 Route::prefix('webhook')->group(function () {
     Route::post('/payment-status-success', 'WebhooksController@paymentIntentSuccessListener');
 });

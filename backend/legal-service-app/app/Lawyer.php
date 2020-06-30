@@ -75,6 +75,11 @@ class Lawyer extends Model
         return $this->hasManyThrough(Rating::class, Appointment::class);
     }
 
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'lawyer_id');
+    }
+
     public function appointments()
     {
         return $this->hasMany(Appointment::class);

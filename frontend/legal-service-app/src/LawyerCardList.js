@@ -86,7 +86,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <Link
                                 className="apt-btn"
                                 to={{
-                                    pathname: `/book-lawyer/${lawyer.id}`,
+                                    pathname: `list/book-lawyer/${lawyer.id}`,
                                     state: {lawyer_id: "1"},
                                 }}
                             >

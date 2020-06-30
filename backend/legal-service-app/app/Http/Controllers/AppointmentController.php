@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Stripe\PaymentIntent;
+use Stripe\Refund;
 use Stripe\Stripe;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
@@ -75,7 +76,6 @@ class AppointmentController extends Controller
 
         // Create payment intent
         // TODO Account for commission
-        Stripe::setApiKey(config('app.stripe_api_key'));
         try {
             $paymentIntent = PaymentIntent::create([
                 'amount' => $total_price * 100, // Stripe uses this stupid way to avoid rounding errors
@@ -151,5 +151,24 @@ class AppointmentController extends Controller
 
         // render token to string
         return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid]);
+    }
+
+    public function cancelAppointment(Appointment $appointment)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
+            return RespondJSON::forbidden();
+        }
+        if (!$appointment->is_cancellable) {
+            return RespondJSON::gone(['message' => 'Appointment cannot be cancelled now']);
+        }
+        // Update appointment to cancelled
+        $appointment->status = 'CANCELLED';
+        $appointment->save();
+        Refund::create([
+            'payment_intent' => $appointment->payment_intent_id
+        ]);
+        return RespondJSON::success();
     }
 }

@@ -5,6 +5,7 @@ import {request} from "./Axios"
 import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
+import useInterval from "./useInterval";
 
 const HideChatListStyle = {
     left: "-100%"
@@ -24,6 +25,7 @@ const ChatPage = () => {
     const [messages, setMessages] = useState([]);
     const [hideChatList, setHide] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
+    const [myId, setMyId] = useState(null);
     const Chats = () => {
         if (window.innerWidth >= 991) setHide(false);
         else setHide(true)
@@ -43,40 +45,56 @@ const ChatPage = () => {
             url: '/chat/all',
             method: 'GET'
         }).then((response) => {
+            const me = response.me;
+            setMyId(me.id);
             const chats = response.chats.map((chat, _) => {
+                console.log(chat.participants);
                 return {
                     id: chat.id,
-                    other_name: chat.participants[0].name
+                    other_name: chat.participants[0].id == me.id ? chat.participants[1].name : chat.participants[0].name
                 };
             });
             setChats(chats);
+            if (chats.length > 0) {
+                setSelectedChat(0);
+            }
         }).catch((error) => {
             console.log(error);
         });
     }, []);
 
+    useInterval(() => {
+        console.log("Loading");
+        loadMessages();
+    }, 3000);
 
     // Load chat messages on chat change
     useEffect(() => {
-        loadMessages();
-        const interval_id = setInterval(() => {
-            loadMessages();
-        }, 3000);
-        return () => {
-            clearInterval(interval_id);
-        };
+        console.log("Updating selected chat");
+        console.log(selectedChat);
+        setMessages([]);
+        loadMessages(true);
     }, [selectedChat]);
 
-    const loadMessages = (since = null) => {
-        if (selectedChat !== null && !isFetching) {
+    const loadMessages = (force = false) => {
+        console.log("Loading messages");
+        if (selectedChat !== null && (force || !isFetching)) {
+            let since = null;
+            if (messages.length > 0 && !force) {
+                const lastMessage = messages[messages.length - 1];
+                since = lastMessage.created_at;
+            }
+            console.log("Clear");
             setIsFetching(true);
             // Chat id
             const chat_id = chats[selectedChat].id;
             request({
-                url: `/chat/${chat_id}`,
+                url: `/chat/${chat_id}` + (since === null ? '' : '?since=' + since),
                 method: 'GET'
             }).then((response) => {
-                setMessages(response.messages);
+                if (response.messages.length > 0) {
+                    setMessages([...messages, ...response.messages]);
+                }
             }).catch((error) => {
                 console.log(error);
             }).finally(() => {
@@ -175,7 +193,7 @@ const ChatPage = () => {
                         </div>
                     </div>
                 </div>
-                <MessagesList messages={messages} />
+                <MessagesList messages={messages} user_id={myId} />
                 <div className="chat-footer">
                     <div className="input-group">
                         <div className="input-group-prepend">

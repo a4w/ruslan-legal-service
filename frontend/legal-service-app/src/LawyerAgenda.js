@@ -16,6 +16,20 @@ const LawyerAgenda = () => {
             client_id: null,
             created_at: null,
             duration: null,
+            id: 7,
+        },
+        {
+            appointment_time: new Date(),
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 9,
+        },
+        {
+            appointment_time: new Date(),
+            client_id: null,
+            created_at: null,
+            duration: null,
             id: 2,
         },
         {

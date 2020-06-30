@@ -59,6 +59,8 @@ body {
     border: 1px solid lightgray;
     height: auto;
     margin: 0 auto;
+    max-height: 100%;
+    overflow-y: auto;
 }
 .calendar .header-calendar {
     text-transform: uppercase;
@@ -187,4 +189,6 @@ body {
 .fc{
     position: absolute;
     padding-top: 3px;
+    max-height: 100%;
+    overflow-y: auto;
 }

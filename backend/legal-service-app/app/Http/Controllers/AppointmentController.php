@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Stripe\PaymentIntent;
+use Stripe\Refund;
 use Stripe\Stripe;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\VideoGrant;
@@ -159,14 +160,15 @@ class AppointmentController extends Controller
         if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
             return RespondJSON::forbidden();
         }
-        $lawyer = $user->lawyer;
-        if (!$appointment->is_cancelable()) {
+        if (!$appointment->is_cancellable) {
             return RespondJSON::gone(['message' => 'Appointment cannot be canceled now']);
         }
         // Update appointment to cancelled
         $appointment->status = 'CANCELLED';
         $appointment->save();
-        // TODO Refund amount to client
+        Refund::create([
+            'payment_intent' => $appointment->payment_intent_id
+        ]);
         return RespondJSON::success();
     }
 }

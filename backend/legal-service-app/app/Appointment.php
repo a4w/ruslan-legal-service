@@ -48,7 +48,7 @@ class Appointment extends Model
         $this->save();
     }
 
-    public function getAttributeIsCancelable()
+    public function getIsCancellableAttribute()
     {
         $CANCEL_ALLOWED_MINUTES = 6 * 60;
         /** @var Carbon */

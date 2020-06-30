@@ -2,91 +2,94 @@ import React, {useState, useEffect, useMemo} from "react";
 import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
+import {request} from "./Axios"
+import {OverlayTrigger, Popover} from "react-bootstrap"
+import {toast} from "react-toastify";
 
-const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime = (moment().format(Config.momentsjs_default_date_format)), numberOfDays = 7, initialSelectedSlots = {}, handleSelection = () => {}}) => {
+const AppointmentTimeForm = ({lawyer_id}) => {
 
-    const MINUTES_PER_DAY = 60 * 24;
-    const minutesToClock = (minutes) => {
-        minutes = minutes % MINUTES_PER_DAY
-        return ("0" + Math.floor(minutes / 60)).substr(-2) + ":" + ("0" + (minutes % 60)).substr(-2);
+
+    const calculateDiscountedPrice = (price) => {
+        if (schedule.discount_type === 1) {
+            price -= price * (schedule.discount_amount / 100);
+        } else {
+            price -= schedule.discount_amount;
+        }
+        return price;
     };
 
-    const [fromDateTime, setFromDateTime] = useState(initialDateTime);
+    // Calender start
+    const [fromDateTime, setFromDateTime] = useState(moment()); // Default now
 
-    const slotsPerDay = MINUTES_PER_DAY / slotLength;
-
+    // Calender
     const [schedule, setSchedule] = useState(null);
-    const [selectedSchedule, setSelectedSchedule] = useState(initialSelectedSlots);
 
-    const initSchedule = useMemo(() => {
-        let initSlots = [];
-        for (let i = 0; i < slotsPerDay; ++i) {
-            const time_from = i * slotLength;
-            const time_to = time_from + slotLength;
-            initSlots.push({
-                id: i,
-                from: minutesToClock(time_from),
-                to: minutesToClock(time_to),
-            });
-        }
-        let initSchedule = [];
-        let date = moment(initialDateTime);
-        for (let i = 1; i <= numberOfDays; ++i) {
-            const dayIdx = calender ? date.weekday() : i;
-            initSchedule.push({
-                name: moment.weekdays(dayIdx),
-                slots: initSlots.slice(),
-                date: calender ? date.format(Config.momentsjs_default_date_format) : null
-            });
-            date.add(1, "days");
-        }
-        setSchedule({data: initSchedule});
-        return initSchedule;
-    }, [slotLength])
+    useEffect(() => {
+        request({
+            url: `/lawyer/${lawyer_id}/schedule`,
+            method: 'POST',
+            data: {
+                days_to_show: 7,
+                from: fromDateTime.format(Config.momentsjs_default_datetime_format)
+            }
+        }).then(response => {
+            response.discount_type = response.enable_discount ? response.is_percent_discount ? 1 : 2 : 0;
+            setSchedule({...response, days: [...response.schedule.days]});
 
+        }).catch(error => {
+            console.log(error);
+        });
+    }, [fromDateTime]);
+
+    // Selected slots
+    const [selectedSlots, setSelectedSlots] = useState([]);
 
     const changeFromDateTime = (amount) => {
-        if (calender) {
-            const i_amount = parseInt(amount);
-            setFromDateTime(
-                moment(fromDateTime)
-                    .add(i_amount, "days")
-                    .format(Config.momentsjs_default_date_format)
-            );
-        }
+        const i_amount = parseInt(amount);
+        setFromDateTime(
+            moment(fromDateTime)
+                .add(i_amount, "days")
+        );
     };
 
     const handleSlotClick = (event) => {
         const button = event.currentTarget;
         const dayIdx = button.dataset.day;
         const slotIdx = button.dataset.slot;
-        const slot = schedule.data[dayIdx].slots[slotIdx];
-        // Find day or create it
-        if (typeof selectedSchedule[dayIdx] === "undefined") {
-            selectedSchedule[dayIdx] = {date: schedule.data[dayIdx].date, name: schedule.data[dayIdx].name, selectedSlots: []};
-        }
-        const currentDay = selectedSchedule[dayIdx];
-        if (button.classList.contains("selected")) {
-            button.classList.remove("selected");
-            const nextSlots = currentDay.selectedSlots.filter((item) => {
-                if (item.id === slot.id) {
+        const slot = schedule.days[dayIdx].slots[slotIdx];
+        slot.datetime = schedule.days[dayIdx].date + " " + slot.time;
+        if (button.classList.contains('selected')) {
+            const nextSelectedSlots = selectedSlots.filter(currentSlot => {
+                if (currentSlot == slot) {
                     return false;
                 }
                 return true;
             });
-            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: nextSlots}};
-            setSelectedSchedule(nextSchedule);
+            setSelectedSlots(nextSelectedSlots);
+            button.classList.remove('selected');
         } else {
-            button.classList.add("selected");
-            const nextSchedule = {...selectedSchedule, [dayIdx]: {...currentDay, selectedSlots: [...currentDay.selectedSlots, slot]}};
-            setSelectedSchedule(nextSchedule);
+            button.classList.add('selected');
+            setSelectedSlots([...selectedSlots, slot]);
         }
     };
 
     const handleContinueClick = (event) => {
-        handleSelection(selectedSchedule);
+        if (selectedSlots.length === 0) {
+            toast.error("At least one slot must be selected");
+            return;
+        }
+        request({
+            url: `/appointment/${lawyer_id}/select-slots`,
+            method: 'POST',
+            data: {slots: selectedSlots}
+        }).then(response => {
+            // Go to checkout with the client secret
+            toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
+        }).catch(error => {
+        });
     };
-    console.debug(schedule);
+
+
     return (
         <>
             <div className="card booking-schedule">
@@ -95,39 +98,24 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
                         <div className="col-12">
                             <div className="day-slot">
                                 <ul>
-                                    {calender && <li className="left-arrow">
-                                        <button
-                                            className="btn btn-link"
-                                            onClick={() => {
-                                                changeFromDateTime(-1);
-                                            }}
-                                        >
-                                            <i className="fa fa-chevron-left"></i>
+                                    <li class="left-arrow">
+                                        <button className="btn btn-link" onClick={() => {changeFromDateTime(-1)}}>
+                                            <i class="fa fa-chevron-left"></i>
                                         </button>
-                                    </li>}
-                                    {schedule !== null && schedule.data.map((day, i) => {
+                                    </li>
+                                    {schedule !== null && schedule.days.map((day, i) => {
                                         return (
                                             <li key={i}>
                                                 <span>{day.name}</span>
-                                                {calender && <span className="slot-date">
-                                                    {moment(day.date).format(
-                                                        "DD MMM"
-                                                    )}{" "}
-                                                    <small>2020</small>
-                                                </span>}
+                                                <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
                                             </li>
                                         );
                                     })}
-                                    {calender && <li className="right-arrow">
-                                        <button
-                                            className="btn btn-link"
-                                            onClick={() => {
-                                                changeFromDateTime(+1);
-                                            }}
-                                        >
-                                            <i className="fa fa-chevron-right"></i>
+                                    <li class="right-arrow">
+                                        <button className="btn btn-link" onClick={() => {changeFromDateTime(+1)}}>
+                                            <i class="fa fa-chevron-right"></i>
                                         </button>
-                                    </li>}
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -136,38 +124,49 @@ const AppointmentTimeForm = ({calender = true, slotLength = 60, initialDateTime 
 
                 <div className="schedule-cont">
                     <div className="row">
-                        <div className="col-12">
-                            <div className="time-slot">
-                                <ul className="clearfix">
-                                    {schedule !== null && schedule.data.map((day, i) => {
+                        {schedule !== null && schedule.days.map((day, i) => {
+                            return (
+                                <div className="col" key={day.date}>
+                                    {day.slots.map((slot, j) => {
+                                        const discountedPrice = calculateDiscountedPrice((slot.length / 60) * schedule.price_per_hour)
                                         return (
-                                            <li key={day.date}>
-                                                {day.slots.map((slot, j) => {
-                                                    return (
-                                                        <button
-                                                            key={slot.id}
-                                                            disabled={
-                                                                slot.reserved
-                                                            }
-                                                            onClick={
-                                                                handleSlotClick
-                                                            }
-                                                            data-day={i}
-                                                            data-slot={j}
-                                                            className="timing btn-block"
-                                                        >
-                                                            <span>
-                                                                {slot.from} - {slot.to}
-                                                            </span>
-                                                        </button>
-                                                    );
-                                                })}
-                                            </li>
+                                            <OverlayTrigger
+                                                placement={"bottom"}
+                                                overlay={
+                                                    <Popover size="lg">
+                                                        <Popover.Title as="h3" className="text-center">
+                                                            {slot.length} minutes
+                                                                </Popover.Title>
+                                                        <Popover.Content>
+                                                            <span className="slot-info-popover-body"><strong>Price:</strong>&nbsp;{discountedPrice} GBP</span>
+                                                            {schedule.discount_type !== 0 &&
+                                                                <>
+                                                                    <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{schedule.discount_amount} {schedule.discount_type === 1 ? '%' : 'GBP'}</span>
+                                                                    <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{schedule.discount_end}</span>
+                                                                </>}
+                                                            <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>
+                                                        </Popover.Content>
+                                                    </Popover>
+                                                }
+                                            >
+                                                <button
+                                                    disabled={slot.reserved}
+                                                    key={slot.id}
+                                                    data-day={i}
+                                                    data-slot={j}
+                                                    className="timing btn-block"
+                                                    onClick={handleSlotClick}
+                                                >
+                                                    <span>
+                                                        {slot.time} - {slot.to}
+                                                    </span>
+                                                </button>
+                                            </OverlayTrigger>
                                         );
                                     })}
-                                </ul>
-                            </div>
-                        </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

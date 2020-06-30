@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
@@ -7,55 +7,95 @@ import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
+import queryString from "query-string"
 
-function LawyerList() {
+function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
-    const [length, setLength] = useState(2);
-    const [lawyers, setLawyers] = useState([]);
+    const [length, setLength] = useState(3);
+    const [lawyers, setLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
-    const SortHandler = ([{value}]) => {
-        setSortBy(value);
-        console.log("sort by: ", value);
-    };
-    useEffect(() => {
+    const [filter, setFilter] = useState({ date: new Date() });
+    const [params, setParams] = useState({
+        ...queryString.parse(props.location.search),
+        offset: offset,
+        length: length,
+    });
+    
+    const getList = (params, keep = false) => {
+        console.log("params : ", params);
+        console.log("qs: ", queryString.stringify(params));
         request({
-            url: "/lawyer/all",
+            url: "/lawyer/all?" + queryString.stringify(params),
+
             method: "GET",
-            data: {offset: offset, length: length},
         })
             .then((data) => {
-                setLawyers(data.lawyers);
+                if (keep) setLawyers([...lawyers, ...data.lawyers]);
+                else setLawyers(data.lawyers);
             })
             .catch((_errors) => {});
+    };
+
+    const SortHandler = ([{value}]) => {
+        setSortBy(value);
+        setOffset(0);
+        const next = {
+            ...params,
+            offset: 0,
+            length: length,
+            order: value
+        };
+        setParams(next);
+        console.log("Sort: ", next);
+        getList(next);
+    };
+
+    useEffect(() => {
+        getList(params);        
     }, []);
+
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
-        request({
-            url: "/lawyer/all",
-            method: "GET",
-            data: {offset: offset, length: length},
-        })
-            .then((data) => {
-                setLawyers(data.lawyers);
-            })
-            .catch((_errors) => {});
+        const next = { ...params, offset: (offset + length), length: length };
+        setParams(next);
+        getList(next, true);
     };
+
+    const filterHandler = ()=>{
+        let date = new Date(filter.date);
+        date = date.toISOString().slice(0,10);
+        console.log("date : ", date); 
+        const next = {
+            ...params,
+            available_on: date,
+            offset: 0,
+            length: length,
+        };
+        setParams(next);
+        // params["filter_by"] = filter.filters;
+        getList(next);       
+    }
     return (
         <div>
             <LawyerListHeader
+                params={params}
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
-            <StickyBox style={{zIndex: 6}}>
-                <LawyerSearchFilter />
+            <StickyBox style={{ zIndex: 6 }}>
+                <LawyerSearchFilter
+                    filter={filter}
+                    setFilter={setFilter}
+                    filterHandler={filterHandler}
+                />
             </StickyBox>
 
             <div className="content">
                 <div className="row justify-content-center align-content-center">
                     <div className="col-7">
-                        <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />
+                        {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
                         <div className="load-more text-center">
                             <a
                                 className="btn btn-primary btn-sm"
@@ -77,14 +117,13 @@ function LawyerList() {
     );
 }
 
-const LawyerSearchFilter = () => {
+const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     const options = [
         {value: 1, label: "f1"},
         {value: 2, label: "f2"},
         {value: 3, label: "f3"},
         {value: 4, label: "f4"},
     ];
-    const [filter, setFilter] = useState({});
     return (
         <div className="card search-filter">
             <form className="card-body form-row p-2">
@@ -96,7 +135,7 @@ const LawyerSearchFilter = () => {
                             onChange={(date) =>
                                 setFilter({...filter, date: date})
                             }
-                            maxDate={new Date()}
+                            minDate={new Date()}
                             placeholderText="Available on"
                         />
                     </div>
@@ -104,11 +143,11 @@ const LawyerSearchFilter = () => {
                 <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
                     <Select
                         className="form-control mb-0"
-                        value={filter.filterOne}
+                        value={filter.filters}
                         placeholder="Filter"
                         options={options}
                         onChange={([{value}]) =>
-                            setFilter({...filter, filterOne: value})
+                            setFilter({...filter, filters: value})
                         }
                         style={{minHeight: "46px"}}
                     />
@@ -117,6 +156,7 @@ const LawyerSearchFilter = () => {
                     <button
                         type="button"
                         className="btn btn-block font-weight-bold"
+                        onClick={filterHandler}
                     >
                         <FaSearch />
                     </button>
@@ -126,12 +166,11 @@ const LawyerSearchFilter = () => {
     );
 };
 
-const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
+const LawyerListHeader = ({params, OnChangeHandler, selectedValue}) => {
     const options = [
-        {value: "rating", label: "Rating"},
+        {value: "ratings", label: "Rating"},
+        {value: "price", label: "Price"},
         {value: "popular", label: "Popular"},
-        {value: "latest", label: "Latest"},
-        {value: "free", label: "Free"},
     ];
     return (
         <div className="breadcrumb-bar">
@@ -154,10 +193,6 @@ const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
                                 </li>
                             </ol>
                         </nav>
-                        <h2 className="breadcrumb-title">
-                            [#matches] found for : Lawyers In [Location] Expert
-                            in [Field]
-                        </h2>
                     </div>
                     <div className="col-md-4 col-12 d-md-block d-none">
                         <div className="sort-by">
@@ -166,9 +201,6 @@ const LawyerListHeader = ({OnChangeHandler, selectedValue}) => {
                                 <Select
                                     className="select-form-control"
                                     value={selectedValue}
-                                    placeholder={
-                                        selectedValue ? selectedValue : "select"
-                                    }
                                     options={options}
                                     onChange={OnChangeHandler}
                                 />
@@ -208,7 +240,7 @@ const AvgCalendar = ({lawyer}) => {
         }
     }
     const [availability, setAvailability] = useState(initAvail);
-    const [slotLength, setSlotLength] = useState(1);
+    const [avgSlotLength, setAvgSlotLength] = useState(1);
     useEffect(() => {
         if (lawyer !== null) {
             request({
@@ -223,12 +255,13 @@ const AvgCalendar = ({lawyer}) => {
                     return day.name;
                 });
                 setDays(nextDays);
-                setSlotLength(response.schedule.slot_length);
                 // Calculate availability
                 const nextAvailability = initAvail.slice();
+                let avg = 0;
+                let count = 0;
                 response.schedule.days.map((day, i) => {
                     for (let j = 0; j < day.slots.length; ++j) {
-                        const time = day.slots[j].from;
+                        const time = day.slots[j].time;
                         if (time >= "00:00" && time < "06:00" && !day.slots[j].reserved) {
                             nextAvailability[i][0]++;
                         } else if (time >= "06:00" && time < "12:00" && !day.slots[j].reserved) {
@@ -238,8 +271,11 @@ const AvgCalendar = ({lawyer}) => {
                         } else if (!day.slots[j].reserved) {
                             nextAvailability[i][3]++;
                         }
+                        avg += day.slots[j].length;
+                        count++;
                     }
                 });
+                setAvgSlotLength(avg / count);
                 setAvailability(nextAvailability);
             }).catch((error) => {
                 console.log(error);
@@ -250,7 +286,7 @@ const AvgCalendar = ({lawyer}) => {
         <table className="calender">
             <thead>
                 <tr>
-                    <th colspan="2"></th>
+                    <th colSpan="2"></th>
                     {days.map((day) => (
                         <th key={day}>{day.substr(0, 3)}</th>
                     ))}
@@ -258,31 +294,31 @@ const AvgCalendar = ({lawyer}) => {
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2">Morning</td>
+                    <td colSpan="2">Morning</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[0] * slotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        const brightness = (a[0] * avgSlotLength) / (6 * 60);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Afternoon</td>
+                    <td colSpan="2">Afternoon</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[1] * slotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        const brightness = (a[1] * avgSlotLength) / (6 * 60);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Evening</td>
+                    <td colSpan="2">Evening</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[2] * slotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        const brightness = (a[2] * avgSlotLength) / (6 * 60);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
                 <tr>
-                    <td colspan="2">Night</td>
+                    <td colSpan="2">Night</td>
                     {availability.map((a, i) => {
-                        const brightness = (a[3] * slotLength) / (6 * 60);
-                        return (<td style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                        const brightness = (a[3] * avgSlotLength) / (6 * 60);
+                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
                     })}
                 </tr>
             </tbody>
@@ -312,4 +348,4 @@ function DayAsString(dayIndex) {
 
     return weekdays[dayIndex];
 }
-export default LawyerList;
+export default withRouter(LawyerList);

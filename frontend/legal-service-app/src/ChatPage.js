@@ -88,7 +88,9 @@ const ChatPage = () => {
                 url: `/chat/${chat_id}` + (since === null ? '' : '?since=' + since),
                 method: 'GET'
             }).then((response) => {
-                setMessages([...messages, ...response.messages]);
+                if (response.messages.length > 0) {
+                    setMessages([...messages, ...response.messages]);
+                }
             }).catch((error) => {
                 console.log(error);
             }).finally(() => {

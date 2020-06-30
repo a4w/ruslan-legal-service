@@ -110,6 +110,9 @@ function App() {
                     <Route exact path="/edit-schedule">
                         <ScheduleForm />
                     </Route>
+                    <Route path="/logout">
+                        <Redirect replace to="/" />
+                    </Route>
                 </Switch>
                 <Route component={Footer} />
                 {/* <Footer /> */}

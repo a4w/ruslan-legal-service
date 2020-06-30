@@ -10,20 +10,23 @@ const LawyerAgenda = () => {
             created_at: null,
             duration: null,
             id: 1,
-        }, {
+        },
+        {
             appointment_time: new Date(),
             client_id: null,
             created_at: null,
             duration: null,
             id: 2,
-        }, {
-            appointment_time: moment().add(1, 'month').toDate(),
+        },
+        {
+            appointment_time: moment().add(1, "month").toDate(),
             client_id: null,
             created_at: null,
             duration: null,
             id: 3,
-        }, {
-            appointment_time: moment().subtract(1, 'month').toDate(),
+        },
+        {
+            appointment_time: moment().subtract(1, "month").toDate(),
             client_id: null,
             created_at: null,
             duration: null,
@@ -33,7 +36,7 @@ const LawyerAgenda = () => {
     const [appointments, setAppointments] = useState(init);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [monthAppointments, setMonthAppointments] = useState(new Array(moment(currentDate).daysInMonth()));
+    const [monthAppointments, setMonthAppointments] = useState(null);
     const nextMonth = () => {
         setCurrentDate(moment(currentDate).add(1, 'month').toDate());
         
@@ -42,14 +45,24 @@ const LawyerAgenda = () => {
         setCurrentDate(moment(currentDate).subtract(1, 'month').toDate());
     };
     const onDateClick = (day) => {
+        console.log(day);
+        
         setSelectedDate(day);
     };
     useEffect(() => {
-        // appointments.forEach((appointment) => {
-        //     if (moment(appointment.appointment_time).isSame(currentDate, "day"))
-        //         monthAppointments.push(appointment);
-        // });
-    }, [currentDate]);
+        const next = new Array(currentDate.getDate() + 1);
+        for (let index = 0; index < next.length; index++) {
+            next[index] = new Array();
+        }
+        appointments.forEach((appointment) => {
+            const appDay = appointment.appointment_time;
+            if (moment(appDay).isSame(currentDate, "month")) {
+                const n = appDay.getDate();
+                next[n].push(appointment);
+            }
+        });
+        setMonthAppointments(next);     
+    }, [currentDate, appointments]);
     return (
         <div className="content">
             <div className="container-fluid">
@@ -71,7 +84,7 @@ const LawyerAgenda = () => {
                                     currentDate={currentDate}
                                     onDateClick={onDateClick}
                                     selectedDate={selectedDate}
-                                    appointments={appointments}
+                                    appointments={monthAppointments}
                                 />
                             </div>
                         </div>
@@ -83,12 +96,12 @@ const LawyerAgenda = () => {
 };
 const CalendarEvent = ()=>{
     return (
-        <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
-            <div class="fc-content">
-                <span class="fc-time">1:08a</span>{" "}
-                <span class="fc-title">Test Event 1</span>
+        <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
+            <div className="fc-content">
+                <span className="fc-time">1:08a</span>{" "}
+                <span className="fc-title">Test Event 1</span>
             </div>
-        </a>
+        </div>
     );
 }
 const HeaderDays = () => {
@@ -138,6 +151,9 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
         for (let i = 0; i < 7; i++) {
             formattedDate = moment(day).format(dateFormat);
             const cloneDay = day;
+            let todaysAppointments = null;
+            if (moment(day).isSame(currentDate, "month") &&appointments !== null)
+                todaysAppointments = appointments[day.getDate()];
             days.push(
                 <div
                     className={`column cell ${
@@ -147,13 +163,18 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
                             ? ""
                             : "disabled"
                     }`}
-                    key={day}
-                    onClick={() => onDateClick(moment(cloneDay).toDate())}
+                    key={day.toISOString()}
+                    onClick={() => onDateClick(cloneDay)}
                     id={moment(day).format("DD-MM-YYYY")}
                 >
                     <span className="number">{formattedDate}</span>
                     <span className="bg">{formattedDate}</span>
-                    {/* {moment(day).isSame(appointments, "day")} */}
+                    <div className="fc">
+                        {todaysAppointments &&
+                            todaysAppointments.map((appointment, i) => (
+                                <CalendarEvent key={i} />
+                            ))}
+                    </div>
                 </div>
             );
             day = moment(day).add(1, "d").toDate();

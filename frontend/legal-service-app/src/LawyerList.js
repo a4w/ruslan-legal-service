@@ -127,7 +127,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     return (
         <div className="card search-filter">
             <form className="card-body form-row p-2">
-                <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
+                <div className="filter-widget mb-0" style={{width:"40%"}}>
                     <div className="cal-icon">
                         <DatePicker
                             className="form-control mb-0"
@@ -140,7 +140,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         />
                     </div>
                 </div>
-                <div className="filter-widget col-md-12 col-lg-3 col-xl-3 mb-0">
+                <div className="filter-widget mb-0 ml-2" style={{width:"40%"}}>
                     <Select
                         className="form-control mb-0"
                         value={filter.filters}
@@ -152,7 +152,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         style={{minHeight: "46px"}}
                     />
                 </div>
-                <div className="btn-search col-md-12 col-lg-1 col-xl-1 align-left">
+                <div className="btn-search align-left ml-2" style={{Width:"10%"}}>
                     <button
                         type="button"
                         className="btn btn-block font-weight-bold"

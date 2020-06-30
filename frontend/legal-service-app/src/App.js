@@ -26,7 +26,7 @@ import LawyerRating from "./LawyerRating";
 import BlogPage from "./WriteBlog";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
-import "react-datepicker/dist/react-datepicker.css";
+import "./assets/css/datepicker.css";
 import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";

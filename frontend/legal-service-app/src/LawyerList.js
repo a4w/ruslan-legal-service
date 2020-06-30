@@ -7,7 +7,7 @@ import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
-import queryString from "query-string";
+import queryString from "query-string"
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -27,6 +27,7 @@ function LawyerList(props) {
         console.log("qs: ", queryString.stringify(params));
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
+
             method: "GET",
         })
             .then((data) => {

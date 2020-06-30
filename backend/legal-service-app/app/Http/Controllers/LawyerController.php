@@ -35,6 +35,7 @@ class LawyerController extends Controller
 
         // Sorting
         $order_by = $request->get('order', 'price');
+
         $sort = ['price_per_hour', 'asc'];
         switch ($order_by) {
             default:
@@ -78,15 +79,13 @@ class LawyerController extends Controller
                 }
                 return $query->whereIN('id', $practice_areas);
             })
+
             ->orderBy($sort[0], $sort[1])
             ->limit($length)
             ->skip($offset)
             ->get();
         if ($available_on !== null) {
             $lawyers = $lawyers->filter(function ($item) use ($available_on) {
-                if ($available_on === null) {
-                    return true;
-                }
                 // Check if available on selected date
                 $day = new Carbon($available_on);
                 $dayIdx = $day->dayOfWeek;
@@ -143,7 +142,6 @@ class LawyerController extends Controller
                         break;
                 }
             })->values();*/
-
         /*foreach ($lawyers as &$lawyer) {
             // Show only average rating
             $ratings = collect($lawyer['ratings']);
@@ -158,7 +156,7 @@ class LawyerController extends Controller
     {
         // Get lawyer
         $lawyer = Lawyer::find($id);
-        if (!$lawyer->isAvailable()) {
+        if ($lawyer !== null && !$lawyer->isAvailable()) {
             return RespondJSON::unknownError();
         }
         $schedule = $lawyer->schedule;
@@ -198,6 +196,9 @@ class LawyerController extends Controller
                 $end_time = new Carbon($start_time);
                 $end_time->addMinutes($slot['length']);
                 $is_upcoming = true;
+                $current->setHour($start_time->hour);
+                $current->setMinute($start_time->minute);
+
                 if ($current->lt(now())) {
                     $is_upcoming = false;
                 }
@@ -226,7 +227,14 @@ class LawyerController extends Controller
             $current->addDay();
         }
         $output['days'] = $data;
-        return RespondJSON::with(['schedule' => $output]);
+        return RespondJSON::with([
+            'schedule' => $output,
+            'price_per_hour' => $lawyer->price_per_hour,
+            'enable_discount' => $lawyer->discount !== null,
+            'discount_amount' => $lawyer->discount,
+            'is_percent_discount' => $lawyer->is_percent_discount,
+            'discount_end' => $lawyer->discount_end
+        ]);
     }
 
     public function getWeekSchedule()
@@ -269,7 +277,15 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        $incoming_schedule = $request->input('schedule.days');
+        $incoming_schedule = collect($request->input('schedule.days'))->map(function ($day) {
+            $day['slots'] = collect($day['slots'])->map(function ($slot) {
+                $slot = collect($slot);
+                return $slot->only('time', 'length');
+            });
+            return $day;
+        });
+        dump($incoming_schedule);
+
 
         // Save schedule
         $lawyer->schedule = $incoming_schedule;

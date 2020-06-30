@@ -48,7 +48,7 @@ const LogOut = (error) => {
     cookie.remove("refresh_token");
     cookie.remove("access_token");
     cookie.remove("logged_in");
-    history.push("/");
+    //history.push("/");
 };
 const request = function (options) {
     const onSuccess = function (response) {

@@ -3521,18 +3521,18 @@ html.menu-opened body {
     text-align: center;
     position: relative;
 }
-.time-slot li .timing:hover {
+.timing:hover {
     background-color: #fff;
 }
-.time-slot li .timing:last-child {
+.timing:last-child {
     margin-bottom: 0;
 }
-.time-slot li .timing.selected {
+.timing.selected {
     background-color: #42c0fb;
     border: 1px solid #42c0fb;
     color: #fff;
 }
-.time-slot li .timing.selected::before {
+.timing.selected::before {
     color: #fff;
     content: "\f00c";
     font-family: "Font Awesome 5 Free";
@@ -7438,4 +7438,8 @@ min-width: 100%;
 }
 .react-datepicker{
     width: max-content;
+}
+.timing:disabled,.timing:disabled:hover{
+    background: #aaa;
+    cursor: not-allowed;
 }

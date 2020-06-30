@@ -144,7 +144,12 @@ const BlogPage = () => {
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img alt="Cover" src={coverData.cover} className="img-fluid" />
+                <img alt="Cover" src={coverData.cover} className="img-fluid" style={{
+                    maxHeight: '200px',
+                    maxWidth: '100%',
+                    width: 'unset',
+                    margin: 'auto'
+                }} />
             </div>
             <h3 className="blog-title">
                 <ErrorMessageInput
@@ -197,6 +202,7 @@ const BlogPage = () => {
             <div className="blog-content">
                 <WriteBlog />
             </div>
+            <button className="btn btn-primary">Submit blog for review</button>
         </div>
     );
 };

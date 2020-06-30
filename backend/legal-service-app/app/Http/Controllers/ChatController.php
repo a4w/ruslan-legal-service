@@ -7,6 +7,8 @@ use App\Chat;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Message;
+use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -50,14 +52,20 @@ class ChatController extends Controller
         return RespondJSON::success();
     }
 
-    public function getMessages(Chat $chat)
+    public function getMessages(Chat $chat, JSONRequest $request)
     {
+        $since = $request->get('since', null);
         $user = Auth::user();
         $participants = $chat->participants;
         if (!$participants->contains($user)) {
             return RespondJSON::forbidden();
         }
-        $messages = $chat->messages()->select(['id', 'message_type', 'content', 'sender_id', 'created_at'])->get();
+        $messages = $chat->messages()
+            ->select(['id', 'message_type', 'content', 'sender_id', 'created_at'])
+            ->when($since, function ($query, $since) {
+                $query->where('created_at', '>', new Carbon($since));
+            })
+            ->get();
         return RespondJSON::with(['messages' => $messages]);
     }
 

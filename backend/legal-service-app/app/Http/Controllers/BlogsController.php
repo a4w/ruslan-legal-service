@@ -13,4 +13,10 @@ class BlogsController extends Controller
         $blogs = Blog::all();
         return RespondJSON::success(['blogs' => $blogs]);
     }
+
+    public function getLawyerBlogs(Lawyer $lawyer)
+    {
+        $blogs = $lawyer->blogs;
+        return RespondJSON::success(['blogs' => $blogs]);
+    }
 }

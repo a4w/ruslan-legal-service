@@ -161,7 +161,7 @@ class AppointmentController extends Controller
             return RespondJSON::forbidden();
         }
         if (!$appointment->is_cancellable) {
-            return RespondJSON::gone(['message' => 'Appointment cannot be canceled now']);
+            return RespondJSON::gone(['message' => 'Appointment cannot be cancelled now']);
         }
         // Update appointment to cancelled
         $appointment->status = 'CANCELLED';

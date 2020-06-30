@@ -52,7 +52,7 @@ class ChatController extends Controller
         return RespondJSON::success();
     }
 
-    public function getMessages(Chat $chat, JSONRequest $request)
+    public function getMessages(Chat $chat, Request $request)
     {
         $since = $request->get('since', null);
         $user = Auth::user();

@@ -1,11 +1,13 @@
 import React, {useRef, useState, useEffect} from "react";
 import Stackedit from "stackedit-js";
-import {FaPencilAlt} from "react-icons/fa";
+import {FaPencilAlt, FaDigitalTachograph} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
+import ErrorMessageSelect from "./ErrorMessageSelect";
 import Select from "react-dropdown-select";
 import {request} from "./Axios";
 import useValidation from "./useValidation";
 import { blogTitleValidations } from "./Validations";
+import { toast } from "react-toastify";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -118,8 +120,8 @@ const BlogPage = () => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const [tagOptions, setTagOptions] = useState([]);
-    const [tags, selectedTags] = useState([]);
-    const [error, , runValidation] = useValidation(blogTitleValidations);
+    const [tags, selectedTags] = useState(null);
+    const [errors, , runValidation] = useValidation(blogTitleValidations);
     const md_preview = useRef(null);
     const md_content = useRef(null);
 
@@ -160,29 +162,44 @@ const BlogPage = () => {
         });
     }, []);
     const Submit = ()=>{
-        runValidation({title}).then((hasErrors, _) => {
-            // console.log(md_content.current.value);
-            // console.log(md_content.current.innerHTML);
-            // console.log(tags);
-            console.log(title);
-            console.log("error", error);
+        runValidation({title: title, tags:tags}).then((hasErrors, _) => {
+            console.log(errors);
+            
+            // request({
+            //     url: "/blogs/add",
+            //     method: "POST",
+            //     data: {
+            //         title: title,
+            //         body: md_content.current.value,
+            //         tag_id: tags[0].value,
+            //     },
+            // }).then(()=>{
+            //     toast.success("Submitted successfuly");
+            // }).catch(()=>{
+            //     toast.error("An error has occurred");
+            // });
         });
         
     }
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img alt="Cover" src={coverData.cover} className="img-fluid" style={{
-                    maxHeight: '200px',
-                    maxWidth: '100%',
-                    width: 'unset',
-                    margin: 'auto'
-                }} />
+                <img
+                    alt="Cover"
+                    src={coverData.cover}
+                    className="img-fluid"
+                    style={{
+                        maxHeight: "200px",
+                        maxWidth: "100%",
+                        width: "unset",
+                        margin: "auto",
+                    }}
+                />
             </div>
             <div className="blog-title" style={{padding: "3px"}}>
                 <ErrorMessageInput
                     placeholder="Title.."
-                    errors={error.title}
+                    errors={errors.title}
                     type="text"
                     OnChangeHandler={({target: {value}}) => setTitle(value)}
                     value={title}
@@ -213,12 +230,13 @@ const BlogPage = () => {
                         </li>
                         <li style={{display: "contents"}}>
                             <i className="fa fa-tags"></i>{" "}
-                            <Select
+                            <ErrorMessageSelect
                                 options={tagOptions}
                                 searchable
-                                create={true}
-                                values={tags}
-                                onChange={(values) => {
+                                value={tags}
+                                errors={errors.tags}
+                                style
+                                OnChangeHandler={(values) => {
                                     console.log(values);
                                     selectedTags(values);
                                 }}

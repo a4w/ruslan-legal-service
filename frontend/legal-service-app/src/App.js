@@ -32,6 +32,7 @@ import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
+import BookLawyerModal from "./BookLawyerModal";
 
 const cookie = new Cookies();
 
@@ -52,6 +53,7 @@ function App() {
                 <Route path="(.+)/register">
                     <RegisterModal />
                 </Route>
+                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal}/>
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />
@@ -95,10 +97,6 @@ function App() {
                     <Route path="/chat">
                         <ChatPage />
                     </Route>
-                    <Route path="/book-lawyer/:LawyerId">
-                        <LawyerBooking />
-                    </Route>
-
                     <Route exact path="/video">
                         <VideoComponent appointment_id={32} />
                     </Route>

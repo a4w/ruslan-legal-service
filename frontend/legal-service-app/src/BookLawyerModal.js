@@ -3,10 +3,9 @@ import Modal from "./ModalRouted";
 import LawyerBooking from "./LawyerBooking";
 
 const BookLawyerModal = ({match})=>{
-    console.log(match);
     return (
         <Modal header="Book this Lawyer!">
-            <LawyerBooking />
+            <LawyerBooking LawyerId={match.params.LawyerId} />
         </Modal>
     );
 }

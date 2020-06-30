@@ -38,7 +38,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             </p>
                             <div className="rating">
                                 <StarRatings
-                                    rating={lawyer.ratings_average}
+                                    rating={parseFloat(lawyer.ratings_average)}
                                     starRatedColor="gold"
                                     starDimension="20px"
                                     starSpacing="0px"

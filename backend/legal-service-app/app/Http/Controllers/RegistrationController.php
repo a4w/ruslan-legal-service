@@ -8,6 +8,7 @@ use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Str;
 
 class RegistrationController extends Controller
 {
@@ -21,7 +22,7 @@ class RegistrationController extends Controller
             'phone' => ['required']
         ]);
         $data = $request->only('name', 'surname', 'email', 'password', 'phone');
-        $data['unverified_email'] = $data['email'];
+        $data['unverified_email'] = Str::lower($data['email']);
         unset($data['email']);
         // Insert
         $account = Account::create($data);
@@ -40,7 +41,8 @@ class RegistrationController extends Controller
             'phone' => ['required']
         ]);
         $data = $request->only('name', 'surname', 'email', 'password', 'phone');
-        $data['unverified_email'] = $data['email'];
+        $data['unverified_email'] = Str::lower($data['email']);
+        unset($data['email']);
         unset($data['email']);
         // Insert
         $account = Account::create($data);

@@ -5,8 +5,13 @@ import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 import history from "./History";
+import FacebookButton from "./FacebookButton";
+import GoogleButton from "./GoogleButton";
+import { Link } from "react-router-dom";
+import { getParent } from "./LoginForm";
+import History from "./History";
 
-const RegisterationForm = ({ setRegister, hideModal }) => {
+const RegisterationForm = () => {
     const initUser = {
         name: "",
         surname: "",
@@ -54,8 +59,6 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                     })
                     .finally(() => {
                         setIsRegistering(false);
-                        hideModal();
-                        history.push('/');
                     });
             }
         });
@@ -66,7 +69,10 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
             <div className="login-header">
                 <h5>
                     {user.isClient ? "Client Register" : "Lawyer Register"}
-                    <button className="btn btn-link text-right" onClick={UserTypeHandler}>
+                    <button
+                        className="btn btn-link text-right"
+                        onClick={UserTypeHandler}
+                    >
                         {user.isClient ? "Not a Client?" : "Not a Lawyer?"}
                     </button>
                 </h5>
@@ -120,12 +126,14 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                 />
                 <div className="text-right">
                     <a
+                        // to={`${getParent(History.location.pathname)}/login`}
                         href="//"
+                        onClick={() =>
+                            History.replace(
+                                `${getParent(History.location.pathname)}/login`
+                            )
+                        }
                         className="forgot-link"
-                        onClick={(event) => {
-                            event.preventDefault();
-                            setRegister(false);
-                        }}
                     >
                         Already have an account?
                     </a>
@@ -147,20 +155,16 @@ const RegisterationForm = ({ setRegister, hideModal }) => {
                 </div>
                 <div className="row form-row social-login">
                     <div className="col-6">
-                        <a
-                            href="facebook.com"
-                            className="btn btn-facebook btn-block"
-                        >
-                            <i className="fab fa-facebook-f mr-1"></i> Login
-                        </a>
+                        <FacebookButton register />
                     </div>
                     <div className="col-6">
-                        <a
+                        {/* <a
                             href="google.com"
                             className="btn btn-google btn-block"
                         >
                             <i className="fab fa-google mr-1"></i> Login
-                        </a>
+                        </a> */}
+                        <GoogleButton register />
                     </div>
                 </div>
             </form>

@@ -36,12 +36,13 @@ const onRefreshSuccess = (response) => {
     setAccessToken(response.data.access_token);
     request(response.config);
 };
-const onRefreshError = (error) => {
+const requireLogin = (error) => {
+    console.log("Require login");
     // Remove refresh token cookie and redirect to login
     cookie.remove("refresh_token");
     cookie.remove("access_token");
     cookie.remove("logged_in");
-    // should show modal here donno how tho
+    history.push(history.location.pathname + '/login');
 };
 const LogOut = (error) => {
     cookie.remove("refresh_token");
@@ -61,25 +62,29 @@ const request = function (options) {
         if (error) {
             const status = error.response.request.status;
             console.log("status: ", status);
-            
-            if (status === 401 && !cookie.get("access_token")) {
+
+            // Unauthorized request
+            if (status === 401) {
                 // If there is a refresh token then refresh
                 const refresh_token = cookie.get("refresh_token");
                 console.log("refresh_token: ", refresh_token);
-                if (refresh_token)
+                if (refresh_token) {
                     return client({
                         method: "POST",
                         url: "/auth/refresh",
                         refresh_token: refresh_token,
                     })
                         .then(onRefreshSuccess)
-                        .catch(onRefreshError);
-                else onRefreshError();
+                        .catch(requireLogin);
+                } else {
+                    requireLogin();
+                }
+            } else if (status === 403) { // Forbidden
+                requireLogin();
             } else {
-                // Else push to login
-                // History.push("/login");
-                // Another error here not login
+                // Some other normal error occurred
             }
+
             console.error("Status:", error.response.status);
             console.error("Data:", error.response.data);
             console.error("Headers:", error.response.headers);

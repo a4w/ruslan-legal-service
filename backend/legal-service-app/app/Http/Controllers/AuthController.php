@@ -8,6 +8,7 @@ use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -20,6 +21,7 @@ class AuthController extends Controller
     public function login(JSONRequest $request)
     {
         $credentials = $request->only('email', 'password');
+        $credentials['email'] = Str::lower($credentials['email']);
         if (!$token = auth()->attempt($credentials)) {
             return RespondJSON::unauthorized();
         }

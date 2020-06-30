@@ -10,6 +10,7 @@ class Message extends Model
 
     protected $casts = [
         'is_read' => 'bool',
+        'created_at' => 'datetime:Y-m-d H:i:s'
     ];
 
     protected $appends = ['link'];

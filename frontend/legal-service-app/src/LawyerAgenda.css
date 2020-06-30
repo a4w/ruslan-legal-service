@@ -27,7 +27,7 @@ body {
     line-height: 1.5;
     position: relative;
 }
-header {
+.header-calendar {
     display: block;
     width: 100%;
     padding: 1.75em 0;
@@ -60,26 +60,26 @@ header {
     height: auto;
     margin: 0 auto;
 }
-.calendar .header {
+.calendar .header-calendar {
     text-transform: uppercase;
     font-weight: 700;
     font-size: 115%;
     padding: 1.5em 0;
     border-bottom: 1px solid lightgray;
 }
-.calendar .header .icon {
+.calendar .header-calendar .icon {
     cursor: pointer;
     transition: 0.15s ease-out;
 }
-.calendar .header .icon:hover {
+.calendar .header-calendar .icon:hover {
     transform: scale(1.75);
     transition: 0.25s ease-out;
     color: dodgerblue;
 }
-.calendar .header .icon:first-of-type {
+.calendar .header-calendar .icon:first-of-type {
     margin-left: 1em;
 }
-.calendar .header .icon:last-of-type {
+.calendar .header-calendar .icon:last-of-type {
     margin-right: 1em;
 }
 .calendar .days {

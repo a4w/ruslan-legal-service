@@ -60,7 +60,7 @@ const HeaderDays = () => {
 const Header = ({currentDate, prevMonth, nextMonth}) => {
     const dateFormat = "MMMM YYYY";
     return (
-        <div className="header row flex-middle">
+        <div className="header-calendar row flex-middle">
             <div className="column col-start">
                 <div className="icon" onClick={prevMonth}>
                     <i className="fas fa-chevron-left mr-3 ml-2"></i>{" "}

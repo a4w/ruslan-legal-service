@@ -72,7 +72,7 @@ class ChatController extends Controller
     public function getChats()
     {
         $user = Auth::user();
-        return RespondJSON::success(['chats' => $user->chats]);
+        return RespondJSON::success(['chats' => $user->chats, 'me' => $user]);
     }
 
     public function sendFile(Chat $chat, Request $request)

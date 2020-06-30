@@ -1,10 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import "./LawyerAgenda.css";
 
 const LawyerAgenda = () => {
+    const init = [
+        {
+            appointment_time: new Date(),
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 1,
+        }, {
+            appointment_time: new Date(),
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 2,
+        }, {
+            appointment_time: moment().add(1, 'month').toDate(),
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 3,
+        }, {
+            appointment_time: moment().subtract(1, 'month').toDate(),
+            client_id: null,
+            created_at: null,
+            duration: null,
+            id: 4,
+        },
+    ];
+    const [appointments, setAppointments] = useState(init);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [monthAppointments, setMonthAppointments] = useState(new Array(moment(currentDate).daysInMonth()));
     const nextMonth = () => {
         setCurrentDate(moment(currentDate).add(1, 'month').toDate());
         
@@ -15,6 +44,12 @@ const LawyerAgenda = () => {
     const onDateClick = (day) => {
         setSelectedDate(day);
     };
+    useEffect(() => {
+        // appointments.forEach((appointment) => {
+        //     if (moment(appointment.appointment_time).isSame(currentDate, "day"))
+        //         monthAppointments.push(appointment);
+        // });
+    }, [currentDate]);
     return (
         <div className="content">
             <div className="container-fluid">
@@ -36,6 +71,7 @@ const LawyerAgenda = () => {
                                     currentDate={currentDate}
                                     onDateClick={onDateClick}
                                     selectedDate={selectedDate}
+                                    appointments={appointments}
                                 />
                             </div>
                         </div>
@@ -45,6 +81,16 @@ const LawyerAgenda = () => {
         </div>
     );
 };
+const CalendarEvent = ()=>{
+    return (
+        <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
+            <div class="fc-content">
+                <span class="fc-time">1:08a</span>{" "}
+                <span class="fc-title">Test Event 1</span>
+            </div>
+        </a>
+    );
+}
 const HeaderDays = () => {
     const weekdayshort = moment.weekdaysShort();
     let weekdayshortname = weekdayshort.map((day, i) => {
@@ -78,7 +124,7 @@ const Header = ({currentDate, prevMonth, nextMonth}) => {
     );
 };
 
-const CalendarCells = ({currentDate, onDateClick, selectedDate}) => {
+const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) => {
     const startOfMonth = moment(currentDate).startOf("month").toDate();
     const endOfMonth = moment(currentDate).endOf("month").toDate();
     const monthStartDate = moment(startOfMonth).startOf("week").toDate();
@@ -107,6 +153,7 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate}) => {
                 >
                     <span className="number">{formattedDate}</span>
                     <span className="bg">{formattedDate}</span>
+                    {/* {moment(day).isSame(appointments, "day")} */}
                 </div>
             );
             day = moment(day).add(1, "d").toDate();

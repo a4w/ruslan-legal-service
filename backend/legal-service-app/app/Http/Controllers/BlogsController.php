@@ -42,5 +42,22 @@ class BlogsController extends Controller
         $blog->tag()->associate($practice_area);
         $blog->lawyer()->associate($lawyer);
         $blog->save();
+        return RespondJSON::success(['blog' => $blog]);
+    }
+
+    public function uploadCover(Request $request, Blog $blog)
+    {
+        $request->validate([
+            'cover_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        /** @var Account */
+        $user = Auth::user();
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        $path = $request->file('cover_photo')->store('blog_covers', ['disk' => 'public']);
+        $blog->cover_photo_path = Storage::url($path);
+        $blog->save();
+        return RespondJSON::success(['blog' => $blog]);
     }
 }

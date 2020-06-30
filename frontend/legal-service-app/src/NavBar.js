@@ -108,7 +108,7 @@ const NavBar = () => {
                         <Link
                             className="nav-link header-login"
                             style={{
-                                visibility: logged_in ? "hidden" : "visible",
+                                display: logged_in ? "none" : "",
                             }}
                             to={`${History.location.pathname}/login`}
                         >

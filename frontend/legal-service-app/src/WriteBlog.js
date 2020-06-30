@@ -3,6 +3,7 @@ import Stackedit from "stackedit-js";
 import {FaPencilAlt} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
 import Select from "react-dropdown-select";
+import {request} from "./Axios"
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -116,6 +117,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 const BlogPage = () => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
+    const [tagOptions, setTagOptions] = useState([]);
     const [tags, selectedTags] = useState([]);
     const showSelectedCover = (e) => {
         const input = e.target;
@@ -130,17 +132,29 @@ const BlogPage = () => {
             reader.readAsDataURL(input.files[0]);
         }
     };
+
     const dateString = (new Date()).toLocaleString("en-GB", {
         year: "numeric",
         month: "long",
         day: "numeric",
     });
-    const tagOptions = [
-        {value: "1", label: "tag 1"},
-        {value: "2", label: "tag 2"},
-        {value: "3", label: "tag 3"},
-        {value: "4", label: "tag 4"},
-    ];
+
+    useEffect(() => {
+        request({
+            url: 'lawyer/practice-areas',
+            method: 'GET'
+        }).then(response => {
+            const areas = response.areas.map((area, i) => {
+                return {
+                    label: area.area,
+                    value: area.id
+                };
+            });
+            setTagOptions(areas);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
@@ -186,7 +200,6 @@ const BlogPage = () => {
                             <i className="fa fa-tags"></i>{" "}
                             <Select
                                 options={tagOptions}
-                                multi
                                 searchable
                                 create={true}
                                 values={tags}

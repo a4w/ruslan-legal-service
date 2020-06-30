@@ -62,7 +62,7 @@ Route::prefix('appointment')->group(function () {
 });
 
 Route::prefix('blogs')->group(function () {
-    Route::get('all', 'BlogsController@getBlogsPaginated');
+    Route::get('all', 'BlogsController@getBlogs');
     Route::get('{lawyer}', 'BlogsController@getLawyerBlogs');
     Route::post('add', 'BlogsController@addBlogPost')->middleware('auth:api');
 });

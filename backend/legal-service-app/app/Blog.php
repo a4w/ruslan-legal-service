@@ -21,4 +21,9 @@ class Blog extends Model
     {
         return $this->belongsTo(Lawyer::class, 'lawyer_id');
     }
+
+    public function tag()
+    {
+        return $this->belongsTo(PracticeArea::class, 'practice_area_id');
+    }
 }

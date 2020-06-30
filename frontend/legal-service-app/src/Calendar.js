@@ -6,10 +6,11 @@ const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const nextMonth = () => {
-        setCurrentDate(moment(currentDate).add(1, "month").toDate());
+        setCurrentDate(moment(currentDate).add(1, 'month').toDate());
+        
     };
     const prevMonth = () => {
-        setCurrentDate(moment(currentDate).subtract(1, "month").toDate());
+        setCurrentDate(moment(currentDate).subtract(1, 'month').toDate());
     };
     const onDateClick = (day) => {
         setSelectedDate(day);
@@ -94,7 +95,11 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate}) => {
             days.push(
                 <div
                     className={`column cell ${
-                        moment(day).isSame(selectedDate, "day")? "selected": ""
+                        moment(day).isSame(selectedDate, "day")
+                            ? "selected"
+                            : moment(day).isSame(startOfMonth, "month")
+                            ? ""
+                            : "disabled"
                     }`}
                     key={day}
                     onClick={() => onDateClick(moment(cloneDay).toDate())}

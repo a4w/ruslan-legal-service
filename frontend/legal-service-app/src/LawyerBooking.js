@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
+import { request } from "./Axios";
 
-const LawyerBooking = () => {
+const LawyerBooking = ({LawyerId}) => {
+    const [lawyer, setLawyer] = useState(null);
+    request({ url: `/lawyer/${LawyerId}`, method: "GET" })
+        .then((data) => {
+            console.log(data);
+            setLawyer(data.lawyer);
+        })
+        .catch((err) => {});
     return (
         <div className="content">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
-                        <LawyerCard />
+                        <LawyerCard lawyer={lawyer} />
                         <TodayIs />
-                        <AppointmentTimeForm />
+                        <AppointmentTimeForm lawyer_id={LawyerId} />
                     </div>
                 </div>
             </div>
@@ -38,8 +46,8 @@ const TodayIs = () => {
         </div>
     );
 };
-const LawyerCard = () => {
-    return (
+const LawyerCard = ({lawyer}) => {
+    return ( lawyer &&
         <div className="card">
             <div className="card-body">
                 <div className="booking-lawyer-info">
@@ -47,15 +55,15 @@ const LawyerCard = () => {
                         href="lawyer-profile.html"
                         className="booking-lawyer-img"
                     >
-                        Profile Pic
+                        <img src={lawyer.account.profile_picture} alt="Lawyer Image"/>
                     </a>
                     <div className="booking-info">
                         <h4>
-                            <a href="lawyer-profile.html">Name</a>
+                            <a href="lawyer-profile.html"> {`${lawyer.account.name} ${lawyer.account.surname}`}</a>
                         </h4>
                         <div className="rating">
                             <StarRatings
-                                rating={4}
+                                rating={parseFloat(lawyer.ratings_average)}
                                 starRatedColor="gold"
                                 starDimension="20px"
                                 starSpacing="0px"
@@ -64,12 +72,11 @@ const LawyerCard = () => {
                             />
                             &nbsp;
                             <span className="d-inline-block text-xs average-rating">
-                                (number of clients rated, percentage)
+                                ({lawyer.ratings_count})
                             </span>
                         </div>
                         <p className="text-muted mb-0">
-                            <i className="fas fa-map-marker-alt"></i> City,
-                            Country
+                            <i className="fas fa-map-marker-alt"></i> `${lawyer.account.city}, ${lawyer.account.country}`
                         </p>
                     </div>
                 </div>

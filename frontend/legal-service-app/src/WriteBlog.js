@@ -18,7 +18,7 @@ const ButtonStyles = {
     borderColor: "transparent",
 };
 
-const WriteBlog = () => {
+const WriteBlog = ({md_content, md_preview}) => {
     const md_initial = [
         `
 # This is a header
@@ -45,8 +45,6 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 
 `,
     ];
-    const md_preview = useRef(null);
-    const md_content = useRef(null);
 
     const loaderStackEdit = new Stackedit();
 
@@ -119,6 +117,9 @@ const BlogPage = () => {
     const [title, setTitle] = useState("");
     const [tagOptions, setTagOptions] = useState([]);
     const [tags, selectedTags] = useState([]);
+    const md_preview = useRef(null);
+    const md_content = useRef(null);
+
     const showSelectedCover = (e) => {
         const input = e.target;
         if (input.files && input.files[0]) {
@@ -155,6 +156,13 @@ const BlogPage = () => {
             console.log(error);
         });
     }, []);
+    const Submit = ()=>{
+        console.log(md_content.current.value);
+        console.log(md_content.current.innerHTML);
+        console.log(tags);
+        console.log(title);
+        
+    }
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
@@ -196,7 +204,7 @@ const BlogPage = () => {
                             <i className="far fa-calendar"></i>
                             {dateString}
                         </li>
-                        <li style={{display: "block ruby"}}>
+                        <li style={{display: "contents"}}>
                             <i className="fa fa-tags"></i>{" "}
                             <Select
                                 options={tagOptions}
@@ -213,9 +221,9 @@ const BlogPage = () => {
                 </div>
             </div>
             <div className="blog-content">
-                <WriteBlog />
+                <WriteBlog md_content={md_content} md_preview={md_preview}/>
             </div>
-            <button className="btn btn-primary">Submit blog for review</button>
+            <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
         </div>
     );
 };

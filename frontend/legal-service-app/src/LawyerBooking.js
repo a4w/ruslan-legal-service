@@ -63,7 +63,7 @@ const LawyerCard = ({lawyer}) => {
                         </h4>
                         <div className="rating">
                             <StarRatings
-                                rating={parseFloat(lawyer.ratings_average)}
+                                rating={lawyer.ratings_average}
                                 starRatedColor="gold"
                                 starDimension="20px"
                                 starSpacing="0px"
@@ -76,7 +76,7 @@ const LawyerCard = ({lawyer}) => {
                             </span>
                         </div>
                         <p className="text-muted mb-0">
-                            <i className="fas fa-map-marker-alt"></i> `${lawyer.account.city}, ${lawyer.account.country}`
+                            <i className="fas fa-map-marker-alt"></i> {`${lawyer.account.city}, ${lawyer.account.country}`}
                         </p>
                     </div>
                 </div>

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Client;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
+use Google_Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -20,6 +23,7 @@ class AuthController extends Controller
     public function login(JSONRequest $request)
     {
         $credentials = $request->only('email', 'password');
+        $credentials['email'] = Str::lower($credentials['email']);
         if (!$token = auth()->attempt($credentials)) {
             return RespondJSON::unauthorized();
         }
@@ -85,5 +89,32 @@ class AuthController extends Controller
             ];
         }
         return RespondJSON::with($response);
+    }
+
+    public function googleLogin(JSONRequest $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'id_token' => ['required']
+        ]);
+
+        $email = $request->get('email');
+        $client = new Google_Client(['client_id' => config('app.google_client_id')]);  // Specify the CLIENT_ID of the app that accesses the backend
+        $payload = $client->verifyIdToken($request->get('id_token'));
+        if ($payload) {
+            // Check if registered
+            $user = Account::where('email', $email)->find();
+            if ($user === null) {
+                // Create account
+                $account = Account::create($request->only(['name', 'surname', 'email']));
+                $account->client()->save(Client::make());
+                return $this->respondWithToken(Auth::login($account));
+            } else {
+                // login
+                return $this->respondWithToken(Auth::login($user));
+            }
+        } else {
+            return RespondJSON::unauthorized();
+        }
     }
 }

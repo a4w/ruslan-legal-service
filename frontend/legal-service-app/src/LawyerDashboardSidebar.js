@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Nav from "react-bootstrap/Nav";
-import { NavTab } from "react-router-tabs";
+import {NavTab} from "react-router-tabs";
 import StarRatings from "react-star-ratings";
-import { request } from "./Axios";
-import { LogOut } from "./Axios";
+import {request} from "./Axios";
+import {LogOut} from "./Axios";
 
 const LawyerDashboardSidebar = () => {
     const [rating, setRating] = useState(0);
@@ -102,7 +102,7 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/logout" onClick={LogOut}>
+                                <NavTab exact to="/dashboard/logout" onClick={LogOut}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
                                 </NavTab>

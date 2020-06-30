@@ -1,35 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import ModalPopUp from "./Modal";
+import History from "./History";
 
 const Footer = () => {
-    const Register = () => {
-        const [modalShow, setModalShow] = useState(false);
-        return (
-            <>
-                <a onClick={() => setModalShow(true)}>Register</a>
-                <ModalPopUp
-                    register={true}
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
-            </>
-        );
-    };
-    const Login = () => {
-        const [modalShow, setModalShow] = useState(false);
-        return (
-            <>
-                <a onClick={() => setModalShow(true)}>Login</a>
-                <ModalPopUp
-                    register={false}
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                />
-            </>
-        );
-    };
     return (
         <footer className="footer">
             <div className="footer-top">
@@ -86,10 +60,18 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Login />
+                                        <Link
+                                            to={`${History.location.pathname}/login`}
+                                        >
+                                            Client Login
+                                        </Link>
                                     </li>
                                     <li>
-                                        <Register />
+                                        <Link
+                                            to={`${History.location.pathname}/register`}
+                                        >
+                                            Client Register
+                                        </Link>
                                     </li>
                                     <li>
                                         <Link to="/book">Booking</Link>
@@ -117,10 +99,18 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Login />
+                                        <Link
+                                            to={`${History.location.pathname}/login`}
+                                        >
+                                            Lawyer Login
+                                        </Link>
                                     </li>
                                     <li>
-                                        <Register />
+                                        <Link
+                                            to={`${History.location.pathname}/register`}
+                                        >
+                                            Lawyer Register
+                                        </Link>
                                     </li>
                                     <li>
                                         <Link to="/dashboard">

@@ -20,17 +20,20 @@ class Lawyer extends Model
     ];
 
     public $timestamps = false;
-    protected $appends = array('discount_ends_in', 'discounted_price_per_slot');
+    protected $appends = array('discount_ends_in', 'discounted_price_per_hour');
 
     public function getDiscountEndsInAttribute()
     {
         $end_date = $this->discount_end;
+        if ($end_date === null) {
+            return null;
+        }
         return $end_date->gt(now()) ? $end_date->diffInMilliseconds(now()) : 0;
     }
 
-    public function getDiscountedPricePerSlotAttribute()
+    public function getDiscountedPricePerHourAttribute()
     {
-        $original_price = $this->price_per_slot;
+        $original_price = $this->price_per_hour;
         $discounted_price = $original_price;
         if (Carbon::now()->lte($this->discount_end)) {
             if ($this->is_percent_discount) {

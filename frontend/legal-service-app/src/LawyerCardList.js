@@ -5,6 +5,7 @@ import History from "./History";
 import {Link} from "react-router-dom";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
+    console.log(lawyers);
     if (lawyers)
         return lawyers.map((lawyer) => (
             <LawyerCard key={lawyer.id} setPopUp={setPopUp} lawyer={lawyer} />
@@ -37,7 +38,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             </p>
                             <div className="rating">
                                 <StarRatings
-                                    rating={lawyer.ratings_average}
+                                    rating={parseFloat(lawyer.ratings_average)}
                                     starRatedColor="gold"
                                     starDimension="20px"
                                     starSpacing="0px"
@@ -63,9 +64,11 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                         <div className="session-infos">
                             <ul>
                                 <Discount
-                                    secsTillEnd={lawyer.discount_ends_in}
-                                    cost={lawyer.price_per_slot}
-                                    costAfterDiscount={lawyer.discounted_price_per_slot}
+                                    secsTillEnd={new Date(lawyer.discount_end)}
+                                    cost={lawyer.price_per_hour}
+                                    costAfterDiscount={lawyer.discounted_price_per_hour}
+                                    discount={lawyer.discount}
+                                    isPercent={lawyer.is_percent_discount}
                                 />
                             </ul>
                         </div>
@@ -100,7 +103,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
 const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) => {
     return (
         <Countdown
-            date={Date.now() + secsTillEnd}
+            date={secsTillEnd}
             renderer={(props) =>
                 LawyerCountDownRenderer({
                     ...props,
@@ -135,11 +138,11 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <i className="fa fa-check-circle" aria-hidden="true"></i>
                     <span className="text-md text-success">
                         {isPercent ?
-                            `There is a ${discountValue}% discount` :
-                            `There is a ${discountValue} discount`}
+                            `${discountValue}% discount` :
+                            `${discountValue} GBP discount`}
                     </span>
                 </li>
                 <li>

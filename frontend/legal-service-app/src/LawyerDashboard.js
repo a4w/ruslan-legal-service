@@ -2,11 +2,12 @@ import React from "react";
 import LawyerDashboardSidebar from "./LawyerDashboardSidebar";
 import StickyBox from "react-sticky-box";
 import LawyerDashboardTabs from "./LawyerDashboardTabs";
-import { BrowserRouter } from "react-router-dom";
+import {Router} from "react-router-dom";
+import History from "./History";
 
 const LawyerDashboard = () => {
     return (
-        <BrowserRouter>
+        <Router history={History}>
             <div className="row">
                 <div className="col-md-5 col-lg-4 col-xl-3 mt-4 mb-4">
                     <StickyBox offsetTop={20} offsetBottom={20}>
@@ -17,7 +18,7 @@ const LawyerDashboard = () => {
                     <LawyerDashboardTabs />
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     );
 };
 export default LawyerDashboard;

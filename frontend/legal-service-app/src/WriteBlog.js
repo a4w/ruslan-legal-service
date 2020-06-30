@@ -3,7 +3,9 @@ import Stackedit from "stackedit-js";
 import {FaPencilAlt} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
 import Select from "react-dropdown-select";
-import {request} from "./Axios"
+import {request} from "./Axios";
+import useValidation from "./useValidation";
+import { blogTitleValidations } from "./Validations";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -117,6 +119,7 @@ const BlogPage = () => {
     const [title, setTitle] = useState("");
     const [tagOptions, setTagOptions] = useState([]);
     const [tags, selectedTags] = useState([]);
+    const [error, , runValidation] = useValidation(blogTitleValidations);
     const md_preview = useRef(null);
     const md_content = useRef(null);
 
@@ -157,10 +160,13 @@ const BlogPage = () => {
         });
     }, []);
     const Submit = ()=>{
-        console.log(md_content.current.value);
-        console.log(md_content.current.innerHTML);
-        console.log(tags);
-        console.log(title);
+        runValidation({title}).then((hasErrors, _) => {
+            // console.log(md_content.current.value);
+            // console.log(md_content.current.innerHTML);
+            // console.log(tags);
+            console.log(title);
+            console.log("error", error);
+        });
         
     }
     return (
@@ -173,14 +179,15 @@ const BlogPage = () => {
                     margin: 'auto'
                 }} />
             </div>
-            <h3 className="blog-title">
+            <div className="blog-title" style={{padding: "3px"}}>
                 <ErrorMessageInput
                     placeholder="Title.."
+                    errors={error.title}
                     type="text"
                     OnChangeHandler={({target: {value}}) => setTitle(value)}
                     value={title}
                 />
-            </h3>
+            </div>
             <div className="blog-info clearfix">
                 <div className="post-left">
                     <ul>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import moment from "moment";
-import "./Agenda.css";
+import "./LawyerAgenda.css";
 
-const Calendar = () => {
+const LawyerAgenda = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const nextMonth = () => {
@@ -121,4 +121,4 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate}) => {
     return <div className="body">{rows}</div>;
 };
 
-export default Calendar;
+export default LawyerAgenda;

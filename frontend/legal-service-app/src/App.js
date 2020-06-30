@@ -31,7 +31,7 @@ import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
-import Calendar from "./Calendar";
+import LawyerAgenda from "./LawyerAgenda";
 
 const cookie = new Cookies();
 
@@ -115,7 +115,7 @@ function App() {
                         <Redirect replace to="/" />
                     </Route>
                     <Route path="/calendar">
-                        <Calendar/>
+                        <LawyerAgenda/>
                     </Route>
                 </Switch>
                 <Route component={Footer} />

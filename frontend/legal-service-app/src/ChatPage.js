@@ -25,6 +25,7 @@ const ChatPage = () => {
     const [messages, setMessages] = useState([]);
     const [hideChatList, setHide] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
+    const [myId, setMyId] = useState(null);
     const Chats = () => {
         if (window.innerWidth >= 991) setHide(false);
         else setHide(true)
@@ -44,10 +45,13 @@ const ChatPage = () => {
             url: '/chat/all',
             method: 'GET'
         }).then((response) => {
+            const me = response.me;
+            setMyId(me.id);
             const chats = response.chats.map((chat, _) => {
+                console.log(chat.participants);
                 return {
                     id: chat.id,
-                    other_name: chat.participants[0].name
+                    other_name: chat.participants[0].id == me.id ? chat.participants[1].name : chat.participants[0].name
                 };
             });
             setChats(chats);
@@ -189,7 +193,7 @@ const ChatPage = () => {
                         </div>
                     </div>
                 </div>
-                <MessagesList messages={messages} />
+                <MessagesList messages={messages} user_id={myId} />
                 <div className="chat-footer">
                     <div className="input-group">
                         <div className="input-group-prepend">

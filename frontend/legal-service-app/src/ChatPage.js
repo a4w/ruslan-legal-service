@@ -51,6 +51,9 @@ const ChatPage = () => {
                 };
             });
             setChats(chats);
+            if (chats.length > 0) {
+                setSelectedChat(0);
+            }
         }).catch((error) => {
             console.log(error);
         });

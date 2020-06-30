@@ -11,9 +11,11 @@ use App\Helpers\RespondJSON;
 use App\LawyerType;
 use App\PracticeArea;
 use Exception;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class LawyerController extends Controller
 {
@@ -34,8 +36,67 @@ class LawyerController extends Controller
         // Sorting
         $order_by = $request->get('order', 'price');
 
-        // TODO: This can be cached (and should be)
+        $sort = ['price_per_hour', 'asc'];
+        switch ($order_by) {
+            default:
+            case 'price':
+                $sort = ['price_per_hour', 'asc'];
+                break;
+            case 'ratings':
+                $sort = ['ratings_average', 'desc'];
+                break;
+            case 'popular':
+                $sort = ['ratings_count', 'desc'];
+                break;
+        }
+
+        $dat_table = DB::table('lawyers as ld')->where('ld.schedule', '<>', null)
+            ->selectRaw('ld.id')
+            ->selectRaw('COUNT(`ratings`.`id`) AS `ratings_count`')
+            ->selectRaw('AVG(IFNULL(`ratings`.`rating`,0)) AS `ratings_average`')
+            ->leftJoin('appointments', function (JoinClause $join) {
+                $join->on('ld.id', '=', 'appointments.lawyer_id');
+            })
+            ->leftJoin('ratings', function (JoinClause $join) {
+                $join->on('appointments.id', 'ratings.appointment_id');
+            })
+            ->groupBy(['ld.id'])
+            ->toSql();
+
         $lawyers = Lawyer::where('schedule', '<>', null)
+            ->join(DB::raw('(' . $dat_table . ') ld'), function (JoinClause $join) {
+                $join->on('ld.id', '=', 'lawyers.id');
+            })
+            ->whereHas('account', function ($query) use ($location) {
+                if ($location === null) {
+                    return $query;
+                }
+                return $query->where('city', $location);
+            })
+            ->whereHas('practice_areas', function ($query) use ($practice_areas) {
+                if ($practice_areas === null) {
+                    return $query;
+                }
+                return $query->whereIN('id', $practice_areas);
+            })
+
+            ->orderBy($sort[0], $sort[1])
+            ->limit($length)
+            ->skip($offset)
+            ->get();
+        if ($available_on !== null) {
+            $lawyers = $lawyers->filter(function ($item) use ($available_on) {
+                // Check if available on selected date
+                $day = new Carbon($available_on);
+                $dayIdx = $day->dayOfWeek;
+                $schedule = $item->schedule;
+                $slots = $schedule[$dayIdx]['slots'];
+                return count($slots) > 0;
+            });
+        }
+
+        // TODO: This can be cached (and should be)
+        /*$lawyers = Lawyer::where('schedule', '<>', null)
             ->whereHas('account', function ($query) use ($location) {
                 if ($location === null) {
                     return $query;
@@ -80,8 +141,7 @@ class LawyerController extends Controller
                         return -$query->ratings_count;
                         break;
                 }
-            })->values();
-
+            })->values();*/
         /*foreach ($lawyers as &$lawyer) {
             // Show only average rating
             $ratings = collect($lawyer['ratings']);
@@ -138,6 +198,7 @@ class LawyerController extends Controller
                 $is_upcoming = true;
                 $current->setHour($start_time->hour);
                 $current->setMinute($start_time->minute);
+
                 if ($current->lt(now())) {
                     $is_upcoming = false;
                 }

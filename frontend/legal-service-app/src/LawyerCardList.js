@@ -38,7 +38,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             </p>
                             <div className="rating">
                                 <StarRatings
-                                    rating={lawyer.ratings_average}
+                                    rating={parseFloat(lawyer.ratings_average)}
                                     starRatedColor="gold"
                                     starDimension="20px"
                                     starSpacing="0px"
@@ -64,7 +64,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                         <div className="session-infos">
                             <ul>
                                 <Discount
-                                    secsTillEnd={lawyer.discount_ends_in}
+                                    secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     discount={lawyer.discount}
@@ -103,7 +103,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
 const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) => {
     return (
         <Countdown
-            date={Date.now() + secsTillEnd}
+            date={secsTillEnd}
             renderer={(props) =>
                 LawyerCountDownRenderer({
                     ...props,
@@ -138,7 +138,7 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <i className="fa fa-check-circle" aria-hidden="true"></i>
                     <span className="text-md text-success">
                         {isPercent ?
                             `${discountValue}% discount` :

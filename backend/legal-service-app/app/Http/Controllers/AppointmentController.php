@@ -75,7 +75,6 @@ class AppointmentController extends Controller
 
         // Create payment intent
         // TODO Account for commission
-        Stripe::setApiKey(config('app.stripe_api_key'));
         try {
             $paymentIntent = PaymentIntent::create([
                 'amount' => $total_price * 100, // Stripe uses this stupid way to avoid rounding errors

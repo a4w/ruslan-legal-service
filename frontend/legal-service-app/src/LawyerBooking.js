@@ -8,7 +8,6 @@ const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
     request({ url: `/lawyer/${LawyerId}`, method: "GET" })
         .then((data) => {
-            console.log(data);
             setLawyer(data.lawyer);
         })
         .catch((err) => {});
@@ -17,8 +16,8 @@ const LawyerBooking = ({LawyerId}) => {
             <div className="container">
                 <div className="row">
                     <div className="col-12">
-                        <LawyerCard lawyer={lawyer} />
-                        <TodayIs />
+                        {/* <LawyerCard lawyer={lawyer} />
+                        <TodayIs /> */}
                         <AppointmentTimeForm lawyer_id={LawyerId} />
                     </div>
                 </div>
@@ -46,7 +45,7 @@ const TodayIs = () => {
         </div>
     );
 };
-const LawyerCard = ({lawyer}) => {
+const LawyerCard = ({lawyer}) => {    
     return ( lawyer &&
         <div className="card">
             <div className="card-body">
@@ -63,7 +62,7 @@ const LawyerCard = ({lawyer}) => {
                         </h4>
                         <div className="rating">
                             <StarRatings
-                                rating={lawyer.ratings_average}
+                                rating={parseFloat(lawyer.ratings_average)}
                                 starRatedColor="gold"
                                 starDimension="20px"
                                 starSpacing="0px"

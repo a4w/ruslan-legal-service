@@ -1,19 +1,24 @@
 import React, {useState, useEffect} from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
-import {Router, Switch, Route} from "react-router-dom";
+import {Router, Switch, Route, withRouter, Link} from "react-router-dom";
 import BlogDetails from "./BlogDetails";
 import History from "./History";
 import {request} from "./Axios";
+import queryString from "query-string"
 
-const Blogs = () => {
-    const test = [];    
+const Blogs = (props) => {
+    const test = [];
     for (let i = 0; i < 10; i++) {
         test.push({id: i});
     }
     const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        request({ url: "/blogs/all", method: "GET" })
+        let qs = '';
+        if (props.match.params.tag) {
+            qs = `?tag=${props.match.params.tag}`;
+        }
+        request({url: "/blogs/all" + qs, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -26,14 +31,7 @@ const Blogs = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8 col-md-12">
-                            <Switch>
-                                <Route exact path="/blogs">
-                                    {blogs && <BlogList blogs={blogs} />}
-                                </Route>
-                                <Route path="/blogs/:blogId">
-                                    <BlogDetails />
-                                </Route>
-                            </Switch>
+                            {blogs && <BlogList blogs={blogs} />}
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
@@ -146,12 +144,15 @@ const Catagories = ({cats}) => {
 
 const TagsList = () => {
     const [tags, setTags] = useState();
-    request({ url: "/lawyer/practice-areas", method: "GET" })
-        .then((data) => {
-            console.log(data);
-            setTags(data.areas);
-        })
-        .catch(() => {});
+    useEffect(() => {
+        request({url: "/lawyer/practice-areas", method: "GET"})
+            .then((data) => {
+                console.log(data);
+                setTags(data.areas);
+            })
+            .catch(() => {});
+
+    }, []);
     return (
         <div className="card tags-widget">
             <div className="card-header">
@@ -161,9 +162,9 @@ const TagsList = () => {
                 <ul className="tags">
                     {tags && tags.map((tag) => (
                         <li key={tag.id}>
-                            <a href="//" className="tag">
+                            <Link to={`/blogs/${tag.id}`} className="tag">
                                 {tag.area}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
@@ -171,4 +172,4 @@ const TagsList = () => {
         </div>
     );
 };
-export default Blogs;
+export default withRouter(Blogs);

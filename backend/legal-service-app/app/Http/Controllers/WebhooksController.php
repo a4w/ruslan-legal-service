@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 use App\Http\Requests\JSONRequest;
+use Illuminate\Support\Facades\Log;
 
 class WebhooksController extends Controller
 {
     public function paymentIntentSuccessListener(JSONRequest $request)
     {
         $intent_id = $request->input('data.object.id');
-        $amount = $request->input('data.object.amount');
+        $amount = (int) $request->input('data.object.amount');
         $currency = $request->input('data.object.currency');
         $status = $request->input('data.object.status');
         $type = $request->input('type');
         if ($type !== 'payment_intent.succeeded' || $currency !== 'gbp' || $status !== 'succeeded') {
+            Log::info('Wrong webhook message');
             return;
         }
         // Find appointments associated with this intent
@@ -25,11 +27,13 @@ class WebhooksController extends Controller
             $total += $appointment->price;
         }
         $total *= 100;
-        if ($amount !== $total) {
+        $total = (int) $total;
+        if ($amount != $total) {
+            Log::info('Wrong webhook total');
             return;
         }
         // Now all is good, update appointment status
-        foreach ($appointment as $appointment) {
+        foreach ($appointments as $appointment) {
             $appointment->status = 'UPCOMING';
             $appointment->save();
         }

@@ -8,6 +8,8 @@ use App\Http\Requests\JSONRequest;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -121,5 +123,18 @@ class AccountController extends Controller
         $user = Auth::user();
         $notifications = $user->unreadNotifications;
         return RespondJSON::success(['notifications' => $notifications]);
+    }
+
+    public function markReadNotification($id)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        /** @var DatabaseNotificationCollection */
+        $notifications = $user->unreadNotifications;
+        $notifications->map(function ($notification) use ($id) {
+            if ($notification->id === $id) {
+                $notification->markAsRead();
+            }
+        });
     }
 }

@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(new DeleteOldHeldAppointments)->everyFifteenMinutes();
         // End appointments
         $schedule->call(new UpdateFinishedAppointments)->everyMinute();
+        // TODO a call to notify users before appointments by 5 minutes
     }
 
     /**

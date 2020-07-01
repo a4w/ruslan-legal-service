@@ -163,6 +163,7 @@ const BlogPage = () => {
     }, []);
     const Submit = async (e) => {
         e.preventDefault();
+        console.log(coverData);
         runValidation({ title: title, tags: tags }).then(
             async (hasErrors, _) => {
                 if (!hasErrors) {
@@ -175,8 +176,23 @@ const BlogPage = () => {
                             tag_id: tags.value,
                         },
                     })
-                        .then(() => {
-                            toast.success("Submitted successfuly");
+                        .then((data) => {
+                            console.log(data);
+                            const id = data.blog.id;
+                            if (coverData.coverFile !== "")
+                                request({
+                                    url: `/blogs/${id}/upload-cover`,
+                                    method: "POST",
+                                    data: { cover_photo: coverData.coverFile },
+                                })
+                                    .then(() => {
+                                        toast.success("Submitted successfuly");
+                                    })
+                                    .catch(() => {
+                                        toast.error("An error has occurred");
+                                    });
+                            else
+                                toast.success("Submitted successfuly");
                         })
                         .catch(() => {
                             toast.error("An error has occurred");

@@ -22,8 +22,8 @@ const Blogs = () => {
     }, []);
     return (
         <Router history={History}>
-            <div class="content">
-                <div class="container">
+            <div className="content">
+                <div className="container">
                     <div className="row">
                         <div className="col-lg-8 col-md-12">
                             <Switch>
@@ -144,19 +144,14 @@ const Catagories = ({cats}) => {
     );
 };
 
-const TagsList = ({tags}) => {
-    tags = [
-        "Tag 1",
-        "Tag 2",
-        "Tag 3",
-        "Tag 4",
-        "Tag 5",
-        "Tag 6",
-        "Tag 7",
-        "Tag 8",
-        "Tag 9",
-        "Tag n",
-    ];
+const TagsList = () => {
+    const [tags, setTags] = useState();
+    request({ url: "/lawyer/practice-areas", method: "GET" })
+        .then((data) => {
+            console.log(data);
+            setTags(data.areas);
+        })
+        .catch(() => {});
     return (
         <div className="card tags-widget">
             <div className="card-header">
@@ -164,10 +159,10 @@ const TagsList = ({tags}) => {
             </div>
             <div className="card-body">
                 <ul className="tags">
-                    {tags.map((tag) => (
-                        <li key={tag}>
+                    {tags && tags.map((tag) => (
+                        <li key={tag.id}>
                             <a href="//" className="tag">
-                                {tag}
+                                {tag.area}
                             </a>
                         </li>
                     ))}

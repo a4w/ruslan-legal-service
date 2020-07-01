@@ -108,57 +108,65 @@ const NavBar = () => {
                         <Link
                             className="nav-link header-login"
                             style={{
-                                visibility: logged_in ? "hidden" : "visible",
+                                display: logged_in ? "none" : "",
                             }}
                             to={`${History.location.pathname}/login`}
                         >
                             login / Signup{" "}
                         </Link>
                     </li>
-                    <li
-                        className={`nav-item dropdown noti-dropdown ${
-                            notificationToggle ? "show" : ""
-                        }`}
-                    >
-                        <a
-                            href="#"
-                            className="dropdown-toggle nav-link"
-                            onClick={() =>
-                                setNotificationToggle(!notificationToggle)
-                            }
-                            style={{fontSize: "1.9rem",lineHeight: "56px"}}
-                        >
-                            <MdNotificationsActive />{" "}
-                            {/* <i class="fa fa-bell"></i> */}
-                            <span className="badge badge-pill">3</span>
-                        </a>
-                        <div
-                            className={`dropdown-menu notifications ${
+                    {logged_in && (
+                        <li
+                            className={`nav-item dropdown noti-dropdown ${
                                 notificationToggle ? "show" : ""
                             }`}
-                            style={{position: "absolute", left:"-296px"}}
                         >
-                            <div className="topnav-dropdown-header">
-                                <span className="notification-title">
-                                    Notifications
-                                </span>
-                                <a
-                                    href="javascript:void(0)"
-                                    className="clear-noti"
-                                >
-                                    {" "}
-                                    Clear All{" "}
-                                </a>
-                            </div>
+                            <a
+                                href="#"
+                                className="dropdown-toggle nav-link"
+                                onClick={() =>
+                                    setNotificationToggle(!notificationToggle)
+                                }
+                                style={{
+                                    fontSize: "1.9rem",
+                                    lineHeight: "56px",
+                                }}
+                            >
+                                <MdNotificationsActive />{" "}
+                                {/* <i class="fa fa-bell"></i> */}
+                                <span className="badge badge-pill">3</span>
+                            </a>
+                            <div
+                                className={`dropdown-menu notifications ${
+                                    notificationToggle ? "show" : ""
+                                }`}
+                                style={{ position: "absolute", left: "-296px" }}
+                            >
+                                <div className="topnav-dropdown-header">
+                                    <span className="notification-title">
+                                        Notifications
+                                    </span>
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="clear-noti"
+                                    >
+                                        {" "}
+                                        Clear All{" "}
+                                    </a>
+                                </div>
 
-                            <div className="noti-content" style={{display:""}}>
-                                <Notifications />
+                                <div
+                                    className="noti-content"
+                                    style={{ display: "" }}
+                                >
+                                    <Notifications />
+                                </div>
+                                <div className="topnav-dropdown-footer">
+                                    <a href="#">View all Notifications</a>
+                                </div>
                             </div>
-                            <div className="topnav-dropdown-footer">
-                                <a href="#">View all Notifications</a>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+                    )}
                     <li
                         className={`nav-item dropdown has-arrow logged-item ${
                             menuToggle ? "show" : ""

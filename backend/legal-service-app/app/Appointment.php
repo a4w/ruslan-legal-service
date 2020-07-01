@@ -17,6 +17,8 @@ class Appointment extends Model
         'appointment_time' => 'datetime',
     ];
 
+    protected $appends = ['is_cancellable', 'can_be_started'];
+
     public function lawyer()
     {
         return $this->belongsTo(Lawyer::class);
@@ -54,5 +56,25 @@ class Appointment extends Model
         /** @var Carbon */
         $appointment_time = $this->appointment_time;
         return now()->lt($appointment_time->subMinutes($CANCEL_ALLOWED_MINUTES));
+    }
+
+    public function getCanBeStartedAttribute()
+    {
+        if ($this->status !== 'UPCOMING') {
+            return false;
+        }
+        // Check time
+        $LOOSE_MINUTES = 1; // Allow joining minutes early
+        /** @var Carbon */
+        $time = $this->appointment_time;
+        if (now()->lt($time->subMinute($LOOSE_MINUTES))) {
+            // Time has not came
+            return false;
+        }
+        if (now()->gt($time->addMinutes($this->duration))) {
+            // Time has passed
+            return false;
+        }
+        return true;
     }
 }

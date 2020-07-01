@@ -13,14 +13,21 @@ use Illuminate\Support\Facades\Storage;
 
 class BlogsController extends Controller
 {
-    public function getBlogs()
+    public function getBlogs(Request $request)
     {
-        $blogs = Blog::where('status', 'PUBLISHED')->get();
+        $tag = $request->get('tag');
+        $blogs = Blog::where('status', 'PUBLISHED')
+            ->when($tag, function ($query, $tag) {
+                $query->whereHas('tag', function ($query) use ($tag) {
+                    $query->where('id', $tag);
+                });
+            })->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
 
     public function getLawyerBlogs(Lawyer $lawyer)
     {
+
         $blogs = $lawyer->blogs()->where('status', 'PUBLISHED')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }

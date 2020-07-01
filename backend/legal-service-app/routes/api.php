@@ -28,7 +28,7 @@ Route::prefix('account')->group(function () {
     Route::post('update-address', 'AccountController@saveAddress')->middleware('auth:api');
 
     Route::get('notifications', 'AccountController@getNotifications')->middleware('auth:api');
-    Route::get('{notification}', 'AccountController@markReadNotification')->middleware('auth:api');
+    Route::get('notification/{notification}', 'AccountController@markReadNotification')->middleware('auth:api');
     Route::get('mark-read-notifications', 'AccountController@markAllAsRead')->middleware('auth:api');
 });
 

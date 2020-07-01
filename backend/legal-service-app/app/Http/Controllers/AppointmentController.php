@@ -100,15 +100,7 @@ class AppointmentController extends Controller
         if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
             return RespondJSON::forbidden();
         }
-        // Check time
-        $LOOSE_MINUTES = 1; // Allow joining minutes early
-        /** @var Carbon */
-        $time = $appointment->appointment_time;
-        if (now()->lt($time->subMinute($LOOSE_MINUTES))) {
-            // Time has not came
-            return RespondJSON::conflict();
-        }
-        if (now()->gt($time->addMinutes($appointment->duration))) {
+        if (!$appointment->can_be_started) {
             // Time has passed
             return RespondJSON::conflict();
         }

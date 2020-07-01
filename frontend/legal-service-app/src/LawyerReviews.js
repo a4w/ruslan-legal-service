@@ -1,8 +1,9 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
+import moment from "moment";
 
-const LawyerReviews = () => {
-    const comments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+const LawyerReviews = ({lawyer}) => {
+    const comments = lawyer.ratings;
 
     return <ReviewList comments={comments} />;
 };
@@ -11,16 +12,18 @@ const ReviewList = ({ comments }) => {
     return (
         <div className="lawyer-review review-listing">
             <ul className="comments-list">
-                {comments.map((comment) => (
+                {comments && comments.map((comment) => (
                     <li key={comment.id}>
-                        <Comment />
+                        <Comment comment={comment} />
                     </li>
                 ))}
             </ul>
         </div>
     );
 };
-const Comment = () => {
+const Comment = ({comment}) => {
+    const date = moment(comment.created_at).format("MMMM Do YYYY, hh:mm a"); 
+    
     return (
         <div className="comment">
             {/* <img
@@ -32,10 +35,10 @@ const Comment = () => {
             <div className="comment-body" style={{ width: "100%" }}>
                 <div className="meta-data">
                     <span className="comment-author">Clients name</span>
-                    <span className="comment-date">Review Date</span>
+                    <span className="comment-date">{date}</span>
                     <div className="review-count rating">
                         <StarRatings
-                            rating={4}
+                            rating={comment.rating}
                             starRatedColor="gold"
                             starDimension="20px"
                             starSpacing="0px"
@@ -44,10 +47,18 @@ const Comment = () => {
                         />
                     </div>
                 </div>
-                <p className="recommended">
-                    <i className="far fa-thumbs-up"></i> I recommend this Lawyer
-                </p>
-                <p className="comment-content">Coments...</p>
+                {comment.rating >= 3 ? (
+                    <p className="recommended">
+                        <i className="far fa-thumbs-up"></i> I recommend this
+                        Lawyer
+                    </p>
+                ) : (
+                    <p className="not-recommended">
+                        <i className="far fa-thumbs-down"></i> I don't recommend
+                        this Lawyer
+                    </p>
+                )}
+                <p className="comment-content">{comment.comment}</p>
             </div>
         </div>
     );

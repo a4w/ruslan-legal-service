@@ -14,29 +14,10 @@ import History from "./History";
 import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
+import BlogList from "./BlogList";
 
 const LawyerProfile = ({match}) => {
-    const initLawyer = {
-        account: {id: 2, name: "", surname: ""},
-        accreditations: [],
-        biography: "",
-        course: "",
-        discount: "",
-        discount_end: "",
-        graduation_year: "",
-        institution: "",
-        is_percent_discount: "",
-        lawyer_type: "",
-        practice_areas: [],
-        price_per_slot: "",
-        ratings: [],
-        regulator: "",
-        slot_length: 3,
-        years_licenced: "",
-        discount_ends_in: 0,
-        discounted_price_per_slot: 0
-    };
-    const [lawyer, setLawyer] = useState(initLawyer);
+    const [lawyer, setLawyer] = useState(null);
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
         request({url: `lawyer/${lawyerID}`, method: "GET"})
@@ -51,10 +32,12 @@ const LawyerProfile = ({match}) => {
     return (
         <Router history={History}>
             <div className="content">
-                <div className="container">
-                    <ProfileCard lawyer={lawyer} match={match} />
-                    <Details lawyer={lawyer} match={match} />
-                </div>
+                {lawyer && (
+                    <div className="container">
+                        <ProfileCard lawyer={lawyer} match={match} />
+                        <Details lawyer={lawyer} match={match} />
+                    </div>
+                )}
             </div>
         </Router>
     );
@@ -77,10 +60,7 @@ const ProfileCard = ({lawyer}) => {
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
-                                {" "}
-                                {lawyer.account.name +
-                                    " " +
-                                    lawyer.account.surname}
+                                {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
                             <p className="lawyer-speciality">
                                 {lawyer.practice_areas &&
@@ -102,7 +82,7 @@ const ProfileCard = ({lawyer}) => {
                                 />
                                 &nbsp;
                                 <span className="d-inline-block text-xs average-rating">
-                                    ({lawyer.ratings_count})
+                                    ({lawyer.ratings.length})
                                 </span>
                             </div>
                             <div className="session-services">
@@ -122,12 +102,12 @@ const ProfileCard = ({lawyer}) => {
                                 </li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
-                                    {lawyer.city, lawyer.country}
+                                    {`${lawyer.account.city}, ${lawyer.account.country}`}
                                 </li>
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
-                                    cost={lawyer.price_per_slot}
-                                    costAfterDiscount={lawyer.discounted_price_per_slot}
+                                    cost={lawyer.price_per_hour}
+                                    costAfterDiscount={lawyer.discounted_price_per_hour}
                                     isPercent={lawyer.is_percent_discount}
                                     discount={lawyer.discount}
                                 />
@@ -155,7 +135,15 @@ const ProfileCard = ({lawyer}) => {
 const Details = ({lawyer, match}) => {
     const path = match.url;
     console.log(match);
-
+    const [blogs, setBlogs] = useState(null);
+    useEffect(() => {
+        request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <div className="card">
             <div className="card-body pt-0">
@@ -175,6 +163,9 @@ const Details = ({lawyer, match}) => {
                         </Route>
                         <Route path={`${path}/hours`}>
                             <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
+                        </Route>
+                        <Route path={`${path}/blogs`}>
+                            {blogs && <BlogList blogs={blogs} />}
                         </Route>
                     </div>
                 </Switch>
@@ -197,6 +188,9 @@ const NavBar = ({match}) => {
                 </li>
                 <li className="nav-item">
                     <Link to={`${path}/hours`}>Business Hours</Link>
+                </li>
+                <li className="nav-item">
+                    <Link to={`${path}/blogs`}>Blogs</Link>
                 </li>
             </ul>
         </nav>

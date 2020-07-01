@@ -6,8 +6,8 @@ import ErrorMessageSelect from "./ErrorMessageSelect";
 import Select from "react-dropdown-select";
 import {request} from "./Axios";
 import useValidation from "./useValidation";
-import { blogTitleValidations } from "./Validations";
-import { toast } from "react-toastify";
+import {blogTitleValidations} from "./Validations";
+import {toast} from "react-toastify";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -163,8 +163,9 @@ const BlogPage = () => {
     }, []);
     const Submit = async (e) => {
         e.preventDefault();
-        runValidation({ title: title, tags: tags }).then(
+        runValidation({title: title, tags: tags}).then(
             async (hasErrors, _) => {
+                console.log(hasErrors, _);
                 if (!hasErrors) {
                     request({
                         url: "/blogs/add",
@@ -174,13 +175,26 @@ const BlogPage = () => {
                             body: md_content.current.value,
                             tag_id: tags.value,
                         },
-                    })
-                        .then(() => {
-                            toast.success("Submitted successfuly");
-                        })
-                        .catch(() => {
-                            toast.error("An error has occurred");
-                        });
+                    }).then((data) => {
+                        const id = data.blog.id;
+                        const formData = new FormData();
+                        formData.append('cover_photo', coverData.coverFile);
+                        if (coverData.coverFile !== "") {
+                            request({
+                                url: `/blogs/${id}/upload-cover`,
+                                method: "POST",
+                                data: formData
+                            }).then(() => {
+                                toast.success("Submitted successfully");
+                            }).catch(() => {
+                                toast.error("An error has occurred");
+                            });
+                        } else {
+                            toast.success("Submitted successfully");
+                        }
+                    }).catch(() => {
+                        toast.error("An error has occurred");
+                    });
                 }
             }
         );
@@ -250,7 +264,7 @@ const BlogPage = () => {
                 </div>
             </div>
             <div className="blog-content">
-                <WriteBlog md_content={md_content} md_preview={md_preview}/>
+                <WriteBlog md_content={md_content} md_preview={md_preview} />
             </div>
             <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
         </div>

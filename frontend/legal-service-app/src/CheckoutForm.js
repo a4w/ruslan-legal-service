@@ -6,6 +6,7 @@ import {
 } from "@stripe/react-stripe-js";
 import "./CheckoutForm.css"
 import {toast} from "react-toastify";
+import History from "./History";
 
 const CheckoutForm = ({client_secret}) => {
     const [succeeded, setSucceeded] = useState(false);
@@ -84,11 +85,7 @@ const CheckoutForm = ({client_secret}) => {
             )}
             {/* Show a success message upon completion */}
             <p className={succeeded ? "result-message" : "result-message hidden"}>
-                Payment succeeded, see the result in your
-                <a href={`https://dashboard.stripe.com/test/payments`}>
-                    {" "}
-                    Stripe dashboard.
-                </a> Refresh the page to pay again.
+                Payment succeeded, you will be redirected to your dashboard for an overview
             </p>
         </form>
     );

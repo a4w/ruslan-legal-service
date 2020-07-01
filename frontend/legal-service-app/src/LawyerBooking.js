@@ -14,6 +14,11 @@ const LawyerBooking = ({LawyerId}) => {
             .catch((err) => {});
 
     }, []);
+
+    const handleTimeSelection = ({client_secret}) => {
+
+    };
+
     return (
         <div className="content">
             <div className="container-fluid">

@@ -15,13 +15,13 @@ class BlogsController extends Controller
 {
     public function getBlogs()
     {
-        $blogs = Blog::all();
+        $blogs = Blog::where('status', 'PUBLISHED')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
 
     public function getLawyerBlogs(Lawyer $lawyer)
     {
-        $blogs = $lawyer->blogs;
+        $blogs = $lawyer->blogs()->where('status', 'PUBLISHED')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
 

@@ -33,8 +33,14 @@ import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
+import {Elements} from "@stripe/react-stripe-js"
+import {loadStripe} from "@stripe/stripe-js"
+import Config from "./Config";
+import CheckoutForm from "./CheckoutForm";
 
 const cookie = new Cookies();
+
+const stripe = loadStripe(Config.stripe_api_key);
 
 function App() {
     return (
@@ -114,6 +120,11 @@ function App() {
                     </Route>
                     <Route path="/calendar">
                         <LawyerAgenda />
+                    </Route>
+                    <Route path="/checkout">
+                        <Elements stripe={stripe}>
+                            <CheckoutForm />
+                        </Elements>
                     </Route>
                 </Switch>
                 <Route component={Footer} />

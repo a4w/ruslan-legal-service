@@ -1,9 +1,13 @@
 import React, {useRef, useState, useEffect} from "react";
 import Stackedit from "stackedit-js";
-import {FaPencilAlt} from "react-icons/fa";
+import {FaPencilAlt, FaDigitalTachograph} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
+import ErrorMessageSelect from "./ErrorMessageSelect";
 import Select from "react-dropdown-select";
-import {request} from "./Axios"
+import {request} from "./Axios";
+import useValidation from "./useValidation";
+import { blogTitleValidations } from "./Validations";
+import { toast } from "react-toastify";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -18,7 +22,7 @@ const ButtonStyles = {
     borderColor: "transparent",
 };
 
-const WriteBlog = () => {
+const WriteBlog = ({md_content, md_preview}) => {
     const md_initial = [
         `
 # This is a header
@@ -45,8 +49,6 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 
 `,
     ];
-    const md_preview = useRef(null);
-    const md_content = useRef(null);
 
     const loaderStackEdit = new Stackedit();
 
@@ -118,7 +120,11 @@ const BlogPage = () => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const [tagOptions, setTagOptions] = useState([]);
-    const [tags, selectedTags] = useState([]);
+    const [tags, selectedTags] = useState(null);
+    const [errors, , runValidation] = useValidation(blogTitleValidations);
+    const md_preview = useRef(null);
+    const md_content = useRef(null);
+
     const showSelectedCover = (e) => {
         const input = e.target;
         if (input.files && input.files[0]) {
@@ -155,24 +161,70 @@ const BlogPage = () => {
             console.log(error);
         });
     }, []);
+    const Submit = async (e) => {
+        e.preventDefault();
+        console.log(coverData);
+        runValidation({ title: title, tags: tags }).then(
+            async (hasErrors, _) => {
+                if (!hasErrors) {
+                    request({
+                        url: "/blogs/add",
+                        method: "POST",
+                        data: {
+                            title: title,
+                            body: md_content.current.value,
+                            tag_id: tags.value,
+                        },
+                    })
+                        .then((data) => {
+                            console.log(data);
+                            const id = data.blog.id;
+                            if (coverData.coverFile !== "")
+                                request({
+                                    url: `/blogs/${id}/upload-cover`,
+                                    method: "POST",
+                                    data: { cover_photo: coverData.coverFile },
+                                })
+                                    .then(() => {
+                                        toast.success("Submitted successfuly");
+                                    })
+                                    .catch(() => {
+                                        toast.error("An error has occurred");
+                                    });
+                            else
+                                toast.success("Submitted successfuly");
+                        })
+                        .catch(() => {
+                            toast.error("An error has occurred");
+                        });
+                }
+            }
+        );
+    };
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img alt="Cover" src={coverData.cover} className="img-fluid" style={{
-                    maxHeight: '200px',
-                    maxWidth: '100%',
-                    width: 'unset',
-                    margin: 'auto'
-                }} />
+                <img
+                    alt="Cover"
+                    src={coverData.cover}
+                    className="img-fluid"
+                    style={{
+                        maxHeight: "200px",
+                        maxWidth: "100%",
+                        width: "unset",
+                        margin: "auto",
+                    }}
+                />
             </div>
-            <h3 className="blog-title">
+            <div className="blog-title" style={{padding: "3px"}}>
                 <ErrorMessageInput
                     placeholder="Title.."
+                    errors={errors.title}
                     type="text"
                     OnChangeHandler={({target: {value}}) => setTitle(value)}
                     value={title}
                 />
-            </h3>
+            </div>
             <div className="blog-info clearfix">
                 <div className="post-left">
                     <ul>
@@ -196,14 +248,15 @@ const BlogPage = () => {
                             <i className="far fa-calendar"></i>
                             {dateString}
                         </li>
-                        <li style={{display: "block ruby"}}>
+                        <li style={{display: "contents"}}>
                             <i className="fa fa-tags"></i>{" "}
-                            <Select
+                            <ErrorMessageSelect
                                 options={tagOptions}
                                 searchable
-                                create={true}
-                                values={tags}
-                                onChange={(values) => {
+                                value={tags}
+                                errors={errors.tags}
+                                style
+                                OnChangeHandler={(values) => {
                                     console.log(values);
                                     selectedTags(values);
                                 }}
@@ -213,9 +266,9 @@ const BlogPage = () => {
                 </div>
             </div>
             <div className="blog-content">
-                <WriteBlog />
+                <WriteBlog md_content={md_content} md_preview={md_preview}/>
             </div>
-            <button className="btn btn-primary">Submit blog for review</button>
+            <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
         </div>
     );
 };

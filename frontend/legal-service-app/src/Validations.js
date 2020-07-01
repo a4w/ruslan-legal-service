@@ -169,3 +169,14 @@ export const scheduleSettingValidation = (data, field) => {
     });
 };
 
+export const blogTitleValidations = (data, field) => {
+    return validate("WriteBlog", () => {
+        vest.only(field);
+        test("title", "Please provide a blog title", () => {
+            enforce(data.title.toString()).isNotEmpty();
+        });
+        test("tags", "Please select a tag", () => {
+            enforce(data.tags !== null).isTruthy();
+        });
+    });
+};

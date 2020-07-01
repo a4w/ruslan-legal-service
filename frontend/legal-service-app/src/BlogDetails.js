@@ -2,15 +2,33 @@ import React, {useState, useEffect, useRef} from "react";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
+import {request} from "./Axios"
 
 const BlogDetails = ({match}) => {
-    const [lawyer, setLawyer] = useState(History.location.state.lawyer);
-    const [blog, setBlog] = useState(History.location.state.blog);
+    const [lawyer, setLawyer] = useState(null);
+    const [blog, setBlog] = useState(null);
+    console.log(match);
+    useEffect(() => {
+        request({
+            url: `/blogs/${match.params.blogId}`,
+            method: 'GET'
+        }).then(response => {
+            setLawyer(response.blog.lawyer);
+            setBlog(response.blog);
+        }).catch(error => {
+            console.error("Error occurred loading blog post");
+        });
+    }, []);
     return (
-        <div className="blog-view">
-            <Post blog={blog} lawyer={lawyer} />
-            <ShareSection />
-            <AboutAuthor lawyer={lawyer} />
+        <div className="row">
+            <div className="col-12">
+
+                <div className="blog-view">
+                    {blog && <Post blog={blog} lawyer={lawyer} />}
+                    <ShareSection />
+                    {lawyer && <AboutAuthor lawyer={lawyer} />}
+                </div>
+            </div>
         </div>
     );
 };
@@ -26,7 +44,7 @@ const AboutAuthor = ({lawyer}) => {
                     <div className="about-author-img">
                         <div className="author-img-wrap">
                             <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                <img class="img-fluid rounded-circle" alt="Author" src={account.profile_picture ? account.profile_picture : "/test.jpg"} />
+                                <img style={{width: '60px', height: '60px'}} class="img-fluid rounded-circle" alt="Author" src={account.profile_picture ? account.profile_picture : "/test.jpg"} />
                             </Link>
                         </div>
                     </div>

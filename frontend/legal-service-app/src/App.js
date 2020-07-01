@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter, Redirect} from "react-router-dom";
+import { Route, Router, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -19,7 +19,7 @@ import ClientDashboard from "./ClientDashboard";
 import ForgotPassword from "./ForgotPassword";
 import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VideoComponent from "./VideoComponent";
 import LawyerRating from "./LawyerRating";
@@ -77,9 +77,7 @@ function App() {
                         </Switch>
                     </Route>
 
-                    <Route path="/blog/:blogId">
-                        <BlogDetails />
-                    </Route>
+                    <Route path="/blog/:blogId" component={BlogDetails} />
                     <Route
                         exact
                         path="/reset/:Token"

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import History from "./History";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
 
 const BlogDetails = ({match}) => {
@@ -15,7 +15,7 @@ const BlogDetails = ({match}) => {
     );
 };
 const AboutAuthor = ({lawyer}) => {
-    const { account } = { ...lawyer };
+    const {account} = {...lawyer};
     return (
         <div className="card author-widget clearfix">
             <div className="card-header">
@@ -25,15 +25,15 @@ const AboutAuthor = ({lawyer}) => {
                 <div className="about-author">
                     <div className="about-author-img">
                         <div className="author-img-wrap">
-                            <Link to={{pathname: `/profile/${lawyer.id}`,state: { lawyer: lawyer }}}>
-                            <img class="img-fluid rounded-circle" alt="Author" src={account.profile_picture? account.profile_picture:"/test.jpg"} />
+                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                <img class="img-fluid rounded-circle" alt="Author" src={account.profile_picture ? account.profile_picture : "/test.jpg"} />
                             </Link>
                         </div>
                     </div>
                     <div className="author-details">
                         <Link
                             className="blog-author-name"
-                            to={{pathname: `/profile/${lawyer.id}`,state: { lawyer: lawyer }}}
+                            to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}
                         >
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
                         </Link>
@@ -83,11 +83,11 @@ const ShareSection = () => {
     );
 };
 const Post = ({blog, lawyer}) => {
-    const { account } = { ...lawyer };
+    const {account} = {...lawyer};
     const loaderStackEdit = new Stackedit();
     const md_preview = useRef(null);
 
-    useEffect(()=>{
+    useEffect(() => {
         loaderStackEdit.openFile({
             name: "blog details",
             content: {
@@ -97,13 +97,13 @@ const Post = ({blog, lawyer}) => {
         loaderStackEdit.on("fileChange", (file) => {
             md_preview.current.innerHTML = file.content.html;
         });
-    },[]);
+    }, []);
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img 
-                    alt="" src={blog.cover_photo? blog.cover_photo:"/test.jpg"} 
-                    class="img-fluid"/>
+                <img
+                    alt="" src={blog.cover_photo_link ? blog.cover_photo_link : "/test.jpg"}
+                    class="img-fluid" />
             </div>
             <h3 className="blog-title">{blog.title}</h3>
             <div className="blog-info clearfix">
@@ -113,7 +113,7 @@ const Post = ({blog, lawyer}) => {
                             <div className="post-author">
                                 <a href="doctor-profile.html">
                                     <img
-                                        src={account.profile_picture? account.profile_picture:"/test.jpg"}
+                                        src={account.profile_picture ? account.profile_picture : "/test.jpg"}
                                         alt="Post Author"
                                     />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
@@ -124,13 +124,13 @@ const Post = ({blog, lawyer}) => {
                             <i className="far fa-calendar"></i>{new Date(blog.created_at).toLocaleTimeString()}
                         </li>
                         <li>
-                            <i className="fa fa-tags"></i> Tag
+                            <i className="fa fa-tags"></i> {blog.tag.area}
                         </li>
                     </ul>
                 </div>
             </div>
             <div className="blog-content" ref={md_preview}>
-                
+
             </div>
         </div>
     );

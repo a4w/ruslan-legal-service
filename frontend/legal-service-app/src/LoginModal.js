@@ -4,8 +4,8 @@ import Modal from "./ModalRouted";
 
 const LoginModal = (props) => {
     return (
-        <Modal header={"Login"}>
-            <div style={{ margin: "10px" }}>
+        <Modal back={props.back} header={"Login"}>
+            <div style={{margin: "10px"}}>
                 <LoginForm />
             </div>
         </Modal>

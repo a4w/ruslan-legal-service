@@ -86,7 +86,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             // Go to checkout with the client secret
             toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
             const client_secret = response.client_secret;
-            handleSelection(client_secret);
+            handleSelection({client_secret});
         }).catch(error => {
         });
     };

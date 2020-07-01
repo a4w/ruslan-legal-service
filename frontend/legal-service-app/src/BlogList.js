@@ -6,31 +6,39 @@ const BlogList = ({ blogs }) => {
         return (
             <div className="row blog-grid-row">
                 {blogs.map((blog) => (
-                    <Blog key={blog.id} id={blog.id} />
+                    <Blog key={blog.id} blog={blog} />
                 ))}
             </div>
         );
     else return <Blog />;
 };
 
-const Blog = ({ id }) => {
+const Blog = ({ blog }) => {
+    const { lawyer, id } = { ...blog };
+    const { account } = { ...lawyer };
     return (
         <div className="col-lg-4 col-md-6 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
-                    <a href="//">Blog cover photo here</a>
+                    <Link to={`/blogs/${id}`}><img className="img-fluid" src={blog.cover_photo_path} alt="Post Image"/></Link>
                 </div>
                 <div className="blog-content">
                     <ul className="entry-meta meta-item">
                         <li>
                             <div className="post-author">
-                                <a href="//">
-                                    Lawyer Photo - <span> - Lawyer Name</span>
-                                </a>
+                                <Link
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: { lawyer: lawyer },
+                                    }}
+                                >
+                                    <img src={account.profile_picture? account.profile_picture:"/test.jpg"} alt="Post Author"/>
+                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                </Link>
                             </div>
                         </li>
                         <li>
-                            <i className="far fa-clock"></i> publish date
+                            <i className="far fa-clock"></i> {new Date(blog.created_at).toLocaleTimeString()}
                         </li>
                     </ul>
                     <h3 className="blog-title">

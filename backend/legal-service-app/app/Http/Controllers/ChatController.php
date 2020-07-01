@@ -42,6 +42,7 @@ class ChatController extends Controller
         $request->validate([
             'content' => ['required', 'min:1']
         ]);
+        /** @var Account */
         $user = Auth::user();
         $participants = $chat->participants;
         if (!$participants->contains($user)) {
@@ -52,10 +53,9 @@ class ChatController extends Controller
         $chat->messages()->save($message);
         // Notify participants
         foreach ($participants as $participant) {
-            if ($user == $participant) {
-                continue;
+            if (!$user->is($participant)) {
+                $participant->notify(new MessageReceived($message));
             }
-            $participant->notify(new MessageReceived($message));
         }
         return RespondJSON::success();
     }

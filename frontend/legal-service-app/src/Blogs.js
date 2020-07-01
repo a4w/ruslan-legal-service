@@ -7,13 +7,13 @@ import History from "./History";
 import {request} from "./Axios";
 
 const Blogs = () => {
-    const test = [];    
+    const test = [];
     for (let i = 0; i < 10; i++) {
         test.push({id: i});
     }
     const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        request({ url: "/blogs/all", method: "GET" })
+        request({url: "/blogs/all", method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -146,12 +146,15 @@ const Catagories = ({cats}) => {
 
 const TagsList = () => {
     const [tags, setTags] = useState();
-    request({ url: "/lawyer/practice-areas", method: "GET" })
-        .then((data) => {
-            console.log(data);
-            setTags(data.areas);
-        })
-        .catch(() => {});
+    useEffect(() => {
+        request({url: "/lawyer/practice-areas", method: "GET"})
+            .then((data) => {
+                console.log(data);
+                setTags(data.areas);
+            })
+            .catch(() => {});
+
+    }, []);
     return (
         <div className="card tags-widget">
             <div className="card-header">

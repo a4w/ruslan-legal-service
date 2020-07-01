@@ -5,35 +5,15 @@ import {
     useElements
 } from "@stripe/react-stripe-js";
 import "./CheckoutForm.css"
+import {toast} from "react-toastify";
 
-const CheckoutForm = () => {
+const CheckoutForm = ({client_secret}) => {
     const [succeeded, setSucceeded] = useState(false);
     const [error, setError] = useState(null);
     const [processing, setProcessing] = useState('');
     const [disabled, setDisabled] = useState(true);
-    const [clientSecret, setClientSecret] = useState('');
     const stripe = useStripe();
     const elements = useElements();
-    useEffect(() => {
-        // Create PaymentIntent as soon as the page loads
-        window
-            .fetch("http://localhost:8000/api/appointment/pay", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({}) // This will have the selected slots
-            })
-            .then(res => {
-                return res.json();
-            })
-            .then(data => {
-                setClientSecret(data.client_secret);
-                // console.log(data);
-            }).catch(error => {
-                console.error(error);
-            });
-    }, []);
     const cardStyle = {
         style: {
             base: {
@@ -61,7 +41,7 @@ const CheckoutForm = () => {
     const handleSubmit = async ev => {
         ev.preventDefault();
         setProcessing(true);
-        const payload = await stripe.confirmCardPayment(clientSecret, {
+        const payload = await stripe.confirmCardPayment(client_secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
                 billing_details: {
@@ -76,10 +56,13 @@ const CheckoutForm = () => {
             setError(null);
             setProcessing(false);
             setSucceeded(true);
+            // Continue
+            toast.success("Thank you, the appointment is successfully reserved")
+            History.push("/dashboard");
         }
     };
     return (
-        <form id="payment-form" onSubmit={handleSubmit}>
+        <form id="payment-form" style={{margin: 'auto'}} onSubmit={handleSubmit}>
             <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
             <button
                 disabled={processing || disabled || succeeded}

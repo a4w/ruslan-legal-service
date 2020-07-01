@@ -26,12 +26,13 @@ import LawyerRating from "./LawyerRating";
 import BlogPage from "./WriteBlog";
 import ScheduleForm from "./ScheduleForm"
 import "tempusdominus-bootstrap/build/css/tempusdominus-bootstrap.css";
-import "react-datepicker/dist/react-datepicker.css";
+import "./assets/css/datepicker.css";
 import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
+import BookLawyerModal from "./BookLawyerModal";
 
 const cookie = new Cookies();
 
@@ -46,12 +47,13 @@ function App() {
                     if (cookie.get('logged_in')) {
                         return <Redirect to={props.match.params[0]} />
                     } else {
-                        return <LoginModal />
+                        return <LoginModal back={props.match.params[0]} />
                     }
                 }} />
                 <Route path="(.+)/register">
                     <RegisterModal />
                 </Route>
+                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />
@@ -95,10 +97,6 @@ function App() {
                     <Route path="/chat">
                         <ChatPage />
                     </Route>
-                    <Route path="/book-lawyer/:LawyerId">
-                        <LawyerBooking />
-                    </Route>
-
                     <Route exact path="/video">
                         <VideoComponent appointment_id={32} />
                     </Route>
@@ -115,7 +113,7 @@ function App() {
                         <Redirect replace to="/" />
                     </Route>
                     <Route path="/calendar">
-                        <LawyerAgenda/>
+                        <LawyerAgenda />
                     </Route>
                 </Switch>
                 <Route component={Footer} />

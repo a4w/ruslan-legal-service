@@ -13,7 +13,7 @@ class Blog extends Model
         'body',
         'cover_photo_path'
     ];
-    protected $with = ['lawyer'];
+    protected $with = ['lawyer', 'tag'];
     protected $casts = [
         'publish_date' => 'datetime'
     ];

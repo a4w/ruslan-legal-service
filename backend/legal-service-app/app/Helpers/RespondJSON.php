@@ -16,6 +16,7 @@ class RespondJSON
     const RESOURCE_GONE = 'RESOURCE_GONE';
     const PAYMENT_REQUIRED = 'PAYMENT_REQUIRED';
     const CONFLICT = 'CONFLICT';
+    const NOT_FOUND = 'NOT_FOUND';
 
 
     public static function with(array $out, ?string $err_reason = null, int $status = 200): Response
@@ -78,5 +79,10 @@ class RespondJSON
     public static function conflict($extra = [])
     {
         return self::with($extra, self::CONFLICT, 409);
+    }
+
+    public static function notFound($extra = [])
+    {
+        return self::with($extra, self::NOT_FOUND, 404);
     }
 }

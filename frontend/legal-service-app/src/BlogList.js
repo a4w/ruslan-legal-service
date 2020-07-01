@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-const BlogList = ({ blogs }) => {
+const BlogList = ({blogs}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
@@ -13,20 +13,20 @@ const BlogList = ({ blogs }) => {
     else return <Blog />;
 };
 
-const Blog = ({ blog }) => {
-    const { lawyer, id } = { ...blog };
-    const { account } = { ...lawyer };
+const Blog = ({blog}) => {
+    const {lawyer, id} = {...blog};
+    const {account} = {...lawyer};
     return (
         <div className="col-lg-4 col-md-6 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
-                    <Link 
+                    <Link
                         to={{
                             pathname: `/blogs/${id}`,
-                            state: { blog: blog, lawyer: lawyer },
+                            state: {blog: blog, lawyer: lawyer},
                         }}
                     >
-                        <img className="img-fluid" src={blog.cover_photo_path} alt="Post Image"/>
+                        <img className="img-fluid" src={blog.cover_photo_link} alt="Post Image" />
                     </Link>
                 </div>
                 <div className="blog-content">
@@ -36,10 +36,10 @@ const Blog = ({ blog }) => {
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
-                                        state: { lawyer: lawyer },
+                                        state: {lawyer: lawyer},
                                     }}
                                 >
-                                    <img src={account.profile_picture? account.profile_picture:"/test.jpg"} alt="Post Author"/>
+                                    <img src={account.profile_picture ? account.profile_picture : "/test.jpg"} alt="Post Author" style={{width: '30px', height: '30px'}} />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>

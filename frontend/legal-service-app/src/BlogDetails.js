@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import History from "./History";
 
-const BlogDetails = () => {
+const BlogDetails = ({match}) => {
+    const [lawyer, setLawyer] = useState(History.location.state.lawyer);
+    const [blog, setBlog] = useState(History.location.state.blog);
     return (
         <div className="blog-view">
-            <Post />
+            <Post blog={blog} />
             <ShareSection />
-            <AboutAuthor />
+            <AboutAuthor lawyer={lawyer} />
         </div>
     );
 };

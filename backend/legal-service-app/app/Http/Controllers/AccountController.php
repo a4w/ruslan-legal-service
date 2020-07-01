@@ -114,4 +114,12 @@ class AccountController extends Controller
         $user->update($request->only(['address', 'city', 'state', 'zip_code', 'country']));
         return RespondJSON::success();
     }
+
+    public function getNotifications()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
+        return RespondJSON::success(['notifications' => $notifications]);
+    }
 }

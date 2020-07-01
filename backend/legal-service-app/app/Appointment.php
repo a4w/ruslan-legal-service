@@ -55,7 +55,7 @@ class Appointment extends Model
         $CANCEL_ALLOWED_MINUTES = 6 * 60;
         /** @var Carbon */
         $appointment_time = $this->appointment_time;
-        return now()->lt($appointment_time->subMinutes($CANCEL_ALLOWED_MINUTES));
+        return now()->lt($appointment_time->subMinutes($CANCEL_ALLOWED_MINUTES)) && $this->status === 'UPCOMING';
     }
 
     public function getCanBeStartedAttribute()

@@ -49,7 +49,7 @@ const Blog = ({ blog }) => {
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blogs/${id}`}>Title</Link>
+                        <Link to={`/blogs/${id}`}>{blog.title}</Link>
                     </h3>
                     <p className="mb-0">Preview</p>
                 </div>

@@ -20,7 +20,14 @@ const Blog = ({ blog }) => {
         <div className="col-lg-4 col-md-6 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
-                    <Link to={`/blogs/${id}`}><img className="img-fluid" src={blog.cover_photo_path} alt="Post Image"/></Link>
+                    <Link 
+                        to={{
+                            pathname: `/blogs/${id}`,
+                            state: { blog: blog, lawyer: lawyer },
+                        }}
+                    >
+                        <img className="img-fluid" src={blog.cover_photo_path} alt="Post Image"/>
+                    </Link>
                 </div>
                 <div className="blog-content">
                     <ul className="entry-meta meta-item">

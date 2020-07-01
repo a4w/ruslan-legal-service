@@ -31,7 +31,7 @@ class MessageReceived extends Notification implements ShouldQueue
             'type' => 'INCOMING_MESSAGE',
             'notification_data' => [
                 'message_hint' => Str::substr($this->message->content, 0, 20),
-                'sender_name' => $this->message->sender->name . ' ' . $this->message->sender->surname
+                'sender_name' => $this->message->sender->full_name
             ]
         ];
     }

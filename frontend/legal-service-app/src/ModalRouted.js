@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import { createPortal } from "react-dom";
+import {createPortal} from "react-dom";
 import History from "./History";
 
 const modalStyle = {
@@ -58,35 +58,33 @@ const Modal = (props) => {
     };
     return (
         <ModalPortal onClick={OnClick}>
-            <div>
-                <div
-                    style={{
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                        pointerEvents: "auto",
-                        backgroundColor: "#fff",
-                        backgroundClip: "padding-box",
-                        border: "1px solid rgba(0,0,0,.2)",
-                        borderRadius: ".3rem",
-                        outline: "0",
-                        width: "90%",
-                        margin: "auto",
-                    }}
-                    ref={ref}
-                >
-                    <div style={modalHeaderStyles}>
-                        <div className="modal-title h4">{props.header}</div>
-                        <button
-                            className="close"
-                            onClick={() => History.goBack()}
-                        >
-                            <span aria-hidden="true">×</span>
-                            <span className="sr-only">Close</span>
-                        </button>
-                    </div>
-                    {props.children}
+            <div
+                style={{
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    pointerEvents: "auto",
+                    backgroundColor: "#fff",
+                    backgroundClip: "padding-box",
+                    border: "1px solid rgba(0,0,0,.2)",
+                    borderRadius: ".3rem",
+                    outline: "0",
+                    width: "90%",
+                    margin: "auto",
+                }}
+                ref={ref}
+            >
+                <div style={modalHeaderStyles}>
+                    <div className="modal-title h4">{props.header}</div>
+                    <button
+                        className="close"
+                        onClick={() => History.goBack()}
+                    >
+                        <span aria-hidden="true">×</span>
+                        <span className="sr-only">Close</span>
+                    </button>
                 </div>
+                {props.children}
             </div>
         </ModalPortal>
     );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import History from "./History";
+import { Link } from "react-router-dom";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(History.location.state.lawyer);
@@ -12,7 +13,8 @@ const BlogDetails = ({match}) => {
         </div>
     );
 };
-const AboutAuthor = () => {
+const AboutAuthor = ({lawyer}) => {
+    const { account } = { ...lawyer };
     return (
         <div className="card author-widget clearfix">
             <div className="card-header">
@@ -22,17 +24,19 @@ const AboutAuthor = () => {
                 <div className="about-author">
                     <div className="about-author-img">
                         <div className="author-img-wrap">
-                            <a href="doctor-profile.html">Profile pic</a>
+                            <Link to={{pathname: `/profile/${lawyer.id}`,state: { lawyer: lawyer }}}>
+                            <img class="img-fluid rounded-circle" alt="Author" src={account.profile_picture? account.profile_picture:"/test.jpg"} />
+                            </Link>
                         </div>
                     </div>
                     <div className="author-details">
-                        <a
-                            href="doctor-profile.html"
+                        <Link
                             className="blog-author-name"
+                            to={{pathname: `/profile/${lawyer.id}`,state: { lawyer: lawyer }}}
                         >
-                            Lawyer's Name
-                        </a>
-                        <p className="mb-0">Bio....</p>
+                            {`${lawyer.account.name} ${lawyer.account.surname}`}
+                        </Link>
+                        <p className="mb-0">{lawyer.biography}</p>
                     </div>
                 </div>
             </div>

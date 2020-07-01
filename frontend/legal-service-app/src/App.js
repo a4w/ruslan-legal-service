@@ -37,6 +37,7 @@ import BlogDetails from "./BlogDetails"
 
 const cookie = new Cookies();
 
+
 function App() {
     return (
         <BrowserRouter>

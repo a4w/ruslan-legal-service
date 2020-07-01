@@ -6,7 +6,7 @@ import {request} from "./Axios"
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import {toast} from "react-toastify";
 
-const AppointmentTimeForm = ({lawyer_id}) => {
+const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
 
 
     const calculateDiscountedPrice = (price) => {
@@ -85,6 +85,8 @@ const AppointmentTimeForm = ({lawyer_id}) => {
         }).then(response => {
             // Go to checkout with the client secret
             toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
+            const client_secret = response.client_secret;
+            handleSelection({client_secret});
         }).catch(error => {
         });
     };

@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->call(new DeleteOldHeldAppointments)->everyFifteenMinutes();
+        $schedule->call(new DeleteOldHeldAppointments)->everyMinute();
         // End appointments
         $schedule->call(new UpdateFinishedAppointments)->everyMinute();
         // TODO a call to notify users before appointments by 5 minutes

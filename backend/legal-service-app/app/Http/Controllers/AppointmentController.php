@@ -43,7 +43,7 @@ class AppointmentController extends Controller
         foreach ($selected_slots as $slot) {
             $slot_datetime = new Carbon($slot['datetime']);
             // Check 1
-            $appointment = $lawyer->appointments()->where('appointment_time', $slot_datetime)->first();
+            $appointment = $lawyer->appointments()->where('status', '<>', 'CANCELLED')->where('appointment_time', $slot_datetime)->first();
             if ($appointment !== null) {
                 return RespondJSON::gone();
             }

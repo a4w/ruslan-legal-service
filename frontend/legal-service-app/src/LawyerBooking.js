@@ -3,9 +3,17 @@ import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import {request} from "./Axios";
+import {Elements} from "@stripe/react-stripe-js"
+import {loadStripe} from "@stripe/stripe-js"
+import Config from "./Config";
+import CheckoutForm from "./CheckoutForm";
+
+const stripe = loadStripe(Config.stripe_api_key);
 
 const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
+    const [isTimeSelected, setIsTimeSelected] = useState(false);
+    const [clientSecret, setClientSecret] = useState(null);
     useEffect(() => {
         request({url: `/lawyer/${LawyerId}`, method: "GET"})
             .then((data) => {
@@ -14,14 +22,24 @@ const LawyerBooking = ({LawyerId}) => {
             .catch((err) => {});
 
     }, []);
+
+    const handleTimeSelection = ({client_secret}) => {
+        setClientSecret(client_secret);
+        console.log(client_secret);
+        setIsTimeSelected(true);
+    };
+
     return (
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12" style={{minHeight: '400px'}}>
-                        {/* <LawyerCard lawyer={lawyer} />
-                        <TodayIs /> */}
-                        <AppointmentTimeForm lawyer_id={LawyerId} />
+                        {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}
+                        {isTimeSelected &&
+                            <Elements stripe={stripe}>
+                                <CheckoutForm client_secret={clientSecret} />
+                            </Elements>
+                        }
                     </div>
                 </div>
             </div>

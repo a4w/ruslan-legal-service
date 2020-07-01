@@ -173,7 +173,7 @@ class LawyerController extends Controller
         $output['number_of_days'] = $days_to_show;
 
         // Get appointments and pre-process them for fast checking
-        $appointments = $lawyer->appointments->whereBetween('appointment_time', [$from_date, $to_date]);
+        $appointments = $lawyer->appointments->where('status', '<>', 'CANCELLED')->whereBetween('appointment_time', [$from_date, $to_date]);
         $appointments_check = array();
         foreach ($appointments as $appointment) {
             $appointments_check[$appointment->appointment_time->format(AppointmentHelper::DATE_FORMAT)][$appointment->appointment_time->format(AppointmentHelper::TIME_FORMAT)] = true;

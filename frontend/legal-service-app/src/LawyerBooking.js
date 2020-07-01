@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
@@ -6,11 +6,14 @@ import {request} from "./Axios";
 
 const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
-    request({url: `/lawyer/${LawyerId}`, method: "GET"})
-        .then((data) => {
-            setLawyer(data.lawyer);
-        })
-        .catch((err) => {});
+    useEffect(() => {
+        request({url: `/lawyer/${LawyerId}`, method: "GET"})
+            .then((data) => {
+                setLawyer(data.lawyer);
+            })
+            .catch((err) => {});
+
+    }, []);
     return (
         <div className="content">
             <div className="container-fluid">

@@ -138,4 +138,12 @@ class AccountController extends Controller
         });
         return RespondJSON::success();
     }
+
+    public function markAllAsRead()
+    {
+
+        /** @var Account */
+        $user = Auth::user();
+        $user->unreadNotifications()->update(['read_at' => now()]);
+    }
 }

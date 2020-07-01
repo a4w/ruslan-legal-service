@@ -33,6 +33,7 @@ import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
+import BlogDetails from "./BlogDetails"
 
 const cookie = new Cookies();
 
@@ -68,7 +69,16 @@ function App() {
                         <AppointmentTimeForm lawyer_id="1" />
                     </Route>
                     <Route path="/blogs">
-                        <Blogs />
+                        <Switch>
+                            <Route exact path="/blogs" >
+                                <Blogs />
+                            </Route>
+                            <Route path="/blogs/:tag" component={Blogs} />
+                        </Switch>
+                    </Route>
+
+                    <Route path="/blog/:blogId">
+                        <BlogDetails />
                     </Route>
                     <Route
                         exact

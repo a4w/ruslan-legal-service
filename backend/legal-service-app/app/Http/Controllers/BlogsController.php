@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Blog;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
+use App\Lawyer;
 use App\PracticeArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class BlogsController extends Controller
 {

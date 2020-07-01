@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
-import { request } from "./Axios";
+import {request} from "./Axios";
 
 const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
-    request({ url: `/lawyer/${LawyerId}`, method: "GET" })
+    request({url: `/lawyer/${LawyerId}`, method: "GET"})
         .then((data) => {
             setLawyer(data.lawyer);
         })
         .catch((err) => {});
     return (
         <div className="content">
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12">
+                    <div className="col-12" style={{minHeight: '400px'}}>
                         {/* <LawyerCard lawyer={lawyer} />
                         <TodayIs /> */}
                         <AppointmentTimeForm lawyer_id={LawyerId} />
@@ -45,8 +45,8 @@ const TodayIs = () => {
         </div>
     );
 };
-const LawyerCard = ({lawyer}) => {    
-    return ( lawyer &&
+const LawyerCard = ({lawyer}) => {
+    return (lawyer &&
         <div className="card">
             <div className="card-body">
                 <div className="booking-lawyer-info">
@@ -54,7 +54,7 @@ const LawyerCard = ({lawyer}) => {
                         href="lawyer-profile.html"
                         className="booking-lawyer-img"
                     >
-                        <img src={lawyer.account.profile_picture} alt="Lawyer Image"/>
+                        <img src={lawyer.account.profile_picture} alt="Lawyer Image" />
                     </a>
                     <div className="booking-info">
                         <h4>

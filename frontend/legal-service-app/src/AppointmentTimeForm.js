@@ -25,11 +25,14 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
     const [schedule, setSchedule] = useState(null);
 
     useEffect(() => {
+        const width = window.innerWidth;
+        const days = Math.min(7, Math.max(1, Math.floor(width / 200)));
+        console.log(days);
         request({
             url: `/lawyer/${lawyer_id}/schedule`,
             method: 'POST',
             data: {
-                days_to_show: 7,
+                days_to_show: days,
                 from: fromDateTime.format(Config.momentsjs_default_datetime_format)
             }
         }).then(response => {
@@ -96,36 +99,37 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         <>
             <div className="card booking-schedule">
                 <div className="schedule-header">
-                    <div className="row">
+                    <div className="row no-gutters">
                         <div className="col-12">
                             <div className="day-slot">
-                                <ul>
-                                    <li class="left-arrow">
+                                <div className="row no-gutters">
+                                    <div className="col-1">
                                         <button className="btn btn-link" onClick={() => {changeFromDateTime(-1)}}>
                                             <i class="fa fa-chevron-left"></i>
                                         </button>
-                                    </li>
+                                    </div>
                                     {schedule !== null && schedule.days.map((day, i) => {
                                         return (
-                                            <li key={i}>
+                                            <div className="col" key={day.date}>
                                                 <span>{day.name}</span>
                                                 <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
-                                            </li>
+                                            </div>
                                         );
                                     })}
-                                    <li class="right-arrow">
+                                    <div className="col-1">
                                         <button className="btn btn-link" onClick={() => {changeFromDateTime(+1)}}>
                                             <i class="fa fa-chevron-right"></i>
                                         </button>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="schedule-cont">
-                    <div className="row">
+                    <div className="row no-gutters">
+                        <div className="col-1"></div>
                         {schedule !== null && schedule.days.map((day, i) => {
                             return (
                                 <div className="col" key={day.date}>
@@ -169,6 +173,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                 </div>
                             );
                         })}
+                        <div className="col-1"></div>
                     </div>
                 </div>
             </div>

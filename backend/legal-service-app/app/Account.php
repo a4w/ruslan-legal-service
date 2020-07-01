@@ -139,4 +139,9 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return $this->belongsToMany(Chat::class, 'chat_participents', 'user_id', 'chat_id');
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->surname;
+    }
 }

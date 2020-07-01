@@ -62,4 +62,12 @@ class BlogsController extends Controller
         $blog->save();
         return RespondJSON::success(['blog' => $blog]);
     }
+
+    public function getBlog(Blog $blog)
+    {
+        if ($blog->status !== 'PUBLISHED') {
+            return RespondJSON::notFound();
+        }
+        return RespondJSON::success(['blog' => $blog]);
+    }
 }

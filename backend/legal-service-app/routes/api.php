@@ -26,6 +26,10 @@ Route::prefix('account')->group(function () {
     Route::post('update-password', 'AccountController@updatePassword')->middleware('auth:api');
     Route::post('upload-profile-picture', 'AccountController@uploadProfilePicture')->middleware('auth:api');
     Route::post('update-address', 'AccountController@saveAddress')->middleware('auth:api');
+
+    Route::get('notifications', 'AccountController@getNotifications')->middleware('auth:api');
+    Route::get('notification/{notification}', 'AccountController@markReadNotification')->middleware('auth:api');
+    Route::get('mark-read-notifications', 'AccountController@markAllAsRead')->middleware('auth:api');
 });
 
 Route::prefix('lawyer')->group(function () {
@@ -64,6 +68,7 @@ Route::prefix('appointment')->group(function () {
 
 Route::prefix('blogs')->group(function () {
     Route::get('all', 'BlogsController@getBlogs');
+    Route::get('{blog}', 'BlogsController@getBlog');
     Route::get('{lawyer}', 'BlogsController@getLawyerBlogs');
     Route::post('add', 'BlogsController@addBlogPost')->middleware('auth:api');
     Route::post('{blog}/upload-cover', 'BlogsController@uploadCover')->middleware('auth:api');

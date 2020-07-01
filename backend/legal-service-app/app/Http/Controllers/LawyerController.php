@@ -302,7 +302,11 @@ class LawyerController extends Controller
     }
     public function fetchLawyer(Lawyer $lawyer)
     {
-        return RespondJSON::with(['lawyer' => $lawyer]);
+        $ratings = collect($lawyer->ratings);
+        $item = $lawyer->toArray();
+        $item['ratings_average'] = $ratings->avg('rating') ?? 0;
+        $item['ratings_count'] = $ratings->count();
+        return RespondJSON::with(['lawyer' => $item]);
     }
 
     public function fetchMe()
@@ -312,7 +316,11 @@ class LawyerController extends Controller
         if ($user->isClient()) {
             return RespondJSON::forbidden();
         }
-        return RespondJSON::with(['lawyer' => $user->lawyer]);
+        $ratings = collect($user->lawyer->ratings);
+        $item = $user->lawyer->toArray();
+        $item['ratings_average'] = $ratings->avg('rating') ?? 0;
+        $item['ratings_count'] = $ratings->count();
+        return RespondJSON::with(['lawyer' => $item]);
     }
 
     public function getLawyerTypes()

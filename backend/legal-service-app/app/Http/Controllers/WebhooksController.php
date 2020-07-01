@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Appointment;
 use App\Http\Requests\JSONRequest;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\AppointmentReserved;
 
 class WebhooksController extends Controller
 {
@@ -37,5 +38,8 @@ class WebhooksController extends Controller
             $appointment->status = 'UPCOMING';
             $appointment->save();
         }
+
+        // Notify lawyer of the appointment
+        $appointment->lawyer->account->notify(new AppointmentReserved($appointment));
     }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter, Redirect} from "react-router-dom";
+import { Route, Router, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -19,7 +19,7 @@ import ClientDashboard from "./ClientDashboard";
 import ForgotPassword from "./ForgotPassword";
 import ChatPage from "./ChatPage";
 import LawyerBooking from "./LawyerBooking";
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VideoComponent from "./VideoComponent";
 import LawyerRating from "./LawyerRating";
@@ -33,6 +33,7 @@ import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
+import BlogDetails from "./BlogDetails"
 
 const cookie = new Cookies();
 
@@ -69,8 +70,15 @@ function App() {
                         <AppointmentTimeForm lawyer_id="1" />
                     </Route>
                     <Route path="/blogs">
-                        <Blogs />
+                        <Switch>
+                            <Route exact path="/blogs" >
+                                <Blogs />
+                            </Route>
+                            <Route path="/blogs/:tag" component={Blogs} />
+                        </Switch>
                     </Route>
+
+                    <Route path="/blog/:blogId" component={BlogDetails} />
                     <Route
                         exact
                         path="/reset/:Token"

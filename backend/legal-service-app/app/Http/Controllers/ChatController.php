@@ -7,6 +7,7 @@ use App\Chat;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Message;
+use App\Notifications\MessageReceived;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class ChatController extends Controller
         $request->validate([
             'content' => ['required', 'min:1']
         ]);
+        /** @var Account */
         $user = Auth::user();
         $participants = $chat->participants;
         if (!$participants->contains($user)) {
@@ -49,6 +51,12 @@ class ChatController extends Controller
         $message = Message::make($request->only('content'));
         $message->sender()->associate($user);
         $chat->messages()->save($message);
+        // Notify participants
+        foreach ($participants as $participant) {
+            if (!$user->is($participant)) {
+                $participant->notify(new MessageReceived($message));
+            }
+        }
         return RespondJSON::success();
     }
 

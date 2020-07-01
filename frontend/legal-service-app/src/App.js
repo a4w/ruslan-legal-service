@@ -47,13 +47,13 @@ function App() {
                     if (cookie.get('logged_in')) {
                         return <Redirect to={props.match.params[0]} />
                     } else {
-                        return <LoginModal />
+                        return <LoginModal back={props.match.params[0]} />
                     }
                 }} />
                 <Route path="(.+)/register">
                     <RegisterModal />
                 </Route>
-                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal}/>
+                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />
@@ -113,7 +113,7 @@ function App() {
                         <Redirect replace to="/" />
                     </Route>
                     <Route path="/calendar">
-                        <LawyerAgenda/>
+                        <LawyerAgenda />
                     </Route>
                 </Switch>
                 <Route component={Footer} />

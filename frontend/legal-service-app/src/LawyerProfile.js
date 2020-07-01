@@ -14,6 +14,7 @@ import History from "./History";
 import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
+import BlogList from "./BlogList";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -134,7 +135,15 @@ const ProfileCard = ({lawyer}) => {
 const Details = ({lawyer, match}) => {
     const path = match.url;
     console.log(match);
-
+    const [blogs, setBlogs] = useState(null);
+    useEffect(() => {
+        request({ url: `/blogs/${lawyer.id}`, method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <div className="card">
             <div className="card-body pt-0">
@@ -156,7 +165,7 @@ const Details = ({lawyer, match}) => {
                             <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
                         </Route>
                         <Route path={`${path}/blogs`}>
-                            <div>blogs</div>
+                            {blogs && <BlogList blogs={blogs} />}
                         </Route>
                     </div>
                 </Switch>

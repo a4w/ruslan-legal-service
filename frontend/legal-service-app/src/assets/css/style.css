@@ -3333,6 +3333,12 @@ html.menu-opened body {
     font-weight: 500;
     margin: 0;
 }
+.not-recommended {
+    color: #dd3939;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+}
 .all-feedback {
     margin-top: 20px;
 }

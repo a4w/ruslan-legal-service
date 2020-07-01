@@ -102,7 +102,7 @@ const ProfileCard = ({lawyer}) => {
                                 </li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
-                                   {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    {`${lawyer.account.city}, ${lawyer.account.country}`}
                                 </li>
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
@@ -137,7 +137,7 @@ const Details = ({lawyer, match}) => {
     console.log(match);
     const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        request({ url: `/blogs/${lawyer.id}`, method: "GET" })
+        request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);

@@ -78,7 +78,13 @@ const Modal = (props) => {
                     <div className="modal-title h4">{props.header}</div>
                     <button
                         className="close"
-                        onClick={() => History.goBack()}
+                        onClick={() => {
+                            if (props.back) {
+                                History.push(props.back);
+                            } else {
+                                History.goBack()
+                            }
+                        }}
                     >
                         <span aria-hidden="true">×</span>
                         <span className="sr-only">Close</span>

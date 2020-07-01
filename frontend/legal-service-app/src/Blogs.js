@@ -4,19 +4,21 @@ import StickyBox from "react-sticky-box";
 import {Router, Switch, Route} from "react-router-dom";
 import BlogDetails from "./BlogDetails";
 import History from "./History";
+import {request} from "./Axios";
 
 const Blogs = () => {
-    const init = [];
-    const test = [];
-    for (let i = 0; i < 30; i++) {
-        init.push({id: i});
-    }
+    const test = [];    
     for (let i = 0; i < 10; i++) {
         test.push({id: i});
     }
-    const [blogs, setBlogs] = useState(init);
+    const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        // here will be the first loaded blogs call
+        request({ url: "/blogs/all", method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
     }, []);
     return (
         <Router history={History}>
@@ -26,7 +28,7 @@ const Blogs = () => {
                         <div className="col-lg-8 col-md-12">
                             <Switch>
                                 <Route exact path="/blogs">
-                                    <BlogList blogs={blogs} />
+                                    {blogs && <BlogList blogs={blogs} />}
                                 </Route>
                                 <Route path="/blogs/:blogId">
                                     <BlogDetails />

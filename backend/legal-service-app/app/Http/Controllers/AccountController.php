@@ -136,5 +136,6 @@ class AccountController extends Controller
                 $notification->markAsRead();
             }
         });
+        return RespondJSON::success();
     }
 }

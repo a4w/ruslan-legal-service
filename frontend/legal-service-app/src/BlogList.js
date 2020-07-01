@@ -17,7 +17,7 @@ const Blog = ({blog}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-        <div className="col-lg-4 col-md-6 col-sm-12">
+        <div className="col-md-6 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
                     <Link

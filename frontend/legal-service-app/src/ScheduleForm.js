@@ -19,6 +19,8 @@ const ScheduleForm = ({}) => {
 
     // Controller status
     const [isSideShown, setIsSideShown] = useState(false);
+    const [numberOfDaysShown, setNumberOfDaysShown] = useState(4);
+    const [firstIndexShown, setFirstIndexShown] = useState(1);
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
@@ -53,6 +55,8 @@ const ScheduleForm = ({}) => {
 
     // On load
     useEffect(() => {
+        // Calculate number of days to show
+        //setNumberOfDaysShown(window.innerWidth / 7);
         request({
             url: 'lawyer/schedule',
             method: 'GET'
@@ -308,15 +312,27 @@ const ScheduleForm = ({}) => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="day-slot">
-                                        <ul>
+                                        <div className="row no-gutters">
+                                            <div className="col-1">
+                                                <button className="btn btn-link" onClick={() => {}}>
+                                                    <i class="fa fa-chevron-left"></i>
+                                                </button>
+                                            </div>
                                             {schedule.map((day, i) => {
-                                                return (
-                                                    <li key={i}>
-                                                        <span>{day.name}</span>
-                                                    </li>
-                                                );
+                                                if (i >= firstIndexShown && i < firstIndexShown + numberOfDaysShown) {
+                                                    return (
+                                                        <div className="col" key={i}>
+                                                            <span>{day.name}</span>
+                                                        </div>
+                                                    );
+                                                }
                                             })}
-                                        </ul>
+                                            <div className="col-1">
+                                                <button className="btn btn-link" onClick={() => {}}>
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -324,7 +340,11 @@ const ScheduleForm = ({}) => {
 
                         <div className="schedule-cont">
                             <div className="row">
+                                <div className="col-1"></div>
                                 {schedule.map((day, i) => {
+                                    if (i < firstIndexShown || i >= firstIndexShown + numberOfDaysShown) {
+                                        return;
+                                    }
                                     return (
                                         <div className="col" key={day.date}>
                                             {day.slots.map((slot, j) => {
@@ -366,6 +386,7 @@ const ScheduleForm = ({}) => {
                                         </div>
                                     );
                                 })}
+                                <div className="col-1"></div>
                             </div>
                         </div>
                     </div>

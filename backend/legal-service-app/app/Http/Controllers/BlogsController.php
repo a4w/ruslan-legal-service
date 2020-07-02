@@ -77,4 +77,11 @@ class BlogsController extends Controller
         }
         return RespondJSON::success(['blog' => $blog]);
     }
+
+    public function latestBlogs($number)
+    {
+        $number = (int) $number;
+        $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date')->get();
+        return RespondJSON::success(['blogs' => $blogs]);
+    }
 }

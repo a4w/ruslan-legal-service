@@ -225,7 +225,7 @@ const ScheduleForm = ({}) => {
 
     return (
         <>
-            <Collapse style={{position: 'fixed', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
+            <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
                 <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button>
                 <div className="p-3">
                     <h4 className="text-center">Add appointment</h4>

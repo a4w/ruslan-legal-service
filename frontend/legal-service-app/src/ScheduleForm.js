@@ -23,6 +23,8 @@ const ScheduleForm = ({}) => {
     const [firstIndexShown, setFirstIndexShown] = useState(0);
     const [visibleSchedule, setVisibleSchedule] = useState([]);
 
+    const schedule_container = useRef(null);
+
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
         {name: "Sunday", slots: []},
@@ -57,7 +59,8 @@ const ScheduleForm = ({}) => {
     // On load
     useEffect(() => {
         // Calculate number of days to show
-        const nDays = Math.min(7, Math.max(1, (0.5 * window.innerWidth) / 100));
+        console.log(schedule_container.current.offsetWidth);
+        const nDays = Math.min(7, Math.max(1, (0.6 * schedule_container.current.offsetWidth) / 100));
         console.log(nDays);
         setNumberOfDaysShown(nDays);
         request({
@@ -325,14 +328,12 @@ const ScheduleForm = ({}) => {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="day-slot">
-                                        <div className="row no-gutters">
+                                        <div className="row no-gutters" ref={schedule_container}>
                                             <div className="col-1">
                                                 <button className="btn btn-link" onClick={() => {setFirstIndexShown((firstIndexShown + 6) % 7)}}>
                                                     <i class="fa fa-chevron-left"></i>
                                                 </button>
                                             </div>
-                                            {
-                                            }
                                             {visibleSchedule.map((day, i) => {
                                                 console.log("DAY: ", i);
                                                 return (

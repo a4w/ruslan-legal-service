@@ -3460,28 +3460,24 @@ html.menu-opened body {
     position: relative;
     width: 100%;
 }
-.day-slot li {
-    float: left;
-    padding-left: 5px;
-    padding-right: 5px;
-    text-align: center;
-    width: 14.28%;
+.day-slot div {
+    text-align:center;
 }
-.day-slot li span {
+.day-slot div span {
     display: block;
     font-size: 18px;
     text-transform: uppercase;
 }
-.day-slot li span.slot-date {
+.day-slot div span.slot-date {
     display: block;
     color: #757575;
     font-size: 14px;
 }
-.day-slot li small.slot-year {
+.day-slot div small.slot-year {
     color: #757575;
     font-size: 14px;
 }
-.day-slot li.left-arrow {
+.day-slot div.left-arrow {
     left: 0;
     padding: 0;
     position: absolute;
@@ -3490,7 +3486,7 @@ html.menu-opened body {
     width: 20px !important;
     transform: translateY(-50%);
 }
-.day-slot li.right-arrow {
+.day-slot div.right-arrow {
     right: -11px;
     padding: 0;
     position: absolute;

@@ -84,4 +84,15 @@ class BlogsController extends Controller
         $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
+
+    public function searchBlogs(JSONRequest $request)
+    {
+        $request->validate([
+            'term' => ['required', 'string', 'min:1']
+        ]);
+        $char = '\\';
+        $term = str_replace([$char, '%', '_'], [$char . $char, $char . '%', $char . '_'], $request->get('term'));
+        $blogs = Blog::where('status', 'PUBLISHED')->where('title', 'LIKE', '%' . $term . '%')->get();
+        return RespondJSON::success(['blogs' => $blogs]);
+    }
 }

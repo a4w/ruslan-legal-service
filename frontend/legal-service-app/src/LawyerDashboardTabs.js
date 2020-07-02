@@ -9,6 +9,7 @@ import LawyerDashboardStatus from "./LawyerDashboardStatus";
 import LawyerReviews from "./LawyerReviews";
 import {Route, Switch, Redirect} from "react-router-dom";
 import History from "./History";
+import ScheduleForm from "./ScheduleForm";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -26,7 +27,7 @@ const LawyerDashboardTabs = () => {
                 <LawyerClients />
             </Route>
             <Route exact path="/dashboard/schedule">
-                test 4
+                <ScheduleForm />
             </Route>
             <Route exact path="/dashboard/invoices">
                 test 5
@@ -35,7 +36,7 @@ const LawyerDashboardTabs = () => {
                 <LawyerReviews />
             </Route>
             <Route exact path="/dashboard/messages">
-                test 7
+                <Redirect to="/chat" />
             </Route>
             <Route path="/dashboard/settings">
                 <EditPersonal />

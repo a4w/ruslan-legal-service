@@ -27,7 +27,8 @@ const LawyerDashboardTabs = () => {
                 <LawyerClients />
             </Route>
             <Route exact path="/dashboard/schedule">
-                <ScheduleForm />
+                <Redirect to="/edit-schedule" />
+                {/* <ScheduleForm /> */}
             </Route>
             <Route exact path="/dashboard/invoices">
                 test 5

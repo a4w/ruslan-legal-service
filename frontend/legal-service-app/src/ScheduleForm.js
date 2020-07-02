@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from "react";
-import {FaArrowCircleRight, FaClock, FaSave} from "react-icons/fa";
+import {FaArrowCircleRight, FaClock, FaSave, FaEye, FaPlusCircle, FaTimes} from "react-icons/fa";
 import ErrorMessageSelect from "./ErrorMessageSelect"
 import ErrorMessageInput from "./ErrorMessageInput"
-import {ButtonGroup, Button} from "reactstrap"
+import {ButtonGroup, Button, Collapse} from "reactstrap"
 import StickyBox from "react-sticky-box"
 import moment from "moment"
 import TimeKeeper from 'react-timekeeper';
@@ -16,6 +16,9 @@ import {request} from "./Axios"
 const ScheduleForm = ({}) => {
 
     const TIME_FORMAT = "HH:mm";
+
+    // Controller status
+    const [isSideShown, setIsSideShown] = useState(false);
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
@@ -202,102 +205,102 @@ const ScheduleForm = ({}) => {
 
     return (
         <>
-            <div className="row no-gutters">
-                <div className="col-3">
-                    <StickyBox>
-                        <div className="p-3">
-                            <h4 className="text-center">Add appointment</h4>
-                            <div className="form-group">
-                                <ErrorMessageSelect
-                                    multi={false}
-                                    name="weekday"
-                                    className="floating"
-                                    value={slotProperties.weekday}
-                                    placeholder="Weekday"
-                                    options={weekDayOptions}
-                                    OnChangeHandler={handleSelection}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
-                                    <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
-                                </button>
-                                {isTimeSelectorShown && <div className="timepicker-container">
-                                    <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
-                                        <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
+            <Collapse style={{position: 'fixed', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
+                <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button>
+                <div className="p-3">
+                    <h4 className="text-center">Add appointment</h4>
+                    <div className="form-group">
+                        <ErrorMessageSelect
+                            multi={false}
+                            name="weekday"
+                            className="floating"
+                            value={slotProperties.weekday}
+                            placeholder="Weekday"
+                            options={weekDayOptions}
+                            OnChangeHandler={handleSelection}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
+                            <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
+                        </button>
+                        {isTimeSelectorShown && <div className="timepicker-container">
+                            <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
+                                <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
 
-                                    </FocusWrapper>
-                                </div>}
-                            </div>
-                            <div className="form-group">
-                                <ErrorMessageSelect
-                                    multi={false}
-                                    name="length"
-                                    className="floating"
-                                    value={slotProperties.length}
-                                    placeholder="Length (in minutes)"
-                                    options={slotOptions}
-                                    OnChangeHandler={handleSelection}
-                                />
-                            </div>
-                            <button onClick={handleButtonClick} className="btn btn-block btn-primary">
-                                <FaArrowCircleRight />&nbsp;Add appointment
+                            </FocusWrapper>
+                        </div>}
+                    </div>
+                    <div className="form-group">
+                        <ErrorMessageSelect
+                            multi={false}
+                            name="length"
+                            className="floating"
+                            value={slotProperties.length}
+                            placeholder="Length (in minutes)"
+                            options={slotOptions}
+                            OnChangeHandler={handleSelection}
+                        />
+                    </div>
+                    <button onClick={handleButtonClick} className="btn btn-block btn-primary">
+                        <FaArrowCircleRight />&nbsp;Add appointment
                             </button>
-                            <hr />
-                            <h4 className="text-center"> Global appointment settings </h4>
-                            <div className="form-group">
-                                <ErrorMessageInput
-                                    type={"text"}
-                                    name="price"
-                                    value={globalSettings.price}
-                                    OnChangeHandler={handleSettingsChange}
-                                    placeholder={"Price per hour"}
-                                    errors={errors.price}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <ButtonGroup>
-                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
-                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
-                                    <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
-                                </ButtonGroup>
-                            </div>
-                            {globalSettings.discount_type !== 0 && <div className="form-group">
-                                <ErrorMessageInput
-                                    disabled={globalSettings.discount_type === 0}
-                                    type={"text"}
-                                    name="discount_amount"
-                                    value={globalSettings.discount_amount}
-                                    OnChangeHandler={handleSettingsChange}
-                                    placeholder={"Discount"}
-                                    errors={errors.discount_amount}
-                                />
-                            </div>}
-                            {globalSettings.discount_type !== 0 && <div className="form-group">
-                                <DatePicker
-                                    className="form-control"
-                                    placeholderText="Available on"
-                                    onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
-                                    selected={globalSettings.discount_end}
-                                    showTimeSelect
-                                    dateFormat={"Y-MM-dd HH:mm:ss"}
-                                />
-                                {errors["discount_end"] && errors["discount_end"].length > 0 &&
-                                    <label className="text-danger ml-2 font-weight-light text-xs">
-                                        {errors["discount_end"][0]}
-                                    </label>
-                                }
-                            </div>}
-                        </div>
-                    </StickyBox>
+                    <hr />
+                    <h4 className="text-center"> Global appointment settings </h4>
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            type={"text"}
+                            name="price"
+                            value={globalSettings.price}
+                            OnChangeHandler={handleSettingsChange}
+                            placeholder={"Price per hour"}
+                            errors={errors.price}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <ButtonGroup>
+                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
+                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
+                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
+                        </ButtonGroup>
+                    </div>
+                    {globalSettings.discount_type !== 0 && <div className="form-group">
+                        <ErrorMessageInput
+                            disabled={globalSettings.discount_type === 0}
+                            type={"text"}
+                            name="discount_amount"
+                            value={globalSettings.discount_amount}
+                            OnChangeHandler={handleSettingsChange}
+                            placeholder={"Discount"}
+                            errors={errors.discount_amount}
+                        />
+                    </div>}
+                    {globalSettings.discount_type !== 0 && <div className="form-group">
+                        <DatePicker
+                            className="form-control"
+                            placeholderText="Available on"
+                            onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
+                            selected={globalSettings.discount_end}
+                            showTimeSelect
+                            dateFormat={"Y-MM-dd HH:mm:ss"}
+                        />
+                        {errors["discount_end"] && errors["discount_end"].length > 0 &&
+                            <label className="text-danger ml-2 font-weight-light text-xs">
+                                {errors["discount_end"][0]}
+                            </label>
+                        }
+                    </div>}
                 </div>
-
+            </Collapse>
+            <div className="row no-gutters">
                 <div className="col">
-                    <div className="row">
+                    <div className="row form-row">
                         <div className="col-12">
-                            <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
-                                <FaSave />&nbsp;Save schedule
-                                </button>
+                            <button className="btn btn-sm btn-info float-right mb-1" onClick={
+                                () => {
+                                    setIsSideShown(!isSideShown);
+                                }
+                            }><FaPlusCircle />&nbsp;Add slot</button>
                         </div>
                     </div>
                     <div className="card booking-schedule">
@@ -367,6 +370,13 @@ const ScheduleForm = ({}) => {
                         </div>
                     </div>
 
+                    <div className="row form-row">
+                        <div className="col">
+                            <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
+                                <FaSave />&nbsp;Save schedule
+                                </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

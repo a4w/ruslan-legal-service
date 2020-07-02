@@ -19,8 +19,9 @@ const ScheduleForm = ({}) => {
 
     // Controller status
     const [isSideShown, setIsSideShown] = useState(false);
-    const [numberOfDaysShown, setNumberOfDaysShown] = useState(4);
-    const [firstIndexShown, setFirstIndexShown] = useState(1);
+    const [numberOfDaysShown, setNumberOfDaysShown] = useState(1);
+    const [firstIndexShown, setFirstIndexShown] = useState(0);
+    const [visibleSchedule, setVisibleSchedule] = useState([]);
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
@@ -56,7 +57,9 @@ const ScheduleForm = ({}) => {
     // On load
     useEffect(() => {
         // Calculate number of days to show
-        //setNumberOfDaysShown(window.innerWidth / 7);
+        const nDays = Math.min(7, Math.max(1, (0.5 * window.innerWidth) / 100));
+        console.log(nDays);
+        setNumberOfDaysShown(nDays);
         request({
             url: 'lawyer/schedule',
             method: 'GET'
@@ -207,6 +210,16 @@ const ScheduleForm = ({}) => {
         {label: 'Saturday', value: 6},
     ];
 
+    useEffect(() => {
+        // Set the "visible" order
+        const nextVisible = [];
+        let n = 0;
+        for (let i = firstIndexShown; n < numberOfDaysShown; i = (i + 1) % 7, n++) {
+            nextVisible.push(schedule[i]);
+        }
+        setVisibleSchedule(nextVisible);
+    }, [firstIndexShown, numberOfDaysShown, schedule]);
+
     return (
         <>
             <Collapse style={{position: 'fixed', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
@@ -314,21 +327,22 @@ const ScheduleForm = ({}) => {
                                     <div className="day-slot">
                                         <div className="row no-gutters">
                                             <div className="col-1">
-                                                <button className="btn btn-link" onClick={() => {}}>
+                                                <button className="btn btn-link" onClick={() => {setFirstIndexShown((firstIndexShown + 6) % 7)}}>
                                                     <i class="fa fa-chevron-left"></i>
                                                 </button>
                                             </div>
-                                            {schedule.map((day, i) => {
-                                                if (i >= firstIndexShown && i < firstIndexShown + numberOfDaysShown) {
-                                                    return (
-                                                        <div className="col" key={i}>
-                                                            <span>{day.name}</span>
-                                                        </div>
-                                                    );
-                                                }
+                                            {
+                                            }
+                                            {visibleSchedule.map((day, i) => {
+                                                console.log("DAY: ", i);
+                                                return (
+                                                    <div className="col" key={i}>
+                                                        <span>{day.name}</span>
+                                                    </div>
+                                                );
                                             })}
                                             <div className="col-1">
-                                                <button className="btn btn-link" onClick={() => {}}>
+                                                <button className="btn btn-link" onClick={() => {setFirstIndexShown((firstIndexShown + 1) % 7)}}>
                                                     <i class="fa fa-chevron-right"></i>
                                                 </button>
                                             </div>
@@ -341,10 +355,7 @@ const ScheduleForm = ({}) => {
                         <div className="schedule-cont">
                             <div className="row">
                                 <div className="col-1"></div>
-                                {schedule.map((day, i) => {
-                                    if (i < firstIndexShown || i >= firstIndexShown + numberOfDaysShown) {
-                                        return;
-                                    }
+                                {visibleSchedule.map((day, i) => {
                                     return (
                                         <div className="col" key={day.date}>
                                             {day.slots.map((slot, j) => {

@@ -17,7 +17,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'refresh']]);
+        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'googleLogin']]);
     }
 
     public function login(JSONRequest $request)
@@ -100,13 +100,16 @@ class AuthController extends Controller
 
         $email = $request->get('email');
         $client = new Google_Client(['client_id' => config('app.google_client_id')]);  // Specify the CLIENT_ID of the app that accesses the backend
+        JWT::$leeway = 60;
         $payload = $client->verifyIdToken($request->get('id_token'));
         if ($payload) {
             // Check if registered
-            $user = Account::where('email', $email)->find();
+            $user = Account::where('email', $email)->first();
             if ($user === null) {
                 // Create account
                 $account = Account::create($request->only(['name', 'surname', 'email']));
+                $account->email = $request->get('email');
+                $account->save();
                 $account->client()->save(Client::make());
                 return $this->respondWithToken(Auth::login($account));
             } else {

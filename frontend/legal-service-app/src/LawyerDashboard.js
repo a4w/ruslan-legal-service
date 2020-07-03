@@ -4,18 +4,26 @@ import StickyBox from "react-sticky-box";
 import LawyerDashboardTabs from "./LawyerDashboardTabs";
 import {Router} from "react-router-dom";
 import History from "./History";
+import {FaBars} from "react-icons/fa";
 
 const LawyerDashboard = () => {
     return (
         <Router history={History}>
             <div className="row">
-                <div className="col-md-5 col-lg-4 col-xl-3 mt-4 mb-4">
-                    <StickyBox offsetTop={20} offsetBottom={20}>
+                <div className="col-12 d-md-none">
+                    <button className="btn btn-primary mb-2 sticky-top float-right btn-block" data-toggle="collapse" data-target="#dashboard_nav"><FaBars /></button>
+                </div>
+                <div className="col-12 col-md-3 col-lg-3 collapse d-md-block" id="dashboard_nav">
+                    <StickyBox>
                         <LawyerDashboardSidebar />
                     </StickyBox>
                 </div>
-                <div className="col-md-7 col-lg-8 col-xl-9 mt-4 mb-4">
-                    <LawyerDashboardTabs />
+                <div className="col">
+                    <div className="row">
+                        <div className="col-12">
+                            <LawyerDashboardTabs />
+                        </div>
+                    </div>
                 </div>
             </div>
         </Router>

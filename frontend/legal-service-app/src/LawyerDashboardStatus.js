@@ -158,11 +158,12 @@ const ListItem = ({appointment}) => {
                 <div className="table-action">
                     {appointment.can_be_started &&
                         <>
-                            <a
+                            <Link
                                 className="btn btn-sm bg-success-light m-1"
+                                to={`/video/${appointment.id}`}
                             >
                                 <i className="fas fa-user"></i> Join
-                        </a>
+                        </Link>
                         </>
                     }
                     {appointment.is_cancellable && cancel === false && (

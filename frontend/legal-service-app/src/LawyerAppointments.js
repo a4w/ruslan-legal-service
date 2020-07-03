@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
 import {request} from "./Axios";
+import {Link} from "react-router-dom";
 
 const LawyerAppointments = () => {
     const init = [
@@ -117,11 +118,12 @@ const AppointmentCard = ({appointment}) => {
                 </button> */}
                 {appointment.can_be_started &&
                     <>
-                        <a
+                        <Link
                             className="btn btn-sm bg-success-light m-1"
+                            to={`/video/${appointment.id}`}
                         >
                             <i className="fas fa-user"></i> Join
-                        </a>
+                        </Link>
                     </>
                 }
                 {appointment.is_cancellable && rejected === null && (
@@ -135,7 +137,7 @@ const AppointmentCard = ({appointment}) => {
                     </>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

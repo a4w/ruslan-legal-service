@@ -146,4 +146,39 @@ class AccountController extends Controller
         $user = Auth::user();
         $user->unreadNotifications()->update(['read_at' => now()]);
     }
+
+    public function getSummary()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isLawyer()) {
+            $lawyer = $user->lawyer;
+            $clients_count = $lawyer->appointments()->distinct('client_id')->count();
+            $done_appointments_count = $lawyer->appointments()->where('status', 'DONE')->count();
+            $upcoming_appointments_count = $lawyer->appointments()->where('status', 'UPCOMING')->count();
+            $total_money = $lawyer->appointments()->sum('price');
+            $total_minutes = $lawyer->appointments()->sum('duration');
+            return RespondJSON::success([
+                'clients_count' => $clients_count,
+                'done_appointments_count' => $done_appointments_count,
+                'upcoming_appointments_count' => $upcoming_appointments_count,
+                'total_money' => $total_money,
+                'total_minutes' => $total_minutes,
+                'user_type' => 'LAWYER'
+            ]);
+        } else if ($user->isClient()) {
+            $client = $user->client;
+            $total_minutes = $client->appointments()->sum('duration');
+            $done_appointments_count = $client->appointments()->where('status', 'DONE')->count();
+            $upcoming_appointments_count = $client->appointments()->where('status', 'UPCOMING')->count();
+            $lawyers_count = $client->appointments()->distinct('lawyer_id')->count();
+            return RespondJSON::success([
+                'lawyers_count' => $lawyers_count,
+                'done_appointments_count' => $done_appointments_count,
+                'upcoming_appointments_count' => $upcoming_appointments_count,
+                'total_minutes' => $total_minutes,
+                'user_type' => 'CLIENT'
+            ]);
+        }
+    }
 }

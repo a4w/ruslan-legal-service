@@ -1,12 +1,11 @@
 import React from "react";
 
-const ChatUserListItem = ({swipe, chat_index, other_name, handleClick}) => {
+const ChatUserListItem = ({chat_index, other_name, handleClick}) => {
     return (
         <div
             className="media"
             onClick={() => {
                 handleClick(chat_index);
-                swipe();
             }}
         >
             <div className="media-body">

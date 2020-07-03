@@ -35,6 +35,7 @@ import Cookies from "universal-cookie";
 import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
 import BlogDetails from "./BlogDetails"
+import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const cookie = new Cookies();
 
@@ -105,7 +106,7 @@ function App() {
                         <ForgotPassword />
                     </Route>
                     <Route path="/chat">
-                        <ChatPage />
+                        <ResponsiveChatPage />
                     </Route>
                     <Route exact path="/video">
                         <VideoComponent appointment_id={32} />

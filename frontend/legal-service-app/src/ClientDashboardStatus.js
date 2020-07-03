@@ -75,7 +75,7 @@ const Appointment = ({ done }) => {
                             <i className="fas fa-times"></i> Cancel
                         </a>
                     ):(
-                        <Link to="/rate-lawyer" className="btn btn-sm bg-primary-light m-1">
+                        <Link to={`${History.location.pathname}/rate-lawyer`} className="btn btn-sm bg-primary-light m-1">
                             <i className="fas fa-star"></i> Rate
                         </Link>
                     )

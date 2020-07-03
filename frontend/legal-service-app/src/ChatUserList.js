@@ -13,7 +13,6 @@ const ChatUserList = ({chats, onChatSelection, swipe}) => {
                                 chat_index={i}
                                 other_name={chat.other_name}
                                 handleClick={onChatSelection}
-                                swipe={swipe}
                             />
                         );
                     })}

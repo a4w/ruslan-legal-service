@@ -115,7 +115,16 @@ const AppointmentCard = ({appointment}) => {
                     <i className="far fa-eye"></i> View
                     <AppointmentDetails show={viewDetails} onHide={hide} />
                 </button> */}
-                {rejected === null && (
+                {appointment.can_be_started &&
+                    <>
+                        <a
+                            className="btn btn-sm bg-success-light m-1"
+                        >
+                            <i className="fas fa-user"></i> Join
+                        </a>
+                    </>
+                }
+                {appointment.is_cancellable && rejected === null && (
                     <>
                         <button
                             className="btn btn-sm bg-danger-light m-1"

@@ -69,7 +69,7 @@ const VideoComponent = ({appointment_id}) => {
         });
 
         return () => {
-            room.disconnet();
+            handleDisconnection();
             toast.info("You are now disconnected from the room");
             // Redirect
         };

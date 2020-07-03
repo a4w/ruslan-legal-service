@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
 import {request} from "./Axios";
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const LawyerAppointments = () => {
     const init = [
@@ -40,7 +41,6 @@ const AppointmentCard = ({appointment}) => {
     // const [viewDetails, setView] = useState(false);
     const {client} = {...appointment};
     const {account} = {...client};
-    const [cancel, setCancel] = useState(appointment.status === "ON HOLD");
     const appointment_time = new Date(appointment.appointment_time);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
@@ -52,11 +52,16 @@ const AppointmentCard = ({appointment}) => {
         hour: "numeric",
         minute: "numeric",
     });
-    const [rejected, setRejected] = useState(null);
     const [date, setDate] = useState(null);
-    const OnReject = () => {
-        setDate(new Date());
-        setRejected(false);
+    const cancelAppointment = (id) => {
+        request({
+            url: `/appointment/${id}/cancel`,
+            method: 'POST'
+        }).then(response => {
+            toast.success("Appointment is cancelled");
+        }).error(error => {
+            toast.error("Appointment couldn't be cancelled");
+        });
     };
     // const show = () => {
     //     setView(true);
@@ -107,7 +112,6 @@ const AppointmentCard = ({appointment}) => {
                         <span className="detail">
                             <i className="fas fa-phone"></i> {account.phone}
                         </span>
-                        {rejected !== null && getStatus(rejected, date)}
                     </div>
                 </div>
             </div>
@@ -126,11 +130,11 @@ const AppointmentCard = ({appointment}) => {
                         </Link>
                     </>
                 }
-                {appointment.is_cancellable && rejected === null && (
+                {appointment.is_cancellable && (
                     <>
                         <button
                             className="btn btn-sm bg-danger-light m-1"
-                            onClick={OnReject}
+                            onClick={() => {cancelAppointment(appointment.id)}}
                         >
                             <i className="fas fa-times"></i> Cancel
                         </button>
@@ -141,22 +145,6 @@ const AppointmentCard = ({appointment}) => {
     );
 };
 
-const getStatus = (rejected, date) => {
-    const dateString = date.toLocaleString("en-GB", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour12: false,
-        hour: "numeric",
-        minute: "numeric",
-    });
-    return (
-        <h5 className="mb-0">
-            <i className="fas fa-times"></i>
-            <span className="text-danger">{" Rejected On " + dateString}</span>
-        </h5>
-    );
-};
 const AppointmentDetails = (props) => {
     return (
         <Modal

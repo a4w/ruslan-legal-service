@@ -2,11 +2,13 @@ import React, {useState, useEffect} from "react";
 import Select from "react-dropdown-select";
 import History from "./History";
 import {request} from "./Axios"
+import * as $ from "jquery"
 
 const Home = () => {
-    const [location, setLocation] = useState({value: null, label: ""});
+    const [location, setLocation] = useState({value: null, label: "Select location"});
     const [practiceAreas, setPracticeAreas] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+    const [isLocationBased, setIsLocationBased] = useState(false);
 
     useEffect(() => {
         request({
@@ -30,6 +32,22 @@ const Home = () => {
         {value: "rome", label: "Rome"},
         {value: "uk", label: "UK"},
     ];
+
+    useEffect(() => {
+        $.get("http://ipinfo.io", function (response) {
+            const city = response.city;
+            for (let i = 0; i < locationOptions.length; ++i) {
+                console.log(city, locationOptions[i].value);
+                if (city.toLowerCase() == locationOptions[i].value) {
+                    setLocation(locationOptions[i]);
+                    setIsLocationBased(true);
+                    break;
+                }
+            }
+        }, "jsonp");
+
+    }, []);
+
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         //History.push("/list");
@@ -60,15 +78,15 @@ const Home = () => {
                                 <Select
                                     className="select-form-control"
                                     placeholder="Select Location"
-                                    value={location.label}
+                                    values={[location]}
                                     searchable
                                     options={locationOptions}
-                                    onChange={([obj]) => setLocation(obj)}
+                                    onChange={([obj]) => {setLocation(obj); console.log(obj)}}
                                     style={{minHeight: "46px"}}
                                 />
-                                <span className="form-text">
+                                {isLocationBased && <span className="form-text">
                                     Based on your Location
-                                </span>
+                                </span>}
                             </div>
                             <div className="form-group search-info">
                                 <Select

@@ -5,6 +5,7 @@ import {Router, Route, Link, Redirect, Switch} from "react-router-dom";
 import history from "./History";
 import {NavTab} from "react-router-tabs";
 import {request} from "./Axios";
+import {toast} from "react-toastify";
 
 const LawyerDashboardStatus = () => {
     const init = [
@@ -110,7 +111,6 @@ const LawyerStatus = () => {
 const ListItem = ({appointment}) => {
     const {client} = {...appointment};
     const {account} = {...client};
-    const [cancel, setCancel] = useState(appointment.status === "ON HOLD");
     const appointment_time = new Date(appointment.appointment_time);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
@@ -122,10 +122,15 @@ const ListItem = ({appointment}) => {
         hour: "numeric",
         minute: "numeric",
     });
-    const OnReject = (e) => {
-        e.preventDefault();
-        setCancel(true);
-        // The API cancel Rquest will be sent here
+    const cancelAppointment = (id) => {
+        request({
+            url: `/appointment/${id}/cancel`,
+            method: 'POST'
+        }).then(response => {
+            toast.success("Appointment is cancelled");
+        }).error(error => {
+            toast.error("Appointment couldn't be cancelled");
+        });
     };
     return (
         <tr>
@@ -152,18 +157,27 @@ const ListItem = ({appointment}) => {
                 {day}
                 <span className="d-block text-info">{time}</span>
             </td>
-            <td>{cancel ? "CANCELLED" : appointment.status}</td>
+            <td className="text-center">{appointment.status}</td>
             <td className="text-center">{appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
-                    {cancel === false && (
-                        <a
-                            href="//"
+                    {appointment.can_be_started &&
+                        <>
+                            <Link
+                                className="btn btn-sm bg-success-light m-1"
+                                to={`/video/${appointment.id}`}
+                            >
+                                <i className="fas fa-user"></i> Join
+                        </Link>
+                        </>
+                    }
+                    {appointment.is_cancellable && (
+                        <button
                             className="btn btn-sm bg-danger-light"
-                            onClick={OnReject}
+                            onClick={() => {cancelAppointment(appointment.id)}}
                         >
                             <i className="fas fa-times"></i> Cancel
-                        </a>
+                        </button>
                     )}
                 </div>
             </td>

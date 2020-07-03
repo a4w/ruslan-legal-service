@@ -108,8 +108,9 @@ function App() {
                     <Route path="/chat">
                         <ResponsiveChatPage />
                     </Route>
-                    <Route exact path="/video">
-                        <VideoComponent appointment_id={32} />
+                    <Route exact path="/video/:AppointmentId" render={(props) => {
+                        return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
+                    }}>
                     </Route>
                     <Route path="/rate">
                         <LawyerRating appointment_id={31} />

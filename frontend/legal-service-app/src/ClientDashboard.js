@@ -4,6 +4,7 @@ import StickyBox from "react-sticky-box";
 import ClientDashboardTabs from "./ClientDashboardTabs";
 import {Router} from "react-router-dom";
 import History from "./History";
+import {FaBars} from "react-icons/fa";
 
 const ClientDashboard = () => {
     return (

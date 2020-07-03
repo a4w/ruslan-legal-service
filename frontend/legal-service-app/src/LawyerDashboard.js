@@ -4,7 +4,7 @@ import StickyBox from "react-sticky-box";
 import LawyerDashboardTabs from "./LawyerDashboardTabs";
 import {Router} from "react-router-dom";
 import History from "./History";
-import {FaCogs, FaBars} from "react-icons/fa";
+import {FaBars} from "react-icons/fa";
 
 const LawyerDashboard = () => {
     return (

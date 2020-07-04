@@ -7,6 +7,7 @@ import {LogOut} from "./Axios";
 import { MdNotificationsActive } from 'react-icons/md';
 import "./Notification.css";
 import UserDropdown from "./UserDropdown";
+import NotificationDropdown from "./NotificationDropdown";
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -108,129 +109,12 @@ const NavBar = () => {
                             login / Signup{" "}
                         </Link>
                     </li>
-                    {logged_in && (
-                        <li
-                            className={`nav-item dropdown noti-dropdown ${
-                                notificationToggle ? "show" : ""
-                            }`}
-                        >
-                            <a
-                                href="#"
-                                className="dropdown-toggle nav-link"
-                                onClick={() =>
-                                    setNotificationToggle(!notificationToggle)
-                                }
-                                style={{
-                                    fontSize: "1.9rem",
-                                    lineHeight: "56px",
-                                }}
-                            >
-                                <MdNotificationsActive />{" "}
-                                {/* <i class="fa fa-bell"></i> */}
-                                <span className="badge badge-pill">3</span>
-                            </a>
-                            <div
-                                className={`dropdown-menu notifications ${
-                                    notificationToggle ? "show" : ""
-                                }`}
-                                style={{ position: "absolute", left: "-296px" }}
-                            >
-                                <div className="topnav-dropdown-header">
-                                    <span className="notification-title">
-                                        Notifications
-                                    </span>
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="clear-noti"
-                                    >
-                                        {" "}
-                                        Clear All{" "}
-                                    </a>
-                                </div>
-
-                                <div
-                                    className="noti-content"
-                                    style={{ display: "" }}
-                                >
-                                    <Notifications />
-                                </div>
-                                <div className="topnav-dropdown-footer">
-                                    <a href="#">View all Notifications</a>
-                                </div>
-                            </div>
-                        </li>
-                    )}
+                    {logged_in && (<NotificationDropdown />)}
                     {logged_in && (<UserDropdown />)}
                      </ul>
             </nav>
         </header>
     );
 };
-const Notifications = ()=>{
-    const notifications = [
-        {
-            id: 1,
-            details: "datailssss",
-            time: new Date(),
-        },
-        {
-            id: 2,
-            details: "hiiii",
-            time: new Date(),
-        },
-        {
-            id: 3,
-            details: "wtf",
-            time: new Date(),
-        },
-        {
-            id: 4,
-            details: "Ola",
-            time: new Date(),
-        },
-        {
-            id: 5,
-            details: "sdfghjkl",
-            time: new Date(),
-        },
-        {
-            id: 6,
-            details: "hi",
-            time: new Date(),
-        },
-        {
-            id: 7,
-            details: "how are u",
-            time: new Date(),
-        },
-        {
-            id: 8,
-            details: "luv u",
-            time: new Date(),
-        },
-    ];
-    return (
-        <ul className="notification-list">
-            {notifications.map((notification, i) => (
-                <li className="notification-message" key={i}>
-                    <a href="#">
-                        <div className="media">
-                            <div className="media-body">
-                                <p className="noti-details">
-                                    {" "}
-                                    {notification.details}{" "}
-                                </p>
-                                <p className="noti-time">
-                                    <span className="notification-time">
-                                        {notification.time.getTime()}
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            ))}
-        </ul>
-    );
-}
+
 export default NavBar;

@@ -7,6 +7,7 @@ import History from "./History";
 import {request} from "./Axios";
 import queryString from "query-string"
 import BlogImg from "./BlogImg";
+import moment from "moment";
 
 const Blogs = (props) => {
     const test = [];
@@ -38,7 +39,7 @@ const Blogs = (props) => {
                             <StickyBox offsetTop={20} offsetBottom={20}>
                                 <Search setBlogs={setBlogs} />
                                 <LatestBlogs latest={test} />
-                                <Catagories />
+                                {/* <Catagories /> */}
                                 <TagsList />
                             </StickyBox>
                         </div>
@@ -83,29 +84,41 @@ const Search = ({setBlogs}) => {
     );
 };
 
-const LatestBlogs = ({latest}) => {
+const LatestBlogs = () => {
+    const [blogs, setBlogs] = useState(null);
+    useEffect(() => {
+        request({ url: `/blogs/latest/${3}`, method: "GET" })
+            .then((response) => {
+                setBlogs(response.blogs);
+            })
+            .catch((err) => {});
+    }, []);
     return (
         <div className="card post-widget">
             <div className="card-header">
                 <h4 className="card-title">Latest Posts</h4>
             </div>
             <div className="card-body">
-                <LatestBlogList latest={latest} />
+                {blogs && <LatestBlogList latest={blogs} />}
             </div>
         </div>
     );
 };
-const LatestBlogCard = () => {
+const LatestBlogCard = ({blog}) => {
     return (
         <>
             <div className="post-thumb">
-                <BlogImg className="img-fluid" src={null} alt=""/>
+                <BlogImg
+                    className="img-fluid"
+                    src={blog.cover_photo_link}
+                    alt=""
+                />
             </div>
             <div className="post-info">
                 <h4>
-                    <a href="//">Title</a>
+                    <Link to={`/blog/${blog.id}`}>{blog.title}</Link>
                 </h4>
-                <p>Date</p>
+                <p>{moment(blog.publish_date).format("Do of MMMM, hh:mm a")}</p>
             </div>
         </>
     );
@@ -115,7 +128,7 @@ const LatestBlogList = ({latest}) => {
         <ul className="latest-posts">
             {latest.map((blog) => (
                 <li key={blog.id}>
-                    <LatestBlogCard lawer={blog} />
+                    <LatestBlogCard blog={blog} />
                 </li>
             ))}
         </ul>

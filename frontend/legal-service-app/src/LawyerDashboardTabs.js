@@ -30,7 +30,7 @@ const LawyerDashboardTabs = () => {
                 <ScheduleForm />
             </Route>
             <Route exact path="/dashboard/invoices">
-                test 5
+                <LawyerInvoice />
             </Route>
             <Route exact path="/dashboard/reviews">
                 <LawyerReviews />

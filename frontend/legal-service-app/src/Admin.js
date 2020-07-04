@@ -3,14 +3,36 @@ import "./assets/css/admin.css";
 
 const Admin = () => {
     return (
-        <div class="page-wrapper">
-            <div class="content container-fluid">
-                <AdminSidebar />
+        <>
+            <AdminHeader />
+            <AdminSidebar />
+            <div class="page-wrapper">
+                <div class="content container-fluid"></div>
             </div>
+        </>
+    );
+};
+const AdminHeader = () => {
+    return (
+        <div class="header">
+            <div class="header-left">
+                <a href="index.html" class="logo">
+                    <b>Lawbe</b>.co.uk
+                </a>
+                <a href="index.html" class="logo logo-small">
+                    <b>Lawbe</b>
+                </a>
+            </div>
+            <a href="javascript:void(0);" id="toggle_btn">
+                <i class="fe fe-text-align-left"></i>
+            </a>
+            <a class="mobile_btn" id="mobile_btn">
+                <i class="fa fa-bars"></i>
+            </a>
         </div>
     );
 };
-const AdminSidebar = ()=>{
+const AdminSidebar = () => {
     return (
         <div className="sidebar" id="sidebar">
             <div className="sidebar-inner slimscroll">
@@ -42,7 +64,8 @@ const AdminSidebar = ()=>{
                         </li>
                         <li>
                             <a href="patient-list.html">
-                                <i className="fe fe-user"></i> <span>Patients</span>
+                                <i className="fe fe-user"></i>{" "}
+                                <span>Patients</span>
                             </a>
                         </li>
                         <li>
@@ -71,5 +94,5 @@ const AdminSidebar = ()=>{
             </div>
         </div>
     );
-}
+};
 export default Admin;

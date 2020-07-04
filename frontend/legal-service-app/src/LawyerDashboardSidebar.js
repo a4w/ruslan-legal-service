@@ -24,9 +24,6 @@ const LawyerDashboardSidebar = () => {
             .then((data) => {
                 setLawyer(data.lawyer);
                 setAccount(data.lawyer.account);
-                console.log(data.lawyer.account);
-                console.log(data.lawyer);
-                
             })
             .catch((err) => {});
     }, []);
@@ -35,7 +32,7 @@ const LawyerDashboardSidebar = () => {
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <a className="booking-doc-img">
-                        <Img src={null} alt="Lawyer's Photo"/>                        
+                        <Img src={account.profile_picture} alt="Lawyer's Photo"/>                        
                     </a>
                     <div className="profile-det-info">
                         <h3>{`${account.name} ${account.surname}`}</h3>

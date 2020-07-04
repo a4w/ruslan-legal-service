@@ -7,24 +7,9 @@ import {NavTab} from "react-router-tabs";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
 import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icons/fa";
+import Img from "./Img";
 
 const LawyerDashboardStatus = () => {
-    const init = [
-        {
-            appointment_time: null,
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 1,
-            lawyer_id: null,
-            payment_intent_id: null,
-            price: null,
-            room_sid: null,
-            status: null,
-            updated_at: null,
-            client: {account: {profile_picture: "", name: "", surname: ""}},
-        },
-    ];
     return (
         <div className="row">
             <div className="col-12">
@@ -33,7 +18,7 @@ const LawyerDashboardStatus = () => {
             <div className="col-12">
                 <h4 className="mb-4">Clients Appoinments</h4>
                 <div className="appointment-tab">
-                    <AppointmentsListTabs upcoming={init} all={init} />
+                    <AppointmentsListTabs />
                 </div>
             </div>
         </div>
@@ -159,13 +144,9 @@ const ListItem = ({appointment}) => {
             <td>
                 <h2 className="table-avatar">
                     <a href="//" className="avatar avatar-sm mr-2">
-                        <img
+                        <Img
                             className="avatar-img rounded-circle"
-                            src={
-                                account.profile_picture
-                                    ? account.profile_picture
-                                    : "/avatar.svg"
-                            }
+                            src={account.profile_picture}
                             alt="User"
                         />
                     </a>
@@ -234,8 +215,8 @@ const AppointmentsTable = (props) => {
     );
 };
 
-const UpcomingAppointments = ({appointments}) => {
-    const [upcoming, setUpcoming] = useState(appointments);
+const UpcomingAppointments = () => {
+    const [upcoming, setUpcoming] = useState(null);
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=true",
@@ -249,14 +230,14 @@ const UpcomingAppointments = ({appointments}) => {
     }, []);
     return (
         <AppointmentsTable>
-            {upcoming.map((appointment) => (
+            {upcoming && upcoming.map((appointment) => (
                 <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AllAppointments = ({appointments}) => {
-    const [all, setAll] = useState(appointments);
+const AllAppointments = () => {
+    const [all, setAll] = useState(null);
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",
@@ -270,13 +251,13 @@ const AllAppointments = ({appointments}) => {
     }, []);
     return (
         <AppointmentsTable>
-            {all.map((appointment) => (
+            {all && all.map((appointment) => (
                 <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({upcoming, all}) => {
+const AppointmentsListTabs = () => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -293,10 +274,10 @@ const AppointmentsListTabs = ({upcoming, all}) => {
             <Switch>
                 <div className="tab-content">
                     <Route path={`${path}/upcoming`}>
-                        <UpcomingAppointments appointments={upcoming} />
+                        <UpcomingAppointments />
                     </Route>
                     <Route path={`${path}/all`}>
-                        <AllAppointments appointments={all} />
+                        <AllAppointments />
                     </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />

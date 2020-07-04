@@ -3,25 +3,10 @@ import Modal from "react-bootstrap/Modal";
 import {request} from "./Axios";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
+import Img from "./Img";
 
 const LawyerAppointments = () => {
-    const init = [
-        {
-            appointment_time: null,
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 1,
-            lawyer_id: null,
-            payment_intent_id: null,
-            price: null,
-            room_sid: null,
-            status: null,
-            updated_at: null,
-            client: {account: {profile_picture: "", name: "", surname: ""}},
-        },
-    ];
-    const [appointments, setAppointments] = useState(init);
+    const [appointments, setAppointments] = useState();
     useEffect(() => {
         request({url: "/lawyer/appointments", method: "GET"})
             .then((data) => {
@@ -31,7 +16,7 @@ const LawyerAppointments = () => {
     }, []);
     return (
         <div className="appointments">
-            {appointments.map((appointment) => (
+            {appointments && appointments.map((appointment) => (
                 <AppointmentCard key={appointment.id} appointment={appointment} />
             ))}
         </div>
@@ -79,13 +64,9 @@ const AppointmentCard = ({appointment}) => {
         <div className="appointment-list">
             <div className="profile-info-widget">
                 <a href="//" className="booking-lawyer-img">
-                    <img
+                    <Img
                         style={imgStyle}
-                        src={
-                            account.profile_picture
-                                ? account.profile_picture
-                                : "/test.jpg"
-                        }
+                        src={account.profile_picture}
                         alt="User"
                     />
                 </a>

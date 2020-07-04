@@ -36,6 +36,8 @@ import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
 import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
+import RatingModal from "./RatingModal";
+import NotFound from "./NotFound";
 
 const cookie = new Cookies();
 
@@ -58,6 +60,7 @@ function App() {
                     <RegisterModal />
                 </Route>
                 <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
+                <Route path="(.+)/rate-lawyer" component={RatingModal} />
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />
@@ -126,6 +129,12 @@ function App() {
                     </Route>
                     <Route path="/calendar">
                         <LawyerAgenda />
+                    </Route>
+                    <Route path="/not-found">
+                        <NotFound />
+                    </Route>
+                    <Route>
+                        <Redirect replace to="/not-found"/>
                     </Route>
                 </Switch>
                 <Route component={Footer} />

@@ -3,6 +3,8 @@ import History from "./History";
 import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
 import {request} from "./Axios"
+import BlogImg from "./BlogImg";
+import Img from "./Img";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -43,15 +45,28 @@ const AboutAuthor = ({lawyer}) => {
                 <div className="about-author">
                     <div className="about-author-img">
                         <div className="author-img-wrap">
-                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                <img style={{width: '60px', height: '60px'}} class="img-fluid rounded-circle" alt="Author" src={account.profile_picture ? account.profile_picture : "/test.jpg"} />
+                            <Link
+                                to={{
+                                    pathname: `/profile/${lawyer.id}`,
+                                    state: { lawyer: lawyer },
+                                }}
+                            >
+                                <Img
+                                    style={{ width: "60px", height: "60px" }}
+                                    className="img-fluid rounded-circle"
+                                    alt="Author"
+                                    src={account.profile_picture}
+                                />
                             </Link>
                         </div>
                     </div>
                     <div className="author-details">
                         <Link
                             className="blog-author-name"
-                            to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}
+                            to={{
+                                pathname: `/profile/${lawyer.id}`,
+                                state: { lawyer: lawyer },
+                            }}
                         >
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
                         </Link>
@@ -119,9 +134,7 @@ const Post = ({blog, lawyer}) => {
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img
-                    alt="" src={blog.cover_photo_link ? blog.cover_photo_link : "/test.jpg"}
-                    class="img-fluid" />
+                <BlogImg alt="" src={blog.cover_photo_link} className="img-fluid" />
             </div>
             <h3 className="blog-title">{blog.title}</h3>
             <div className="blog-info clearfix">
@@ -130,8 +143,8 @@ const Post = ({blog, lawyer}) => {
                         <li>
                             <div className="post-author">
                                 <a href="doctor-profile.html">
-                                    <img
-                                        src={account.profile_picture ? account.profile_picture : "/test.jpg"}
+                                    <Img
+                                        src={account.profile_picture}
                                         alt="Post Author"
                                     />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
@@ -139,7 +152,8 @@ const Post = ({blog, lawyer}) => {
                             </div>
                         </li>
                         <li>
-                            <i className="far fa-calendar"></i>{new Date(blog.created_at).toLocaleTimeString()}
+                            <i className="far fa-calendar"></i>
+                            {new Date(blog.created_at).toLocaleTimeString()}
                         </li>
                         <li>
                             <i className="fa fa-tags"></i> {blog.tag.area}
@@ -147,9 +161,7 @@ const Post = ({blog, lawyer}) => {
                     </ul>
                 </div>
             </div>
-            <div className="blog-content" ref={md_preview}>
-
-            </div>
+            <div className="blog-content" ref={md_preview}></div>
         </div>
     );
 };

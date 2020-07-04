@@ -133,10 +133,10 @@ function App() {
                     <Route path="/not-found">
                         <NotFound />
                     </Route>
+                    <Route>
+                        <Redirect replace to="/not-found"/>
+                    </Route>
                 </Switch>
-                <Route>
-                    <Redirect replace to="/not-found"/>
-                </Route>
                 <Route component={Footer} />
                 {/* <Footer /> */}
             </Router>

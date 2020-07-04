@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react";
 import {MdNotificationsActive} from "react-icons/md";
 import "./Notification.css";
 import {request} from "./Axios";
+import moment from "moment";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -75,26 +76,54 @@ const Notifications = () => {
     useEffect(getNotifications, []);
     return (
         <ul className="notification-list">
-            {notifications && notifications.map((notification, i) => (
-                <li className="notification-message" key={i}>
-                    <a href="#">
-                        <div className="media">
-                            <div className="media-body">
-                                <p className="noti-details">
-                                    {" "}
-                                    {notification.details}{" "}
-                                </p>
-                                <p className="noti-time">
-                                    <span className="notification-time">
-                                        {notification.time.getTime()}
-                                    </span>
-                                </p>
+            {notifications &&
+                notifications.map((notification, i) => (
+                    <li className="notification-message" key={i}>
+                        <a
+                            href="#"
+                            style={{
+                                background: notification.read_at
+                                    ? ""
+                                    : "lightgray",
+                            }}
+                        >
+                            <div className="media">
+                                <div className="media-body">
+                                    <Notification {...notification} />
+                                    <p className="noti-time">
+                                        <span className="notification-time">
+                                            {`at ${moment(
+                                                notification.created_at
+                                            ).format("MM/D, hh:mm a")}`}
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </li>
-            ))}
+                        </a>
+                    </li>
+                ))}
         </ul>
     );
 };
+
+const Notification = ({data: { type, notification_data }}) => {
+    switch (type) {
+        case "INCOMING_MESSAGE":
+            return (
+                <p
+                    className="noti-details"
+                >
+                    <span class="noti-title">
+                        {`${notification_data.sender_name} Sent you a message!`}
+                    </span>
+                    <br />
+                    {notification_data.message_hint}
+                </p>
+            );
+
+        default:
+            return <p> no data </p>;
+    }
+};
+
 export default NotificationDropdown;

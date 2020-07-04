@@ -12,7 +12,7 @@ class MessageReceived extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Message $message;
+    protected $message;
 
     public function __construct(Message $message)
     {

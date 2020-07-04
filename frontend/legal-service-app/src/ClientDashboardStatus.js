@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
+import History from "./History";
+import {NavTab} from "react-router-tabs";
 
 const ClientDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -63,7 +66,7 @@ const Appointment = ({ done }) => {
             </td>
             <td className="text-right">
                 <div className="table-action">
-                    {!done && cancel === false && (
+                    {(!done && cancel === false) ? (
                         <a
                             href="//"
                             className="btn btn-sm bg-danger-light"
@@ -71,7 +74,12 @@ const Appointment = ({ done }) => {
                         >
                             <i className="fas fa-times"></i> Cancel
                         </a>
-                    )}
+                    ):(
+                        <Link to={`${History.location.pathname}/rate-lawyer`} className="btn btn-sm bg-primary-light m-1">
+                            <i className="fas fa-star"></i> Rate
+                        </Link>
+                    )
+                }
                 </div>
             </td>
         </tr>
@@ -121,46 +129,47 @@ const PreviousAppointments = ({ appointments }) => {
     );
 };
 const AppointmentsListTabs = ({ appointments }) => {
+    const path = "/client-dashboard/status";
+    // const path = History.location.pathname;
     return (
         <div className="card">
             <div className="card-body pt-0">
-                <Tab.Container
-                    id="appointments-dashboard"
-                    defaultActiveKey="billing"
-                >
+                <Router history={History}>
                     <Nav className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
                             style={{ width: "100%" }}
                         >
                             <li className="nav-item">
-                                <Nav.Link eventKey="upcoming">
+                                <NavTab to={`${path}/upcoming`}>
                                     Upcoming
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li className="nav-item">
-                                <Nav.Link eventKey="previous">
+                                <NavTab to={`${path}/previous`}>
                                     Previous
-                                </Nav.Link>
+                                </NavTab>
                             </li>
                             <li className="nav-item">
-                                <Nav.Link eventKey="billing">Billing</Nav.Link>
+                                <NavTab to={`${path}/billing`}>Billing</NavTab>
                             </li>
                         </ul>
                     </Nav>
-
-                    <Tab.Content>
-                        <Tab.Pane eventKey="upcoming">
+                    <Switch>
+                        <Route exact path={"/client-dashboard/status"}>
+                            <Redirect replace to={`${path}/upcoming`} />
+                        </Route>
+                        <Route path={`${path}/upcoming`}>
                             <UpcomingAppointments appointments={appointments} />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="previous">
+                        </Route>
+                        <Route path={`${path}/previous`}>
                             <PreviousAppointments appointments={appointments} />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="billing">
+                        </Route>
+                        <Route path={`${path}/billing`}>
                             <Billings billings={appointments} />
-                        </Tab.Pane>
-                    </Tab.Content>
-                </Tab.Container>
+                        </Route>
+                    </Switch>
+                </Router>
             </div>
         </div>
     );

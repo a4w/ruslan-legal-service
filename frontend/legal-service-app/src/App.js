@@ -36,6 +36,7 @@ import LawyerAgenda from "./LawyerAgenda";
 import BookLawyerModal from "./BookLawyerModal";
 import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
+import RatingModal from "./RatingModal";
 
 const cookie = new Cookies();
 
@@ -58,6 +59,7 @@ function App() {
                     <RegisterModal />
                 </Route>
                 <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
+                <Route path="(.+)/rate-lawyer" component={RatingModal} />
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />

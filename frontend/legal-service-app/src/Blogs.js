@@ -6,6 +6,7 @@ import BlogDetails from "./BlogDetails";
 import History from "./History";
 import {request} from "./Axios";
 import queryString from "query-string"
+import BlogImg from "./BlogImg";
 
 const Blogs = (props) => {
     const test = [];
@@ -98,7 +99,7 @@ const LatestBlogCard = () => {
     return (
         <>
             <div className="post-thumb">
-                <a href="//">Thumbnail</a>
+                <BlogImg className="img-fluid" src={null} alt=""/>
             </div>
             <div className="post-info">
                 <h4>

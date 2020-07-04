@@ -3,9 +3,6 @@ import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
 import History from "./History";
-import {LogOut} from "./Axios";
-import { MdNotificationsActive } from 'react-icons/md';
-import "./Notification.css";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
 
@@ -98,12 +95,9 @@ const NavBar = () => {
                             </p>
                         </div>
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item"  style={{display: logged_in ? "none" : ""}}> 
                         <Link
                             className="nav-link header-login"
-                            style={{
-                                display: logged_in ? "none" : "",
-                            }}
                             to={`${History.location.pathname}/login`}
                         >
                             login / Signup{" "}
@@ -116,5 +110,4 @@ const NavBar = () => {
         </header>
     );
 };
-
 export default NavBar;

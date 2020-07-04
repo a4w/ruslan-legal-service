@@ -119,7 +119,7 @@ const ProfileCard = ({lawyer}) => {
                             <Link
                                 className="apt-btn"
                                 to={{
-                                    pathname: `/book-lawyer/${lawyer.id}`,
+                                    pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
                                     state: {lawyer_id: lawyer.id},
                                 }}
                             >

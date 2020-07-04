@@ -30,6 +30,8 @@ Route::prefix('account')->group(function () {
     Route::get('notifications', 'AccountController@getNotifications')->middleware('auth:api');
     Route::get('notification/{notification}', 'AccountController@markReadNotification')->middleware('auth:api');
     Route::get('mark-read-notifications', 'AccountController@markAllAsRead')->middleware('auth:api');
+
+    Route::get('summary', 'AccountController@getSummary')->middleware('auth:api');
 });
 
 Route::prefix('lawyer')->group(function () {

@@ -125,6 +125,16 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->client !== null;
     }
 
+    public function getType()
+    {
+        if ($this->isClient()) {
+            return 'CLIENT';
+        } else if ($this->isLawyer()) {
+            return 'LAWYER';
+        }
+        return null;
+    }
+
     /**
      * Get the email address that should be used for verification.
      *

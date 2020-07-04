@@ -3,6 +3,7 @@ import StarRatings from "react-star-ratings";
 import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
+import Img from "./Img";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
     console.log(lawyers);
@@ -20,7 +21,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                     <div className="lawyer-info-left">
                         <div className="lawyer-img">
                             <strong>{}</strong>
-                            <img className="img-fluid" src={lawyer.account.profile_picture} />
+                            <Img className="img-fluid" src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">

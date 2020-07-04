@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
+import Img from "./Img";
 
 const ClientDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -38,12 +39,10 @@ const Appointment = ({ done }) => {
                         href="lawyer-profile.html"
                         className="avatar avatar-sm mr-2"
                     >
-                        {/* <img
-                                className="avatar-img rounded-circle"
-                                src="assets/img/doctors/lawyer-thumb-01.jpg"
-                                alt="User Image"
-                            /> */}
-                        IMG
+                        <Img
+                            className="avatar-img rounded-circle"
+                            alt="User Image"
+                        />
                     </a>
                     <a href="lawyer-profile.html">
                         Lawyer's Name <span>Type</span>
@@ -66,7 +65,7 @@ const Appointment = ({ done }) => {
             </td>
             <td className="text-right">
                 <div className="table-action">
-                    {(!done && cancel === false) ? (
+                    {!done && cancel === false ? (
                         <a
                             href="//"
                             className="btn btn-sm bg-danger-light"
@@ -74,12 +73,14 @@ const Appointment = ({ done }) => {
                         >
                             <i className="fas fa-times"></i> Cancel
                         </a>
-                    ):(
-                        <Link to={`${History.location.pathname}/rate-lawyer`} className="btn btn-sm bg-primary-light m-1">
+                    ) : (
+                        <Link
+                            to={`${History.location.pathname}/rate-lawyer`}
+                            className="btn btn-sm bg-primary-light m-1"
+                        >
                             <i className="fas fa-star"></i> Rate
                         </Link>
-                    )
-                }
+                    )}
                 </div>
             </td>
         </tr>
@@ -195,8 +196,10 @@ const BillingTableRow = () => {
                         href="lawyer-profile.html"
                         className="avatar avatar-sm mr-2"
                     >
-                        {/* <img className="avatar-img rounded-circle" src="assets/img/doctors/lawyer-thumb-01.jpg" alt="User Image"/> */}
-                        IMG
+                        <Img
+                            className="avatar-img rounded-circle"
+                            alt="User Image"
+                        />
                     </a>
                     <a href="lawyer-profile.html">
                         Lawyer's name <span>Type</span>

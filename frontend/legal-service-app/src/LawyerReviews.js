@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import moment from "moment";
 import { request } from "./Axios";
+import Img from "./Img";
 
 const LawyerReviews = ({lawyer}) => {
     const [comments, setComments] = useState(null);
@@ -30,20 +31,19 @@ const ReviewList = ({ comments }) => {
         </div>
     );
 };
-const Comment = ({comment}) => {
+const Comment = ({comment, account = {}}) => {
     const date = moment(comment.created_at).format("MMMM Do YYYY, hh:mm a"); 
     
     return (
         <div className="comment">
-            {/* <img
+            <Img
                 className="avatar rounded-circle"
                 alt="User"
-                src="assets/img/patients/patient.jpg"
-            /> */}
-            Client's Pic
+                src={account.profile_picture}
+            />
             <div className="comment-body" style={{ width: "100%" }}>
                 <div className="meta-data">
-                    <span className="comment-author">Clients name</span>
+                    <span className="comment-author">{`${account.name} ${account.surname}`}</span>
                     <span className="comment-date">{date}</span>
                     <div className="review-count rating">
                         <StarRatings

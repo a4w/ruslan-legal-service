@@ -83,6 +83,13 @@ const UserDropdown = () => {
                 </Link>
                 <Link
                     className="dropdown-item"
+                    to="/calendar"
+                    onClick={handleButtonClick}
+                >
+                    Agenda
+                </Link>
+                <Link
+                    className="dropdown-item"
                     to="/dashboard/settings/lawyer-info"
                     onClick={handleButtonClick}
                 >

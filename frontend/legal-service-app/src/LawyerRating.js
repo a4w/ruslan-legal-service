@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import StarRatings from "react-star-ratings";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
+import Img from "./Img";
 
 const LawyerRating = ({appointment_id = 0}) => {
     const [rating, setRating] = useState(0);
@@ -36,8 +37,8 @@ const LawyerRating = ({appointment_id = 0}) => {
                 <div className="blog blog-grid-row">
                     <div className="profile-info-widget justify-content-center">
                         <a href="//" className="booking-lawyer-img">
-                            <img
-                                src="./test.jpg"
+                            <Img
+                                src={null}
                                 className="img-fluid"
                                 style={imgStyle}
                             />

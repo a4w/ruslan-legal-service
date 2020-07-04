@@ -57,7 +57,10 @@ const Search = ({setBlogs}) => {
     };
     const OnSubmitHandler = (e) => {
         e.preventDefault();
-        // On search here will set the new blog list
+        History.push({
+            pathname: '/blogs',
+            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g,'+')}` : '',
+        })
     };
     return (
         <div className="card search-widget">

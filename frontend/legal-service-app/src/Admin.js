@@ -1,37 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import "./assets/css/admin.css";
 
 const Admin = () => {
+    const [sidebarToggle, setToggle] = useState(false);
+    const handleToggle = () => setToggle(!sidebarToggle);
     return (
-        <>
-            <AdminHeader />
+        <div className={`main-wrapper ${sidebarToggle? "slide-nav":""}`}>
+            <div className="header">
+                <div className="header-left">
+                    <a href="index.html" className="logo">
+                        <b>Lawbe</b>.co.uk
+                    </a>
+                    <a href="index.html" className="logo logo-small">
+                        <b>Lawbe</b>
+                    </a>
+                </div>
+                <a href="" id="toggle_btn">
+                    <i className="fe fe-text-align-left"></i>
+                </a>
+                <a className="mobile_btn" onClick={handleToggle}>
+                    <i className="fa fa-bars"></i>
+                </a>
+            </div>
             <AdminSidebar />
-            <div class="page-wrapper">
-                <div class="content container-fluid"></div>
+            <div className="page-wrapper">
+                <div className="content container-fluid"></div>
             </div>
-        </>
-    );
-};
-const AdminHeader = () => {
-    return (
-        <div class="header">
-            <div class="header-left">
-                <a href="index.html" class="logo">
-                    <b>Lawbe</b>.co.uk
-                </a>
-                <a href="index.html" class="logo logo-small">
-                    <b>Lawbe</b>
-                </a>
-            </div>
-            <a href="javascript:void(0);" id="toggle_btn">
-                <i class="fe fe-text-align-left"></i>
-            </a>
-            <a class="mobile_btn" id="mobile_btn">
-                <i class="fa fa-bars"></i>
-            </a>
         </div>
     );
 };
+
 const AdminSidebar = () => {
     return (
         <div className="sidebar" id="sidebar">

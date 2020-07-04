@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import {MdNotificationsActive} from "react-icons/md";
 import "./Notification.css";
+import {request} from "./Axios";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -62,51 +63,19 @@ const NotificationDropdown = () => {
 };
 
 const Notifications = () => {
-    const notifications = [
-        {
-            id: 1,
-            details: "datailssss",
-            time: new Date(),
-        },
-        {
-            id: 2,
-            details: "hiiii",
-            time: new Date(),
-        },
-        {
-            id: 3,
-            details: "wtf",
-            time: new Date(),
-        },
-        {
-            id: 4,
-            details: "Ola",
-            time: new Date(),
-        },
-        {
-            id: 5,
-            details: "sdfghjkl",
-            time: new Date(),
-        },
-        {
-            id: 6,
-            details: "hi",
-            time: new Date(),
-        },
-        {
-            id: 7,
-            details: "how are u",
-            time: new Date(),
-        },
-        {
-            id: 8,
-            details: "luv u",
-            time: new Date(),
-        },
-    ];
+    const [notifications, setNotifications] = useState();
+    const getNotifications = ()=>{
+        request({ url: "/account/notifications", method: "GET" })
+            .then((data) => {
+                console.log("-->",data);
+                setNotifications(data.notifications);
+            })
+            .catch((err) => {});
+    }
+    useEffect(getNotifications, []);
     return (
         <ul className="notification-list">
-            {notifications.map((notification, i) => (
+            {notifications && notifications.map((notification, i) => (
                 <li className="notification-message" key={i}>
                     <a href="#">
                         <div className="media">

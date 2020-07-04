@@ -6,6 +6,7 @@ import History from "./History";
 import {LogOut} from "./Axios";
 import { MdNotificationsActive } from 'react-icons/md';
 import "./Notification.css";
+import UserDropdown from "./UserDropdown";
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -13,14 +14,6 @@ const NavBar = () => {
     const [menuToggle, setMenuToggle] = useState(false);
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [open, setOpen] = useState(true);
-    const [user, setUser] = useState({
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
-        profile_picture_url: "/test.jpg",
-        type: "",
-    });
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)
@@ -167,68 +160,8 @@ const NavBar = () => {
                             </div>
                         </li>
                     )}
-                    <li
-                        className={`nav-item dropdown has-arrow logged-item ${
-                            menuToggle ? "show" : ""
-                        }`}
-                        style={{ display: logged_in ? "" : "none" }}
-                    >
-                        <Link
-                            to="#"
-                            className="dropdown-toggle nav-link"
-                            onClick={() => setMenuToggle(!menuToggle)}
-                        >
-                            <span className="user-img">
-                                <img
-                                    className="rounded-circle"
-                                    src={user.profile_picture_url}
-                                    width="31"
-                                    alt={user.name}
-                                />
-                            </span>
-                        </Link>
-                        <div
-                            className={`dropdown-menu dropdown-menu-right ${
-                                menuToggle ? "show" : ""
-                            }`}
-                        >
-                            <div className="user-header">
-                                <div className="avatar avatar-sm">
-                                    <img
-                                        src={user.profile_picture_url}
-                                        alt="User Image"
-                                        className="avatar-img rounded-circle"
-                                    />
-                                </div>
-                                <div className="user-text">
-                                    <h6>{`${user.name} ${user.surname}`}</h6>
-                                    <p className="text-muted mb-0">
-                                        {user.type}
-                                    </p>
-                                </div>
-                            </div>
-                            <Link className="dropdown-item" to="/dashboard">
-                                Dashboard
-                            </Link>
-                            <Link className="dropdown-item" to="/chat">
-                                Messages
-                            </Link>
-                            <Link
-                                className="dropdown-item"
-                                to="/dashboard/settings/lawyer-info"
-                            >
-                                Profile Settings
-                            </Link>
-                            <Link
-                                className="dropdown-item"
-                                to="/logout"
-                                onClick={LogOut}
-                            >
-                                Logout
-                            </Link>
-                        </div>
-                    </li>
-                </ul>
+                    {logged_in && (<UserDropdown />)}
+                     </ul>
             </nav>
         </header>
     );

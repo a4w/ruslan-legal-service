@@ -4,34 +4,46 @@ import {NavTab} from "react-router-tabs";
 import StarRatings from "react-star-ratings";
 import {request} from "./Axios";
 import {LogOut} from "./Axios";
+import Img from "./Img";
 
 const LawyerDashboardSidebar = () => {
-    const [rating, setRating] = useState(0);
+    const init = {
+        account: {
+            name: "",
+            surname: "",
+            phone: "",
+            profile_picture: null,
+        },
+        lawyer_type: { type: "" },
+        ratings_average: 0,
+    };
+    const [lawyer, setLawyer] = useState(init);
+    const [account, setAccount] = useState(init.account);
     useEffect(() => {
-        request({
-            url: `/rating/${1}`,
-            method: "GET",
-        })
+        request({ url: "/lawyer/me", method: "GET" })
             .then((data) => {
-                console.log(data);
-                // setRating(data);
+                setLawyer(data.lawyer);
+                setAccount(data.lawyer.account);
+                console.log(data.lawyer.account);
+                console.log(data.lawyer);
+                
             })
-            .catch((e) => {});
+            .catch((err) => {});
     }, []);
     return (
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <a href="//" className="booking-lawyer-img">
-                        Lawyer's Photo
+                    <a className="booking-doc-img">
+                        <Img src={null} alt="Lawyer's Photo"/>                        
                     </a>
                     <div className="profile-det-info">
-                        <h3>Lawyer's Name</h3>
+                        <h3>{`${account.name} ${account.surname}`}</h3>
 
                         <div className="client-details">
-                            <h5 className="mb-0">Lawyer's Area of expertice</h5>
+                            <h5 className="mb-0">{lawyer.lawyer_type.type}</h5>
                             <StarRatings
-                                rating={rating}
+                                rating={lawyer.ratings_average}
                                 starRatedColor="gold"
                                 starDimension="20px"
                                 starSpacing="0px"

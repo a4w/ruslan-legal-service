@@ -4,6 +4,11 @@ import History from "./History";
 import {request} from "./Axios"
 import * as $ from "jquery"
 import Slider from "react-slick";
+import Img from "./Img";
+import { Discount } from "./LawyerCardList";
+import StarRatings from "react-star-ratings";
+import { Link } from "react-router-dom";
+import queryString from "query-string"
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -124,6 +129,7 @@ const Home = () => {
             </div>
         </section>
         <AreaOfExpertices />
+        <PopularLawyers />
         </>
     );
 };
@@ -157,41 +163,41 @@ const SearchLawyerByName = () => {
     );
 };
 export default Home;
+var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                infinite: true,
+                dots: true,
+            },
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1,
+                initialSlide: 2,
+            },
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+            },
+        },
+    ],
+};
 const AreaOfExpertices = () => {
-    var settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        initialSlide: 0,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true,
-                },
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    initialSlide: 2,
-                },
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                },
-            },
-        ],
-    };
     const [areas, setAreas] = useState([]);
     useEffect(() => {
         request({
@@ -234,6 +240,129 @@ const SlickIcon = ({url, label})=>{
                 </span>
             </div>
             <p>{label}</p>
+        </div>
+    );
+}
+
+const PopularLawyers = ()=>{
+    const [lawyers, setLawyers] = useState([]);
+    const [params, setParams] = useState({length: 7, order:"ratings"});
+    
+    useEffect(() => {
+        request({
+            url: "/lawyer/all?" + queryString.stringify(params),
+            method: "GET",
+        })
+            .then((data) => {
+               setLawyers(data.lawyers);
+            })
+            .catch((_errors) => {});
+    }, []);
+    return (
+        <section className="section section-lawyer">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-lg-4">
+                        <div className="section-header ">
+                            <h2>Book Our Lawyers</h2>
+                        </div>
+                    </div>
+                    <div className="col-lg-8">
+                        <div className="lawyer-slider slider">
+                            <Slider {...settings}>
+                                {lawyers.map((lawyer, i) => (
+                                    <LawyerCard
+                                        key={i}
+                                        account={lawyer.account}
+                                        lawyer={lawyer}
+                                    />
+                                ))}
+                            </Slider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+const LawyerCard = ({account, lawyer})=>{
+    return (
+        <div className="profile-widget">
+            <div className="lawyer-img">
+                <a href="lawyer-profile.html">
+                    <Img
+                        className="img-fluid"
+                        alt="User Image"
+                        src={account.profile_picture}
+                    />
+                </a>
+                <a href="javascript:void(0)" className="fav-btn">
+                    <i className="far fa-bookmark"></i>
+                </a>
+            </div>
+            <div className="pro-content">
+                <h3 className="title">
+                    <a href="lawyer-profile.html">{`${account.name} ${account.surname}`}</a>
+                    <i className="fas fa-check-circle verified"></i>
+                </h3>
+                <p className="speciality">
+                    {lawyer.practice_areas &&
+                        lawyer.practice_areas.map((area) => (
+                            <h6 key={area.id}>{area.area}</h6>
+                        ))}
+                </p>
+                <div className="rating">
+                    <StarRatings
+                        rating={parseFloat(lawyer.ratings_average)}
+                        starRatedColor="gold"
+                        starDimension="20px"
+                        starSpacing="0px"
+                        numberOfStars={5}
+                        name="rating"
+                    />
+                    &nbsp;
+                    <span className="d-inline-block text-xs average-rating">
+                        ({lawyer.ratings.length})
+                    </span>
+                </div>
+                <ul className="available-info">
+                    <li>
+                        <i className="fas fa-map-marker-alt"></i>{" "}
+                        {`${account.city}, ${account.country}`}
+                    </li>
+                    <Discount
+                        secsTillEnd={new Date(lawyer.discount_end)}
+                        cost={lawyer.price_per_hour}
+                        costAfterDiscount={lawyer.discounted_price_per_hour}
+                        isPercent={lawyer.is_percent_discount}
+                        discount={lawyer.discount}
+                    />
+                </ul>
+                <div className="row row-sm">
+                    <div className="col-6">
+                        <Link
+                            to={{
+                                pathname: `/profile/${lawyer.id}`,
+                                state: { lawyer: lawyer },
+                            }}
+                            className="btn view-btn"
+                        >
+                            View Profile
+                        </Link>
+                    </div>
+                    <div className="col-6">
+                        <Link
+                            to={{
+                                pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
+                                state: { lawyer_id: lawyer.id },
+                            }}
+                            className="btn book-btn"
+                        >
+                            Book Now
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -41,7 +41,7 @@ class AuthController extends Controller
             );
             $refresh_token = JWT::encode($payload, $key);
         }
-        return $this->respondWithToken($token, $refresh_token);
+        return $this->respondWithToken(auth()->user(), $token, $refresh_token);
     }
 
     public function logout()
@@ -69,19 +69,21 @@ class AuthController extends Controller
         }
         // Create new login token from $user
         $token = JWTAuth::fromUser($user);
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($user, $token);
     }
 
     public function refreshCurrentToken()
     {
-        return $this->respondWithToken(Auth::refresh());
+        return $this->respondWithToken(Auth::user(), Auth::refresh());
     }
 
-    protected function respondWithToken($token, $refresh_token = null)
+    protected function respondWithToken(Account $account, $token, $refresh_token = null)
     {
         $response = [
             'access_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            'account_type' => $account->getType(),
+            'user_id' => $account->id
         ];
         if ($refresh_token !== null) {
             $response += [

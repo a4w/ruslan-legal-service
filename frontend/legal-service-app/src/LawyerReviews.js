@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import moment from "moment";
+import { request } from "./Axios";
 
 const LawyerReviews = ({lawyer}) => {
-    const comments = lawyer.ratings;
-
+    const [comments, setComments] = useState(null);
+    useEffect(() => {
+        if (!lawyer)
+            request({ url: "/lawyer/me", method: "GET" })
+                .then((data) => {
+                    setComments(data.lawyer.ratings);
+                })
+                .catch((err) => {});
+        else setComments(lawyer.ratings);
+    }, []);
     return <ReviewList comments={comments} />;
 };
 

@@ -1,28 +1,35 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Nav from "react-bootstrap/Nav";
 import { NavTab } from "react-router-tabs";
+import {request} from "./Axios";
+import Img from "./Img";
 
 const ClientDashboardSidebar = () => {
+    const [account, setAccount] = useState({});
+    useEffect(() => {
+        request({ url: "/account/personal-info", method: "GET" })
+            .then((data) => {
+                setAccount(data.profile_data);
+                console.log(data);                
+            })
+            .catch((err) => {});
+    }, []);
     return (
         <div className="profile-sidebar">
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
-                    <a href="//" className="booking-lawyer-img">
-                        {/* <img
-                            src="assets/img/patients/patient.jpg"
-                            alt="User Image"
-                        /> */}
-                        Client's PP
+                    <a className="booking-lawyer-img">
+                        <Img src={account.profile_picture} alt="User Image" />
                     </a>
                     <div className="profile-det-info">
-                        <h3>Client's name</h3>
+                        <h3>{`${account.name} ${account.surname}`}</h3>
                         <div className="client-details">
                             <h5>
-                                <i className="fas fa-phone"></i> Phone
+                                <i className="fas fa-phone"></i> {account.phone}
                             </h5>
                             <h5 className="mb-0">
-                                <i className="fas fa-map-marker-alt"></i> City,
-                                Country
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                                {`${account.city}, ${account.country}`}
                             </h5>
                         </div>
                     </div>

@@ -6,7 +6,8 @@ import History from "./History";
 import {LogOut, request} from "./Axios";
 import { MdNotificationsActive } from 'react-icons/md';
 import "./Notification.css";
-import useInterval from "./useInterval";
+import UserDropdown from "./UserDropdown";
+import NotificationDropdown from "./NotificationDropdown";
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -14,14 +15,6 @@ const NavBar = () => {
     const [menuToggle, setMenuToggle] = useState(false);
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [open, setOpen] = useState(true);
-    const [user, setUser] = useState({
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
-        profile_picture_url: "/test.jpg",
-        type: "",
-    });
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)
@@ -113,151 +106,11 @@ const NavBar = () => {
                             login / Signup{" "}
                         </Link>
                     </li>
-                    {logged_in && (
-                        <li
-                            className={`nav-item dropdown noti-dropdown ${
-                                notificationToggle ? "show" : ""
-                            }`}
-                        >
-                            <Notifications 
-                                setNotificationToggle={setNotificationToggle} 
-                                notificationToggle={notificationToggle}  
-                            />
-                        </li>
-                    )}
-                    <li
-                        className={`nav-item dropdown has-arrow logged-item ${
-                            menuToggle ? "show" : ""
-                        }`}
-                        style={{ display: logged_in ? "" : "none" }}
-                    >
-                        <Link
-                            to="#"
-                            className="dropdown-toggle nav-link"
-                            onClick={() => setMenuToggle(!menuToggle)}
-                        >
-                            <span className="user-img">
-                                <img
-                                    className="rounded-circle"
-                                    src={user.profile_picture_url}
-                                    width="31"
-                                    alt={user.name}
-                                />
-                            </span>
-                        </Link>
-                        <div
-                            className={`dropdown-menu dropdown-menu-right ${
-                                menuToggle ? "show" : ""
-                            }`}
-                        >
-                            <div className="user-header">
-                                <div className="avatar avatar-sm">
-                                    <img
-                                        src={user.profile_picture_url}
-                                        alt="User Image"
-                                        className="avatar-img rounded-circle"
-                                    />
-                                </div>
-                                <div className="user-text">
-                                    <h6>{`${user.name} ${user.surname}`}</h6>
-                                    <p className="text-muted mb-0">
-                                        {user.type}
-                                    </p>
-                                </div>
-                            </div>
-                            <Link className="dropdown-item" to="/dashboard">
-                                Dashboard
-                            </Link>
-                            <Link className="dropdown-item" to="/chat">
-                                Messages
-                            </Link>
-                            <Link
-                                className="dropdown-item"
-                                to="/dashboard/settings/lawyer-info"
-                            >
-                                Profile Settings
-                            </Link>
-                            <Link
-                                className="dropdown-item"
-                                to="/logout"
-                                onClick={LogOut}
-                            >
-                                Logout
-                            </Link>
-                        </div>
-                    </li>
-                </ul>
+                    {logged_in && (<NotificationDropdown />)}
+                    {logged_in && (<UserDropdown />)}
+                     </ul>
             </nav>
         </header>
     );
 };
-const Notifications = ({setNotificationToggle, notificationToggle})=>{
-    const [notifications, setNotifications] = useState(null);
-    const getNotification = ()=>{
-        request({ url: "/account/notifications", method: "GET" })
-            .then((data) => {
-                console.log("-->",data);
-                setNotifications(data.notifications);
-            })
-            .catch((err) => {});
-    }
-    useEffect(getNotification,[]);
-    return (
-        <>
-            <a
-                href="#"
-                className="dropdown-toggle nav-link"
-                onClick={() => setNotificationToggle(!notificationToggle)}
-                style={{
-                    fontSize: "1.9rem",
-                    lineHeight: "56px",
-                }}
-            >
-                <MdNotificationsActive /> {/* <i class="fa fa-bell"></i> */}
-                <span className="badge badge-pill">3</span>
-            </a>
-            <div
-                className={`dropdown-menu notifications ${
-                    notificationToggle ? "show" : ""
-                }`}
-                style={{ position: "absolute", left: "-296px" }}
-            >
-                <div className="topnav-dropdown-header">
-                    <span className="notification-title">Notifications</span>
-                    <a href="javascript:void(0)" className="clear-noti">
-                        {" "}
-                        Clear All{" "}
-                    </a>
-                </div>
-                <div className="noti-content" style={{ display: "" }}>
-                    <ul className="notification-list">
-                        {notifications &&
-                            notifications.map((notification, i) => (
-                                <li className="notification-message" key={i}>
-                                    <a href="#">
-                                        <div className="media">
-                                            <div className="media-body">
-                                                <p className="noti-details">
-                                                    {" "}
-                                                    {notification.details}{" "}
-                                                </p>
-                                                <p className="noti-time">
-                                                    <span className="notification-time">
-                                                        {notification.time.getTime()}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            ))}
-                    </ul>
-                </div>
-                <div className="topnav-dropdown-footer">
-                    <a href="#">View all Notifications</a>
-                </div>
-            </div>
-        </>
-    );
-}
 export default NavBar;

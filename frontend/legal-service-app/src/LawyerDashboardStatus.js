@@ -5,24 +5,10 @@ import {Router, Route, Link, Redirect, Switch} from "react-router-dom";
 import history from "./History";
 import {NavTab} from "react-router-tabs";
 import {request} from "./Axios";
+import {toast} from "react-toastify";
+import Img from "./Img";
 
 const LawyerDashboardStatus = () => {
-    const init = [
-        {
-            appointment_time: null,
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 1,
-            lawyer_id: null,
-            payment_intent_id: null,
-            price: null,
-            room_sid: null,
-            status: null,
-            updated_at: null,
-            client: {account: {profile_picture: "", name: "", surname: ""}},
-        },
-    ];
     return (
         <div className="row">
             <div className="col-12">
@@ -31,7 +17,7 @@ const LawyerDashboardStatus = () => {
             <div className="col-12">
                 <h4 className="mb-4">Clients Appoinments</h4>
                 <div className="appointment-tab">
-                    <AppointmentsListTabs upcoming={init} all={init} />
+                    <AppointmentsListTabs />
                 </div>
             </div>
         </div>
@@ -110,7 +96,6 @@ const LawyerStatus = () => {
 const ListItem = ({appointment}) => {
     const {client} = {...appointment};
     const {account} = {...client};
-    const [cancel, setCancel] = useState(appointment.status === "ON HOLD");
     const appointment_time = new Date(appointment.appointment_time);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
@@ -122,23 +107,24 @@ const ListItem = ({appointment}) => {
         hour: "numeric",
         minute: "numeric",
     });
-    const OnReject = (e) => {
-        e.preventDefault();
-        setCancel(true);
-        // The API cancel Rquest will be sent here
+    const cancelAppointment = (id) => {
+        request({
+            url: `/appointment/${id}/cancel`,
+            method: 'POST'
+        }).then(response => {
+            toast.success("Appointment is cancelled");
+        }).error(error => {
+            toast.error("Appointment couldn't be cancelled");
+        });
     };
     return (
         <tr>
             <td>
                 <h2 className="table-avatar">
                     <a href="//" className="avatar avatar-sm mr-2">
-                        <img
+                        <Img
                             className="avatar-img rounded-circle"
-                            src={
-                                account.profile_picture
-                                    ? account.profile_picture
-                                    : "/avatar.svg"
-                            }
+                            src={account.profile_picture}
                             alt="User"
                         />
                     </a>
@@ -152,18 +138,27 @@ const ListItem = ({appointment}) => {
                 {day}
                 <span className="d-block text-info">{time}</span>
             </td>
-            <td>{cancel ? "CANCELLED" : appointment.status}</td>
+            <td className="text-center">{appointment.status}</td>
             <td className="text-center">{appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
-                    {cancel === false && (
-                        <a
-                            href="//"
+                    {appointment.can_be_started &&
+                        <>
+                            <Link
+                                className="btn btn-sm bg-success-light m-1"
+                                to={`/video/${appointment.id}`}
+                            >
+                                <i className="fas fa-user"></i> Join
+                        </Link>
+                        </>
+                    }
+                    {appointment.is_cancellable && (
+                        <button
                             className="btn btn-sm bg-danger-light"
-                            onClick={OnReject}
+                            onClick={() => {cancelAppointment(appointment.id)}}
                         >
                             <i className="fas fa-times"></i> Cancel
-                        </a>
+                        </button>
                     )}
                 </div>
             </td>
@@ -198,8 +193,8 @@ const AppointmentsTable = (props) => {
     );
 };
 
-const UpcomingAppointments = ({appointments}) => {
-    const [upcoming, setUpcoming] = useState(appointments);
+const UpcomingAppointments = () => {
+    const [upcoming, setUpcoming] = useState(null);
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=true",
@@ -213,14 +208,14 @@ const UpcomingAppointments = ({appointments}) => {
     }, []);
     return (
         <AppointmentsTable>
-            {upcoming.map((appointment) => (
+            {upcoming && upcoming.map((appointment) => (
                 <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AllAppointments = ({appointments}) => {
-    const [all, setAll] = useState(appointments);
+const AllAppointments = () => {
+    const [all, setAll] = useState(null);
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",
@@ -234,13 +229,13 @@ const AllAppointments = ({appointments}) => {
     }, []);
     return (
         <AppointmentsTable>
-            {all.map((appointment) => (
+            {all && all.map((appointment) => (
                 <ListItem key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({upcoming, all}) => {
+const AppointmentsListTabs = () => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -257,10 +252,10 @@ const AppointmentsListTabs = ({upcoming, all}) => {
             <Switch>
                 <div className="tab-content">
                     <Route path={`${path}/upcoming`}>
-                        <UpcomingAppointments appointments={upcoming} />
+                        <UpcomingAppointments />
                     </Route>
                     <Route path={`${path}/all`}>
-                        <AllAppointments appointments={all} />
+                        <AllAppointments />
                     </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />

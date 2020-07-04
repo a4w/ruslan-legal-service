@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Chat;
 use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
@@ -141,8 +142,18 @@ class AppointmentController extends Controller
         // Add grant to token
         $token->addGrant($videoGrant);
 
+
+        $chat = Chat::whereHas('participants', function ($query) use ($appointment) {
+            $query->whereIn('user_id', [$appointment->lawyer->account->id, $appointment->client->account->id]);
+        }, '=', 2)->first();
+        if ($chat === null) {
+            // Create chat
+            $chat = Chat::create();
+            $chat->participants()->attach($appointment->lawyer->account);
+            $chat->participants()->attach($appointment->client->account);
+        }
         // render token to string
-        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid]);
+        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid, 'chat_id' => $chat->id]);
     }
 
     public function cancelAppointment(Appointment $appointment)

@@ -6,6 +6,7 @@ import {connect, createLocalTracks} from "twilio-video"
 import {request} from "./Axios.js"
 import {toast} from "react-toastify"
 import ChatPage from "./ChatPage"
+import ResponsiveChatPage from "./ResponsiveChatPage"
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -15,6 +16,7 @@ const VideoComponent = ({appointment_id}) => {
     const [accessToken, setAccessToken] = useState(null);
     const [room, setRoom] = useState(null);
     const [localTracks, setLocalTracks] = useState(null);
+    const [chatId, setChatId] = useState(null);
 
     const handleSoundControl = () => {
         setIsMuted(!isMuted);
@@ -50,6 +52,7 @@ const VideoComponent = ({appointment_id}) => {
         }).then((response) => {
             setRoomSID(response.room_sid);
             setAccessToken(response.access_token);
+            setChatId(response.chat_id);
         }).catch((error) => {
             toast.warn("It's not the appointment time, you will not be connected");
         });
@@ -69,7 +72,7 @@ const VideoComponent = ({appointment_id}) => {
         });
 
         return () => {
-            room.disconnet();
+            handleDisconnection();
             toast.info("You are now disconnected from the room");
             // Redirect
         };
@@ -177,8 +180,8 @@ const VideoComponent = ({appointment_id}) => {
                     </div>
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none')}>
-                    <button onClick={handleChatToggle} className="btn btn-link"><FaChevronLeft /></button>
-                    <ChatPage />
+                    <button onClick={handleChatToggle} className="btn btn-primary btn-block"><FaChevronLeft /></button>
+                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} />
                 </div>
             </div>
         </>

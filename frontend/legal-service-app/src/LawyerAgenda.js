@@ -1,53 +1,10 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import "./LawyerAgenda.css";
+import {request} from "./Axios";
 
 const LawyerAgenda = () => {
-    const init = [
-        {
-            appointment_time: new Date(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 1,
-        },
-        {
-            appointment_time: new Date(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 7,
-        },
-        {
-            appointment_time: new Date(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 9,
-        },
-        {
-            appointment_time: new Date(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 2,
-        },
-        {
-            appointment_time: moment().add(1, "month").toDate(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 3,
-        },
-        {
-            appointment_time: moment().subtract(1, "month").toDate(),
-            client_id: null,
-            created_at: null,
-            duration: null,
-            id: 4,
-        },
-    ];
-    const [appointments, setAppointments] = useState(init);
+    const [appointments, setAppointments] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [monthAppointments, setMonthAppointments] = useState(null);
@@ -64,12 +21,19 @@ const LawyerAgenda = () => {
         setSelectedDate(day);
     };
     useEffect(() => {
-        const next = new Array(currentDate.getDate() + 1);
+        request({url: "/lawyer/appointments", method: "GET"})
+            .then((data) => {
+                setAppointments(data.appointments);
+            })
+            .catch((err) => {});
+    }, []);
+    useEffect(() => {
+        const next = new Array(moment(currentDate). daysInMonth() + 1);
         for (let index = 0; index < next.length; index++) {
             next[index] = new Array();
         }
         appointments.forEach((appointment) => {
-            const appDay = appointment.appointment_time;
+            const appDay = new Date(appointment.appointment_time);
             if (moment(appDay).isSame(currentDate, "month")) {
                 const n = appDay.getDate();
                 next[n].push(appointment);
@@ -81,7 +45,7 @@ const LawyerAgenda = () => {
         <div className="content">
             <div className="container-fluid">
                 <div className="card">
-                    <div className="card-body">
+                    <div className="card-body" style={{overflowY:"auto"}}>
                         <div className="calendar">
                             <div>
                                 <Header
@@ -108,12 +72,18 @@ const LawyerAgenda = () => {
         </div>
     );
 };
-const CalendarEvent = ()=>{
+const CalendarEvent = ({appointment})=>{
+    // let duration = new Date(0);
+    // duration.setMinutes(appointment.duration);
+    // duration = moment(duration).format("hh hours and mm minutes");
+    // console.log(duration);
+    
     return (
         <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
             <div className="fc-content">
-                <span className="fc-time">1:08a</span>{" "}
-                <span className="fc-title">Test Event 1</span>
+                <span className="fc-time">{moment(appointment.appointment_time).format("hh:mm a")}</span>{" "}
+                <br/>
+                <span className="fc-title">{`duration: ${appointment.duration} minutes`}</span>
             </div>
         </div>
     );
@@ -166,7 +136,7 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
             formattedDate = moment(day).format(dateFormat);
             const cloneDay = day;
             let todaysAppointments = null;
-            if (moment(day).isSame(currentDate, "month") &&appointments !== null)
+            if (moment(day).isSame(currentDate, "month") && appointments !== null)
                 todaysAppointments = appointments[day.getDate()];
             days.push(
                 <div
@@ -186,7 +156,7 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
                     <div className="fc">
                         {todaysAppointments &&
                             todaysAppointments.map((appointment, i) => (
-                                <CalendarEvent key={i} />
+                                <CalendarEvent appointment={appointment} key={i} />
                             ))}
                     </div>
                 </div>

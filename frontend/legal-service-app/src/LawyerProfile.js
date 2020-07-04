@@ -15,6 +15,7 @@ import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import BlogList from "./BlogList";
+import Img from "./Img";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -52,8 +53,8 @@ const ProfileCard = ({lawyer}) => {
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
                         <div className="lawyer-img">
-                            <img
-                                src={lawyer.pp}
+                            <Img
+                                src={lawyer.profile_picture}
                                 className="img-fluid"
                                 alt="Lawyer Profile"
                             />

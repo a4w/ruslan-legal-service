@@ -1,4 +1,5 @@
 import React from "react";
+import Img from "./Img";
 
 const LawyerClients = () => {
     const clients = [
@@ -28,23 +29,23 @@ const ClientCard = ({ client }) => {
                 <div className="card-body">
                     <div className="pro-widget-content">
                         <div className="profile-info-widget">
-                            <a
-                                href="client-profile.html"
-                                className="booking-lawyer-img"
-                            >
-                                Profile Pic
+                            <a className="booking-lawyer-img">
+                                <Img
+                                    src={client.profile_picture}
+                                    alt="User Image"
+                                />
                             </a>
                             <div className="profile-det-info">
                                 <h3>
                                     <a href="client-profile.html">
-                                        Client's name
+                                        {`${client.name} ${client.surname}`}
                                     </a>
                                 </h3>
 
                                 <div className="client-details">
                                     <h5 className="mb-0">
                                         <i className="fas fa-map-marker-alt"></i>{" "}
-                                        City, Country
+                                        {`${client.city} ${client.country}`}
                                     </h5>
                                 </div>
                             </div>
@@ -53,10 +54,7 @@ const ClientCard = ({ client }) => {
                     <div className="client-info">
                         <ul>
                             <li>
-                                Phone <span>+x xxx xxx xxxx</span>
-                            </li>
-                            <li>
-                                data <span>etc..</span>
+                                Phone <span>{client.phone}</span>
                             </li>
                         </ul>
                     </div>

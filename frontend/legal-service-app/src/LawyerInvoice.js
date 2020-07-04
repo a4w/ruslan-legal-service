@@ -1,4 +1,5 @@
 import React from "react";
+import Img from "./Img";
 
 const LawyerInvoice = () => {
     const clients = [
@@ -33,12 +34,10 @@ const InvoiceTableRow = ({ client }) => {
                         href="patient-profile.html"
                         className="avatar avatar-sm mr-2"
                     >
-                        {/* <img
+                        <Img
                             className="avatar-img rounded-circle"
-                            src="assets/img/patients/patient.jpg"
                             alt="User"
-                        /> */}
-                        IMG
+                        />
                     </a>
                     <a href="patient-profile.html">
                         Client's name <span> ID </span>
@@ -65,7 +64,10 @@ const InvoiceTable = (props) => {
         <div className="card card-table">
             <div className="card-body">
                 <div className="table-responsive">
-                    <table className="table table-hover table-center mb-0">
+                    <table
+                        className="table table-hover table-center mb-0"
+                        style={{ backgroundColor: "white" }}
+                    >
                         <thead>
                             <tr>
                                 <th>Invoice No</th>

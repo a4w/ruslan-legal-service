@@ -3,9 +3,6 @@ import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
 import History from "./History";
-import {LogOut, request} from "./Axios";
-import { MdNotificationsActive } from 'react-icons/md';
-import "./Notification.css";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
 

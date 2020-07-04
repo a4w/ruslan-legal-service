@@ -1,35 +1,23 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 const NotFound = () => {
-    const ImgStyle = {
-        display: "block",
-        marginLeft: "auto",
-        marginRight: "auto",
-        width: "50%",
-        width: "100%",
-        height: " auto",
-    };
+    
     return (
-        <div
-            style={{
-                backgroundColor: "#fff",
-            }}
-        >
-            <div
-                style={{
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "column",
-                    pointerEvents: "auto",
-                    backgroundColor: "#fff",
-                    backgroundClip: "padding-box",
-                    borderRadius: ".3rem",
-                    outline: "0",
-                    width: "50%",
-                    margin: "auto",
-                }}
-            >
-                <img src="/undraw_page_not_found_su7k.svg" style={ImgStyle} />
+        <div className="error-page">
+            <div className="main-wrapper">
+                <div className="error-box">
+                    <h1>404</h1>
+                    <h3 className="h2 mb-3">
+                        <i className="fa fa-warning"></i> Oops! Page not found!
+                    </h3>
+                    <p className="h4 font-weight-normal">
+                        The page you requested was not found.
+                    </p>
+                    <Link to="/home" className="btn btn-primary">
+                        Back to Home
+                    </Link>
+                </div>
             </div>
         </div>
     );

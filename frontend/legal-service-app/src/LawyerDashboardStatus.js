@@ -6,6 +6,7 @@ import history from "./History";
 import {NavTab} from "react-router-tabs";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
+import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icons/fa";
 
 const LawyerDashboardStatus = () => {
     const init = [
@@ -44,6 +45,26 @@ const LawyerStatus = () => {
         day: "numeric",
         year: "numeric",
     });
+    const [numberOfClients, setNumberOfClients] = useState(0);
+    const [numberOfDoneAppointments, setNumberOfDoneAppointments] = useState(0);
+    const [numberOfUpcomingAppointments, setNumberOfUpcomingAppointments] = useState(0);
+    const [nextAppointmentDate, setNextAppointmentDate] = useState(null);
+
+    useEffect(() => {
+        request({
+            url: 'account/summary',
+            method: 'GET'
+        }).then(response => {
+            console.log(response);
+            setNumberOfClients(response.clients_count);
+            setNumberOfDoneAppointments(response.done_appointments_count);
+            setNumberOfUpcomingAppointments(response.upcoming_appointments_count);
+            setNextAppointmentDate(response.next_appointment_date);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
+
     return (
         <div className="card dash-card">
             <div className="card-body">
@@ -55,13 +76,13 @@ const LawyerStatus = () => {
                                     className="circle-graph1"
                                     data-percent="75"
                                 >
-                                    <div className="img-fluid">ICON</div>
+                                    <div className="img-fluid"><FaUser /></div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">
                                 <h6>Total Clients</h6>
-                                <h3>Number</h3>
-                                <p className="text-muted">Till All</p>
+                                <h3>{numberOfClients}</h3>
+                                <p className="text-muted">Till today</p>
                             </div>
                         </div>
                     </div>
@@ -73,12 +94,12 @@ const LawyerStatus = () => {
                                     className="circle-graph2"
                                     data-percent="65"
                                 >
-                                    <div className="img-fluid">ICON</div>
+                                    <div className="img-fluid"><FaCalendarCheck /></div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">
-                                <h6>All Clients</h6>
-                                <h3>Number</h3>
+                                <h6>Total appointments</h6>
+                                <h3>{numberOfDoneAppointments}</h3>
                                 <p className="text-muted">{date}</p>
                             </div>
                         </div>
@@ -91,15 +112,16 @@ const LawyerStatus = () => {
                                     className="circle-graph3"
                                     data-percent="50"
                                 >
-                                    <div className="img-fluid">ICON</div>
+                                    <div className="img-fluid"><FaRegCalendarPlus /></div>
                                 </div>
                             </div>
                             <div className="dash-widget-info">
-                                <h6>Appoinments</h6>
-                                <h3>Total</h3>
-                                <p className="text-muted">
-                                    Date of next session
-                                </p>
+                                <h6>Upcoming appointments</h6>
+                                <h3>{numberOfUpcomingAppointments}</h3>
+                                {nextAppointmentDate !== null && <p className="text-muted">
+                                    First on:&nbsp;
+                                    <b>{new Date(nextAppointmentDate).toLocaleString()}</b>
+                                </p>}
                             </div>
                         </div>
                     </div>

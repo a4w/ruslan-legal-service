@@ -5,6 +5,7 @@ import Stackedit from "stackedit-js";
 import {request} from "./Axios"
 import BlogImg from "./BlogImg";
 import Img from "./Img";
+import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -27,7 +28,7 @@ const BlogDetails = ({match}) => {
 
                 <div className="blog-view">
                     {blog && <Post blog={blog} lawyer={lawyer} />}
-                    <ShareSection />
+                    <ShareSection id={match.params.blogId} />
                     {lawyer && <AboutAuthor lawyer={lawyer} />}
                 </div>
             </div>
@@ -77,40 +78,17 @@ const AboutAuthor = ({lawyer}) => {
         </div>
     );
 };
-const ShareSection = () => {
+const ShareSection = ({id}) => {
     return (
         <div className="card blog-share clearfix">
             <div className="card-header">
                 <h4 className="card-title">Share the post</h4>
             </div>
             <div className="card-body">
-                <ul className="social-share">
-                    <li>
-                        <a href="#" title="Facebook">
-                            <i className="fab fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Twitter">
-                            <i className="fab fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Linkedin">
-                            <i className="fab fa-linkedin"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Google Plus">
-                            <i className="fab fa-google-plus"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Youtube">
-                            <i className="fab fa-youtube"></i>
-                        </a>
-                    </li>
-                </ul>
+                <Facebook small circle solid link={`/blog/${id}`} />
+                <Twitter small circle solid link={`/blog/${id}`} />
+                <Linkedin small circle solid link={`/blog/${id}`} />
+                <Google small circle solid link={`/blog/${id}`} />
             </div>
         </div>
     );

@@ -38,17 +38,18 @@ import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
 import RatingModal from "./RatingModal";
 import NotFound from "./NotFound";
+import Admin from "./Admin";
 
 const cookie = new Cookies();
 
 
 function App() {
     return (
-        <BrowserRouter>
+        <>
             <ToastContainer />
             <Router history={history}>
                 {/* <NavBar /> */}
-                <Route component={NavBar} />
+                {/* <Route component={NavBar} />
                 <Route path="(.+)/login" render={(props) => {
                     if (cookie.get('logged_in')) {
                         return <Redirect to={props.match.params[0]} />
@@ -58,7 +59,7 @@ function App() {
                 }} />
                 <Route path="(.+)/register">
                     <RegisterModal />
-                </Route>
+                </Route> */}
                 <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                 <Route path="(.+)/rate-lawyer" component={RatingModal} />
                 <Switch>
@@ -140,7 +141,7 @@ function App() {
                 <Route component={Footer} />
                 {/* <Footer /> */}
             </Router>
-        </BrowserRouter>
+        </>
     );
 }
 

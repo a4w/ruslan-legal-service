@@ -3,9 +3,12 @@ import {MdNotificationsActive} from "react-icons/md";
 import "./Notification.css";
 import {request} from "./Axios";
 import moment from "moment";
+import {toast} from "react-toastify";
+import useInterval from "./useInterval";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
+    const [newNotification, setNew] = useState(0);
     const ref = useRef(null);
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -22,6 +25,15 @@ const NotificationDropdown = () => {
     const handleButtonClick = () => {
         setNotificationToggle(!notificationToggle);
     };
+    const MarkAllRead = ()=>{
+        request({ url: "/account/mark-read-notifications", method: "GET" })
+            .then((res) => {
+                toast.success("Marked all as read successfuly!");
+            })
+            .catch((err) => {
+                toast.error("An Error Occured");
+            });
+    }
     return (
         <li
             className={`nav-item dropdown noti-dropdown ${
@@ -39,7 +51,7 @@ const NotificationDropdown = () => {
                 }}
             >
                 <MdNotificationsActive /> {/* <i class="fa fa-bell"></i> */}
-                <span className="badge badge-pill">3</span>
+                {newNotification !== 0 && <span className="badge badge-pill">{newNotification}</span>}
             </a>
             <div
                 className={`dropdown-menu notifications ${
@@ -49,44 +61,50 @@ const NotificationDropdown = () => {
             >
                 <div className="topnav-dropdown-header">
                     <span className="notification-title">Notifications</span>
-                    <a href="javascript:void(0)" className="clear-noti">
-                        {" "}
-                        Clear All{" "}
-                    </a>
                 </div>
                 <div className="noti-content" style={{ display: "" }}>
-                    <Notifications />
+                    <Notifications setNew={setNew}/>
                 </div>
-                <div className="topnav-dropdown-footer"></div>
+                <div className="topnav-dropdown-footer" onClick={MarkAllRead}>
+                    <a href="" className="clear-noti">
+                        Mark all read
+                    </a>
+                </div>
             </div>
         </li>
     );
 };
 
-const Notifications = () => {
-    const [notifications, setNotifications] = useState();
+const Notifications = ({setNew}) => {
+    const [notifications, setNotifications] = useState([]);
     const getNotifications = ()=>{
         request({ url: "/account/notifications", method: "GET" })
             .then((data) => {
                 console.log("-->",data);
-                setNotifications(data.notifications);
+                setNotifications([...data.notifications]);
+                setNew(data.notifications.length);
             })
             .catch((err) => {});
     }
     useEffect(getNotifications, []);
+    const MarkAsRead = (notification)=>{
+        request({ url: `/account/notification/${notification}`, method: "GET" })
+            .then((res) => {
+            })
+            .catch((err) => {
+                toast.error("An Error Occured");
+            });
+    }
+    useInterval(() => {
+        console.log("Loading");
+        getNotifications();
+    }, 3000);
     return (
         <ul className="notification-list">
             {notifications &&
-                notifications.map((notification, i) => (
-                    <li className="notification-message" key={i}>
-                        <a
-                            href="#"
-                            style={{
-                                background: notification.read_at
-                                    ? ""
-                                    : "lightgray",
-                            }}
-                        >
+                notifications.map((notification) => (
+                    <li className="notification-message" key={notification.id}>
+                        <a href="#" onClick={() => MarkAsRead(notification.id)}>
                             <div className="media">
                                 <div className="media-body">
                                     <Notification {...notification} />

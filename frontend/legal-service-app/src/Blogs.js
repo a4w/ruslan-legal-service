@@ -10,13 +10,19 @@ import BlogImg from "./BlogImg";
 import moment from "moment";
 
 const Blogs = (props) => {
-    const test = [];
-    for (let i = 0; i < 10; i++) {
-        test.push({id: i});
-    }
     const [blogs, setBlogs] = useState(null);
+    const [search, setSearch] = useState();
+    
+    useEffect(() => {
+        setSearch(queryString.parse(props.location.search));
+        
+    },[props.location.search]);
+
     useEffect(() => {
         let qs = '';
+        
+        console.log(props.match);
+        
         if (props.match.params.tag) {
             qs = `?tag=${props.match.params.tag}`;
         }
@@ -37,8 +43,8 @@ const Blogs = (props) => {
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search setBlogs={setBlogs} />
-                                <LatestBlogs latest={test} />
+                                <Search/>
+                                <LatestBlogs/>
                                 {/* <Catagories /> */}
                                 <TagsList />
                             </StickyBox>
@@ -50,7 +56,7 @@ const Blogs = (props) => {
     );
 };
 
-const Search = ({setBlogs}) => {
+const Search = () => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);

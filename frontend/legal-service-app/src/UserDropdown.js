@@ -1,18 +1,21 @@
 import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
-import { LogOut } from "./Axios";
-
+import { LogOut, request } from "./Axios";
+import Img from "./Img";
 const UserDropdown = () => {
     const ref = useRef(null);
     const [menuToggle, setMenuToggle] = useState(false);
-    const [user, setUser] = useState({
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
-        profile_picture_url: "/test.jpg",
-        type: "",
-    });
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        request({ url: "/account/personal-info", method: "GET" })
+            .then((data) => {
+                setUser(data.profile_data);
+                console.log(data);
+            })
+            .catch((err) => {});
+    }, []);
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () =>
@@ -41,10 +44,10 @@ const UserDropdown = () => {
                 onClick={handleButtonClick}
             >
                 <span className="user-img">
-                    <img
+                    <Img
                         className="rounded-circle"
-                        src={user.profile_picture_url}
-                        width="31"
+                        src={user.profile_picture}
+                        style = {{width: "31"}}
                         alt={user.name}
                     />
                 </span>
@@ -56,8 +59,8 @@ const UserDropdown = () => {
             >
                 <div className="user-header">
                     <div className="avatar avatar-sm">
-                        <img
-                            src={user.profile_picture_url}
+                        <Img
+                            src={user.profile_picture}
                             alt="User Image"
                             className="avatar-img rounded-circle"
                         />

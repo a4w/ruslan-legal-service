@@ -1,9 +1,14 @@
 import React, {useState, useEffect, useRef} from "react";
 import {MdNotificationsActive} from "react-icons/md";
 import "./Notification.css";
+import {request} from "./Axios";
+import moment from "moment";
+import {toast} from "react-toastify";
+import useInterval from "./useInterval";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
+    const [newNotification, setNew] = useState(0);
     const ref = useRef(null);
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -20,6 +25,15 @@ const NotificationDropdown = () => {
     const handleButtonClick = () => {
         setNotificationToggle(!notificationToggle);
     };
+    const MarkAllRead = ()=>{
+        request({ url: "/account/mark-read-notifications", method: "GET" })
+            .then((res) => {
+                toast.success("Marked all as read successfuly!");
+            })
+            .catch((err) => {
+                toast.error("An Error Occured");
+            });
+    }
     return (
         <li
             className={`nav-item dropdown noti-dropdown ${
@@ -37,7 +51,7 @@ const NotificationDropdown = () => {
                 }}
             >
                 <MdNotificationsActive /> {/* <i class="fa fa-bell"></i> */}
-                <span className="badge badge-pill">3</span>
+                {newNotification !== 0 && <span className="badge badge-pill">{newNotification}</span>}
             </a>
             <div
                 className={`dropdown-menu notifications ${
@@ -47,85 +61,87 @@ const NotificationDropdown = () => {
             >
                 <div className="topnav-dropdown-header">
                     <span className="notification-title">Notifications</span>
-                    <a href="javascript:void(0)" className="clear-noti">
-                        {" "}
-                        Clear All{" "}
-                    </a>
                 </div>
                 <div className="noti-content" style={{ display: "" }}>
-                    <Notifications />
+                    <Notifications setNew={setNew}/>
                 </div>
-                <div className="topnav-dropdown-footer"></div>
+                <div className="topnav-dropdown-footer" onClick={MarkAllRead}>
+                    <a href="" className="clear-noti">
+                        Mark all read
+                    </a>
+                </div>
             </div>
         </li>
     );
 };
 
-const Notifications = () => {
-    const notifications = [
-        {
-            id: 1,
-            details: "datailssss",
-            time: new Date(),
-        },
-        {
-            id: 2,
-            details: "hiiii",
-            time: new Date(),
-        },
-        {
-            id: 3,
-            details: "wtf",
-            time: new Date(),
-        },
-        {
-            id: 4,
-            details: "Ola",
-            time: new Date(),
-        },
-        {
-            id: 5,
-            details: "sdfghjkl",
-            time: new Date(),
-        },
-        {
-            id: 6,
-            details: "hi",
-            time: new Date(),
-        },
-        {
-            id: 7,
-            details: "how are u",
-            time: new Date(),
-        },
-        {
-            id: 8,
-            details: "luv u",
-            time: new Date(),
-        },
-    ];
+const Notifications = ({setNew}) => {
+    const [notifications, setNotifications] = useState([]);
+    const getNotifications = ()=>{
+        request({ url: "/account/notifications", method: "GET" })
+            .then((data) => {
+                console.log("-->",data);
+                setNotifications([...data.notifications]);
+                setNew(data.notifications.length);
+            })
+            .catch((err) => {});
+    }
+    useEffect(getNotifications, []);
+    const MarkAsRead = (notification)=>{
+        request({ url: `/account/notification/${notification}`, method: "GET" })
+            .then((res) => {
+            })
+            .catch((err) => {
+                toast.error("An Error Occured");
+            });
+    }
+    useInterval(() => {
+        console.log("Loading");
+        getNotifications();
+    }, 3000);
     return (
         <ul className="notification-list">
-            {notifications.map((notification, i) => (
-                <li className="notification-message" key={i}>
-                    <a href="#">
-                        <div className="media">
-                            <div className="media-body">
-                                <p className="noti-details">
-                                    {" "}
-                                    {notification.details}{" "}
-                                </p>
-                                <p className="noti-time">
-                                    <span className="notification-time">
-                                        {notification.time.getTime()}
-                                    </span>
-                                </p>
+            {notifications &&
+                notifications.map((notification) => (
+                    <li className="notification-message" key={notification.id}>
+                        <a href="#" onClick={() => MarkAsRead(notification.id)}>
+                            <div className="media">
+                                <div className="media-body">
+                                    <Notification {...notification} />
+                                    <p className="noti-time">
+                                        <span className="notification-time">
+                                            {`at ${moment(
+                                                notification.created_at
+                                            ).format("MM/D, hh:mm a")}`}
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </li>
-            ))}
+                        </a>
+                    </li>
+                ))}
         </ul>
     );
 };
+
+const Notification = ({data: { type, notification_data }}) => {
+    switch (type) {
+        case "INCOMING_MESSAGE":
+            return (
+                <p
+                    className="noti-details"
+                >
+                    <span class="noti-title">
+                        {`${notification_data.sender_name} Sent you a message!`}
+                    </span>
+                    <br />
+                    {notification_data.message_hint}
+                </p>
+            );
+
+        default:
+            return <p> no data </p>;
+    }
+};
+
 export default NotificationDropdown;

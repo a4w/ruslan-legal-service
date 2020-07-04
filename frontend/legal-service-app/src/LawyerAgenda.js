@@ -33,7 +33,7 @@ const LawyerAgenda = () => {
             next[index] = new Array();
         }
         appointments.forEach((appointment) => {
-            const appDay = appointment.appointment_time;
+            const appDay = new Date(appointment.appointment_time);
             if (moment(appDay).isSame(currentDate, "month")) {
                 const n = appDay.getDate();
                 next[n].push(appointment);
@@ -45,7 +45,7 @@ const LawyerAgenda = () => {
         <div className="content">
             <div className="container-fluid">
                 <div className="card">
-                    <div className="card-body">
+                    <div className="card-body" style={{overflowY:"auto"}}>
                         <div className="calendar">
                             <div>
                                 <Header
@@ -72,12 +72,18 @@ const LawyerAgenda = () => {
         </div>
     );
 };
-const CalendarEvent = ()=>{
+const CalendarEvent = ({appointment})=>{
+    // let duration = new Date(0);
+    // duration.setMinutes(appointment.duration);
+    // duration = moment(duration).format("hh hours and mm minutes");
+    // console.log(duration);
+    
     return (
         <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
             <div className="fc-content">
-                <span className="fc-time">1:08a</span>{" "}
-                <span className="fc-title">Test Event 1</span>
+                <span className="fc-time">{moment(appointment.appointment_time).format("hh:mm a")}</span>{" "}
+                <br/>
+                <span className="fc-title">{`duration: ${appointment.duration} minutes`}</span>
             </div>
         </div>
     );
@@ -150,7 +156,7 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
                     <div className="fc">
                         {todaysAppointments &&
                             todaysAppointments.map((appointment, i) => (
-                                <CalendarEvent key={i} />
+                                <CalendarEvent appointment={appointment} key={i} />
                             ))}
                     </div>
                 </div>

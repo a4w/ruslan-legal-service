@@ -5,10 +5,12 @@ import {request} from "./Axios"
 import * as $ from "jquery"
 import Slider from "react-slick";
 import Img from "./Img";
+import BlogImg from "./BlogImg";
 import { Discount } from "./LawyerCardList";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import queryString from "query-string"
+import moment from "moment";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -130,6 +132,7 @@ const Home = () => {
         </section>
         <AreaOfExpertices />
         <PopularLawyers />
+        <LatestBlogs />
         </>
     );
 };
@@ -167,7 +170,7 @@ var settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
     initialSlide: 0,
     responsive: [
@@ -234,7 +237,7 @@ const SlickIcon = ({url, label})=>{
     return (
         <div className="speicality-item text-center">
             <div className="speicality-img">
-                <img className="img-fluid" alt="Speciality" />
+                <img className="img-fluid" alt="Speciality" src="/avatar.svg"/>
                 <span>
                     <i className="fa fa-circle" aria-hidden="true"></i>
                 </span>
@@ -361,6 +364,80 @@ const LawyerCard = ({account, lawyer})=>{
                             Book Now
                         </Link>
                     </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const LatestBlogs = ()=>{
+    const [blogs, setBlogs] = useState([]);
+    useEffect(() => {
+        request({ url: `/blogs/latest/${4}`, method: "GET" })
+            .then((response) => {
+                setBlogs(response.blogs);
+            })
+            .catch((err) => {});
+    }, []);
+    return (
+        <section className="section section-blogs">
+            <div className="container-fluid">
+                <div className="section-header text-center">
+                    <h2>Blogs and News</h2>
+                </div>
+                <div className="row blog-grid-row">
+                    {blogs.map((blog, i) => (
+                        <BlogCard key={i} blog={blog} />
+                    ))}
+                </div>
+                <div className="view-all text-center">
+                    <Link to="/blogs" className="btn btn-primary">
+                        View All
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
+}
+const BlogCard = ({blog})=>{
+    const {lawyer, id} = {...blog};
+    const {account} = {...lawyer};
+    return (
+        <div className="col-md-6 col-lg-3 col-sm-12">
+            <div className="blog grid-blog">
+                <div className="blog-image">
+                    <Link to={`/blog/${id}`}>
+                        <BlogImg
+                            className="img-fluid"
+                            src={blog.cover_photo_link}
+                            alt="Post Image"
+                        />
+                    </Link>
+                </div>
+                <div className="blog-content">
+                    <ul className="entry-meta meta-item">
+                        <li>
+                            <div className="post-author">
+                                <Link to={`/profile/${lawyer.id}`}>
+                                    <Img
+                                        src={account.profile_picture}
+                                        alt="Post Author"
+                                    />
+                                    <span>{`${account.name} ${account.surname}`}</span>
+                                </Link>
+                            </div>
+                        </li>
+                        <li>
+                            <i className="far fa-clock"></i>{" "}
+                            {moment(blog.puplished_at).format("D MM YYYY")}
+                        </li>
+                    </ul>
+                    <h3 className="blog-title">
+                        <Link to={`/blog/${id}`}>{blog.title}</Link>
+                    </h3>
+                    <p className="mb-0">
+                        Preview..
+                    </p>
                 </div>
             </div>
         </div>

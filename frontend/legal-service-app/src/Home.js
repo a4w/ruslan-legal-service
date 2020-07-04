@@ -129,8 +129,15 @@ const SearchLawyerByName = () => {
     const OnChangeHandler = ({ target: { value } }) => {
         setName(value);
     };
+    const OnSubmitHandler = (event) => {
+        event.preventDefault();
+        History.push({
+            pathname: '/list',
+            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g,'+')}` : '',
+        })
+    };
     return (
-        <form style={{ marginTop: "8px" }}>
+        <form style={{ marginTop: "8px" }} onSubmit={OnSubmitHandler}>
             <div className="form-group search-info" style={{ minWidth: "93%" }}>
                 <input
                     className="form-control"

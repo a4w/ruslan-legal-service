@@ -81,12 +81,17 @@ const Home = () => {
                                     values={[location]}
                                     searchable
                                     options={locationOptions}
-                                    onChange={([obj]) => {setLocation(obj); console.log(obj)}}
-                                    style={{minHeight: "46px"}}
+                                    onChange={([obj]) => {
+                                        setLocation(obj);
+                                        console.log(obj);
+                                    }}
+                                    style={{ minHeight: "46px" }}
                                 />
-                                {isLocationBased && <span className="form-text">
-                                    Based on your Location
-                                </span>}
+                                {isLocationBased && (
+                                    <span className="form-text">
+                                        Based on your Location
+                                    </span>
+                                )}
                             </div>
                             <div className="form-group search-info">
                                 <Select
@@ -97,7 +102,7 @@ const Home = () => {
                                     searchable
                                     options={practiceAreaOptions}
                                     onChange={(obj) => setPracticeAreas(obj)}
-                                    style={{minHeight: "46px"}}
+                                    style={{ minHeight: "46px" }}
                                 />
                             </div>
                             <button
@@ -108,10 +113,36 @@ const Home = () => {
                                 <span>Search</span>
                             </button>
                         </form>
+                        <div className="separator">
+                            or Search lawyer by name!
+                        </div>
+                        <SearchLawyerByName />
                     </div>
                 </div>
             </div>
         </section>
+    );
+};
+
+const SearchLawyerByName = () => {
+    const [name, setName] = useState("");
+    const OnChangeHandler = ({ target: { value } }) => {
+        setName(value);
+    };
+    return (
+        <form style={{ marginTop: "8px" }}>
+            <div className="form-group search-info" style={{ minWidth: "93%" }}>
+                <input
+                    className="form-control"
+                    placeholder="Enter Lawyer Name"
+                    value={name}
+                    onChange={OnChangeHandler}
+                />
+            </div>
+            <button type="submit" className="btn btn-primary search-btn">
+                <i className="fas fa-search"></i> <span>Search</span>
+            </button>
+        </form>
     );
 };
 export default Home;

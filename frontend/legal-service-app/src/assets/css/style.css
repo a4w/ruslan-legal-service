@@ -7454,3 +7454,6 @@ min-width: 100%;
 .separator::after {
     margin-left: .25em;
 }
+.slick-track{
+    display: flex;
+}

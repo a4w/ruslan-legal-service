@@ -3,6 +3,7 @@ import Select from "react-dropdown-select";
 import History from "./History";
 import {request} from "./Axios"
 import * as $ from "jquery"
+import Slider from "react-slick";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -63,6 +64,7 @@ const Home = () => {
         })
     };
     return (
+        <>
         <section className="section section-search">
             <div className="container-fluid">
                 <div className="banner-wrapper">
@@ -121,6 +123,8 @@ const Home = () => {
                 </div>
             </div>
         </section>
+        <AreaOfExpertices />
+        </>
     );
 };
 
@@ -153,3 +157,83 @@ const SearchLawyerByName = () => {
     );
 };
 export default Home;
+const AreaOfExpertices = () => {
+    var settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    initialSlide: 2,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+    };
+    const [areas, setAreas] = useState([]);
+    useEffect(() => {
+        request({
+            url: "lawyer/practice-areas",
+            method: "GET",
+        }).then((response) => {
+            setAreas(response.areas);
+        });
+    }, []);
+
+    return (
+        <section className="section section-specialities">
+            <div className="container-fluid">
+                <div className="section-header text-center">
+                    <h2>Area of expertises</h2>
+                </div>
+                <div className="row justify-content-center">
+                    <div className="col-md-9">
+                        <div className="specialities-slider slider">
+                            <Slider {...settings}>
+                                {areas.map((area, i) => (
+                                    <SlickIcon key={i} url="" label={area.area} />
+                                ))}
+                            </Slider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const SlickIcon = ({url, label})=>{
+    return (
+        <div className="speicality-item text-center">
+            <div className="speicality-img">
+                <img className="img-fluid" alt="Speciality" />
+                <span>
+                    <i className="fa fa-circle" aria-hidden="true"></i>
+                </span>
+            </div>
+            <p>{label}</p>
+        </div>
+    );
+}

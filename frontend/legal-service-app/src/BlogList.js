@@ -1,5 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import Img from "./Img";
+import BlogImg from "./BlogImg";
 
 const BlogList = ({blogs}) => {
     if (blogs)
@@ -22,11 +24,15 @@ const Blog = ({blog}) => {
                 <div className="blog-image">
                     <Link
                         to={{
-                            pathname: `/blogs/${id}`,
-                            state: {blog: blog, lawyer: lawyer},
+                            pathname: `/blog/${id}`,
+                            state: { blog: blog, lawyer: lawyer },
                         }}
                     >
-                        <img className="img-fluid" src={blog.cover_photo_link} alt="Post Image" />
+                        <BlogImg
+                            className="img-fluid"
+                            src={blog.cover_photo_link}
+                            alt="Post Image"
+                        />
                     </Link>
                 </div>
                 <div className="blog-content">
@@ -36,20 +42,28 @@ const Blog = ({blog}) => {
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
-                                        state: {lawyer: lawyer},
+                                        state: { lawyer: lawyer },
                                     }}
                                 >
-                                    <img src={account.profile_picture ? account.profile_picture : "/test.jpg"} alt="Post Author" style={{width: '30px', height: '30px'}} />
+                                    <Img
+                                        src={account.profile_picture}
+                                        alt="Post Author"
+                                        style={{
+                                            width: "30px",
+                                            height: "30px",
+                                        }}
+                                    />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>
                         <li>
-                            <i className="far fa-clock"></i> {new Date(blog.created_at).toLocaleTimeString()}
+                            <i className="far fa-clock"></i>{" "}
+                            {new Date(blog.created_at).toLocaleTimeString()}
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blogs/${id}`}>{blog.title}</Link>
+                        <Link to={`/blog/${id}`}>{blog.title}</Link>
                     </h3>
                     <p className="mb-0">Preview</p>
                 </div>

@@ -47,13 +47,14 @@ export const LoadingOverlayContext = React.createContext(null);
 
 function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
+    const [loadingOverlayText, setLoadingOverlayText] = useState("");
     return (
         <>
-            <LoadingOverlayContext.Provider value={{isLoadingOverlayShown, setIsLoadingOverlayShown}}>
+            <LoadingOverlayContext.Provider value={{isLoadingOverlayShown, setIsLoadingOverlayShown, loadingOverlayText, setLoadingOverlayText}}>
                 <LoadingOverlay
                     active={isLoadingOverlayShown}
                     spinner
-                    text=''
+                    text={loadingOverlayText}
                     styles={{
                         overlay: (base) => ({
                             ...base,

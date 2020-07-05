@@ -19,8 +19,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         return price;
     };
 
-    const {isLoadingOverlayShown, setIsLoadingOverlayShown} = useContext(LoadingOverlayContext);
-    console.log(isLoadingOverlayShown, setIsLoadingOverlayShown);
+    const loadingContext = useContext(LoadingOverlayContext);
 
     // Calender start
     const [fromDateTime, setFromDateTime] = useState(moment()); // Default now
@@ -85,7 +84,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             toast.error("At least one slot must be selected");
             return;
         }
-        setIsLoadingOverlayShown(true);
+        loadingContext.setIsLoadingOverlayShown(true);
+        loadingContext.setLoadingOverlayText("Please wait while we hold these slots for you");
         request({
             url: `/appointment/${lawyer_id}/select-slots`,
             method: 'POST',
@@ -97,7 +97,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             handleSelection({client_secret});
         }).catch(error => {
         }).finally(() => {
-            setIsLoadingOverlayShown(false);
+            loadingContext.setIsLoadingOverlayShown(false);
         });
     };
 

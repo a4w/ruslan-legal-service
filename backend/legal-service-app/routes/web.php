@@ -65,6 +65,9 @@ Route::get('account/connect-stripe-success', function (Request $request) {
     }
     // State is ok, get user and save it
     $lawyer = Lawyer::find($jwt->sub);
+    if ($lawyer->stripe_connected_account_id !== null) {
+        return "You are already connected to stripe";
+    }
     try {
         $stripeResponse = \Stripe\OAuth::token([
             'grant_type' => 'authorization_code',

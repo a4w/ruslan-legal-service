@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\DeleteOldHeldAppointments;
+use App\PayLawyers;
 use App\UpdateFinishedAppointments;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

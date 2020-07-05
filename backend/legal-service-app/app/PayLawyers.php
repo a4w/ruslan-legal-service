@@ -15,7 +15,7 @@ class PayLawyers
             try {
                 $transfer = \Stripe\Transfer::create([
                     "amount" => $appointment->price * 100,
-                    "currency" => "gbp",
+                    "currency" => config('app.currency'),
                     "destination" => $appointment->lawyer->stripe_connected_account_id
                 ]);
                 $appointment->transfer_id = $transfer->id;

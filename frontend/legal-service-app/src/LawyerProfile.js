@@ -52,7 +52,7 @@ const ProfileCard = ({lawyer}) => {
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="lawyer-img">
+                        <div className="law-img">
                             <Img
                                 src={lawyer.profile_picture}
                                 className="img-fluid"

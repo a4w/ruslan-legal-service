@@ -299,9 +299,6 @@ const LawyerCard = ({account, lawyer})=>{
                         src={account.profile_picture}
                     />
                 </a>
-                <a href="javascript:void(0)" className="fav-btn">
-                    <i className="far fa-bookmark"></i>
-                </a>
             </div>
             <div className="pro-content">
                 <h3 className="title">
@@ -380,7 +377,10 @@ const LatestBlogs = ()=>{
             .catch((err) => {});
     }, []);
     return (
-        <section className="section section-blogs">
+        <section
+            className="section section-blogs"
+            style={{ backgroundColor: "#fff" }}
+        >
             <div className="container-fluid">
                 <div className="section-header text-center">
                     <h2>Blogs and News</h2>
@@ -429,7 +429,7 @@ const BlogCard = ({blog})=>{
                         </li>
                         <li>
                             <i className="far fa-clock"></i>{" "}
-                            {moment(blog.puplished_at).format("D MM YYYY")}
+                            {moment(blog.puplished_at).format("D MMMM YYYY")}
                         </li>
                     </ul>
                     <h3 className="blog-title">

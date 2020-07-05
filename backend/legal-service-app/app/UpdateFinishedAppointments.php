@@ -26,19 +26,6 @@ class UpdateFinishedAppointments
                 $appointment->status = 'DONE';
                 $appointment->save();
             }
-
-            // Attempt paying lawyer
-            try {
-                $transfer = \Stripe\Transfer::create([
-                    "amount" => $appointment->price * 100,
-                    "currency" => "gbp",
-                    "destination" => $appointment->lawyer->stripe_connected_account_id
-                ]);
-                $appointment->transfer_id = $transfer->id;
-                $appointment->save();
-            } catch (Exception $e) {
-                //
-            }
         }
     }
 }

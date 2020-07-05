@@ -136,6 +136,9 @@ return [
 
     'frontend_url' => env('FRONTEND_LINK'),
 
+    'currency' => 'gbp',
+    'currency_symbol' => '£',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -414,19 +414,23 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        // TODO Lawyer must have finished his registration
-        $client_id = config('app.stripe_client_id');
-        $key = config('app.key');
-        $payload = array(
-            "iss" => url('/'),
-            "aud" => url('/'),
-            "iat" => now()->unix(),
-            "exp" => now()->addHours(8)->unix(),
-            "sub" => $lawyer->id,
-            "rea" => 'STRIPE_CONNECT_STATE'
-        );
-        $token = urlencode(JWT::encode($payload, $key));
-        $link = "https://connect.stripe.com/express/oauth/authorize?client_id={$client_id}&state={$token}&suggested_capabilities[]=transfers&stripe_user[email]={$user->email}&stripe_user[first_name]={$user->name}&stripe_user[last_name]={$user->surname}";
+        if ($lawyer->stripe_connected_account_id !== null) {
+            $link = "https://connect.stripe.com";
+        } else {
+            // TODO Lawyer must have finished his registration
+            $client_id = config('app.stripe_client_id');
+            $key = config('app.key');
+            $payload = array(
+                "iss" => url('/'),
+                "aud" => url('/'),
+                "iat" => now()->unix(),
+                "exp" => now()->addHours(8)->unix(),
+                "sub" => $lawyer->id,
+                "rea" => 'STRIPE_CONNECT_STATE'
+            );
+            $token = urlencode(JWT::encode($payload, $key));
+            $link = "https://connect.stripe.com/express/oauth/authorize?client_id={$client_id}&state={$token}&suggested_capabilities[]=transfers&stripe_user[email]={$user->email}&stripe_user[first_name]={$user->name}&stripe_user[last_name]={$user->surname}";
+        }
         return RespondJSON::success([
             'connection_link' => $link
         ]);

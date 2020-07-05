@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Nav from "react-bootstrap/Nav";
 import { NavTab } from "react-router-tabs";
-import {request} from "./Axios";
+import {request, LogOut} from "./Axios";
 import Img from "./Img";
 
 const ClientDashboardSidebar = () => {
@@ -65,7 +65,7 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to="/client-dashboard/logout">
+                                <NavTab to="/client-dashboard/logout" onClick={LogOut}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
                                 </NavTab>

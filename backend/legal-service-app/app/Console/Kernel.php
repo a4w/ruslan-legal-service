@@ -2,14 +2,10 @@
 
 namespace App\Console;
 
-use App\Appointment;
 use App\DeleteOldHeldAppointments;
 use App\UpdateFinishedAppointments;
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Log;
-use Twilio\Rest\Client;
 
 class Kernel extends ConsoleKernel
 {

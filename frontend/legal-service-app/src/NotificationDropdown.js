@@ -80,7 +80,6 @@ const Notifications = ({setNew}) => {
     const getNotifications = ()=>{
         request({ url: "/account/notifications", method: "GET" })
             .then((data) => {
-                console.log("-->",data);
                 setNotifications([...data.notifications]);
                 setNew(data.notifications.length);
             })
@@ -96,7 +95,6 @@ const Notifications = ({setNew}) => {
             });
     }
     useInterval(() => {
-        console.log("Loading");
         getNotifications();
     }, 3000);
     return (

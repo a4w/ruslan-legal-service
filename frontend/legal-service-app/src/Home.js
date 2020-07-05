@@ -325,19 +325,6 @@ const LawyerCard = ({account, lawyer})=>{
                         ({lawyer.ratings.length})
                     </span>
                 </div>
-                <ul className="available-info">
-                    <li>
-                        <i className="fas fa-map-marker-alt"></i>{" "}
-                        {`${account.city}, ${account.country}`}
-                    </li>
-                    <Discount
-                        secsTillEnd={new Date(lawyer.discount_end)}
-                        cost={lawyer.price_per_hour}
-                        costAfterDiscount={lawyer.discounted_price_per_hour}
-                        isPercent={lawyer.is_percent_discount}
-                        discount={lawyer.discount}
-                    />
-                </ul>
                 <div className="row row-sm">
                     <div className="col-6">
                         <Link
@@ -362,6 +349,19 @@ const LawyerCard = ({account, lawyer})=>{
                         </Link>
                     </div>
                 </div>
+            <ul className="available-info mt-2" style={{minHeight:"125px"}} >
+                    <li>
+                        <i className="fas fa-map-marker-alt"></i>{" "}
+                        {`${account.city}, ${account.country}`}
+                    </li>
+                    <Discount
+                        secsTillEnd={new Date(lawyer.discount_end)}
+                        cost={lawyer.price_per_hour}
+                        costAfterDiscount={lawyer.discounted_price_per_hour}
+                        isPercent={lawyer.is_percent_discount}
+                        discount={lawyer.discount}
+                    />
+                </ul>
             </div>
         </div>
     );

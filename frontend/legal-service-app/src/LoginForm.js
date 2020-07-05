@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import {request, setAccessToken, setRefreshToken} from "./Axios";
+import {request, setAccessToken, setRefreshToken, setAccountType} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
@@ -40,13 +40,14 @@ const LoginForm = () => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-                        console.log("success", data);
-                        if (data.access_token) {
-                            console.log("Setting shit");
+                        console.log(data);
+                        
+                        if (data.access_token)
                             setAccessToken(data.access_token);
-                        }
                         if (data.refresh_token)
                             setRefreshToken(data.refresh_token);
+                        if (data.account_type)
+                            setAccountType(data.account_type);
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

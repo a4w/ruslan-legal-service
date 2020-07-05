@@ -136,7 +136,7 @@ const ListItem = ({appointment}) => {
             method: 'POST'
         }).then(response => {
             toast.success("Appointment is cancelled");
-        }).error(error => {
+        }).catch(error => {
             toast.error("Appointment couldn't be cancelled");
         });
     };

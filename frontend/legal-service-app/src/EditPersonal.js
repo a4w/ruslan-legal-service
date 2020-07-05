@@ -7,6 +7,7 @@ import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
 import {NavTab} from "react-router-tabs";
 import "./Tabs.css";
 import history from "./History";
+import LawyerPaymentSettings from "./LawyerPaymentSettings"
 
 const EditPersonal = () => {
     const path = "/dashboard/settings";
@@ -36,6 +37,14 @@ const EditPersonal = () => {
                                     Lawyer
                                 </NavTab>
                             </li>
+                            <li>
+                                <NavTab
+                                    exact
+                                    to="/dashboard/settings/payment-settings"
+                                >
+                                    Payment settings
+                                </NavTab>
+                            </li>
                         </ul>
                     </div>
 
@@ -57,6 +66,9 @@ const EditPersonal = () => {
                         </Route>
                         <Route path="/dashboard/settings/lawyer-info">
                             <EditLawyerInfo />
+                        </Route>
+                        <Route path="/dashboard/settings/payment-settings">
+                            <LawyerPaymentSettings />
                         </Route>
                     </Switch>
                 </div>

@@ -2,14 +2,11 @@
 
 namespace App\Console;
 
-use App\Appointment;
 use App\DeleteOldHeldAppointments;
+use App\PayLawyers;
 use App\UpdateFinishedAppointments;
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Log;
-use Twilio\Rest\Client;
 
 class Kernel extends ConsoleKernel
 {
@@ -35,6 +32,7 @@ class Kernel extends ConsoleKernel
         // End appointments
         $schedule->call(new UpdateFinishedAppointments)->everyMinute();
         // TODO a call to notify users before appointments by 5 minutes
+        $schedule->call(new PayLawyers)->everyMinute();
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Helpers\RespondJSON;
 use App\LawyerType;
 use App\PracticeArea;
 use Exception;
+use Firebase\JWT\JWT;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -403,5 +404,35 @@ class LawyerController extends Controller
             $appointments = $lawyer->appointments;
         }
         return RespondJSON::success(['appointments' => $appointments]);
+    }
+
+    public function getStripeConnectionLink()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        if ($lawyer->stripe_connected_account_id !== null) {
+            $link = "https://connect.stripe.com";
+        } else {
+            // TODO Lawyer must have finished his registration
+            $client_id = config('app.stripe_client_id');
+            $key = config('app.key');
+            $payload = array(
+                "iss" => url('/'),
+                "aud" => url('/'),
+                "iat" => now()->unix(),
+                "exp" => now()->addHours(8)->unix(),
+                "sub" => $lawyer->id,
+                "rea" => 'STRIPE_CONNECT_STATE'
+            );
+            $token = urlencode(JWT::encode($payload, $key));
+            $link = "https://connect.stripe.com/express/oauth/authorize?client_id={$client_id}&state={$token}&suggested_capabilities[]=transfers&stripe_user[email]={$user->email}&stripe_user[first_name]={$user->name}&stripe_user[last_name]={$user->surname}";
+        }
+        return RespondJSON::success([
+            'connection_link' => $link
+        ]);
     }
 }

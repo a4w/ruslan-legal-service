@@ -1,7 +1,9 @@
 <?php
 
 use App\Account;
+use App\Lawyer;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -47,3 +49,36 @@ Route::get('verify/email/{token}', function ($token) {
 Route::get('account/reset-password/{token}', function ($token) {
     return redirect(config('app.frontend_url') . '/reset/' . $token);
 })->name('account.reset_password');
+
+Route::get('account/connect-stripe-success', function (Request $request) {
+    $state = $request->get('state');
+    $key = config('app.key');
+    try {
+        $jwt = JWT::decode($state, $key, array('HS256'));
+    } catch (TokenExpiredException $e) {
+        return "Email verification token expired";
+    } catch (Exception $e) {
+        return "Error occurred";
+    }
+    if ($jwt->rea !== 'STRIPE_CONNECT_STATE') {
+        return "Error verifying identity, please try again later";
+    }
+    // State is ok, get user and save it
+    $lawyer = Lawyer::find($jwt->sub);
+    if ($lawyer->stripe_connected_account_id !== null) {
+        return "You are already connected to stripe";
+    }
+    try {
+        $stripeResponse = \Stripe\OAuth::token([
+            'grant_type' => 'authorization_code',
+            'code' => $request->get('code'),
+        ]);
+    } catch (Exception $e) {
+        return "Error verifying identity, please try again later";
+    }
+    $connected_account_id = $stripeResponse->stripe_user_id;
+    $lawyer->stripe_connected_account_id = $connected_account_id;
+    $lawyer->save();
+    // Redirect to dashboard
+    return redirect(config('app.frontend_url') . '/dashboard');
+});

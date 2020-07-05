@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Exception;
+use Twilio\Rest\Client;
+
 class UpdateFinishedAppointments
 {
     public function __invoke()

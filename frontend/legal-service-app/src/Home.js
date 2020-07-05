@@ -292,17 +292,17 @@ const LawyerCard = ({account, lawyer})=>{
     return (
         <div className="profile-widget">
             <div className="lawyer-img">
-                <a href="lawyer-profile.html">
-                    <Img
-                        className="img-fluid"
-                        alt="User Image"
-                        src={account.profile_picture}
-                    />
-                </a>
+            <Link to={{pathname: `/profile/${lawyer.id}`, state: { lawyer: lawyer }}}>
+                <Img
+                    className="img-fluid"
+                    alt="User Image"
+                    src={account.profile_picture}
+                />
+            </Link>
             </div>
             <div className="pro-content">
                 <h3 className="title">
-                    <a href="lawyer-profile.html">{`${account.name} ${account.surname}`}</a>
+                    <Link to={{pathname: `/profile/${lawyer.id}`, state: { lawyer: lawyer }}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
                 <p className="speciality">

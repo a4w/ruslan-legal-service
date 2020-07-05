@@ -17,7 +17,7 @@ class Appointment extends Model
         'appointment_time' => 'datetime',
     ];
 
-    protected $appends = ['is_cancellable', 'can_be_started', 'currency'];
+    protected $appends = ['is_cancellable', 'can_be_started', 'currency_symbol'];
 
     public function lawyer()
     {

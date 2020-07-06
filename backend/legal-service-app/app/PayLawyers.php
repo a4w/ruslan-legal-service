@@ -13,6 +13,13 @@ class PayLawyers
         foreach ($appointments as $appointment) {
             // Attempt paying lawyer
             try {
+                $transfer = \Stripe\Transfer::create([
+                    "amount" => $appointment->price * 100,
+                    "currency" => config('app.currency'),
+                    "destination" => $appointment->lawyer->stripe_connected_account_id
+                ]);
+                $appointment->transfer_id = $transfer->id;
+
                 // Subtract commission
                 $price_after_commission = $appointment->price;
                 if (config('app.commission_type') === 'PERCENT') {

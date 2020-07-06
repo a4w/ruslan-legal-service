@@ -136,6 +136,9 @@ return [
 
     'frontend_url' => env('FRONTEND_LINK'),
 
+    'currency' => 'gbp',
+    'currency_symbol' => '£',
+
     'commission_type' => 'PERCENT',
     'commission_amount' => 10,
 

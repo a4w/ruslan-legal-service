@@ -84,7 +84,7 @@ function App() {
                             <RegisterModal />
                         </Route>
                         <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
-                        <Route path="(.+)/rate-lawyer" component={RatingModal} />
+                        <Route path="(.+)/rate-lawyer/:appId/:lawyerId" component={RatingModal} />
                         <Route path="(.+)/details/:appId" component={AppointmentDetails} />
                           <Switch>
                             <Route exact path="/">

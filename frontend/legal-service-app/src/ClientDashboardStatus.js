@@ -5,6 +5,9 @@ import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
 import Img from "./Img";
+import { request } from "./Axios";
+import moment from "moment";
+import {toast} from "react-toastify";
 
 const ClientDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -18,64 +21,93 @@ const ClientDashboardStatus = () => {
     );
 };
 
-const Appointment = ({ done }) => {
-    const [cancel, setCancel] = useState(false);
-    const [status, setStatus] = useState("badge badge-pill bg-warning-light");
-    const [date, setDate] = useState(null);
+const Appointment = ({
+    id,
+    lawyer_id,
+    appointment_time,
+    created_at,
+    status,
+    price,
+    duration,
+    is_cancellable,
+}) => {
+    const [appStatus, setStatus] = useState(
+        "badge badge-pill bg-success-light"
+    );
+    const [lawyer, setLawyer] = useState(null);
     useEffect(() => {
-        if (done) setStatus("badge badge-pill bg-success-light");
+        if (status === "UPCOMING")
+            setStatus("badge badge-pill bg-warning-light");
+        else if (status === "CANCELLED")
+            setStatus("badge badge-pill bg-danger-light");
+        request({ url: `lawyer/${lawyer_id}`, method: "GET" })
+            .then((data) => {
+                setLawyer(data.lawyer);
+                console.log(data.lawyer);
+            })
+            .catch((e) => {});
     }, []);
-    const OnReject = (e) => {
+    const Cancel = (e) => {
         e.preventDefault();
-        setDate(new Date());
-        setCancel(true);
-        // The API cancel Rquest will be sent here
+        request({
+            url: `/appointment/${id}/cancel`,
+            method: "POST",
+        })
+            .then((response) => {
+                toast.success("Appointment is cancelled");
+            })
+            .catch((error) => {
+                toast.error("Appointment couldn't be cancelled");
+            });
     };
     return (
         <tr>
             <td>
-                <h2 className="table-avatar">
-                    <a
-                        href="lawyer-profile.html"
-                        className="avatar avatar-sm mr-2"
-                    >
-                        <Img
-                            className="avatar-img rounded-circle"
-                            alt="User Image"
-                        />
-                    </a>
-                    <a href="lawyer-profile.html">
-                        Lawyer's Name <span>Type</span>
-                    </a>
-                </h2>
+                {lawyer && (
+                    <h2 className="table-avatar">
+                        <Link
+                            to={`profile/${lawyer_id}`}
+                            className="avatar avatar-sm mr-2"
+                        >
+                            <Img
+                                src={lawyer.account.profile_picture}
+                                className="avatar-img rounded-circle"
+                                alt="User Image"
+                            />
+                        </Link>
+                        <Link to={`profile/${lawyer_id}`}>
+                            {`${lawyer.account.name} ${lawyer.account.surname}`}
+                            <span>{lawyer.lawyer_type.type}</span>
+                        </Link>
+                    </h2>
+                )}
             </td>
             <td>
-                Appt Date <span className="d-block text-info">Time</span>
-            </td>
-            <td>Booking Date</td>
-            <td>Price</td>
-            <td>
-                <span
-                    className={
-                        cancel ? "badge badge-pill bg-danger-light" : status
-                    }
-                >
-                    {cancel ? "Cancelled" : done ? "Done" : "Upcoming"}
+                {moment(appointment_time).format("Do MMMM YYYY")}{" "}
+                <span className="d-block text-info">
+                    {moment(appointment_time).format("hh:mm a")}
                 </span>
+            </td>
+            <td>{moment(created_at).format("Do MMMM YYYY")}</td>
+            <td>{`${duration} minutes`}</td>
+            <td>{price}</td>
+            <td>
+                <span className={appStatus}>{status.toLowerCase()}</span>
             </td>
             <td className="text-right">
                 <div className="table-action">
-                    {!done && cancel === false ? (
+                    {is_cancellable && (
                         <a
                             href="//"
                             className="btn btn-sm bg-danger-light"
-                            onClick={OnReject}
+                            onClick={Cancel}
                         >
                             <i className="fas fa-times"></i> Cancel
                         </a>
-                    ) : (
+                    )}
+                    {status === "DONE" && (
                         <Link
-                            to={`${History.location.pathname}/rate-lawyer/`}
+                            to={`${History.location.pathname}/rate-lawyer/${id}/${lawyer_id}`}
                             className="btn btn-sm bg-primary-light m-1"
                         >
                             <i className="fas fa-star"></i> Rate
@@ -98,6 +130,7 @@ const AppointmentsTable = (props) => {
                                     <th>Lawyer</th>
                                     <th>Appt Date</th>
                                     <th>Booking Date</th>
+                                    <th>duration</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th></th>
@@ -111,20 +144,44 @@ const AppointmentsTable = (props) => {
         </div>
     );
 };
-const UpcomingAppointments = ({ appointments }) => {
+const UpcomingAppointments = () => {
+    const [upcoming, setUpcoming] = useState([]);
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=true",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} />
+            {upcoming.map((appointment) => (
+                <Appointment key={appointment.id} {...appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const PreviousAppointments = ({ appointments }) => {
+const AllAppointments = () => {
+    const [all, setAll] = useState([]);
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=false",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} done={true} />
+            {all.map((appointment) => (
+                <Appointment key={appointment.id} {...appointment} />
             ))}
         </AppointmentsTable>
     );
@@ -147,8 +204,8 @@ const AppointmentsListTabs = ({ appointments }) => {
                                 </NavTab>
                             </li>
                             <li className="nav-item">
-                                <NavTab to={`${path}/previous`}>
-                                    Previous
+                                <NavTab to={`${path}/all`}>
+                                    All
                                 </NavTab>
                             </li>
                             <li className="nav-item">
@@ -163,8 +220,8 @@ const AppointmentsListTabs = ({ appointments }) => {
                         <Route path={`${path}/upcoming`}>
                             <UpcomingAppointments appointments={appointments} />
                         </Route>
-                        <Route path={`${path}/previous`}>
-                            <PreviousAppointments appointments={appointments} />
+                        <Route path={`${path}/all`}>
+                            <AllAppointments appointments={appointments} />
                         </Route>
                         <Route path={`${path}/billing`}>
                             <Billings billings={appointments} />

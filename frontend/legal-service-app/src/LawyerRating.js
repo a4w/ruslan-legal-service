@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StarRatings from "react-star-ratings";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
 import Img from "./Img";
+import { Link } from "react-router-dom";
 
-const LawyerRating = ({appointment_id = 0}) => {
+const LawyerRating = ({appId, lawyerId}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
+    const [account, setAccount] = useState({});
     const imgStyle = {
         borderRadius: "120px",
         height: "120px",
         width: "120px",
         objectFit: "cover",
     };
-
+    useEffect(()=>{
+        request({ url: `lawyer/${lawyerId}`, method: "GET" })
+            .then((data) => {
+                setAccount(data.lawyer.account);
+            })
+            .catch((e) => {});
+    },[]);
     const OnSubmitHandler = (e) => {
         e.preventDefault();
         console.log("done");
         request({
-            url: `/rating/rate/${appointment_id}`,
+            url: `/rating/rate/${appId}`,
             method: "POST",
             data: { rating: rating, comment: review },
         })
@@ -36,19 +44,19 @@ const LawyerRating = ({appointment_id = 0}) => {
             <div className="container">
                 <div className="blog blog-grid-row">
                     <div className="profile-info-widget justify-content-center">
-                        <a href="//" className="booking-lawyer-img">
+                        <Link to={`profile/${lawyerId}`} className="booking-lawyer-img">
                             <Img
-                                src={null}
+                                src={account.profile_picture}
                                 className="img-fluid"
                                 style={imgStyle}
                             />
-                        </a>
+                        </Link>
                     </div>
                     <div
                         className="profile-det-info mt-4"
                         style={{ textAlign: "center" }}
                     >
-                        <h2>Lawyer's Name</h2>
+                        <h2>{`${account.name} ${account.surname}`}</h2>
                     </div>
                     <div
                         className="justify-content-center"
@@ -73,10 +81,10 @@ const LawyerRating = ({appointment_id = 0}) => {
                                     ? "form-group form-focus"
                                     : "form-group form-focus focused")
                             }
-                            style={{ display: "flex" }}
+                            style={{ display: "flex", height: "auto" }}
                         >
                             <textarea
-                                style={{ minHeight: "100px" }}
+                                style={{ height: "auto" }}
                                 className="form-control"
                                 value={review}
                                 onChange={({ target: { value } }) =>

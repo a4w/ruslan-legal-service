@@ -107,7 +107,7 @@ const Appointment = ({
                     )}
                     {status === "DONE" && (
                         <Link
-                            to={`${History.location.pathname}/rate-lawyer/${id}`}
+                            to={`${History.location.pathname}/rate-lawyer/${id}/${lawyer_id}`}
                             className="btn btn-sm bg-primary-light m-1"
                         >
                             <i className="fas fa-star"></i> Rate

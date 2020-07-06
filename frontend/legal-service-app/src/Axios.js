@@ -45,9 +45,19 @@ const requireLogin = (error) => {
     history.push(history.location.pathname + '/login');
 };
 const LogOut = (error) => {
-    cookie.remove("refresh_token");
-    cookie.remove("access_token");
-    cookie.remove("logged_in");
+    request({
+        url: 'auth/logout',
+        method: 'POST',
+        data: null
+    }).then(response => {
+
+    }).catch(error => {
+        console.log(error);
+    }).finally(() => {
+        cookie.remove("refresh_token");
+        cookie.remove("access_token");
+        cookie.remove("logged_in");
+    });
     //history.push("/");
 };
 const request = function (options) {

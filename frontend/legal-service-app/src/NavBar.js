@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 import History from "./History";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
+import {refreshAccessToken} from "./Axios"
 
 const NavBar = () => {
     const cookie = new Cookies();
@@ -22,6 +23,17 @@ const NavBar = () => {
         window.addEventListener("resize", Menu);
         return () => window.removeEventListener("resize", Menu);
     });
+
+    // Attempt automatic login
+    useEffect(() => {
+        if (!logged_in) {
+            refreshAccessToken()
+                .then(() => {
+                    window.location.reload();
+                }).catch(() => {})
+        }
+    }, []);
+
     return (
         <header className="header">
             <nav className="navbar navbar-expand-lg header-nav">
@@ -95,7 +107,7 @@ const NavBar = () => {
                             </p>
                         </div>
                     </li>
-                    <li className="nav-item"  style={{display: logged_in ? "none" : ""}}> 
+                    <li className="nav-item" style={{display: logged_in ? "none" : ""}}>
                         <Link
                             className="nav-link header-login"
                             to={`${History.location.pathname}/login`}
@@ -105,7 +117,7 @@ const NavBar = () => {
                     </li>
                     {logged_in && (<NotificationDropdown />)}
                     {logged_in && (<UserDropdown />)}
-                     </ul>
+                </ul>
             </nav>
         </header>
     );

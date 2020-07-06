@@ -2,6 +2,7 @@ import axios from "axios";
 import Config from "./Config";
 import Cookies from "universal-cookie";
 import history from "./History";
+import moment from "moment";
 
 const cookie = new Cookies();
 const access_token = cookie.get('access_token');
@@ -28,6 +29,7 @@ const setAccountType = (type) => {
 const setRefreshToken = (refresh_token) => {
     cookie.set("refresh_token", refresh_token, {
         path: "/",
+        expires: moment().add(30, "days").toDate()
     });
 };
 
@@ -62,6 +64,27 @@ const LogOut = (error) => {
     });
     //history.push("/");
 };
+
+const refreshAccessToken = async () => {
+    return new Promise((resolve, reject) => {
+        const refresh_token = cookie.get("refresh_token");
+        if (refresh_token) {
+            client({
+                method: "POST",
+                url: "/auth/refresh",
+                data: {refresh_token},
+            }).then((response) => {
+                onRefreshSuccess(response)
+                resolve();
+            }).catch(() => {
+                reject();
+            });
+        } else {
+            reject();
+        }
+    });
+}
+
 const request = function (options) {
     const onSuccess = function (response) {
         return response.data;
@@ -73,18 +96,8 @@ const request = function (options) {
             // Unauthorized request
             if (status === 401) {
                 // If there is a refresh token then refresh
-                const refresh_token = cookie.get("refresh_token");
-                if (refresh_token) {
-                    return client({
-                        method: "POST",
-                        url: "/auth/refresh",
-                        refresh_token: refresh_token,
-                    })
-                        .then(onRefreshSuccess)
-                        .catch(requireLogin);
-                } else {
-                    requireLogin();
-                }
+                refreshAccessToken()
+                    .catch(requireLogin);
             } else if (status === 403) { // Forbidden
                 requireLogin();
             } else {
@@ -103,4 +116,4 @@ const request = function (options) {
     return client(options).then(onSuccess).catch(onError);
 };
 
-export {request, setAccessToken, setRefreshToken, LogOut, setAccountType};
+export {request, setAccessToken, setRefreshToken, LogOut, setAccountType, refreshAccessToken};

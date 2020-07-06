@@ -305,12 +305,12 @@ const LawyerCard = ({account, lawyer})=>{
                     <Link to={{pathname: `/profile/${lawyer.id}`, state: { lawyer: lawyer }}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
-                <p className="speciality">
+                <div className="session-services">
                     {lawyer.practice_areas &&
                         lawyer.practice_areas.map((area) => (
-                            <h6 key={area.id}>{area.area}</h6>
+                            <span key={area.id}>{area.area}</span>
                         ))}
-                </p>
+                </div>
                 <div className="rating">
                     <StarRatings
                         rating={parseFloat(lawyer.ratings_average)}

@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useMemo} from "react";
+import React, {useState, useEffect, useMemo, useContext} from "react";
 import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
 import {request} from "./Axios"
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import {toast} from "react-toastify";
+import {LoadingOverlayContext} from "./App"
 
 const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
 
@@ -17,6 +18,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         }
         return price;
     };
+
+    const loadingContext = useContext(LoadingOverlayContext);
 
     // Calender start
     const [fromDateTime, setFromDateTime] = useState(moment()); // Default now
@@ -81,6 +84,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             toast.error("At least one slot must be selected");
             return;
         }
+        loadingContext.setIsLoadingOverlayShown(true);
+        loadingContext.setLoadingOverlayText("Please wait while we hold these slots for you");
         request({
             url: `/appointment/${lawyer_id}/select-slots`,
             method: 'POST',
@@ -91,6 +96,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             const client_secret = response.client_secret;
             handleSelection({client_secret});
         }).catch(error => {
+        }).finally(() => {
+            loadingContext.setIsLoadingOverlayShown(false);
         });
     };
 

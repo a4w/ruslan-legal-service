@@ -3,17 +3,13 @@ import Modal from './ModalRouted';
 import { request } from "./Axios";
 
 const AppointmentDetails = ({match})=>{
-    const [appointment, setAppointment] = useState({
-        id: 1,
-        appointment_time: new Date().toISOString(),
-        status: "DONE",
-        price: 450,
-        duration: 300,
-    });
+    const [appointment, setAppointment] = useState({ id: 0 });
     useEffect(()=>{
-        // request({ url: `/appointment/${match.params.appId}`, method: "GET" })
-        //     .then((res) => {})
-        //     .catch((err) => {});
+        request({ url: `/appointment/${match.params.appId}`, method: "GET" })
+            .then((res) => {                
+                setAppointment(res.appointment);
+            })
+            .catch((err) => {});
     },[]);
     return (
         <Modal header={"Appointment Details"} width={"40%"}>

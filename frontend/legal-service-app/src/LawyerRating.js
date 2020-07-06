@@ -81,10 +81,10 @@ const LawyerRating = ({appId, lawyerId}) => {
                                     ? "form-group form-focus"
                                     : "form-group form-focus focused")
                             }
-                            style={{ display: "flex" }}
+                            style={{ display: "flex", height: "auto" }}
                         >
                             <textarea
-                                style={{ minHeight: "100px" }}
+                                style={{ height: "auto" }}
                                 className="form-control"
                                 value={review}
                                 onChange={({ target: { value } }) =>

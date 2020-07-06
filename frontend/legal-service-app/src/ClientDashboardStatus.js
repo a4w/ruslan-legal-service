@@ -5,6 +5,7 @@ import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
 import Img from "./Img";
+import { request } from "./Axios";
 
 const ClientDashboardStatus = () => {
     const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
@@ -111,20 +112,44 @@ const AppointmentsTable = (props) => {
         </div>
     );
 };
-const UpcomingAppointments = ({ appointments }) => {
+const UpcomingAppointments = () => {
+    const [upcoming, setUpcoming] = useState([]);
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=true",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} />
+            {upcoming.map((appointment) => (
+                <Appointment key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );
 };
-const AllAppointments = ({ appointments }) => {
+const AllAppointments = () => {
+    const [all, setAll] = useState([]);
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=false",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} done={true} />
+            {all.map((appointment) => (
+                <Appointment key={appointment.id} appointment={appointment} />
             ))}
         </AppointmentsTable>
     );

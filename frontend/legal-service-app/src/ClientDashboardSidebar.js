@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from "react";
 import Nav from "react-bootstrap/Nav";
-import { NavTab } from "react-router-tabs";
+import {NavTab} from "react-router-tabs";
 import {request, LogOut} from "./Axios";
 import Img from "./Img";
 
 const ClientDashboardSidebar = () => {
     const [account, setAccount] = useState({});
     useEffect(() => {
-        request({ url: "/account/personal-info", method: "GET" })
+        request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
                 setAccount(data.profile_data);
-                console.log(data);                
+                console.log(data);
             })
             .catch((err) => {});
     }, []);
@@ -65,10 +65,10 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to="/client-dashboard/logout" onClick={LogOut}>
+                                <a href="#" onClick={LogOut}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </NavTab>
+                                </a>
                             </li>
                         </ul>
                     </div>

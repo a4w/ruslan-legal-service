@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
@@ -38,109 +38,136 @@ import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
 import RatingModal from "./RatingModal";
 import NotFound from "./NotFound";
+import LoadingOverlay from "react-loading-overlay"
+import {FaSpinner} from "react-icons/fa";
+import AppointmentDetails from "./AppointmentDetails";
 
 const cookie = new Cookies();
 
+export const LoadingOverlayContext = React.createContext(null);
 
 function App() {
+    const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
+    const [loadingOverlayText, setLoadingOverlayText] = useState("");
     return (
-        <BrowserRouter>
-            <ToastContainer />
-            <Router history={history}>
-                {/* <NavBar /> */}
-                <Route component={NavBar} />
-                <Route path="(.+)/login" render={(props) => {
-                    if (cookie.get('logged_in')) {
-                        return <Redirect to={props.match.params[0]} />
-                    } else {
-                        return <LoginModal back={props.match.params[0]} />
-                    }
-                }} />
-                <Route path="(.+)/register">
-                    <RegisterModal />
-                </Route>
-                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
-                <Route path="(.+)/rate-lawyer" component={RatingModal} />
-                <Switch>
-                    <Route exact path="/">
-                        <Redirect to="/home" />
-                    </Route>
-                    <Route path="/home">
-                        <Home />
-                    </Route>
-                    <Route path="/list">
-                        <LawyerList />
-                    </Route>
-                    <Route path="/book">
-                        <AppointmentTimeForm lawyer_id="1" />
-                    </Route>
-                    <Route path="/blogs">
-                        <Switch>
-                            <Route exact path="/blogs" >
-                                <Blogs />
+        <>
+            <LoadingOverlayContext.Provider value={{isLoadingOverlayShown, setIsLoadingOverlayShown, loadingOverlayText, setLoadingOverlayText}}>
+                <LoadingOverlay
+                    active={isLoadingOverlayShown}
+                    spinner
+                    text={loadingOverlayText}
+                    styles={{
+                        overlay: (base) => ({
+                            ...base,
+                            position: 'fixed',
+                        }),
+                        wrapper: (base) => ({
+                            ...base,
+                            zIndex: '99999',
+                        })
+                    }}
+                >
+                </LoadingOverlay>
+                <BrowserRouter>
+                    <ToastContainer />
+                    <Router history={history}>
+                        {/* <NavBar /> */}
+                        <Route component={NavBar} />
+                        <Route path="(.+)/login" render={(props) => {
+                            if (cookie.get('logged_in')) {
+                                return <Redirect to={props.match.params[0]} />
+                            } else {
+                                return <LoginModal back={props.match.params[0]} />
+                            }
+                        }} />
+                        <Route path="(.+)/register">
+                            <RegisterModal />
+                        </Route>
+                        <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
+                        <Route path="(.+)/rate-lawyer" component={RatingModal} />
+                        <Route path="(.+)/details/:appId" component={AppointmentDetails} />
+                          <Switch>
+                            <Route exact path="/">
+                                <Redirect to="/home" />
                             </Route>
-                            <Route path="/blogs/:tag" component={Blogs} />
-                        </Switch>
-                    </Route>
+                            <Route path="/home">
+                                <Home />
+                            </Route>
+                            <Route path="/list">
+                                <LawyerList />
+                            </Route>
+                            <Route path="/book">
+                                <AppointmentTimeForm lawyer_id="1" />
+                            </Route>
+                            <Route path="/blogs">
+                                <Switch>
+                                    <Route exact path="/blogs" >
+                                        <Blogs />
+                                    </Route>
+                                    <Route path="/blogs/:tag" component={Blogs} />
+                                </Switch>
+                            </Route>
 
-                    <Route path="/blog/:blogId" component={BlogDetails} />
-                    <Route
-                        exact
-                        path="/reset/:Token"
-                        component={ResetPassword}
-                    />
-                    <Route exact path="/edit">
-                        <EditPersonal />
-                    </Route>
-                    <Route path="/complete-registeration">
-                        <LawyerCompleteRegisteration />
-                    </Route>
-                    <Route path="/dashboard">
-                        <LawyerDashboard />
-                    </Route>
-                    <Route
-                        path="/profile/:LawyerId"
-                        component={LawyerProfile}
-                    />
-                    <Route path="/client-dashboard">
-                        <ClientDashboard />
-                    </Route>
-                    <Route path="/forgot-password">
-                        <ForgotPassword />
-                    </Route>
-                    <Route path="/chat">
-                        <ResponsiveChatPage />
-                    </Route>
-                    <Route exact path="/video/:AppointmentId" render={(props) => {
-                        return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
-                    }}>
-                    </Route>
-                    <Route path="/rate">
-                        <LawyerRating appointment_id={31} />
-                    </Route>
-                    <Route path="/write-blog">
-                        <BlogPage />
-                    </Route>
-                    <Route exact path="/edit-schedule">
-                        <ScheduleForm />
-                    </Route>
-                    <Route path="/logout">
-                        <Redirect replace to="/" />
-                    </Route>
-                    <Route path="/calendar">
-                        <LawyerAgenda />
-                    </Route>
-                    <Route path="/not-found">
-                        <NotFound />
-                    </Route>
-                    <Route>
-                        <Redirect replace to="/not-found"/>
-                    </Route>
-                </Switch>
-                <Route component={Footer} />
-                {/* <Footer /> */}
-            </Router>
-        </BrowserRouter>
+                            <Route path="/blog/:blogId" component={BlogDetails} />
+                            <Route
+                                exact
+                                path="/reset/:Token"
+                                component={ResetPassword}
+                            />
+                            <Route exact path="/edit">
+                                <EditPersonal />
+                            </Route>
+                            <Route path="/complete-registeration">
+                                <LawyerCompleteRegisteration />
+                            </Route>
+                            <Route path="/dashboard">
+                                <LawyerDashboard />
+                            </Route>
+                            <Route
+                                path="/profile/:LawyerId"
+                                component={LawyerProfile}
+                            />
+                            <Route path="/client-dashboard">
+                                <ClientDashboard />
+                            </Route>
+                            <Route path="/forgot-password">
+                                <ForgotPassword />
+                            </Route>
+                            <Route path="/chat">
+                                <ResponsiveChatPage />
+                            </Route>
+                            <Route exact path="/video/:AppointmentId" render={(props) => {
+                                return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
+                            }}>
+                            </Route>
+                            <Route path="/rate">
+                                <LawyerRating appointment_id={31} />
+                            </Route>
+                            <Route path="/write-blog">
+                                <BlogPage />
+                            </Route>
+                            <Route exact path="/edit-schedule">
+                                <ScheduleForm />
+                            </Route>
+                            <Route path="/logout">
+                                <Redirect replace to="/" />
+                            </Route>
+                            <Route path="/calendar">
+                                <LawyerAgenda />
+                            </Route>
+                            <Route path="/not-found">
+                                <NotFound />
+                            </Route>
+                            <Route>
+                                <Redirect replace to="/not-found" />
+                            </Route>
+                        </Switch>
+                        <Route component={Footer} />
+                        {/* <Footer /> */}
+                    </Router>
+                </BrowserRouter>
+            </LoadingOverlayContext.Provider>
+        </>
     );
 }
 

@@ -139,6 +139,9 @@ return [
     'currency' => 'gbp',
     'currency_symbol' => '£',
 
+    'commission_type' => 'PERCENT',
+    'commission_amount' => 10,
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

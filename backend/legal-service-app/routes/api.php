@@ -46,6 +46,7 @@ Route::prefix('lawyer')->group(function () {
     Route::get('accreditations', 'LawyerController@getAccreditations');
     Route::get('appointments', 'LawyerController@fetchLawyerAppointments')->middleware('auth:api');
     Route::get('stripe-connect', 'LawyerController@getStripeConnectionLink')->middleware('auth:api');
+    Route::get('search', 'LawyerController@searchLawyers');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 

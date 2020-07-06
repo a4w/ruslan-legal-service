@@ -136,6 +136,9 @@ return [
 
     'frontend_url' => env('FRONTEND_LINK'),
 
+    'commission_type' => 'PERCENT',
+    'commission_amount' => 10,
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

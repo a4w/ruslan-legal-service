@@ -40,6 +40,7 @@ import RatingModal from "./RatingModal";
 import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import {FaSpinner} from "react-icons/fa";
+import AppointmentDetails from "./AppointmentDetails";
 
 const cookie = new Cookies();
 
@@ -84,7 +85,8 @@ function App() {
                         </Route>
                         <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                         <Route path="(.+)/rate-lawyer" component={RatingModal} />
-                        <Switch>
+                        <Route path="(.+)/details/:appId" component={AppointmentDetails} />
+                          <Switch>
                             <Route exact path="/">
                                 <Redirect to="/home" />
                             </Route>

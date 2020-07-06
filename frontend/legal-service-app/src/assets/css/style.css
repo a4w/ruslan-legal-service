@@ -2886,13 +2886,13 @@ html.menu-opened body {
     flex: 0 0 200px;
     max-width: 200px;
 }
-.lawyer-img {
+.law-img {
     -ms-flex: 0 0 150px;
     flex: 0 0 150px;
     margin-right: 20px;
     width: 150px;
 }
-.lawyer-img img {
+.law-img img {
     border-radius: 5px;
 }
 .lawyer-department {
@@ -7000,7 +7000,7 @@ html.menu-opened body {
     .session-services {
         display: none;
     }
-    .lawyer-img {
+    .law-img {
         margin: 0 auto 20px;
     }
     .lawyer-action {

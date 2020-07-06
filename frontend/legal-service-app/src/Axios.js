@@ -58,7 +58,7 @@ const LogOut = (error) => {
         cookie.remove("access_token");
         cookie.remove("logged_in");
         history.push('/home/login');
-        //window.location.reload();
+        window.location.reload();
     });
     //history.push("/");
 };

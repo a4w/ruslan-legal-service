@@ -14,13 +14,13 @@ const LawyerDashboardSidebar = () => {
             phone: "",
             profile_picture: null,
         },
-        lawyer_type: { type: "" },
+        lawyer_type: {type: ""},
         ratings_average: 0,
     };
     const [lawyer, setLawyer] = useState(init);
     const [account, setAccount] = useState(init.account);
     useEffect(() => {
-        request({ url: "/lawyer/me", method: "GET" })
+        request({url: "/lawyer/me", method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
                 setAccount(data.lawyer.account);
@@ -32,7 +32,7 @@ const LawyerDashboardSidebar = () => {
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <a className="booking-doc-img">
-                        <Img src={account.profile_picture} alt="Lawyer's Photo"/>                        
+                        <Img src={account.profile_picture} alt="Lawyer's Photo" />
                     </a>
                     <div className="profile-det-info">
                         <h3>{`${account.name} ${account.surname}`}</h3>
@@ -111,10 +111,10 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/logout" onClick={LogOut}>
+                                <a href="#" onClick={LogOut}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </NavTab>
+                                </a>
                             </li>
                         </ul>
                     </div>

@@ -174,4 +174,14 @@ class AppointmentController extends Controller
         ]);
         return RespondJSON::success();
     }
+
+    public function getAppointment(Appointment $appointment)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::success($appointment);
+    }
 }

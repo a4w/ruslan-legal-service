@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Stripe\Transfer;
 
 class Appointment extends Model
 {
 
     protected $with = ['client'];
-    protected $hidden = ['room_sid', 'payment_intent_id'];
+    protected $hidden = ['room_sid', 'payment_intent_id', 'transfer_id'];
     protected $fillable = [
         'appointment_time', 'status', 'price', 'duration'
     ];
@@ -17,7 +18,7 @@ class Appointment extends Model
         'appointment_time' => 'datetime',
     ];
 
-    protected $appends = ['is_cancellable', 'can_be_started', 'currency_symbol'];
+    protected $appends = ['is_cancellable', 'can_be_started', 'currency_symbol', 'is_paid'];
 
     public function lawyer()
     {
@@ -78,6 +79,14 @@ class Appointment extends Model
         return true;
     }
 
+    public function getIsPaidAttribute()
+    {
+        if ($this->transfer_id === null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     public function getCurrencySymbolAttribute()
     {
         return config('app.currency_symbol');

@@ -49,6 +49,10 @@ Route::prefix('lawyer')->group(function () {
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
 });
 
+Route::prefix('client')->group(function () {
+    Route::get('appointments', 'ClientController@fetchClientAppointments')->middleware('auth:api');
+});
+
 Route::prefix('chat')->group(function () {
     Route::post('{chat}/file', 'ChatController@sendFile')->middleware('auth:api');
     Route::get('file/{mid}', 'ChatController@getChatFile')->middleware('auth:api')->name('chat.download_file');
@@ -67,6 +71,7 @@ Route::prefix('appointment')->group(function () {
     Route::post('{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
     Route::get('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
     Route::post('{appointment}/cancel', 'AppointmentController@cancelAppointment')->middleware('auth:api');
+    Route::get('{appointment}', 'AppointmentController@getAppointment')->middleware('auth:api');
 });
 
 Route::prefix('blogs')->group(function () {

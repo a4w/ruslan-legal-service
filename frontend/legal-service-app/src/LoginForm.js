@@ -145,7 +145,7 @@ const LoginForm = () => {
                 </div>
                 <div className="text-center dont-have">
                     Don’t have an account?
-                    <Link
+                    <a
                         style={{cursor:"pointer"}}
                         onClick={() =>
                             History.replace(
@@ -155,7 +155,7 @@ const LoginForm = () => {
                     >
                         {" "}
                         Register
-                    </Link>
+                    </a>
                 </div>
             </form>
         </LoginWrapper>

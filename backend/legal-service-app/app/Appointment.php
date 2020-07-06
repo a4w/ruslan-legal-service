@@ -18,7 +18,7 @@ class Appointment extends Model
         'appointment_time' => 'datetime',
     ];
 
-    protected $appends = ['is_cancellable', 'can_be_started', 'is_paid'];
+    protected $appends = ['is_cancellable', 'can_be_started', 'currency_symbol', 'is_paid'];
 
     public function lawyer()
     {
@@ -86,5 +86,9 @@ class Appointment extends Model
         } else {
             return true;
         }
+    }
+    public function getCurrencySymbolAttribute()
+    {
+        return config('app.currency_symbol');
     }
 }

@@ -20,7 +20,7 @@ class Lawyer extends Model
     ];
 
     public $timestamps = false;
-    protected $appends = array('discount_ends_in', 'discounted_price_per_hour');
+    protected $appends = array('discount_ends_in', 'discounted_price_per_hour', 'currency_symbol');
 
     public function getDiscountEndsInAttribute()
     {
@@ -88,5 +88,10 @@ class Lawyer extends Model
     public function isAvailable()
     {
         return $this->schedule !== null;
+    }
+
+    public function getCurrencySymbolAttribute()
+    {
+        return config('app.currency_symbol');
     }
 }

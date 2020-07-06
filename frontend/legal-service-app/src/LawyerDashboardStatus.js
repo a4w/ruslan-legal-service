@@ -8,6 +8,7 @@ import {request} from "./Axios";
 import {toast} from "react-toastify";
 import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icons/fa";
 import Img from "./Img";
+import History from "./History";
 
 const LawyerDashboardStatus = () => {
     return (
@@ -135,7 +136,7 @@ const ListItem = ({appointment}) => {
             method: 'POST'
         }).then(response => {
             toast.success("Appointment is cancelled");
-        }).error(error => {
+        }).catch(error => {
             toast.error("Appointment couldn't be cancelled");
         });
     };
@@ -182,6 +183,9 @@ const ListItem = ({appointment}) => {
                             <i className="fas fa-times"></i> Cancel
                         </button>
                     )}
+                    <Link to={`${History.location.pathname}/details/${appointment.id}`} className="btn btn-sm bg-info-light">
+                        <i className="far fa-eye"></i> View
+                    </Link>
                 </div>
             </td>
         </tr>

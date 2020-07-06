@@ -13,14 +13,18 @@ const ClientDashboardTabs = () => {
             <Route path="/client-dashboard/status">
                 <ClientDashboardStatus />
             </Route>
-            <Route path="/client-dashboard/messages">test</Route>
+            <Route path="/client-dashboard/messages">
+                <Redirect to="/chat" />
+            </Route>
             <Route path="/client-dashboard/settings">
                 <ProfileSettings />
             </Route>
             <Route path="/client-dashboard/change-password">
                 <EditPassword />
             </Route>
-            <Route path="/client-dashboard/logout">test</Route>
+            <Route path="/client-dashboard/logout">
+                <Redirect replace to="/" />
+            </Route>
         </Switch>
     );
 };

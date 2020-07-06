@@ -80,7 +80,7 @@ class AppointmentController extends Controller
         try {
             $paymentIntent = PaymentIntent::create([
                 'amount' => $total_price * 100, // Stripe uses this stupid way to avoid rounding errors
-                'currency' => 'gbp'
+                'currency' => config('app.currency')
             ]);
             foreach ($appointments as $appointment) {
                 $appointment->payment_intent_id = $paymentIntent->id;

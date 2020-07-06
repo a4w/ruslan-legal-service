@@ -126,8 +126,7 @@ const RegisterationForm = () => {
                 />
                 <div className="text-right">
                     <a
-                        // to={`${getParent(History.location.pathname)}/login`}
-                        href="//"
+                        style={{cursor:"pointer"}}
                         onClick={() =>
                             History.replace(
                                 `${getParent(History.location.pathname)}/login`

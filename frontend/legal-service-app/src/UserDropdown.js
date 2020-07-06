@@ -2,7 +2,11 @@ import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
 import { LogOut, request } from "./Axios";
 import Img from "./Img";
+import Cookies from "universal-cookie";
+
 const UserDropdown = () => {
+    const cookie = new Cookies();
+    const [isClient, setIsClient] = useState(cookie.get('account_type') === "CLIENT" );
     const ref = useRef(null);
     const [menuToggle, setMenuToggle] = useState(false);
     const [user, setUser] = useState({});
@@ -11,7 +15,7 @@ const UserDropdown = () => {
         request({ url: "/account/personal-info", method: "GET" })
             .then((data) => {
                 setUser(data.profile_data);
-                console.log(data);
+                setIsClient(cookie.get('account_type') === "CLIENT" );
             })
             .catch((err) => {});
     }, []);
@@ -47,7 +51,7 @@ const UserDropdown = () => {
                     <Img
                         className="rounded-circle"
                         src={user.profile_picture}
-                        style = {{width: "31"}}
+                        style={{ width: "31" }}
                         alt={user.name}
                     />
                 </span>
@@ -67,12 +71,12 @@ const UserDropdown = () => {
                     </div>
                     <div className="user-text">
                         <h6>{`${user.name} ${user.surname}`}</h6>
-                        <p className="text-muted mb-0">{user.type}</p>
+                        <p className="text-muted mb-0">{isClient? "Client": "Lawyer"}</p>
                     </div>
                 </div>
                 <Link
                     className="dropdown-item"
-                    to="/dashboard"
+                    to={isClient ? "/client-dashboard" : "/dashboard"}
                     onClick={handleButtonClick}
                 >
                     Dashboard
@@ -84,16 +88,16 @@ const UserDropdown = () => {
                 >
                     Messages
                 </Link>
-                <Link
+                {!isClient && <Link
                     className="dropdown-item"
                     to="/calendar"
                     onClick={handleButtonClick}
                 >
                     Agenda
-                </Link>
+                </Link>}
                 <Link
                     className="dropdown-item"
-                    to="/dashboard/settings/lawyer-info"
+                    to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}
                     onClick={handleButtonClick}
                 >
                     Profile Settings

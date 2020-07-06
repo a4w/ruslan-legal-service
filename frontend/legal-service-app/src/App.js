@@ -38,6 +38,7 @@ import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
 import RatingModal from "./RatingModal";
 import NotFound from "./NotFound";
+import AppointmentDetails from "./AppointmentDetails";
 
 const cookie = new Cookies();
 
@@ -61,6 +62,7 @@ function App() {
                 </Route>
                 <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                 <Route path="(.+)/rate-lawyer" component={RatingModal} />
+                <Route path="(.+)/details/:appId" component={AppointmentDetails} />
                 <Switch>
                     <Route exact path="/">
                         <Redirect to="/home" />

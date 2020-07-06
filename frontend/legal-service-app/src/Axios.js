@@ -15,20 +15,20 @@ const client = axios.create({
 });
 
 const setAccessToken = (access_token) => {
-    console.log("Set Successful!", access_token);
     client.defaults.headers.common.headers = {
         Authorization: `Bearer ${access_token}`,
     };
     cookie.set("access_token", access_token);
     cookie.set("logged_in", true);
-    console.log("Set Successful!", client.defaults.headers.common.headers);
+};
+const setAccountType = (type) => {
+    cookie.set("account_type", type);
 };
 
 const setRefreshToken = (refresh_token) => {
     cookie.set("refresh_token", refresh_token, {
         path: "/",
     });
-    console.log("Set Successful!", cookie.get("refresh_token"));
 };
 
 const onRefreshSuccess = (response) => {
@@ -52,22 +52,16 @@ const LogOut = (error) => {
 };
 const request = function (options) {
     const onSuccess = function (response) {
-        console.log("Request Successful!", response);
-        console.log("Config", response.config);
         return response.data;
     };
 
     const onError = function (error) {
-        console.error("Request Failed:", error.config);
         if (error) {
             const status = error.response.request.status;
-            console.log("status: ", status);
-
             // Unauthorized request
             if (status === 401) {
                 // If there is a refresh token then refresh
                 const refresh_token = cookie.get("refresh_token");
-                console.log("refresh_token: ", refresh_token);
                 if (refresh_token) {
                     return client({
                         method: "POST",
@@ -97,4 +91,4 @@ const request = function (options) {
     return client(options).then(onSuccess).catch(onError);
 };
 
-export {request, setAccessToken, setRefreshToken, LogOut};
+export {request, setAccessToken, setRefreshToken, LogOut, setAccountType};

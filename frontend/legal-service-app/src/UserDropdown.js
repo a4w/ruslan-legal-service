@@ -1,21 +1,24 @@
 import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
-import { LogOut, request } from "./Axios";
+import {LogOut, request} from "./Axios";
 import Img from "./Img";
 import Cookies from "universal-cookie";
 
 const UserDropdown = () => {
     const cookie = new Cookies();
-    const [isClient, setIsClient] = useState(cookie.get('account_type') === "CLIENT" );
+    const [isClient, setIsClient] = useState(cookie.get('account_type') === "CLIENT");
     const ref = useRef(null);
     const [menuToggle, setMenuToggle] = useState(false);
     const [user, setUser] = useState({});
 
     useEffect(() => {
-        request({ url: "/account/personal-info", method: "GET" })
+        if (!cookie.get('logged_in')) {
+            return;
+        }
+        request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
                 setUser(data.profile_data);
-                setIsClient(cookie.get('account_type') === "CLIENT" );
+                setIsClient(cookie.get('account_type') === "CLIENT");
             })
             .catch((err) => {});
     }, []);
@@ -31,7 +34,7 @@ const UserDropdown = () => {
             setMenuToggle(false);
         }
     };
-    
+
     const handleButtonClick = () => {
         setMenuToggle(!menuToggle);
     };
@@ -39,7 +42,7 @@ const UserDropdown = () => {
         <li
             className={`nav-item dropdown has-arrow logged-item ${
                 menuToggle ? "show" : ""
-            }`}
+                }`}
             ref={ref}
         >
             <Link
@@ -51,7 +54,7 @@ const UserDropdown = () => {
                     <Img
                         className="rounded-circle"
                         src={user.profile_picture}
-                        style={{ width: "31" }}
+                        style={{width: "31"}}
                         alt={user.name}
                     />
                 </span>
@@ -59,7 +62,7 @@ const UserDropdown = () => {
             <div
                 className={`dropdown-menu dropdown-menu-right ${
                     menuToggle ? "show" : ""
-                }`}
+                    }`}
             >
                 <div className="user-header">
                     <div className="avatar avatar-sm">
@@ -71,7 +74,7 @@ const UserDropdown = () => {
                     </div>
                     <div className="user-text">
                         <h6>{`${user.name} ${user.surname}`}</h6>
-                        <p className="text-muted mb-0">{isClient? "Client": "Lawyer"}</p>
+                        <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
                 <Link
@@ -102,16 +105,15 @@ const UserDropdown = () => {
                 >
                     Profile Settings
                 </Link>
-                <Link
+                <button
                     className="dropdown-item"
-                    to="/logout"
                     onClick={() => {
                         handleButtonClick();
                         LogOut();
                     }}
                 >
                     Logout
-                </Link>
+                </button>
             </div>
         </li>
     );

@@ -5,6 +5,7 @@ import {request} from "./Axios";
 import moment from "moment";
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
+import Cookies from "universal-cookie";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -25,8 +26,8 @@ const NotificationDropdown = () => {
     const handleButtonClick = () => {
         setNotificationToggle(!notificationToggle);
     };
-    const MarkAllRead = ()=>{
-        request({ url: "/account/mark-read-notifications", method: "GET" })
+    const MarkAllRead = () => {
+        request({url: "/account/mark-read-notifications", method: "GET"})
             .then((res) => {
                 toast.success("Marked all as read successfuly!");
             })
@@ -38,7 +39,7 @@ const NotificationDropdown = () => {
         <li
             className={`nav-item dropdown noti-dropdown ${
                 notificationToggle ? "show" : ""
-            }`}
+                }`}
             ref={ref}
         >
             <a
@@ -56,14 +57,14 @@ const NotificationDropdown = () => {
             <div
                 className={`dropdown-menu notifications ${
                     notificationToggle ? "show" : ""
-                }`}
-                style={{ position: "absolute", left: "-296px" }}
+                    }`}
+                style={{position: "absolute", left: "-296px"}}
             >
                 <div className="topnav-dropdown-header">
                     <span className="notification-title">Notifications</span>
                 </div>
-                <div className="noti-content" style={{ display: "" }}>
-                    <Notifications setNew={setNew}/>
+                <div className="noti-content" style={{display: ""}}>
+                    <Notifications setNew={setNew} />
                 </div>
                 <div className="topnav-dropdown-footer" onClick={MarkAllRead}>
                     <a href="" className="clear-noti">
@@ -75,10 +76,14 @@ const NotificationDropdown = () => {
     );
 };
 
+const cookie = new Cookies();
 const Notifications = ({setNew}) => {
     const [notifications, setNotifications] = useState([]);
-    const getNotifications = ()=>{
-        request({ url: "/account/notifications", method: "GET" })
+    const getNotifications = () => {
+        if (!cookie.get('logged_in')) {
+            return;
+        }
+        request({url: "/account/notifications", method: "GET"})
             .then((data) => {
                 setNotifications([...data.notifications]);
                 setNew(data.notifications.length);
@@ -86,8 +91,8 @@ const Notifications = ({setNew}) => {
             .catch((err) => {});
     }
     useEffect(getNotifications, []);
-    const MarkAsRead = (notification)=>{
-        request({ url: `/account/notification/${notification}`, method: "GET" })
+    const MarkAsRead = (notification) => {
+        request({url: `/account/notification/${notification}`, method: "GET"})
             .then((res) => {
             })
             .catch((err) => {
@@ -122,7 +127,7 @@ const Notifications = ({setNew}) => {
     );
 };
 
-const Notification = ({data: { type, notification_data }}) => {
+const Notification = ({data: {type, notification_data}}) => {
     switch (type) {
         case "INCOMING_MESSAGE":
             return (

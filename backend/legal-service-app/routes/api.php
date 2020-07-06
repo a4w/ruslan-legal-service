@@ -67,6 +67,7 @@ Route::prefix('appointment')->group(function () {
     Route::post('{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
     Route::get('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
     Route::post('{appointment}/cancel', 'AppointmentController@cancelAppointment')->middleware('auth:api');
+    Route::get('{appointment}', 'AppointmentController@getAppointment')->middleware('auth:api');
 });
 
 Route::prefix('blogs')->group(function () {

@@ -120,7 +120,7 @@ const UpcomingAppointments = ({ appointments }) => {
         </AppointmentsTable>
     );
 };
-const PreviousAppointments = ({ appointments }) => {
+const AllAppointments = ({ appointments }) => {
     return (
         <AppointmentsTable>
             {appointments.map((appointment) => (
@@ -147,8 +147,8 @@ const AppointmentsListTabs = ({ appointments }) => {
                                 </NavTab>
                             </li>
                             <li className="nav-item">
-                                <NavTab to={`${path}/previous`}>
-                                    Previous
+                                <NavTab to={`${path}/all`}>
+                                    All
                                 </NavTab>
                             </li>
                             <li className="nav-item">
@@ -163,8 +163,8 @@ const AppointmentsListTabs = ({ appointments }) => {
                         <Route path={`${path}/upcoming`}>
                             <UpcomingAppointments appointments={appointments} />
                         </Route>
-                        <Route path={`${path}/previous`}>
-                            <PreviousAppointments appointments={appointments} />
+                        <Route path={`${path}/all`}>
+                            <AllAppointments appointments={appointments} />
                         </Route>
                         <Route path={`${path}/billing`}>
                             <Billings billings={appointments} />

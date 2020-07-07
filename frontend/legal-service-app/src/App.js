@@ -129,15 +129,6 @@ function App() {
                                 return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
                             }}>
                             </Route>
-                            <Route path="/rate">
-                                <LawyerRating appointment_id={31} />
-                            </Route>
-                            <Route path="/write-blog">
-                                <BlogPage />
-                            </Route>
-                            <Route exact path="/edit-schedule">
-                                <ScheduleForm />
-                            </Route>
                             <Route path="/logout">
                                 <Redirect replace to="/" />
                             </Route>

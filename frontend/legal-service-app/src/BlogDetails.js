@@ -5,6 +5,7 @@ import Stackedit from "stackedit-js";
 import {request} from "./Axios"
 import BlogImg from "./BlogImg";
 import Img from "./Img";
+import PageHead from "./PageHead";
 // import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 
 const BlogDetails = ({match}) => {
@@ -23,16 +24,22 @@ const BlogDetails = ({match}) => {
         });
     }, []);
     return (
-        <div className="row">
-            <div className="col-12">
+        <>
+            <PageHead
+                title={blog !== null && blog.title}
+                description={blog !== null && blog.body.substr(0, 128)}
+            />
+            <div className="row">
+                <div className="col-12">
 
-                <div className="blog-view">
-                    {blog && <Post blog={blog} lawyer={lawyer} />}
-                    <ShareSection id={match.params.blogId} />
-                    {lawyer && <AboutAuthor lawyer={lawyer} />}
+                    <div className="blog-view">
+                        {blog && <Post blog={blog} lawyer={lawyer} />}
+                        <ShareSection id={match.params.blogId} />
+                        {lawyer && <AboutAuthor lawyer={lawyer} />}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 const AboutAuthor = ({lawyer}) => {
@@ -49,11 +56,11 @@ const AboutAuthor = ({lawyer}) => {
                             <Link
                                 to={{
                                     pathname: `/profile/${lawyer.id}`,
-                                    state: { lawyer: lawyer },
+                                    state: {lawyer: lawyer},
                                 }}
                             >
                                 <Img
-                                    style={{ width: "60px", height: "60px" }}
+                                    style={{width: "60px", height: "60px"}}
                                     className="img-fluid rounded-circle"
                                     alt="Author"
                                     src={account.profile_picture}
@@ -66,7 +73,7 @@ const AboutAuthor = ({lawyer}) => {
                             className="blog-author-name"
                             to={{
                                 pathname: `/profile/${lawyer.id}`,
-                                state: { lawyer: lawyer },
+                                state: {lawyer: lawyer},
                             }}
                         >
                             {`${lawyer.account.name} ${lawyer.account.surname}`}

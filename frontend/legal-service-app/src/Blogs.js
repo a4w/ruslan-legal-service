@@ -16,13 +16,15 @@ const Blogs = (props) => {
         e.preventDefault();
         const search = e.target[0].value;
         const term = queryString.stringify({ term: search });
-        if (search !== "")
+        if (search !== "") {
+            History.push("/blogs");
             request({ url: `/blogs/all?${term}`, method: "GET" })
                 .then((data) => {
                     console.log(data);
                     setBlogs(data.blogs);
                 })
                 .catch(() => {});
+        }
     };
 
     useEffect(() => {

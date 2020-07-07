@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AppointmentReserved extends Notification
+class UpcomingAppointment extends Notification
 {
     use Queueable;
 
@@ -43,7 +43,11 @@ class AppointmentReserved extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('emails.lawyer.new_appointment', ['appointment' => $this->appointment]);
+        if($notifiable->isLawyer()){
+            return (new MailMessage)->markdown('emails.lawyer.upcoming_appointment', ['appointment' => $this->appointment]);
+        }else{
+            return (new MailMessage)->markdown('emails.client.upcoming_appointment', ['appointment' => $this->appointment]);
+        }
     }
 
     /**
@@ -55,12 +59,9 @@ class AppointmentReserved extends Notification
     public function toArray($notifiable)
     {
         return [
-            'type' => 'APPOINTMENT_RESERVATION',
+            'type' => 'UPCOMING_APPOINTMENT',
             'notification_data' => [
-                'client_name' => $this->appointment->client->account->full_name,
-                'date' => $this->appointment->appointment_time,
-                'price' => $this->appointment->price
+                'appointment_id' => $this->appointment->id
             ]
         ];
     }
-}

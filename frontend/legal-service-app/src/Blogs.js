@@ -11,12 +11,19 @@ import moment from "moment";
 
 const Blogs = (props) => {
     const [blogs, setBlogs] = useState(null);
-    const [search, setSearch] = useState();
     
-    useEffect(() => {
-        setSearch(queryString.parse(props.location.search));
-        
-    },[props.location.search]);
+    const OnSubmitHandler = (e) => {
+        e.preventDefault();
+        const search = e.target[0].value;
+        const term = queryString.stringify({ term: search });
+        if (search !== "")
+            request({ url: `/blogs/all?${term}`, method: "GET" })
+                .then((data) => {
+                    console.log(data);
+                    setBlogs(data.blogs);
+                })
+                .catch(() => {});
+    };
 
     useEffect(() => {
         let qs = '';
@@ -43,7 +50,7 @@ const Blogs = (props) => {
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search/>
+                                <Search OnSubmitHandler={OnSubmitHandler}/>
                                 <LatestBlogs/>
                                 {/* <Catagories /> */}
                                 <TagsList />
@@ -56,17 +63,10 @@ const Blogs = (props) => {
     );
 };
 
-const Search = () => {
+const Search = ({OnSubmitHandler}) => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
-    };
-    const OnSubmitHandler = (e) => {
-        e.preventDefault();
-        History.push({
-            pathname: '/blogs',
-            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g,'+')}` : '',
-        })
     };
     return (
         <div className="card search-widget">

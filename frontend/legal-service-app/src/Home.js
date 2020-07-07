@@ -6,11 +6,12 @@ import * as $ from "jquery"
 import Slider from "react-slick";
 import Img from "./Img";
 import BlogImg from "./BlogImg";
-import { Discount } from "./LawyerCardList";
+import {Discount} from "./LawyerCardList";
 import StarRatings from "react-star-ratings";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
+import PageHead from "./PageHead";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -72,86 +73,90 @@ const Home = () => {
     };
     return (
         <>
-        <section className="section section-search">
-            <div className="container-fluid">
-                <div className="banner-wrapper">
-                    <div className="banner-header text-center">
-                        <h1>Search Lawyer, Book an Appointment</h1>
-                        <p>
-                            Discover the best lawyers the city nearest to you.
+            <PageHead
+                title="Find and book lawyers in your area | Lawbe"
+                description="Lawbe helps you find, compare and book meetings with the best lawyers from the comfort of your home"
+            />
+            <section className="section section-search">
+                <div className="container-fluid">
+                    <div className="banner-wrapper">
+                        <div className="banner-header text-center">
+                            <h1>Search Lawyer, Book an Appointment</h1>
+                            <p>
+                                Discover the best lawyers the city nearest to you.
                         </p>
-                    </div>
-                    <div className="search-box">
-                        <form onSubmit={OnSubmitHandler}>
-                            <div className="form-group search-location">
-                                <Select
-                                    className="select-form-control"
-                                    placeholder="Select Location"
-                                    values={[location]}
-                                    searchable
-                                    options={locationOptions}
-                                    onChange={([obj]) => {
-                                        setLocation(obj);
-                                        console.log(obj);
-                                    }}
-                                    style={{ minHeight: "46px" }}
-                                />
-                                {isLocationBased && (
-                                    <span className="form-text">
-                                        Based on your Location
-                                    </span>
-                                )}
-                            </div>
-                            <div className="form-group search-info">
-                                <Select
-                                    multi
-                                    className="select-form-control"
-                                    placeholder="Select Area of Practice"
-                                    value={practiceAreas}
-                                    searchable
-                                    options={practiceAreaOptions}
-                                    onChange={(obj) => setPracticeAreas(obj)}
-                                    style={{ minHeight: "46px" }}
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="btn btn-primary search-btn"
-                            >
-                                <i className="fas fa-search"></i>{" "}
-                                <span>Search</span>
-                            </button>
-                        </form>
-                        <div className="separator">
-                            or Search lawyer by name!
                         </div>
-                        <SearchLawyerByName />
+                        <div className="search-box">
+                            <form onSubmit={OnSubmitHandler}>
+                                <div className="form-group search-location">
+                                    <Select
+                                        className="select-form-control"
+                                        placeholder="Select Location"
+                                        values={[location]}
+                                        searchable
+                                        options={locationOptions}
+                                        onChange={([obj]) => {
+                                            setLocation(obj);
+                                            console.log(obj);
+                                        }}
+                                        style={{minHeight: "46px"}}
+                                    />
+                                    {isLocationBased && (
+                                        <span className="form-text">
+                                            Based on your Location
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="form-group search-info">
+                                    <Select
+                                        multi
+                                        className="select-form-control"
+                                        placeholder="Select Area of Practice"
+                                        value={practiceAreas}
+                                        searchable
+                                        options={practiceAreaOptions}
+                                        onChange={(obj) => setPracticeAreas(obj)}
+                                        style={{minHeight: "46px"}}
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary search-btn"
+                                >
+                                    <i className="fas fa-search"></i>{" "}
+                                    <span>Search</span>
+                                </button>
+                            </form>
+                            <div className="separator">
+                                or Search lawyer by name!
+                        </div>
+                            <SearchLawyerByName />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <AreaOfExpertices />
-        <PopularLawyers />
-        <LatestBlogs />
+            </section>
+            <AreaOfExpertices />
+            <PopularLawyers />
+            <LatestBlogs />
         </>
     );
 };
 
 const SearchLawyerByName = () => {
     const [name, setName] = useState("");
-    const OnChangeHandler = ({ target: { value } }) => {
+    const OnChangeHandler = ({target: {value}}) => {
         setName(value);
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
         History.push({
             pathname: '/list',
-            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g,'+')}` : '',
+            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g, '+')}` : '',
         })
     };
     return (
-        <form style={{ marginTop: "8px" }} onSubmit={OnSubmitHandler}>
-            <div className="form-group search-info" style={{ minWidth: "93%" }}>
+        <form style={{marginTop: "8px"}} onSubmit={OnSubmitHandler}>
+            <div className="form-group search-info" style={{minWidth: "93%"}}>
                 <input
                     className="form-control"
                     placeholder="Enter Lawyer Name"
@@ -233,11 +238,11 @@ const AreaOfExpertices = () => {
     );
 };
 
-const SlickIcon = ({url, label})=>{
+const SlickIcon = ({url, label}) => {
     return (
         <div className="speicality-item text-center">
             <div className="speicality-img">
-                <img className="img-fluid" alt="Speciality" src="/avatar.svg"/>
+                <img className="img-fluid" alt="Speciality" src="/avatar.svg" />
                 <span>
                     <i className="fa fa-circle" aria-hidden="true"></i>
                 </span>
@@ -247,17 +252,17 @@ const SlickIcon = ({url, label})=>{
     );
 }
 
-const PopularLawyers = ()=>{
+const PopularLawyers = () => {
     const [lawyers, setLawyers] = useState([]);
-    const [params, setParams] = useState({length: 7, order:"ratings"});
-    
+    const [params, setParams] = useState({length: 7, order: "ratings"});
+
     useEffect(() => {
         request({
             url: "/lawyer/all?" + queryString.stringify(params),
             method: "GET",
         })
             .then((data) => {
-               setLawyers(data.lawyers);
+                setLawyers(data.lawyers);
             })
             .catch((_errors) => {});
     }, []);
@@ -288,21 +293,21 @@ const PopularLawyers = ()=>{
         </section>
     );
 }
-const LawyerCard = ({account, lawyer})=>{
+const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
             <div className="lawyer-img">
-            <Link to={{pathname: `/profile/${lawyer.id}`, state: { lawyer: lawyer }}}>
-                <Img
-                    className="img-fluid"
-                    alt="User Image"
-                    src={account.profile_picture}
-                />
-            </Link>
+                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                    <Img
+                        className="img-fluid"
+                        alt="User Image"
+                        src={account.profile_picture}
+                    />
+                </Link>
             </div>
             <div className="pro-content">
                 <h3 className="title">
-                    <Link to={{pathname: `/profile/${lawyer.id}`, state: { lawyer: lawyer }}}>{`${account.name} ${account.surname}`}</Link>
+                    <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
                 <div className="session-services">
@@ -330,7 +335,7 @@ const LawyerCard = ({account, lawyer})=>{
                         <Link
                             to={{
                                 pathname: `/profile/${lawyer.id}`,
-                                state: { lawyer: lawyer },
+                                state: {lawyer: lawyer},
                             }}
                             className="btn view-btn"
                         >
@@ -341,7 +346,7 @@ const LawyerCard = ({account, lawyer})=>{
                         <Link
                             to={{
                                 pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
-                                state: { lawyer_id: lawyer.id },
+                                state: {lawyer_id: lawyer.id},
                             }}
                             className="btn book-btn"
                         >
@@ -349,7 +354,7 @@ const LawyerCard = ({account, lawyer})=>{
                         </Link>
                     </div>
                 </div>
-            <ul className="available-info mt-2" style={{minHeight:"125px"}} >
+                <ul className="available-info mt-2" style={{minHeight: "125px"}} >
                     <li>
                         <i className="fas fa-map-marker-alt"></i>{" "}
                         {`${account.city}, ${account.country}`}
@@ -367,10 +372,10 @@ const LawyerCard = ({account, lawyer})=>{
     );
 }
 
-const LatestBlogs = ()=>{
+const LatestBlogs = () => {
     const [blogs, setBlogs] = useState([]);
     useEffect(() => {
-        request({ url: `/blogs/latest/${4}`, method: "GET" })
+        request({url: `/blogs/latest/${4}`, method: "GET"})
             .then((response) => {
                 setBlogs(response.blogs);
             })
@@ -379,7 +384,7 @@ const LatestBlogs = ()=>{
     return (
         <section
             className="section section-blogs"
-            style={{ backgroundColor: "#fff" }}
+            style={{backgroundColor: "#fff"}}
         >
             <div className="container-fluid">
                 <div className="section-header text-center">
@@ -399,7 +404,7 @@ const LatestBlogs = ()=>{
         </section>
     );
 }
-const BlogCard = ({blog})=>{
+const BlogCard = ({blog}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (

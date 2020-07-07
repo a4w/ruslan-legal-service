@@ -146,7 +146,7 @@ const SearchLawyerByName = () => {
         event.preventDefault();
         History.push({
             pathname: '/list',
-            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g,'+')}` : '',
+            search: (name !== '') ? `?term=${name.replace(/\s/g,'+')}` : '',
         })
     };
     return (

@@ -102,7 +102,7 @@ class AuthController extends Controller
 
         $email = $request->get('email');
         $client = new Google_Client(['client_id' => config('app.google_client_id')]);  // Specify the CLIENT_ID of the app that accesses the backend
-        JWT::$leeway = 60;
+        JWT::$leeway = 120;
         $payload = $client->verifyIdToken($request->get('id_token'));
         if ($payload) {
             // Check if registered
@@ -113,10 +113,10 @@ class AuthController extends Controller
                 $account->email = $request->get('email');
                 $account->save();
                 $account->client()->save(Client::make());
-                return $this->respondWithToken(Auth::login($account));
+                return $this->respondWithToken($account, Auth::login($account));
             } else {
                 // login
-                return $this->respondWithToken(Auth::login($user));
+                return $this->respondWithToken($user, Auth::login($user));
             }
         } else {
             return RespondJSON::unauthorized();

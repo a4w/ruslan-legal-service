@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { request } from "./Axios";
-import { registrationValidation } from "./Validations";
+import React, {useState} from "react";
+import {request} from "./Axios";
+import {registrationValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { FaSpinner } from "react-icons/fa";
+import {FaSpinner} from "react-icons/fa";
 import history from "./History";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
-import { Link } from "react-router-dom";
-import { getParent } from "./LoginForm";
+import {Link} from "react-router-dom";
 import History from "./History";
 
-const RegisterationForm = () => {
+const RegisterationForm = ({back}) => {
     const initUser = {
         name: "",
         surname: "",
@@ -29,13 +28,13 @@ const RegisterationForm = () => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };
 
     const UserTypeHandler = () => {
-        setUser({ ...user, isClient: !user.isClient });
+        setUser({...user, isClient: !user.isClient});
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -46,7 +45,7 @@ const RegisterationForm = () => {
 
                 if (user.isClient) url = "/register/client";
                 else url = "/register/lawyer";
-                request({ url: url, method: "POST", data: user })
+                request({url: url, method: "POST", data: user})
                     .then((response) => {
                         console.log("success", response);
                     })
@@ -126,10 +125,10 @@ const RegisterationForm = () => {
                 />
                 <div className="text-right">
                     <a
-                        style={{cursor:"pointer"}}
+                        style={{cursor: "pointer"}}
                         onClick={() =>
                             History.replace(
-                                `${getParent(History.location.pathname)}/login`
+                                `${back}/login`
                             )
                         }
                         className="forgot-link"

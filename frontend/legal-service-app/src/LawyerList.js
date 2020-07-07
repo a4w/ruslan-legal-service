@@ -52,6 +52,8 @@ function LawyerList(props) {
     };
 
     useEffect(() => {
+        console.log(params);
+        
         getList(params);        
     }, []);
 

@@ -79,11 +79,9 @@ const CalendarEvent = ({appointment}) => {
     // console.log(duration);
 
     return (
-        <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
-            <div className="fc-content">
-                <span className="fc-time">{moment(appointment.appointment_time).format("hh:mm a")}</span>{" "}
-                <br />
-                <span className="fc-title">{`duration: ${appointment.duration} minutes`}</span>
+        <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable">
+            <div className="fc-content d-none d-md-block">
+                <b>{moment(appointment.appointment_time).format("hh:mm a")}</b> for <b>{appointment.duration}</b> minutes
             </div>
         </div>
     );
@@ -151,9 +149,9 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
                     onClick={() => onDateClick(cloneDay)}
                     id={moment(day).format("DD-MM-YYYY")}
                 >
-                    <span className="number">{formattedDate}</span>
-                    <span className="bg">{formattedDate}</span>
-                    <div className="fc">
+                    <span className="number" style={{zIndex: '0'}}>{formattedDate}</span>
+                    <span className="bg" style={{zIndex: 1}}>{formattedDate}</span>
+                    <div className="fc w-100" style={{zIndex: '0'}}>
                         {todaysAppointments &&
                             todaysAppointments.map((appointment, i) => (
                                 <CalendarEvent appointment={appointment} key={i} />

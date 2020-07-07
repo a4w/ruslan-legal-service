@@ -44,7 +44,9 @@ const requireLogin = (error) => {
     cookie.remove("refresh_token");
     cookie.remove("access_token");
     cookie.remove("logged_in");
-    history.push(history.location.pathname + '/login');
+    if (!history.location.pathname.endsWith("/login")) {
+        history.push(history.location.pathname + '/login');
+    }
 };
 const LogOut = (error) => {
     request({

@@ -6,7 +6,7 @@ const LoginModal = (props) => {
     return (
         <Modal back={props.back} header={"Login"}>
             <div style={{margin: "10px"}}>
-                <LoginForm />
+                <LoginForm back={props.back} />
             </div>
         </Modal>
     );

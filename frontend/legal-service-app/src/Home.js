@@ -149,7 +149,19 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+                <br />
+                <hr />
+                <div className="row">
+                    <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                        <div className="separator">
+                            or Search lawyer by name!
+                        </div>
+                        <SearchLawyerByName />
+                    </div>
+                </div>
             </div>
+
+
             <AreaOfExpertices />
             <PopularLawyers />
             <LatestBlogs />
@@ -183,7 +195,7 @@ const SearchLawyerByName = () => {
                     </div>
                 </div>
                 <div className="col-auto">
-                    <button type="submit" className="btn btn-block btn-primary search-btn">
+                    <button type="submit" style={{height: '46px'}} className="btn btn-block btn-primary search-btn">
                         <i className="fas fa-search"></i>
                     </button>
 

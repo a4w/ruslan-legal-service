@@ -115,12 +115,7 @@ function App() {
                                 path="/reset/:Token"
                                 component={ResetPassword}
                             />
-                            <Route path="/complete-registration">
-                                <LawyerCompleteRegisteration />
-                            </Route>
-                            <Route path="/dashboard">
-                                <LawyerDashboard />
-                            </Route>
+                            <PrivateRoute path="/dashboard" component={LawyerDashboard} />
                             <Route
                                 path="/profile/:LawyerId"
                                 component={LawyerProfile}

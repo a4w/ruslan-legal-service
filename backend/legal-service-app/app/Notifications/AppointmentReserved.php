@@ -32,7 +32,18 @@ class AppointmentReserved extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'email'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)->markdown('emails.lawyer.new_appointment', ['appointment' => $this->appointment]);
     }
 
     /**

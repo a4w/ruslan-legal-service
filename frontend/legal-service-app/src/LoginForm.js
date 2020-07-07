@@ -10,14 +10,8 @@ import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
 
-function getParent(url) {
-    const reversed = url.split("").reverse().join("")
-    const n = reversed.indexOf("/");
-    const parent = reversed.substr(n + 1);
-    return parent.split("").reverse().join("");
-}
 
-const LoginForm = () => {
+const LoginForm = ({back}) => {
     const initUser = {
         email: "",
         password: "",
@@ -41,7 +35,7 @@ const LoginForm = () => {
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
                         console.log(data);
-                        
+
                         if (data.access_token)
                             setAccessToken(data.access_token);
                         if (data.refresh_token)
@@ -146,10 +140,10 @@ const LoginForm = () => {
                 <div className="text-center dont-have">
                     Don’t have an account?
                     <a
-                        style={{cursor:"pointer"}}
+                        style={{cursor: "pointer"}}
                         onClick={() =>
                             History.replace(
-                                `${getParent(History.location.pathname)}/register`
+                                `${back}/register`
                             )
                         }
                     >
@@ -180,4 +174,3 @@ const LoginWrapper = (props) => {
     );
 };
 export default LoginForm;
-export {getParent};

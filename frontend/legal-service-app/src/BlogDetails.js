@@ -49,11 +49,11 @@ const AboutAuthor = ({lawyer}) => {
                             <Link
                                 to={{
                                     pathname: `/profile/${lawyer.id}`,
-                                    state: { lawyer: lawyer },
+                                    state: {lawyer: lawyer},
                                 }}
                             >
                                 <Img
-                                    style={{ width: "60px", height: "60px" }}
+                                    style={{width: "60px", height: "60px"}}
                                     className="img-fluid rounded-circle"
                                     alt="Author"
                                     src={account.profile_picture}
@@ -66,7 +66,7 @@ const AboutAuthor = ({lawyer}) => {
                             className="blog-author-name"
                             to={{
                                 pathname: `/profile/${lawyer.id}`,
-                                state: { lawyer: lawyer },
+                                state: {lawyer: lawyer},
                             }}
                         >
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
@@ -112,7 +112,14 @@ const Post = ({blog, lawyer}) => {
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <BlogImg alt="" src={blog.cover_photo_link} className="img-fluid" />
+                <BlogImg alt="" src={blog.cover_photo_link} style={{
+                    maxHeight: '400px',
+                    maxWidth: '100%',
+                    width: 'unset',
+                    height: 'unset',
+                    display: 'block',
+                    margin: 'auto'
+                }} className="img-fluid" />
             </div>
             <h3 className="blog-title">{blog.title}</h3>
             <div className="blog-info clearfix">

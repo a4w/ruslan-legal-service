@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import moment from "moment";
 import "./LawyerAgenda.css";
 import {request} from "./Axios";
@@ -10,14 +10,14 @@ const LawyerAgenda = () => {
     const [monthAppointments, setMonthAppointments] = useState(null);
     const nextMonth = () => {
         setCurrentDate(moment(currentDate).add(1, 'month').toDate());
-        
+
     };
     const prevMonth = () => {
         setCurrentDate(moment(currentDate).subtract(1, 'month').toDate());
     };
     const onDateClick = (day) => {
         console.log(day);
-        
+
         setSelectedDate(day);
     };
     useEffect(() => {
@@ -28,7 +28,7 @@ const LawyerAgenda = () => {
             .catch((err) => {});
     }, []);
     useEffect(() => {
-        const next = new Array(moment(currentDate). daysInMonth() + 1);
+        const next = new Array(moment(currentDate).daysInMonth() + 1);
         for (let index = 0; index < next.length; index++) {
             next[index] = new Array();
         }
@@ -39,13 +39,13 @@ const LawyerAgenda = () => {
                 next[n].push(appointment);
             }
         });
-        setMonthAppointments(next);     
+        setMonthAppointments(next);
     }, [currentDate, appointments]);
     return (
         <div className="content">
             <div className="container-fluid">
                 <div className="card">
-                    <div className="card-body" style={{overflowY:"auto"}}>
+                    <div className="card-body" style={{overflowY: "auto"}}>
                         <div className="calendar">
                             <div>
                                 <Header
@@ -72,17 +72,17 @@ const LawyerAgenda = () => {
         </div>
     );
 };
-const CalendarEvent = ({appointment})=>{
+const CalendarEvent = ({appointment}) => {
     // let duration = new Date(0);
     // duration.setMinutes(appointment.duration);
     // duration = moment(duration).format("hh hours and mm minutes");
     // console.log(duration);
-    
+
     return (
         <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end bg-success fc-draggable">
             <div className="fc-content">
                 <span className="fc-time">{moment(appointment.appointment_time).format("hh:mm a")}</span>{" "}
-                <br/>
+                <br />
                 <span className="fc-title">{`duration: ${appointment.duration} minutes`}</span>
             </div>
         </div>
@@ -144,9 +144,9 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
                         moment(day).isSame(selectedDate, "day")
                             ? "selected"
                             : moment(day).isSame(startOfMonth, "month")
-                            ? ""
-                            : "disabled"
-                    }`}
+                                ? ""
+                                : "disabled"
+                        }`}
                     key={day.toISOString()}
                     onClick={() => onDateClick(cloneDay)}
                     id={moment(day).format("DD-MM-YYYY")}

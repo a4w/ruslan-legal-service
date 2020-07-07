@@ -120,9 +120,7 @@ function App() {
                                 path="/profile/:LawyerId"
                                 component={LawyerProfile}
                             />
-                            <Route path="/client-dashboard">
-                                <ClientDashboard />
-                            </Route>
+                            <PrivateRoute path="/client-dashboard" component={ClientDashboard} />
                             <Route path="/forgot-password">
                                 <ForgotPassword />
                             </Route>

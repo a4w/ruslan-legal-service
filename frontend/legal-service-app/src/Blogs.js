@@ -17,7 +17,6 @@ const Blogs = (props) => {
         const search = e.target[0].value;
         const term = queryString.stringify({ term: search });
         if (search !== "") {
-            History.push("/blogs");
             request({ url: `/blogs/all?${term}`, method: "GET" })
                 .then((data) => {
                     console.log(data);
@@ -26,16 +25,17 @@ const Blogs = (props) => {
                 .catch(() => {});
         }
     };
-
+    const TagFilterHandler = (id) => {
+        const term = queryString.stringify({ tag: id });
+        request({ url: `/blogs/all?${term}`, method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    };
     useEffect(() => {
-        let qs = '';
-        
-        console.log(props.match);
-        
-        if (props.match.params.tag) {
-            qs = `?tag=${props.match.params.tag}`;
-        }
-        request({url: "/blogs/all" + qs, method: "GET"})
+        request({ url: "/blogs/all", method: "GET" })
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -55,7 +55,7 @@ const Blogs = (props) => {
                                 <Search OnSubmitHandler={OnSubmitHandler}/>
                                 <LatestBlogs/>
                                 {/* <Catagories /> */}
-                                <TagsList />
+                                <TagsList TagFilterHandler={TagFilterHandler}/>
                             </StickyBox>
                         </div>
                     </div>
@@ -167,7 +167,7 @@ const Catagories = ({cats}) => {
     );
 };
 
-const TagsList = () => {
+const TagsList = ({TagFilterHandler}) => {
     const [tags, setTags] = useState();
     useEffect(() => {
         request({url: "/lawyer/practice-areas", method: "GET"})
@@ -186,10 +186,10 @@ const TagsList = () => {
             <div className="card-body">
                 <ul className="tags">
                     {tags && tags.map((tag) => (
-                        <li key={tag.id}>
-                            <Link to={`/blogs/${tag.id}`} className="tag">
+                        <li key={tag.id} onClick={()=>TagFilterHandler(tag.id)}>
+                            <a href="#" className="tag">
                                 {tag.area}
-                            </Link>
+                            </a>
                         </li>
                     ))}
                 </ul>

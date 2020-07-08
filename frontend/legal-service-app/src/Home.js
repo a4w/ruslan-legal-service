@@ -244,7 +244,7 @@ const SearchLawyerByName = () => {
 export default Home;
 var settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -255,7 +255,7 @@ var settings = {
             settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
-                infinite: true,
+                infinite: false,
                 dots: true,
             },
         },
@@ -491,6 +491,10 @@ const BlogCard = ({blog}) => {
                             className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            style={{
+                                maxWidth: '100%',
+                                height: '200px'
+                            }}
                         />
                     </Link>
                 </div>

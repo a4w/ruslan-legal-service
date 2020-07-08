@@ -12,10 +12,13 @@ const NavBar = () => {
     const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
     const [open, setOpen] = useState(true);
     const ref = useRef(null);
+    const CloseOnOutsideClick = () => {
+        if (window.innerWidth <= 991) setOpen(false);
+    };
     useEffect(() => {
-        document.addEventListener("mousedown", () => setOpen(false));
+        document.addEventListener("mousedown", CloseOnOutsideClick);
         return () =>
-            document.removeEventListener("mousedown", () => setOpen(false));
+            document.removeEventListener("mousedown", CloseOnOutsideClick);
     }, [ref]);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);

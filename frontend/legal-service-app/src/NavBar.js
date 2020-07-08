@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {Link} from "react-router-dom";
 import Cookies from "universal-cookie";
 import History from "./History";
@@ -10,9 +10,13 @@ import {refreshAccessToken} from "./Axios"
 const NavBar = () => {
     const cookie = new Cookies();
     const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
-    const [menuToggle, setMenuToggle] = useState(false);
-    const [notificationToggle, setNotificationToggle] = useState(false);
     const [open, setOpen] = useState(true);
+    const ref = useRef(null);
+    useEffect(() => {
+        document.addEventListener("mousedown", () => setOpen(false));
+        return () =>
+            document.removeEventListener("mousedown", () => setOpen(false));
+    }, [ref]);
     const Menu = () => {
         if (window.innerWidth >= 991) setOpen(true);
         else setOpen(false)
@@ -56,6 +60,7 @@ const NavBar = () => {
                             ? "translateX(0px)"
                             : "translateX(-260px)",
                     }}
+                    ref={ref}
                 >
                     <div className="menu-header">
                         <Link className="menu-logo" to="/">

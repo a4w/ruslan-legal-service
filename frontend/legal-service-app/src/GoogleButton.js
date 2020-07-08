@@ -1,7 +1,7 @@
 import React from "react";
 import GoogleLogin from "react-google-login";
 import Config from "./Config";
-import {request, setAccessToken} from "./Axios"
+import {request, setAccessToken, setAccountType} from "./Axios"
 
 const GoogleButton = ({register}) => {
     const responseGoogle = (response) => {
@@ -19,6 +19,7 @@ const GoogleButton = ({register}) => {
         }).then(response => {
             console.log(response);
             setAccessToken(response.access_token);
+            setAccountType(response.account_type);
             window.location.reload();
         }).catch(error => {
             console.log(error);

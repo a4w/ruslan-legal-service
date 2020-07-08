@@ -124,8 +124,11 @@ const AppointmentsTable = (props) => {
             <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <table className="table table-hover table-center mb-0">
-                            <thead>
+                        <table 
+                            className="table table-hover table-center mb-0"
+                            style={{backgroundColor: "white", display: "block"}}
+                        >
+                            <tbody style={{ width: "100%", display: "table" }}>
                                 <tr>
                                     <th>Lawyer</th>
                                     <th>Appt Date</th>
@@ -135,8 +138,8 @@ const AppointmentsTable = (props) => {
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>{props.children}</tbody>
+                                {props.children}
+                            </tbody>
                         </table>
                     </div>
                 </div>

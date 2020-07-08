@@ -91,13 +91,13 @@ const UserDropdown = () => {
                 >
                     Messages
                 </Link>
-                {!isClient && <Link
+                <Link
                     className="dropdown-item"
                     to="/calendar"
                     onClick={handleButtonClick}
                 >
                     Agenda
-                </Link>}
+                </Link>
                 <Link
                     className="dropdown-item"
                     to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}

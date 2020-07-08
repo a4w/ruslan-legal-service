@@ -109,7 +109,7 @@ const Home = () => {
                             <div className="search-box">
                                 <form onSubmit={OnSubmitHandler}>
                                     <div className="row form-row">
-                                        <div className="col-5">
+                                        <div className="col-12 col-md-5 m-1">
                                             <Select
                                                 className="search-form-control"
                                                 placeholder="Select Location"
@@ -128,7 +128,7 @@ const Home = () => {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-12 col-md-6 m-1">
                                             <Select
                                                 multi
                                                 className="search-form-control"
@@ -140,7 +140,7 @@ const Home = () => {
                                                 style={{minHeight: "46px", backgroundColor: '#fff'}}
                                             />
                                         </div>
-                                        <div className="col-1">
+                                        <div className="col-12 col-md-1 m-1">
                                             <button
                                                 type="submit"
                                                 className="btn btn-primary search-btn btn-block"
@@ -312,7 +312,7 @@ const AreaOfExpertices = () => {
 const SlickIcon = ({url, label}) => {
     return (
         <div className="speicality-item text-center">
-            <div className="speicality-img">
+            <div className="speicality-img" style={{margin: 'auto'}}>
                 <img className="img-fluid" alt="Speciality" src="/avatar.svg" />
                 <span>
                     <i className="fa fa-circle" aria-hidden="true"></i>
@@ -366,7 +366,7 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget" style={{width: '300px'}}>
+        <div className="profile-widget" style={{width: '300px', margin: 'auto'}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img

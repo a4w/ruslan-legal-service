@@ -325,11 +325,11 @@ const SlickIcon = ({url, label}) => {
 
 const PopularLawyers = () => {
     const [lawyers, setLawyers] = useState([]);
-    const [params, setParams] = useState({length: 7, order: "ratings"});
+    const params = queryString.stringify({length: 6, order: "ratings"});
 
     useEffect(() => {
         request({
-            url: "/lawyer/all?" + queryString.stringify(params),
+            url: "/lawyer/all?" + params,
             method: "GET",
         })
             .then((data) => {
@@ -366,7 +366,7 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget" style={{width: '300px', margin: 'auto'}}>
+        <div className="profile-widget" style={{width: 'auto', margin: 'auto'}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img

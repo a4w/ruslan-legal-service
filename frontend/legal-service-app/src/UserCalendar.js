@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import moment from "moment";
-import "./LawyerAgenda.css";
+import "./UserCalendar.css";
 import {request} from "./Axios";
 
-const LawyerAgenda = () => {
+const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -171,4 +171,4 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
     return <div className="body">{rows}</div>;
 };
 
-export default LawyerAgenda;
+export default UserCalendar;

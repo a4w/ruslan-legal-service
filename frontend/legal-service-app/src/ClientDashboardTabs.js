@@ -3,6 +3,7 @@ import EditPassword from "./EditPassword";
 import ClientDashboardStatus from "./ClientDashboardStatus";
 import ProfileSettings from "./ProfileSettings";
 import { Switch, Route, Redirect } from "react-router-dom";
+import UserCalendar from "./UserCalendar";
 
 const ClientDashboardTabs = () => {
     return (
@@ -12,6 +13,9 @@ const ClientDashboardTabs = () => {
             </Route>
             <Route path="/client-dashboard/status">
                 <ClientDashboardStatus />
+            </Route>
+            <Route exact path="/client-dashboard/calendar">
+                <UserCalendar />
             </Route>
             <Route path="/client-dashboard/messages">
                 <Redirect to="/chat" />

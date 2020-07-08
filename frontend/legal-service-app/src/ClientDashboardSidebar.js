@@ -46,6 +46,12 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
+                                <NavTab exact to="/client-dashboard/calendar">
+                                    <i className="fas fa-calendar"></i>
+                                    <span>Calendar</span>
+                                </NavTab>
+                            </li>
+                            <li>
                                 <NavTab to="/client-dashboard/messages">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>

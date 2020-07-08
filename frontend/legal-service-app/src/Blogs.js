@@ -15,9 +15,9 @@ const Blogs = (props) => {
     const OnSubmitHandler = (e) => {
         e.preventDefault();
         const search = e.target[0].value;
-        const term = queryString.stringify({ term: search });
+        const term = queryString.stringify({term: search});
         if (search !== "") {
-            request({ url: `/blogs/all?${term}`, method: "GET" })
+            request({url: `/blogs/all?${term}`, method: "GET"})
                 .then((data) => {
                     console.log(data);
                     setBlogs(data.blogs);
@@ -26,8 +26,8 @@ const Blogs = (props) => {
         }
     };
     const TagFilterHandler = (id) => {
-        const term = queryString.stringify({ tag: id });
-        request({ url: `/blogs/all?${term}`, method: "GET" })
+        const term = queryString.stringify({tag: id});
+        request({url: `/blogs/all?${term}`, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -35,7 +35,7 @@ const Blogs = (props) => {
             .catch(() => {});
     };
     useEffect(() => {
-        request({ url: "/blogs/all", method: "GET" })
+        request({url: "/blogs/all", method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -56,10 +56,10 @@ const Blogs = (props) => {
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search OnSubmitHandler={OnSubmitHandler}/>
-                                <LatestBlogs/>
+                                <Search OnSubmitHandler={OnSubmitHandler} />
+                                <LatestBlogs />
                                 {/* <Catagories /> */}
-                                <TagsList TagFilterHandler={TagFilterHandler}/>
+                                <TagsList TagFilterHandler={TagFilterHandler} />
                             </StickyBox>
                         </div>
                     </div>
@@ -73,13 +73,6 @@ const Search = ({OnSubmitHandler}) => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
-    };
-    const OnSubmitHandler = (e) => {
-        e.preventDefault();
-        History.push({
-            pathname: '/blogs',
-            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g, '+')}` : '',
-        })
     };
     return (
         <div className="card search-widget">
@@ -197,7 +190,7 @@ const TagsList = ({TagFilterHandler}) => {
             <div className="card-body">
                 <ul className="tags">
                     {tags && tags.map((tag) => (
-                        <li key={tag.id} onClick={()=>TagFilterHandler(tag.id)}>
+                        <li key={tag.id} onClick={() => TagFilterHandler(tag.id)}>
                             <a href="#" className="tag">
                                 {tag.area}
                             </a>

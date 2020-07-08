@@ -199,9 +199,9 @@ const AppointmentsTable = (props) => {
                     <div className="table-responsive">
                         <table
                             className="table table-hover table-center mb-0"
-                            style={{backgroundColor: "white"}}
+                            style={{backgroundColor: "white", display: "block"}}
                         >
-                            <thead>
+                            <tbody style={{ width: "100%", display: "table" }}>
                                 <tr>
                                     <th>Client Name</th>
                                     <th>Appt Date</th>
@@ -209,8 +209,8 @@ const AppointmentsTable = (props) => {
                                     <th className="text-center">Paid Amount</th>
                                     <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>{props.children}</tbody>
+                                {props.children}
+                            </tbody>
                         </table>
                     </div>
                 </div>

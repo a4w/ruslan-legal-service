@@ -366,12 +366,16 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget">
+        <div className="profile-widget" style={{width: '300px'}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
                         className="img-fluid"
                         alt="User Image"
+                        style={{
+                            maxWidth: '100%',
+                            height: '150px'
+                        }}
                         src={account.profile_picture}
                     />
                 </Link>
@@ -426,10 +430,10 @@ const LawyerCard = ({account, lawyer}) => {
                     </div>
                 </div>
                 <ul className="available-info mt-2" style={{minHeight: "125px"}} >
-                    <li>
+                    {account.city && <li>
                         <i className="fas fa-map-marker-alt"></i>{" "}
                         {`${account.city}, ${account.country}`}
-                    </li>
+                    </li>}
                     <Discount
                         secsTillEnd={new Date(lawyer.discount_end)}
                         cost={lawyer.price_per_hour}

@@ -17,6 +17,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LawyerController extends Controller
 {
@@ -443,11 +444,12 @@ class LawyerController extends Controller
         ]);
         $char = '\\';
         $term = str_replace([$char, '%', '_'], [$char . $char, $char . '%', $char . '_'], $request->get('term'));
+        $term = Str::lower($term);
         $lawyers = Lawyer::select(['lawyers.*'])->where('schedule', '<>', null)
             ->leftJoin('users', function (JoinClause $join) {
                 $join->on('lawyers.user_id', '=', 'users.id');
             })
-            ->whereRaw('CONCAT_WS(\'\', users.name, users.surname) LIKE ' . '\'%' . $term . '%\'')->get();
+            ->whereRaw('LOWER(CONCAT_WS(\' \', users.name, users.surname)) LIKE ' . '\'%' . $term . '%\'')->get();
         return RespondJSON::success(['lawyers' => $lawyers]);
     }
 }

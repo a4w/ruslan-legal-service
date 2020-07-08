@@ -208,9 +208,6 @@ const AppointmentsListTabs = ({ appointments }) => {
                                     All
                                 </NavTab>
                             </li>
-                            <li className="nav-item">
-                                <NavTab to={`${path}/billing`}>Billing</NavTab>
-                            </li>
                         </ul>
                     </Nav>
                     <Switch>
@@ -222,9 +219,6 @@ const AppointmentsListTabs = ({ appointments }) => {
                         </Route>
                         <Route path={`${path}/all`}>
                             <AllAppointments appointments={appointments} />
-                        </Route>
-                        <Route path={`${path}/billing`}>
-                            <Billings billings={appointments} />
                         </Route>
                     </Switch>
                 </Router>

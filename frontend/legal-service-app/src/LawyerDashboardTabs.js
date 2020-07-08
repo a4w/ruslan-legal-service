@@ -10,6 +10,7 @@ import LawyerReviews from "./LawyerReviews";
 import {Route, Switch, Redirect} from "react-router-dom";
 import History from "./History";
 import ScheduleForm from "./ScheduleForm";
+import LawyerAgenda from "./LawyerAgenda";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -29,8 +30,8 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/schedule">
                 <ScheduleForm />
             </Route>
-            <Route exact path="/dashboard/invoices">
-                <LawyerInvoice />
+            <Route exact path="/dashboard/calendar">
+                <LawyerAgenda />
             </Route>
             <Route exact path="/dashboard/reviews">
                 <LawyerReviews />

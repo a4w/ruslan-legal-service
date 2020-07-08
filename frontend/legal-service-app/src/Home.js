@@ -12,6 +12,7 @@ import {Link} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
 import PageHead from "./PageHead";
+import "./Home.css"
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -73,7 +74,7 @@ const Home = () => {
     };
     return (
         <>
-      <PageHead
+            <PageHead
                 title="Find and book lawyers in your area | Lawbe"
                 description="Lawbe helps you find, compare and book meetings with the best lawyers from the comfort of your home"
             />
@@ -158,53 +159,10 @@ const Home = () => {
                 <hr />
                 <div className="row">
                     <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                        <div className="separator">
-                            or Search lawyer by name!
-                        </div>
                         <div className="search-box">
-                            <form onSubmit={OnSubmitHandler}>
-                                <div className="form-group search-location">
-                                    <Select
-                                        className="select-form-control"
-                                        placeholder="Select Location"
-                                        values={[location]}
-                                        searchable
-                                        options={locationOptions}
-                                        onChange={([obj]) => {
-                                            setLocation(obj);
-                                            console.log(obj);
-                                        }}
-                                        style={{minHeight: "46px"}}
-                                    />
-                                    {isLocationBased && (
-                                        <span className="form-text">
-                                            Based on your Location
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="form-group search-info">
-                                    <Select
-                                        multi
-                                        className="select-form-control"
-                                        placeholder="Select Area of Practice"
-                                        value={practiceAreas}
-                                        searchable
-                                        options={practiceAreaOptions}
-                                        onChange={(obj) => setPracticeAreas(obj)}
-                                        style={{minHeight: "46px"}}
-                                    />
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary search-btn"
-                                >
-                                    <i className="fas fa-search"></i>{" "}
-                                    <span>Search</span>
-                                </button>
-                            </form>
                             <div className="separator">
                                 or Search lawyer by name!
-                        </div>
+                            </div>
                             <SearchLawyerByName />
                         </div>
                     </div>
@@ -219,35 +177,64 @@ const Home = () => {
 };
 
 const SearchLawyerByName = () => {
-    const [name, setName] = useState("");
+    const [results, setResults] = useState([]);
     const OnChangeHandler = ({target: {value}}) => {
-        setName(value);
-    };
-    const OnSubmitHandler = (event) => {
-        event.preventDefault();
-        History.push({
-            pathname: '/list',
-            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g, '+')}` : '',
-        })
+        const term = value;
+        request({
+            url: `/lawyer/search?term=${term}`,
+            method: 'GET'
+        }).then(response => {
+            setResults(response.lawyers);
+        }).catch(error => {
+            setResults([]);
+        });
     };
     return (
-        <form style={{marginTop: "8px"}} onSubmit={OnSubmitHandler}>
+        <form style={{marginTop: "8px"}}>
             <div className="row form-row">
                 <div className="col">
-                    <div className="form-group search-info" style={{minWidth: "93%"}}>
+                    <div className="form-group" style={{minWidth: "93%"}}>
                         <input
                             className="form-control"
                             placeholder="Enter Lawyer Name"
-                            value={name}
                             onChange={OnChangeHandler}
                         />
+
+                        {results.length > 0 && <div style={{
+                            position: 'absolute',
+                            display: 'block',
+                            width: '99%',
+                            backgroundColor: '#fff',
+                            borderRadius: '0px 0px 10px 10px',
+                            border: '1px solid #ccc',
+                            marginRight: '5px'
+                        }}>
+                            {results.map((lawyer) => {
+                                console.log(lawyer);
+                                return (
+                                    <>
+                                        <div className="inline-search-result">
+                                            <a href={`/profile/${lawyer.id}`}>
+                                                <Img alt={lawyer.full_name} className="rounded-circle" src={lawyer.account.profile_picture} style={{
+                                                    width: '50px',
+                                                    height: '50px',
+                                                    borderRadius: '3px',
+                                                    marginRight: '10px'
+                                                }} />
+                                                <b>{lawyer.account.full_name}</b>
+                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
+                                            </a>
+                                        </div>
+                                    </>
+                                );
+                            })}
+                        </div>}
                     </div>
                 </div>
                 <div className="col-auto">
                     <button type="submit" style={{height: '46px'}} className="btn btn-block btn-primary search-btn">
                         <i className="fas fa-search"></i>
                     </button>
-
                 </div>
 
             </div>

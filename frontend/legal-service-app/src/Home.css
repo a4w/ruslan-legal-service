@@ -1,0 +1,16 @@
+.inline-search-result{
+    padding: 5px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.inline-search-result a{
+    display: block;
+}
+
+.inline-search-result:hover{
+    background: #fafafa;
+}
+
+.inline-search-result:last-of-type{
+    border-bottom: 0px solid #fff;
+}

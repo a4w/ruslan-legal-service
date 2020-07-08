@@ -43,6 +43,8 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['full_name'];
+
     public function client()
     {
         return $this->hasOne(Client::class, 'user_id');

@@ -80,6 +80,12 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
+                                <NavTab exact to="/dashboard/calendar">
+                                    <i className="fas fa-calendar"></i>
+                                    <span>Calendar</span>
+                                </NavTab>
+                            </li>
+                            <li>
                                 <NavTab exact to="/dashboard/invoices">
                                     <i className="fas fa-file-invoice"></i>
                                     <span>Invoices</span>

@@ -73,18 +73,93 @@ const Home = () => {
     };
     return (
         <>
-            <PageHead
+      <PageHead
                 title="Find and book lawyers in your area | Lawbe"
                 description="Lawbe helps you find, compare and book meetings with the best lawyers from the comfort of your home"
             />
-            <section className="section section-search">
-                <div className="container-fluid">
-                    <div className="banner-wrapper">
-                        <div className="banner-header text-center">
-                            <h1>Search Lawyer, Book an Appointment</h1>
-                            <p>
+            <div className="container-fluid">
+                <div className="cover d-flex" style={{
+                    height: '80vh',
+                    flexDirection: 'column',
+                    'justifyContent': 'center',
+                    position: 'relative',
+                    margin: '-30px',
+                    width: '100vw'
+                }}>
+                    <video autoPlay muted loop style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        minWidth: '100vw',
+                        zIndex: -1000
+                    }}>
+                        <source src="video.mp4" type="video/mp4" />
+                    </video>
+                    <div className="row">
+                        <div className="col-12">
+                            <h1 className="font-weight-bold text-center d-block text-light" style={{fontSize: '2.5em'}}>Search Lawyer, Book an Appointment</h1>
+                            <p className="text-center d-block text-lg text-light">
                                 Discover the best lawyers the city nearest to you.
                         </p>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                            <div className="search-box">
+                                <form onSubmit={OnSubmitHandler}>
+                                    <div className="row form-row">
+                                        <div className="col-5">
+                                            <Select
+                                                className="search-form-control"
+                                                placeholder="Select Location"
+                                                values={[location]}
+                                                searchable
+                                                options={locationOptions}
+                                                onChange={([obj]) => {
+                                                    setLocation(obj);
+                                                    console.log(obj);
+                                                }}
+                                                style={{minHeight: "46px", backgroundColor: '#fff'}}
+                                            />
+                                            {isLocationBased && (
+                                                <span className="form-text">
+                                                    Based on your Location
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="col-6">
+                                            <Select
+                                                multi
+                                                className="search-form-control"
+                                                placeholder="Select Area of Practice"
+                                                value={practiceAreas}
+                                                searchable
+                                                options={practiceAreaOptions}
+                                                onChange={(obj) => setPracticeAreas(obj)}
+                                                style={{minHeight: "46px", backgroundColor: '#fff'}}
+                                            />
+                                        </div>
+                                        <div className="col-1">
+                                            <button
+                                                type="submit"
+                                                className="btn btn-primary search-btn btn-block"
+                                            >
+                                                <i className="fas fa-search"></i>{" "}
+                                                <span>Search</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div className="row">
+                    <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                        <div className="separator">
+                            or Search lawyer by name!
                         </div>
                         <div className="search-box">
                             <form onSubmit={OnSubmitHandler}>
@@ -134,7 +209,8 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+
+            </div>
             <AreaOfExpertices />
             <PopularLawyers />
             <LatestBlogs />
@@ -156,17 +232,25 @@ const SearchLawyerByName = () => {
     };
     return (
         <form style={{marginTop: "8px"}} onSubmit={OnSubmitHandler}>
-            <div className="form-group search-info" style={{minWidth: "93%"}}>
-                <input
-                    className="form-control"
-                    placeholder="Enter Lawyer Name"
-                    value={name}
-                    onChange={OnChangeHandler}
-                />
+            <div className="row form-row">
+                <div className="col">
+                    <div className="form-group search-info" style={{minWidth: "93%"}}>
+                        <input
+                            className="form-control"
+                            placeholder="Enter Lawyer Name"
+                            value={name}
+                            onChange={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-auto">
+                    <button type="submit" style={{height: '46px'}} className="btn btn-block btn-primary search-btn">
+                        <i className="fas fa-search"></i>
+                    </button>
+
+                </div>
+
             </div>
-            <button type="submit" className="btn btn-primary search-btn">
-                <i className="fas fa-search"></i> <span>Search</span>
-            </button>
         </form>
     );
 };

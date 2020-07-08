@@ -119,7 +119,14 @@ const Post = ({blog, lawyer}) => {
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <BlogImg alt="" src={blog.cover_photo_link} className="img-fluid" />
+                <BlogImg alt="" src={blog.cover_photo_link} style={{
+                    maxHeight: '400px',
+                    maxWidth: '100%',
+                    width: 'unset',
+                    height: 'unset',
+                    display: 'block',
+                    margin: 'auto'
+                }} className="img-fluid" />
             </div>
             <h3 className="blog-title">{blog.title}</h3>
             <div className="blog-info clearfix">

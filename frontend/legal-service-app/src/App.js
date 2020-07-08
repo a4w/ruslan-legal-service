@@ -41,6 +41,7 @@ import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import {FaSpinner} from "react-icons/fa";
 import AppointmentDetails from "./AppointmentDetails";
+import PrivateRoute from "./PrivateRoute";
 
 const cookie = new Cookies();
 
@@ -118,40 +119,19 @@ function App() {
                                 path="/reset/:Token"
                                 component={ResetPassword}
                             />
-                            <Route exact path="/edit">
-                                <EditPersonal />
-                            </Route>
-                            <Route path="/complete-registeration">
-                                <LawyerCompleteRegisteration />
-                            </Route>
-                            <Route path="/dashboard">
-                                <LawyerDashboard />
-                            </Route>
+                            <PrivateRoute path="/dashboard" component={LawyerDashboard} />
                             <Route
                                 path="/profile/:LawyerId"
                                 component={LawyerProfile}
                             />
-                            <Route path="/client-dashboard">
-                                <ClientDashboard />
-                            </Route>
+                            <PrivateRoute path="/client-dashboard" component={ClientDashboard} />
                             <Route path="/forgot-password">
                                 <ForgotPassword />
                             </Route>
-                            <Route path="/chat">
-                                <ResponsiveChatPage />
-                            </Route>
+                            <PrivateRoute path="/chat" component={ResponsiveChatPage} />
                             <Route exact path="/video/:AppointmentId" render={(props) => {
                                 return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
                             }}>
-                            </Route>
-                            <Route path="/rate">
-                                <LawyerRating appointment_id={31} />
-                            </Route>
-                            <Route path="/write-blog">
-                                <BlogPage />
-                            </Route>
-                            <Route exact path="/edit-schedule">
-                                <ScheduleForm />
                             </Route>
                             <Route path="/logout">
                                 <Redirect replace to="/" />

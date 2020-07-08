@@ -6,7 +6,7 @@ const RegisterModal = (props) => {
     return (
         <Modal back={props.back} header={"Register"}>
             <div style={{margin: "10px"}}>
-                <RegisterationForm />
+                <RegisterationForm back={props.back} />
             </div>
         </Modal>
     );

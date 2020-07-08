@@ -109,7 +109,7 @@ const Home = () => {
                             <div className="search-box">
                                 <form onSubmit={OnSubmitHandler}>
                                     <div className="row form-row">
-                                        <div className="col-5">
+                                        <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 className="search-form-control"
                                                 placeholder="Select Location"
@@ -128,7 +128,7 @@ const Home = () => {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-12 col-md-6 p-1">
                                             <Select
                                                 multi
                                                 className="search-form-control"
@@ -140,7 +140,7 @@ const Home = () => {
                                                 style={{minHeight: "46px", backgroundColor: '#fff'}}
                                             />
                                         </div>
-                                        <div className="col-1">
+                                        <div className="col-12 col-md-1 p-1">
                                             <button
                                                 type="submit"
                                                 className="btn btn-primary search-btn btn-block"
@@ -244,7 +244,7 @@ const SearchLawyerByName = () => {
 export default Home;
 var settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -255,7 +255,7 @@ var settings = {
             settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
-                infinite: true,
+                infinite: false,
                 dots: true,
             },
         },
@@ -312,7 +312,7 @@ const AreaOfExpertices = () => {
 const SlickIcon = ({url, label}) => {
     return (
         <div className="speicality-item text-center">
-            <div className="speicality-img">
+            <div className="speicality-img" style={{margin: 'auto'}}>
                 <img className="img-fluid" alt="Speciality" src="/avatar.svg" />
                 <span>
                     <i className="fa fa-circle" aria-hidden="true"></i>
@@ -366,12 +366,16 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget">
+        <div className="profile-widget" style={{width: '300px', margin: 'auto'}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
                         className="img-fluid"
                         alt="User Image"
+                        style={{
+                            maxWidth: '100%',
+                            height: '150px'
+                        }}
                         src={account.profile_picture}
                     />
                 </Link>
@@ -426,10 +430,10 @@ const LawyerCard = ({account, lawyer}) => {
                     </div>
                 </div>
                 <ul className="available-info mt-2" style={{minHeight: "125px"}} >
-                    <li>
+                    {account.city && <li>
                         <i className="fas fa-map-marker-alt"></i>{" "}
                         {`${account.city}, ${account.country}`}
-                    </li>
+                    </li>}
                     <Discount
                         secsTillEnd={new Date(lawyer.discount_end)}
                         cost={lawyer.price_per_hour}
@@ -487,6 +491,10 @@ const BlogCard = ({blog}) => {
                             className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            style={{
+                                maxWidth: '100%',
+                                height: '200px'
+                            }}
                         />
                     </Link>
                 </div>

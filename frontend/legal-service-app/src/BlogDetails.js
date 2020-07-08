@@ -5,7 +5,7 @@ import Stackedit from "stackedit-js";
 import {request} from "./Axios"
 import BlogImg from "./BlogImg";
 import Img from "./Img";
-// import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
+import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -85,10 +85,10 @@ const ShareSection = ({id}) => {
                 <h4 className="card-title">Share the post</h4>
             </div>
             <div className="card-body">
-                {/* <Facebook small circle solid link={`/blog/${id}`} />
-                <Twitter small circle solid link={`/blog/${id}`} />
-                <Linkedin small circle solid link={`/blog/${id}`} />
-                <Google small circle solid link={`/blog/${id}`} /> */}
+                <Facebook small circle solid link={History.location.pathname} />
+                <Twitter small circle solid link={History.location.pathname} />
+                <Linkedin small circle solid link={History.location.pathname} />
+                <Google small circle solid link={History.location.pathname} />
             </div>
         </div>
     );

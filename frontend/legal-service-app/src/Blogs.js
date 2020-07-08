@@ -8,10 +8,10 @@ import {request} from "./Axios";
 import queryString from "query-string"
 import BlogImg from "./BlogImg";
 import moment from "moment";
+import PageHead from "./PageHead";
 
 const Blogs = (props) => {
     const [blogs, setBlogs] = useState(null);
-    
     const OnSubmitHandler = (e) => {
         e.preventDefault();
         const search = e.target[0].value;
@@ -44,6 +44,10 @@ const Blogs = (props) => {
     }, []);
     return (
         <Router history={History}>
+            <PageHead
+                title="Top blogs written by the best lawyers"
+                description="Understand your legal advice now. Enjoy reading a list of the blogs written by the best lawyers from all across the country."
+            />
             <div className="content">
                 <div className="container">
                     <div className="row">
@@ -69,6 +73,13 @@ const Search = ({OnSubmitHandler}) => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
+    };
+    const OnSubmitHandler = (e) => {
+        e.preventDefault();
+        History.push({
+            pathname: '/blogs',
+            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g, '+')}` : '',
+        })
     };
     return (
         <div className="card search-widget">
@@ -98,7 +109,7 @@ const Search = ({OnSubmitHandler}) => {
 const LatestBlogs = () => {
     const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        request({ url: `/blogs/latest/${3}`, method: "GET" })
+        request({url: `/blogs/latest/${3}`, method: "GET"})
             .then((response) => {
                 setBlogs(response.blogs);
             })

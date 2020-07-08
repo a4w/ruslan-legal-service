@@ -81,9 +81,13 @@ function App() {
                                 return <LoginModal back={props.match.params[0]} />
                             }
                         }} />
-                        <Route path="(.+)/register">
-                            <RegisterModal />
-                        </Route>
+                        <Route path="(.+)/register" render={(props) => {
+                            if (cookie.get('logged_in')) {
+                                return <Redirect to={props.match.params[0]} />
+                            } else {
+                                return <RegisterModal back={props.match.params[0]} />
+                            }
+                        }} />
                         <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
                         <Route path="(.+)/rate-lawyer/:appId/:lawyerId" component={RatingModal} />
                         <Route path="(.+)/details/:appId" component={AppointmentDetails} />

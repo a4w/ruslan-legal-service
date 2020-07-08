@@ -6,6 +6,8 @@ import {request} from "./Axios"
 import BlogImg from "./BlogImg";
 import Img from "./Img";
 import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
+import PageHead from "./PageHead";
+
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -23,16 +25,22 @@ const BlogDetails = ({match}) => {
         });
     }, []);
     return (
-        <div className="row">
-            <div className="col-12">
+        <>
+            <PageHead
+                title={blog !== null && blog.title}
+                description={blog !== null && blog.body.substr(0, 128)}
+            />
+            <div className="row">
+                <div className="col-12">
 
-                <div className="blog-view">
-                    {blog && <Post blog={blog} lawyer={lawyer} />}
-                    <ShareSection id={match.params.blogId} />
-                    {lawyer && <AboutAuthor lawyer={lawyer} />}
+                    <div className="blog-view">
+                        {blog && <Post blog={blog} lawyer={lawyer} />}
+                        <ShareSection id={match.params.blogId} />
+                        {lawyer && <AboutAuthor lawyer={lawyer} />}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 const AboutAuthor = ({lawyer}) => {

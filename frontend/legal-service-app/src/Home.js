@@ -109,7 +109,7 @@ const Home = () => {
                             <div className="search-box">
                                 <form onSubmit={OnSubmitHandler}>
                                     <div className="row form-row">
-                                        <div className="col-12 col-md-5 m-1">
+                                        <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 className="search-form-control"
                                                 placeholder="Select Location"
@@ -128,7 +128,7 @@ const Home = () => {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="col-12 col-md-6 m-1">
+                                        <div className="col-12 col-md-6 p-1">
                                             <Select
                                                 multi
                                                 className="search-form-control"
@@ -140,7 +140,7 @@ const Home = () => {
                                                 style={{minHeight: "46px", backgroundColor: '#fff'}}
                                             />
                                         </div>
-                                        <div className="col-12 col-md-1 m-1">
+                                        <div className="col-12 col-md-1 p-1">
                                             <button
                                                 type="submit"
                                                 className="btn btn-primary search-btn btn-block"

@@ -525,7 +525,13 @@ const BlogCard = ({blog}) => {
                         <Link to={`/blog/${id}`}>{blog.title}</Link>
                     </h3>
                     <p className="mb-0">
-                        Preview..
+                        <ul className="tags">
+                            <li>
+                                <a href="#" className="tag">
+                                    {blog.tag.area}
+                                </a>
+                            </li>
+                        </ul>
                     </p>
                 </div>
             </div>

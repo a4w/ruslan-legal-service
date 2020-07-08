@@ -12,22 +12,30 @@ import PageHead from "./PageHead";
 
 const Blogs = (props) => {
     const [blogs, setBlogs] = useState(null);
-    const [search, setSearch] = useState();
-
-    useEffect(() => {
-        setSearch(queryString.parse(props.location.search));
-
-    }, [props.location.search]);
-
-    useEffect(() => {
-        let qs = '';
-
-        console.log(props.match);
-
-        if (props.match.params.tag) {
-            qs = `?tag=${props.match.params.tag}`;
+    const OnSubmitHandler = (e) => {
+        e.preventDefault();
+        const search = e.target[0].value;
+        const term = queryString.stringify({ term: search });
+        if (search !== "") {
+            request({ url: `/blogs/all?${term}`, method: "GET" })
+                .then((data) => {
+                    console.log(data);
+                    setBlogs(data.blogs);
+                })
+                .catch(() => {});
         }
-        request({url: "/blogs/all" + qs, method: "GET"})
+    };
+    const TagFilterHandler = (id) => {
+        const term = queryString.stringify({ tag: id });
+        request({ url: `/blogs/all?${term}`, method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    };
+    useEffect(() => {
+        request({ url: "/blogs/all", method: "GET" })
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -48,10 +56,10 @@ const Blogs = (props) => {
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search />
-                                <LatestBlogs />
+                                <Search OnSubmitHandler={OnSubmitHandler}/>
+                                <LatestBlogs/>
                                 {/* <Catagories /> */}
-                                <TagsList />
+                                <TagsList TagFilterHandler={TagFilterHandler}/>
                             </StickyBox>
                         </div>
                     </div>
@@ -61,7 +69,7 @@ const Blogs = (props) => {
     );
 };
 
-const Search = () => {
+const Search = ({OnSubmitHandler}) => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
@@ -170,7 +178,7 @@ const Catagories = ({cats}) => {
     );
 };
 
-const TagsList = () => {
+const TagsList = ({TagFilterHandler}) => {
     const [tags, setTags] = useState();
     useEffect(() => {
         request({url: "/lawyer/practice-areas", method: "GET"})
@@ -189,10 +197,10 @@ const TagsList = () => {
             <div className="card-body">
                 <ul className="tags">
                     {tags && tags.map((tag) => (
-                        <li key={tag.id}>
-                            <Link to={`/blogs/${tag.id}`} className="tag">
+                        <li key={tag.id} onClick={()=>TagFilterHandler(tag.id)}>
+                            <a href="#" className="tag">
                                 {tag.area}
-                            </Link>
+                            </a>
                         </li>
                     ))}
                 </ul>

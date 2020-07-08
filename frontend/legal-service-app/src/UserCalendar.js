@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from "react";
 import moment from "moment";
-import "./LawyerAgenda.css";
+import "./UserCalendar.css";
 import {request} from "./Axios";
+import {toast} from "react-toastify";
+import Cookies from "universal-cookie";
 
-const LawyerAgenda = () => {
+const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -21,11 +23,20 @@ const LawyerAgenda = () => {
         setSelectedDate(day);
     };
     useEffect(() => {
-        request({url: "/lawyer/appointments", method: "GET"})
-            .then((data) => {
-                setAppointments(data.appointments);
+        const cookie = new Cookies();
+        const type = cookie.get("account_type");
+        if (type)
+            request({
+                url: `/${type.toLowerCase()}/appointments`,
+                method: "GET",
             })
-            .catch((err) => {});
+                .then((data) => {
+                    setAppointments(data.appointments);
+                })
+                .catch((err) => {
+                    toast.error("An error occired couldn't load appointments");
+                });
+        else toast.error("An error occired couldn't load appointments");
     }, []);
     useEffect(() => {
         const next = new Array(moment(currentDate).daysInMonth() + 1);
@@ -171,4 +182,4 @@ const CalendarCells = ({currentDate, onDateClick, selectedDate, appointments}) =
     return <div className="body">{rows}</div>;
 };
 
-export default LawyerAgenda;
+export default UserCalendar;

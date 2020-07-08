@@ -32,7 +32,7 @@ import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Cookies from "universal-cookie";
-import LawyerAgenda from "./LawyerAgenda";
+import UserCalendar from "./UserCalendar";
 import BookLawyerModal from "./BookLawyerModal";
 import BlogDetails from "./BlogDetails"
 import ResponsiveChatPage from "./ResponsiveChatPage";
@@ -132,7 +132,7 @@ function App() {
                                 <Redirect replace to="/" />
                             </Route>
                             <Route path="/calendar">
-                                <LawyerAgenda />
+                                <UserCalendar />
                             </Route>
                             <Route path="/not-found">
                                 <NotFound />

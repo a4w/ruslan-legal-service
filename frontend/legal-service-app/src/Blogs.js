@@ -8,21 +8,22 @@ import {request} from "./Axios";
 import queryString from "query-string"
 import BlogImg from "./BlogImg";
 import moment from "moment";
+import PageHead from "./PageHead";
 
 const Blogs = (props) => {
     const [blogs, setBlogs] = useState(null);
     const [search, setSearch] = useState();
-    
+
     useEffect(() => {
         setSearch(queryString.parse(props.location.search));
-        
-    },[props.location.search]);
+
+    }, [props.location.search]);
 
     useEffect(() => {
         let qs = '';
-        
+
         console.log(props.match);
-        
+
         if (props.match.params.tag) {
             qs = `?tag=${props.match.params.tag}`;
         }
@@ -35,6 +36,10 @@ const Blogs = (props) => {
     }, []);
     return (
         <Router history={History}>
+            <PageHead
+                title="Top blogs written by the best lawyers"
+                description="Understand your legal advice now. Enjoy reading a list of the blogs written by the best lawyers from all across the country."
+            />
             <div className="content">
                 <div className="container">
                     <div className="row">
@@ -43,8 +48,8 @@ const Blogs = (props) => {
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search/>
-                                <LatestBlogs/>
+                                <Search />
+                                <LatestBlogs />
                                 {/* <Catagories /> */}
                                 <TagsList />
                             </StickyBox>
@@ -65,7 +70,7 @@ const Search = () => {
         e.preventDefault();
         History.push({
             pathname: '/blogs',
-            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g,'+')}` : '',
+            search: (searchInput !== '') ? `?search=${searchInput.replace(/\s/g, '+')}` : '',
         })
     };
     return (
@@ -96,7 +101,7 @@ const Search = () => {
 const LatestBlogs = () => {
     const [blogs, setBlogs] = useState(null);
     useEffect(() => {
-        request({ url: `/blogs/latest/${3}`, method: "GET" })
+        request({url: `/blogs/latest/${3}`, method: "GET"})
             .then((response) => {
                 setBlogs(response.blogs);
             })

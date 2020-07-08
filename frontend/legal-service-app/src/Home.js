@@ -11,6 +11,7 @@ import StarRatings from "react-star-ratings";
 import {Link} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
+import PageHead from "./PageHead";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -72,6 +73,10 @@ const Home = () => {
     };
     return (
         <>
+      <PageHead
+                title="Find and book lawyers in your area | Lawbe"
+                description="Lawbe helps you find, compare and book meetings with the best lawyers from the comfort of your home"
+            />
             <div className="container-fluid">
                 <div className="cover d-flex" style={{
                     height: '80vh',
@@ -156,12 +161,56 @@ const Home = () => {
                         <div className="separator">
                             or Search lawyer by name!
                         </div>
-                        <SearchLawyerByName />
+                        <div className="search-box">
+                            <form onSubmit={OnSubmitHandler}>
+                                <div className="form-group search-location">
+                                    <Select
+                                        className="select-form-control"
+                                        placeholder="Select Location"
+                                        values={[location]}
+                                        searchable
+                                        options={locationOptions}
+                                        onChange={([obj]) => {
+                                            setLocation(obj);
+                                            console.log(obj);
+                                        }}
+                                        style={{minHeight: "46px"}}
+                                    />
+                                    {isLocationBased && (
+                                        <span className="form-text">
+                                            Based on your Location
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="form-group search-info">
+                                    <Select
+                                        multi
+                                        className="select-form-control"
+                                        placeholder="Select Area of Practice"
+                                        value={practiceAreas}
+                                        searchable
+                                        options={practiceAreaOptions}
+                                        onChange={(obj) => setPracticeAreas(obj)}
+                                        style={{minHeight: "46px"}}
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary search-btn"
+                                >
+                                    <i className="fas fa-search"></i>{" "}
+                                    <span>Search</span>
+                                </button>
+                            </form>
+                            <div className="separator">
+                                or Search lawyer by name!
+                        </div>
+                            <SearchLawyerByName />
+                        </div>
                     </div>
                 </div>
+
             </div>
-
-
             <AreaOfExpertices />
             <PopularLawyers />
             <LatestBlogs />
@@ -200,6 +249,7 @@ const SearchLawyerByName = () => {
                     </button>
 
                 </div>
+
             </div>
         </form>
     );

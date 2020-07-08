@@ -8,6 +8,7 @@ import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import {request} from "./Axios";
 import queryString from "query-string"
+import PageHead from "./PageHead";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -15,13 +16,13 @@ function LawyerList(props) {
     const [length, setLength] = useState(3);
     const [lawyers, setLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
-    const [filter, setFilter] = useState({ date: new Date() });
+    const [filter, setFilter] = useState({date: new Date()});
     const [params, setParams] = useState({
         ...queryString.parse(props.location.search),
         offset: offset,
         length: length,
     });
-    
+
     const getList = (params, keep = false) => {
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
@@ -52,21 +53,21 @@ function LawyerList(props) {
     };
 
     useEffect(() => {
-        getList(params);        
+        getList(params);
     }, []);
 
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
-        const next = { ...params, offset: (offset + length), length: length };
+        const next = {...params, offset: (offset + length), length: length};
         setParams(next);
         getList(next, true);
     };
 
-    const filterHandler = ()=>{
+    const filterHandler = () => {
         let date = new Date(filter.date);
-        date = date.toISOString().slice(0,10);
-        console.log("date : ", date); 
+        date = date.toISOString().slice(0, 10);
+        console.log("date : ", date);
         const next = {
             ...params,
             available_on: date,
@@ -75,16 +76,20 @@ function LawyerList(props) {
         };
         setParams(next);
         // params["filter_by"] = filter.filters;
-        getList(next);       
+        getList(next);
     }
     return (
         <div>
+            <PageHead
+                title="Available Lawyers list | Lawbe"
+                description="A list of the best lawyers from all across the country, book them now!"
+            />
             <LawyerListHeader
                 params={params}
                 OnChangeHandler={SortHandler}
                 selectedValue={sortBy}
             />
-            <StickyBox style={{ zIndex: 6 }}>
+            <StickyBox style={{zIndex: 6}}>
                 <LawyerSearchFilter
                     filter={filter}
                     setFilter={setFilter}
@@ -127,7 +132,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     return (
         <div className="card search-filter">
             <form className="card-body form-row p-2">
-                <div className="filter-widget mb-0" style={{width:"40%"}}>
+                <div className="filter-widget mb-0" style={{width: "40%"}}>
                     <div className="cal-icon">
                         <DatePicker
                             className="form-control mb-0"
@@ -140,7 +145,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         />
                     </div>
                 </div>
-                <div className="filter-widget mb-0 ml-2" style={{width:"40%"}}>
+                <div className="filter-widget mb-0 ml-2" style={{width: "40%"}}>
                     <Select
                         className="form-control mb-0"
                         value={filter.filters}
@@ -152,7 +157,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         style={{minHeight: "46px"}}
                     />
                 </div>
-                <div className="btn-search align-left ml-2" style={{Width:"10%"}}>
+                <div className="btn-search align-left ml-2" style={{Width: "10%"}}>
                     <button
                         type="button"
                         className="btn btn-block font-weight-bold"

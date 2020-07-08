@@ -12,6 +12,7 @@ import {Link} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
 import PageHead from "./PageHead";
+import "./Home.css"
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -176,35 +177,64 @@ const Home = () => {
 };
 
 const SearchLawyerByName = () => {
-    const [name, setName] = useState("");
+    const [results, setResults] = useState([]);
     const OnChangeHandler = ({target: {value}}) => {
-        setName(value);
-    };
-    const OnSubmitHandler = (event) => {
-        event.preventDefault();
-        History.push({
-            pathname: '/list',
-            search: (name !== '') ? `?lawyerName=${name.replace(/\s/g, '+')}` : '',
-        })
+        const term = value;
+        request({
+            url: `/lawyer/search?term=${term}`,
+            method: 'GET'
+        }).then(response => {
+            setResults(response.lawyers);
+        }).catch(error => {
+            setResults([]);
+        });
     };
     return (
-        <form style={{marginTop: "8px"}} onSubmit={OnSubmitHandler}>
+        <form style={{marginTop: "8px"}}>
             <div className="row form-row">
                 <div className="col">
                     <div className="form-group" style={{minWidth: "93%"}}>
                         <input
                             className="form-control"
                             placeholder="Enter Lawyer Name"
-                            value={name}
                             onChange={OnChangeHandler}
                         />
+
+                        {results.length > 0 && <div style={{
+                            position: 'absolute',
+                            display: 'block',
+                            width: '99%',
+                            backgroundColor: '#fff',
+                            borderRadius: '0px 0px 10px 10px',
+                            border: '1px solid #ccc',
+                            marginRight: '5px'
+                        }}>
+                            {results.map((lawyer) => {
+                                console.log(lawyer);
+                                return (
+                                    <>
+                                        <div className="inline-search-result">
+                                            <a href={`/profile/${lawyer.id}`}>
+                                                <Img alt={lawyer.full_name} className="rounded-circle" src={lawyer.account.profile_picture} style={{
+                                                    width: '50px',
+                                                    height: '50px',
+                                                    borderRadius: '3px',
+                                                    marginRight: '10px'
+                                                }} />
+                                                <b>{lawyer.account.full_name}</b>
+                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
+                                            </a>
+                                        </div>
+                                    </>
+                                );
+                            })}
+                        </div>}
                     </div>
                 </div>
                 <div className="col-auto">
                     <button type="submit" style={{height: '46px'}} className="btn btn-block btn-primary search-btn">
                         <i className="fas fa-search"></i>
                     </button>
-
                 </div>
 
             </div>

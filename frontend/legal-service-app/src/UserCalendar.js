@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import moment from "moment";
 import "./UserCalendar.css";
 import {request} from "./Axios";
+import {toast} from "react-toastify";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
@@ -21,11 +22,19 @@ const UserCalendar = () => {
         setSelectedDate(day);
     };
     useEffect(() => {
-        request({url: "/lawyer/appointments", method: "GET"})
-            .then((data) => {
-                setAppointments(data.appointments);
+        const type = cookie.get("account_type");
+        if (type)
+            request({
+                url: `/${type.toLowerCase()}/appointments`,
+                method: "GET",
             })
-            .catch((err) => {});
+                .then((data) => {
+                    setAppointments(data.appointments);
+                })
+                .catch((err) => {
+                    toast.error("An error occired couldn't load appointments");
+                });
+        else toast.error("An error occired couldn't load appointments");
     }, []);
     useEffect(() => {
         const next = new Array(moment(currentDate).daysInMonth() + 1);

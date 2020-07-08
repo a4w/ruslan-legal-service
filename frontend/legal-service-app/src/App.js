@@ -101,12 +101,7 @@ function App() {
                                 <AppointmentTimeForm lawyer_id="1" />
                             </Route>
                             <Route path="/blogs">
-                                <Switch>
-                                    <Route exact path="/blogs" >
-                                        <Blogs />
-                                    </Route>
-                                    <Route path="/blogs/:tag" component={Blogs} />
-                                </Switch>
+                                <Route exact path="/blogs" component={Blogs} />
                             </Route>
 
                             <Route path="/blog/:blogId" component={BlogDetails} />

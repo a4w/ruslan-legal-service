@@ -2458,7 +2458,7 @@ html.menu-opened body {
     display: block;
     margin-left: 0;
     padding: 10px;
-    width: 280px;
+    width: auto;
 }
 .profile-widget {
     background-color: #fff;

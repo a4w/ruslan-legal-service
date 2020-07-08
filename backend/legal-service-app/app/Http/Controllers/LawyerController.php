@@ -443,7 +443,7 @@ class LawyerController extends Controller
         ]);
         $char = '\\';
         $term = str_replace([$char, '%', '_'], [$char . $char, $char . '%', $char . '_'], $request->get('term'));
-        $lawyers = Lawyer::where('schedule', '<>', null)
+        $lawyers = Lawyer::select(['lawyers.*'])->where('schedule', '<>', null)
             ->leftJoin('users', function (JoinClause $join) {
                 $join->on('lawyers.user_id', '=', 'users.id');
             })

@@ -86,12 +86,6 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/invoices">
-                                    <i className="fas fa-file-invoice"></i>
-                                    <span>Invoices</span>
-                                </NavTab>
-                            </li>
-                            <li>
                                 <NavTab exact to="/dashboard/reviews">
                                     <i className="fas fa-star"></i>
                                     <span>Reviews</span>

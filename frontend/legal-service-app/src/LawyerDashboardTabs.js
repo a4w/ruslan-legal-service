@@ -33,9 +33,6 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/calendar">
                 <LawyerAgenda />
             </Route>
-            <Route exact path="/dashboard/invoices">
-                <LawyerInvoice />
-            </Route>
             <Route exact path="/dashboard/reviews">
                 <LawyerReviews />
             </Route>

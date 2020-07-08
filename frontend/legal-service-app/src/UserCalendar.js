@@ -3,6 +3,7 @@ import moment from "moment";
 import "./UserCalendar.css";
 import {request} from "./Axios";
 import {toast} from "react-toastify";
+import Cookies from "universal-cookie";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
@@ -22,6 +23,7 @@ const UserCalendar = () => {
         setSelectedDate(day);
     };
     useEffect(() => {
+        const cookie = new Cookies();
         const type = cookie.get("account_type");
         if (type)
             request({

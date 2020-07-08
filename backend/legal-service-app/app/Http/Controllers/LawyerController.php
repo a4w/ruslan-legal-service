@@ -263,7 +263,6 @@ class LawyerController extends Controller
             'schedule' => ['required', 'array'],
             'schedule.days' => ['required', 'array', 'size:7'],
             'schedule.days.*.slots' => ['array'],
-            'schedule.days.*.slots.*.weekday' => ['required', 'numeric', 'min:0', 'max:6'],
             'schedule.days.*.slots.*.time' => ['required', 'regex:/^[0-9]{2}:[0-9]{2}$/', 'date_format:H:i'],
             'schedule.days.*.slots.*.length' => ['required', 'IN:30,45,60,90'],
 

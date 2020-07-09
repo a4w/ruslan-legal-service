@@ -101,9 +101,6 @@ function App() {
                             <Route path="/list">
                                 <LawyerList />
                             </Route>
-                            <Route path="/book">
-                                <AppointmentTimeForm lawyer_id="1" />
-                            </Route>
                             <Route path="/blogs">
                                 <Route exact path="/blogs" component={Blogs} />
                             </Route>

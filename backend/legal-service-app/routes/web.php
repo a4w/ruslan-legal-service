@@ -32,17 +32,18 @@ Route::get('verify/email/{token}', function ($token) {
     } catch (TokenExpiredException $e) {
         return "Email verification token expired";
     } catch (Exception $e) {
-        return redirect('/');
+        return redirect(config('app.frontend_url'));
     }
     if ($jwt->rea !== 'EMAIL_VERIFY') {
-        return redirect('/');
+        return redirect(config('app.frontend_url'));
     }
     $account = Account::find($jwt->sub);
     if ($account === null) {
-        return redirect('/');
+        return redirect(config('app.frontend_url'));
     }
-    // TODO: Check email to be verified (i.e include email in jwt)
-    $account->markEmailAsVerified();
+    if ($account->unverified_email === $jwt->email) {
+        $account->markEmailAsVerified();
+    }
     return redirect(config('app.frontend_url') . '/home/login');
 })->name('verify.email');
 

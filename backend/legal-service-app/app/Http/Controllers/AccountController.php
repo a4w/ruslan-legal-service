@@ -158,7 +158,11 @@ class AccountController extends Controller
             $upcoming_appointments_count = $lawyer->appointments()->where('status', 'UPCOMING')->count();
             $total_money = $lawyer->appointments()->sum('price');
             $total_minutes = $lawyer->appointments()->sum('duration');
-            $next_appointment_date = $lawyer->appointments()->where('status', 'UPCOMING')->select('appointment_time')->orderBy('appointment_time', 'DESC')->first()->appointment_time;
+            $next_appointment = $lawyer->appointments()->where('status', 'UPCOMING')->select('appointment_time')->orderBy('appointment_time', 'DESC')->first();
+            $next_appointment_date = null;
+            if ($next_appointment !== null) {
+                $next_appointment_date = $next_appointment->appointment_time;
+            }
             return RespondJSON::success([
                 'clients_count' => $clients_count,
                 'done_appointments_count' => $done_appointments_count,

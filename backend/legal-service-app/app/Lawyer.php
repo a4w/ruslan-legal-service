@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Lawyer extends Model
@@ -22,6 +23,13 @@ class Lawyer extends Model
 
     public $timestamps = false;
     protected $appends = array('discount_ends_in', 'discounted_price_per_hour', 'currency_symbol');
+
+    public function scopeFullyRegistered(Builder $query)
+    {
+        return $query->where('schedule', '<>', null)->where('lawyer_type_id', '<>', null)->whereHas('account', function ($query) {
+            return $query->where('email_verified_at', '<>', null);
+        });
+    }
 
     public function getDiscountEndsInAttribute()
     {

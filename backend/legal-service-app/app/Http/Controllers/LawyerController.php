@@ -285,7 +285,6 @@ class LawyerController extends Controller
             });
             return $day;
         });
-        dump($incoming_schedule);
 
 
         // Save schedule

@@ -42,6 +42,10 @@ const LoginForm = ({back}) => {
                             setRefreshToken(data.refresh_token);
                         if (data.account_type)
                             setAccountType(data.account_type);
+
+                        if (!data.account.fully_registered) {
+                            History.push('/dashboard/settings');
+                        }
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

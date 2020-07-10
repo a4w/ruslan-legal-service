@@ -41,8 +41,9 @@ Route::get('verify/email/{token}', function ($token) {
     if ($account === null) {
         return redirect('/');
     }
-    // TODO: Check email to be verified (i.e include email in jwt)
-    $account->markEmailAsVerified();
+    if ($account->unverified_email === $jwt->email) {
+        $account->markEmailAsVerified();
+    }
     return redirect(config('app.frontend_url') . '/home/login');
 })->name('verify.email');
 

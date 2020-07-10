@@ -83,7 +83,8 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'account_type' => $account->getType(),
-            'user_id' => $account->id
+            'user_id' => $account->id,
+            'account' => $account->isLawyer() ? $account->lawyer : $account->client
         ];
         if ($refresh_token !== null) {
             $response += [

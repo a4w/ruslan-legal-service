@@ -65,16 +65,19 @@ const UserCalendar = () => {
                                     nextMonth={nextMonth}
                                 />
                             </div>
-                            <div>
+                            <div style={{overflowX:"auto"}}>
+                            <div style={{minWidth:"750px"}}>
                                 <HeaderDays />
                             </div>
-                            <div>
+                            <div style={{minWidth:"750px"}}>
                                 <CalendarCells
                                     currentDate={currentDate}
                                     onDateClick={onDateClick}
                                     selectedDate={selectedDate}
                                     appointments={monthAppointments}
                                 />
+                            </div>
+
                             </div>
                         </div>
                     </div>
@@ -90,10 +93,9 @@ const CalendarEvent = ({appointment}) => {
     // console.log(duration);
 
     return (
-        <div className="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable">
-            <div className="fc-content d-none d-md-block">
-                <b>{moment(appointment.appointment_time).format("hh:mm a")}</b> for <b>{appointment.duration}</b> minutes
-            </div>
+        <div className="test">
+            <b>{moment(appointment.appointment_time).format("hh:mm a")}</b> for{" "}
+            <b>{appointment.duration}</b> minutes
         </div>
     );
 }

@@ -101,11 +101,8 @@ function App() {
                             <Route path="/list">
                                 <LawyerList />
                             </Route>
-                            <Route path="/book">
-                                <AppointmentTimeForm lawyer_id="1" />
-                            </Route>
                             <Route path="/blogs">
-                                <Route exact path="/blogs" component={Blogs} />
+                                <Route path="/blogs" component={Blogs} />
                             </Route>
 
                             <Route path="/blog/:blogId" component={BlogDetails} />
@@ -124,7 +121,7 @@ function App() {
                                 <ForgotPassword />
                             </Route>
                             <PrivateRoute path="/chat" component={ResponsiveChatPage} />
-                            <Route exact path="/video/:AppointmentId" render={(props) => {
+                            <Route path="/video/:AppointmentId" render={(props) => {
                                 return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
                             }}>
                             </Route>

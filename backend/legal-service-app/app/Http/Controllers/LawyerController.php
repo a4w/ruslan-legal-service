@@ -65,7 +65,7 @@ class LawyerController extends Controller
             ->groupBy(['ld.id'])
             ->toSql();
 
-        $lawyers = Lawyer::where('schedule', '<>', null)
+        $lawyers = Lawyer::fullyRegistered()
             ->join(DB::raw('(' . $dat_table . ') ld'), function (JoinClause $join) {
                 $join->on('ld.id', '=', 'lawyers.id');
             })

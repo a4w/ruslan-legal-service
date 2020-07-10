@@ -13,7 +13,7 @@ const LawyerCompleteRegisteration = ({}) => {
         regulatedBy: "",
         yearLicensed: "",
         education: "",
-        graduation: "",
+        graduation_year: "",
         course: "",
         practiceAreas: [],
         accreditations: [],
@@ -86,7 +86,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 regulatedBy: "",
                 yearLicensed: "",
                 education: "",
-                graduation: "",
+                graduation_year: "",
                 course: "",
                 practiceAreas: [],
                 accreditations: [],
@@ -103,7 +103,7 @@ const LawyerCompleteRegisteration = ({}) => {
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
-            nextLawyer.graduation = data.graduation_year;
+            nextLawyer.graduation_year = data.graduation_year;
             nextLawyer.course = data.course;
             nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
                 return area.id;
@@ -127,9 +127,9 @@ const LawyerCompleteRegisteration = ({}) => {
                 lawyer_type_id: lawyer.type,
                 lawyer_type: lawyer.other,
                 regulator: lawyer.regulatedBy,
-                year_licensed: lawyer.yearLicensed,
+                years_licenced: lawyer.yearLicensed,
                 institution: lawyer.education,
-                graduation: lawyer.graduation,
+                graduation_year: lawyer.graduation_year,
                 course: lawyer.course,
                 practice_areas: lawyer.practiceAreas,
                 accreditations: lawyer.accreditations,
@@ -223,8 +223,8 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-3 col-md-3 col-sm-2">
                     <ErrorMessageInput
                         type={"text"}
-                        name="graduation"
-                        value={lawyer.graduation}
+                        name="graduation_year"
+                        value={lawyer.graduation_year}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Graduation year"}
                     />

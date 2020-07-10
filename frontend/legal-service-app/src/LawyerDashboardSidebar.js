@@ -22,6 +22,7 @@ const LawyerDashboardSidebar = () => {
     useEffect(() => {
         request({url: "/lawyer/me", method: "GET"})
             .then((data) => {
+
                 setLawyer(data.lawyer);
                 setAccount(data.lawyer.account);
             })
@@ -35,10 +36,10 @@ const LawyerDashboardSidebar = () => {
                         <Img src={account.profile_picture} alt="Lawyer's Photo" />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{`${account.name} ${account.surname}`}</h3>
+                        <h3>{`${account.full_name}`}</h3>
 
                         <div className="client-details">
-                            <h5 className="mb-0">{lawyer.lawyer_type.type}</h5>
+                            <h5 className="mb-0">{lawyer.lawyer_type? "" : lawyer.lawyer_type.type}</h5>
                             <StarRatings
                                 rating={lawyer.ratings_average}
                                 starRatedColor="gold"
@@ -65,12 +66,6 @@ const LawyerDashboardSidebar = () => {
                                 <NavTab exact to="/dashboard/appointments">
                                     <i className="fas fa-calendar-check"></i>
                                     <span>Appointments</span>
-                                </NavTab>
-                            </li>
-                            <li>
-                                <NavTab exact to="/dashboard/clients">
-                                    <i className="fas fa-user-injured"></i>
-                                    <span>My Clients</span>
                                 </NavTab>
                             </li>
                             <li>

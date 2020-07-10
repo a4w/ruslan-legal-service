@@ -42,6 +42,7 @@ const LoginForm = ({back}) => {
                             setRefreshToken(data.refresh_token);
                         if (data.account_type)
                             setAccountType(data.account_type);
+                        window.location.reload();
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
@@ -52,7 +53,6 @@ const LoginForm = ({back}) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        window.location.reload();
                     });
             }
         });

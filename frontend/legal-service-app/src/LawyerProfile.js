@@ -209,7 +209,7 @@ const Overview = ({lawyer}) => {
     } = {...lawyer};
 
     const specializations = [
-        `Regulated By: ${regulator.regulator}`,
+        `Regulated By: ${regulator? regulator.regulator : ""}`,
         `Years licenced: ${years_licenced}`,
     ];
     return (

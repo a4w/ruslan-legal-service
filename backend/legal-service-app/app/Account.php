@@ -110,17 +110,12 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      */
     public function markEmailAsVerified()
     {
-	$this->email = $this->unverified_email;
-	dump($this);
-	dump($this->save());
-	dump($this->unverified_email);
-	dump($this->email);
-	$this->save();
-        /*$this->forceFill([
+        $this->email = $this->unverified_email;
+        $this->save();
+        $this->forceFill([
             'email_verified_at' => $this->freshTimestamp(),
             'unverified_email' => null
         ])->save();
-	 */
     }
 
     public function isLawyer()

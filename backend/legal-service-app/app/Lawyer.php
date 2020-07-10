@@ -22,13 +22,18 @@ class Lawyer extends Model
     ];
 
     public $timestamps = false;
-    protected $appends = array('discount_ends_in', 'discounted_price_per_hour', 'currency_symbol');
+    protected $appends = array('discount_ends_in', 'discounted_price_per_hour', 'currency_symbol', 'fully_registered');
 
     public function scopeFullyRegistered(Builder $query)
     {
         return $query->where('schedule', '<>', null)->where('lawyer_type_id', '<>', null)->whereHas('account', function ($query) {
             return $query->where('email_verified_at', '<>', null);
         });
+    }
+
+    public function getFullyRegisteredAttribute()
+    {
+        return $this->schedule !== null && $this->lawyer_type_id !== null && $this->account->email_verified_at !== null;
     }
 
     public function getDiscountEndsInAttribute()

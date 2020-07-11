@@ -33,7 +33,7 @@ class Lawyer extends Model
 
     public function getFullyRegisteredAttribute()
     {
-        return $this->schedule !== null && $this->lawyer_type_id !== null && $this->account->email_verified_at !== null;
+        return $this->lawyer_type_id !== null && $this->account->email_verified_at !== null;
     }
 
     public function getDiscountEndsInAttribute()

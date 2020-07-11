@@ -48,6 +48,7 @@ const LoginForm = ({back}) => {
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
+                        window.location.reload();
 
                     })
                     .catch((_errors) => {
@@ -59,7 +60,6 @@ const LoginForm = ({back}) => {
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        window.location.reload();
                     });
             }
         });

@@ -146,7 +146,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                             <OverlayTrigger
                                                 placement={"bottom"}
                                                 overlay={
-                                                    <Popover size="lg">
+                                                    <Popover size="lg" style={{zIndex: '9999'}}>
                                                         <Popover.Title as="h3" className="text-center">
                                                             {slot.length} minutes
                                                                 </Popover.Title>
@@ -157,7 +157,6 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                                     <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{schedule.discount_amount} {schedule.discount_type === 1 ? '%' : 'GBP'}</span>
                                                                     <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{schedule.discount_end}</span>
                                                                 </>}
-                                                            <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>
                                                         </Popover.Content>
                                                     </Popover>
                                                 }

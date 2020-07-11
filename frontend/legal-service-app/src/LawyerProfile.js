@@ -164,7 +164,7 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <LawyerBooking LawyerId={lawyer} />
+                            <LawyerBooking LawyerId={lawyer.id} />
                         </Route>
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}

@@ -127,7 +127,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 lawyer_type_id: lawyer.type,
                 lawyer_type: lawyer.other,
                 regulator: lawyer.regulatedBy,
-                years_licensed: lawyer.yearLicensed,
+                year_licensed: lawyer.yearLicensed,
                 institution: lawyer.education,
                 graduation: lawyer.graduation_year,
                 course: lawyer.course,

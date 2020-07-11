@@ -54,8 +54,7 @@ const LoginForm = ({back}) => {
                     .catch((_errors) => {
                         console.log("failed", _errors);
                         addError(["password", "email"], {
-                            email: ["Invalid User"],
-                            password: ["Invalid User"],
+                            password: ["Invalid password supplied"],
                         });
                     })
                     .finally(() => {

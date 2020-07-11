@@ -44,7 +44,7 @@ const Home = () => {
     ];
 
     useEffect(() => {
-        $.get("http://ipinfo.io", function (response) {
+        $.get("https://ipinfo.io", function (response) {
             const city = response.city;
             for (let i = 0; i < locationOptions.length; ++i) {
                 console.log(city, locationOptions[i].value);
@@ -234,7 +234,7 @@ const SearchLawyerByName = () => {
                 <div className="col-auto">
                     <button
                         type="submit"
-                        style={{ height: "46px" }}
+                        style={{height: "46px"}}
                         className="btn btn-block btn-primary search-btn"
                         onClick={(e) => e.preventDefault()}
                     >

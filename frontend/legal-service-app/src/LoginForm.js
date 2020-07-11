@@ -46,6 +46,7 @@ const LoginForm = ({back}) => {
                         if (typeof data.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
+                        
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

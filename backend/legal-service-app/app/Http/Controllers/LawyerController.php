@@ -10,6 +10,7 @@ use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use App\LawyerType;
 use App\PracticeArea;
+use App\Regulator;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Query\Builder;
@@ -350,9 +351,9 @@ class LawyerController extends Controller
             'lawyer_type_id' => ['required', 'IN:0,1,2'],
             'lawyer_type' => ['exclude_unless:lawyer_type_id,0', 'required'],
             'regulator' => ['required'],
-            'year_licensed' => ['required', 'numeric'],
+            'years_licenced' => ['required', 'numeric'],
             'institution' => ['required'],
-            'graduation' => ['required', 'numeric'],
+            'graduation_year' => ['required', 'numeric'],
             'course' => ['required'],
             'practice_areas' => ['required', 'array', 'min:1'],
             'practice_areas.*' => ['required', 'numeric', 'exists:practice_areas,id'],
@@ -376,6 +377,11 @@ class LawyerController extends Controller
         foreach ($practice_areas as $area) {
             $lawyer->practice_areas()->attach(PracticeArea::find($area));
         }
+
+        // Save regulator
+        $regulator = $request->get('regulator');
+        $lawyer->regulator()->delete();
+        $lawyer->regulator()->associate(Regulator::create(['regulator' => $regulator]));
 
         // Lawyer accreditations
         $accreditations = $request->get('accreditations');

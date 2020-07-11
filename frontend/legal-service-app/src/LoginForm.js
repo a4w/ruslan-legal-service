@@ -43,7 +43,7 @@ const LoginForm = ({back}) => {
                         if (data.account_type)
                             setAccountType(data.account_type);
 
-                        if (!data.account.fully_registered) {
+                        if (typeof data.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
                     })

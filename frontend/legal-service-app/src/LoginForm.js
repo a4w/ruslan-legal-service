@@ -34,7 +34,6 @@ const LoginForm = ({back}) => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-                        console.log(data);
 
                         if (data.access_token)
                             setAccessToken(data.access_token);
@@ -42,13 +41,20 @@ const LoginForm = ({back}) => {
                             setRefreshToken(data.refresh_token);
                         if (data.account_type)
                             setAccountType(data.account_type);
+
+                        console.debug(data.account);
+                        console.debug(data.account.fully_registered);
+
+                        if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
+                            History.push('/dashboard/settings');
+                        }
                         window.location.reload();
+
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
                         addError(["password", "email"], {
-                            email: ["Invalid User"],
-                            password: ["Invalid User"],
+                            password: ["Invalid password supplied"],
                         });
                     })
                     .finally(() => {

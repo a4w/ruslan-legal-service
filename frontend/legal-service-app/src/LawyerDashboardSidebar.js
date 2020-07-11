@@ -39,7 +39,7 @@ const LawyerDashboardSidebar = () => {
                         <h3>{`${account.full_name}`}</h3>
 
                         <div className="client-details">
-                            <h5 className="mb-0">{lawyer.lawyer_type? "" : lawyer.lawyer_type.type}</h5>
+                            <h5 className="mb-0">{lawyer.lawyer_type ? lawyer.lawyer_type.type : ""}</h5>
                             <StarRatings
                                 rating={lawyer.ratings_average}
                                 starRatedColor="gold"

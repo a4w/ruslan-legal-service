@@ -34,7 +34,6 @@ const LoginForm = ({back}) => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-                        console.log(data);
 
                         if (data.access_token)
                             setAccessToken(data.access_token);
@@ -43,10 +42,13 @@ const LoginForm = ({back}) => {
                         if (data.account_type)
                             setAccountType(data.account_type);
 
-                        if (typeof data.fully_registered !== "undefined" && !data.account.fully_registered) {
+                        console.debug(data.account);
+                        console.debug(data.account.fully_registered);
+
+                        if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
-                        
+
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

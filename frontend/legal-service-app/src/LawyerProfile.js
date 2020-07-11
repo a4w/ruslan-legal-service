@@ -16,6 +16,7 @@ import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import BlogList from "./BlogList";
 import Img from "./Img";
+import LawyerBooking from "./LawyerBooking";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -163,7 +164,7 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
+                            <LawyerBooking LawyerId={lawyer} />
                         </Route>
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}
@@ -209,7 +210,7 @@ const Overview = ({lawyer}) => {
     } = {...lawyer};
 
     const specializations = [
-        `Regulated By: ${regulator? regulator.regulator : ""}`,
+        `Regulated By: ${regulator ? regulator.regulator : ""}`,
         `Years licenced: ${years_licenced}`,
     ];
     return (

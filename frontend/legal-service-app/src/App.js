@@ -132,6 +132,9 @@ function App() {
                             <Route path="/calendar">
                                 <UserCalendar />
                             </Route>
+                            <Route path="/post-register">
+                                <PostRegistration />
+                            </Route>
                             <Route path="/not-found">
                                 <NotFound />
                             </Route>

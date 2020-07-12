@@ -12,7 +12,7 @@ const EditBasicInfo = () => {
         surname: "",
         email: "",
         phone: "",
-        profile_picture_url: "",
+        profile_picture_url: "/undraw_male_avatar.svg",
         profile_picture: null,
     };
     const [user, setUser] = useState(initUser);
@@ -25,7 +25,10 @@ const EditBasicInfo = () => {
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            setUser({ ...response.profile_data, profile_picture_url: response.profile_data.profile_picture });
+            const url = response.profile_data.profile_picture
+                ? response.profile_data.profile_picture
+                : "/undraw_male_avatar.svg";
+            setUser({ ...response.profile_data, profile_picture_url: url });
         }).catch((error) => { });
     }, []);
 

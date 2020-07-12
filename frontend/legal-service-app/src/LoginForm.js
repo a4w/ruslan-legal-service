@@ -3,12 +3,13 @@ import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import {request, setAccessToken, setRefreshToken, setAccountType} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
+import {useCookies} from "react-cookie";
+import useRequests from "./useRequests";
 
 
 const LoginForm = ({back}) => {
@@ -20,6 +21,9 @@ const LoginForm = ({back}) => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
+
+    const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'logged_in', 'refresh_token', 'account_type']);
+    const {request} = useRequests();
 
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
@@ -34,22 +38,16 @@ const LoginForm = ({back}) => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-
-                        if (data.access_token)
-                            setAccessToken(data.access_token);
-                        if (data.refresh_token)
-                            setRefreshToken(data.refresh_token);
-                        if (data.account_type)
-                            setAccountType(data.account_type);
-
-                        console.debug(data.account);
-                        console.debug(data.account.fully_registered);
+                        setCookie("logged_in", true, {path: '/'});
+                        setCookie("access_token", data.access_token, {path: '/'});
+                        setCookie("account_type", data.account_type, {path: '/'});
+                        if (data.refresh_token) {
+                            setCookie("refresh_token", data.refresh_token, {path: '/'});
+                        }
 
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
-                        window.location.reload();
-
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

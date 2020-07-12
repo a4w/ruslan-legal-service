@@ -68,9 +68,12 @@ const EditBasicInfo = () => {
     const showSelectedPicture = (e) => {
         const input = e.target;
         if (input.files && input.files[0]) {
+            console.log(e.target.files[0].size/(1024**2));
             const reader = new FileReader();
             reader.onload = (e) => {
-                setUser({ ...user, profile_picture_url: e.target.result, profile_picture: input.files[0] });
+                const next = { ...user, profile_picture_url: e.target.result, profile_picture: input.files[0] };
+                setUser(next);
+                runValidation(next, e.target.name);
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -95,7 +98,7 @@ const EditBasicInfo = () => {
                                         <i className="fa fa-upload"></i> Upload
                                         Photo
                                     </span>
-                                    <input type="file" accept="image/png,image/jpeg,image/jpg,image/gif" onChange={showSelectedPicture} className="upload" />
+                                    <input name="profile" type="file" accept="image/png,image/jpeg,image/jpg,image/gif" onChange={showSelectedPicture} className="upload" />
                                 </div>
                                 <small className="form-text text-muted">
                                     Allowed JPG, GIF or PNG. Max size of 2MB
@@ -103,6 +106,11 @@ const EditBasicInfo = () => {
                             </div>
                         </div>
                     </div>
+                    {errors.profile && errors.profile.length > 0 && (
+                        <label className="text-danger ml-2 font-weight-light text-xs">
+                            {errors.profile[0]}
+                        </label> 
+                    )}
                 </div>
                 <div className="col-12 col-md-6">
                     <div className="form-group">

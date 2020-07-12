@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
@@ -33,6 +33,7 @@ import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
+import {useCookies} from "react-cookie"
 
 const cookie = new Cookies();
 
@@ -40,14 +41,26 @@ export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
 
 function App() {
+    const [cookies, ,] = useCookies(['access_token', 'logged_in', 'refresh_token', 'account_type']);
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
     const [loadingOverlayText, setLoadingOverlayText] = useState("");
+
     const [auth, setAuth] = useState({
-        accessToken: null,
-        refreshToken: null,
-        isLoggedIn: false,
-        isClient: null
+        accessToken: cookies.access_token,
+        refreshToken: cookies.refresh_token,
+        isLoggedIn: cookies.logged_in === "true",
+        isClient: cookies.account_type === "CLIENT"
     });
+
+    useEffect(() => {
+        setAuth({
+            accessToken: cookies.access_token,
+            refreshToken: cookies.refresh_token,
+            isLoggedIn: cookies.logged_in === "true",
+            isClient: cookies.account_type === "CLIENT"
+        });
+    }, [cookies])
+
     return (
         <>
             <AuthContext.Provider value={{auth, setAuth}}>

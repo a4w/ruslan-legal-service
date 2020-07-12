@@ -104,6 +104,9 @@ export const editBasicInfoValidation = (data, field) => {
         test("phone", `${phone} is not a valid phone number`, () => {
             enforce(parseInt(phone)).isNumeric();
         });
+        test("profile", `Image size exceeds 2MB`, () => {
+            enforce(data.profile_picture.size/(1024**2) <= 2).isTruthy();
+        });
     });
 };
 export const editEmailValidations = (data, field) => {

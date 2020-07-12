@@ -5,6 +5,7 @@ import ErrorMessageInput from "./ErrorMessageInput";
 import { FaSpinner } from "react-icons/fa";
 import { request } from "./Axios";
 import { toast } from "react-toastify";
+import Img from "./Img";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -12,7 +13,7 @@ const EditBasicInfo = () => {
         surname: "",
         email: "",
         phone: "",
-        profile_picture_url: "/undraw_male_avatar.svg",
+        profile_picture_url: "",
         profile_picture: null,
     };
     const [user, setUser] = useState(initUser);
@@ -25,10 +26,7 @@ const EditBasicInfo = () => {
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            const url = response.profile_data.profile_picture
-                ? response.profile_data.profile_picture
-                : "/undraw_male_avatar.svg";
-            setUser({ ...response.profile_data, profile_picture_url: url });
+            setUser({ ...response.profile_data, profile_picture_url:response.profile_data.profile_picture});
         }).catch((error) => { });
     }, []);
 
@@ -86,7 +84,7 @@ const EditBasicInfo = () => {
                     <div className="form-group">
                         <div className="change-avatar">
                             <div className="profile-img">
-                                <img
+                                <Img
                                     src={user.profile_picture_url}
                                     alt="User"
                                 />

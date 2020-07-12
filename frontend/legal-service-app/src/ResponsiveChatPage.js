@@ -129,20 +129,20 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                         className={"chat-cont-left"}
                         style={{maxWidth: '100%'}}
                     >
-                        <div class="chat-header">
+                        <div className="chat-header">
                             <span>Chats</span>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                <i class="fas fa-times"></i>
+                            <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
+                                <i className="fas fa-times"></i>
                             </button>
                         </div>
-                        <form class="chat-search">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <i class="fas fa-search"></i>
+                        <form className="chat-search">
+                            <div className="input-group">
+                                <div className="input-group-prepend">
+                                    <i className="fas fa-search"></i>
                                 </div>
                                 <input
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     placeholder="Search"
                                 />
                             </div>
@@ -159,21 +159,21 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                         style={{maxWidth: '100%'}}
                     >
                         <div className="chat-header">
-                            <div class="media">
-                                {list_chats && <button class="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                    <i class="fas fa-chevron-left"></i>
+                            <div className="media">
+                                {list_chats && <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
+                                    <i className="fas fa-chevron-left"></i>
                                 </button>}
-                                <div class="media-img-wrap">
-                                    <div class="avatar avatar-online">
+                                <div className="media-img-wrap">
+                                    <div className="avatar avatar-online">
                                         <img
                                             src="/test.jpg"
                                             alt="User Image"
-                                            class="avatar-img rounded-circle"
+                                            className="avatar-img rounded-circle"
                                         />
                                     </div>
                                 </div>{" "}
-                                <div class="media-body">
-                                    <div class="user-name">
+                                <div className="media-body">
+                                    <div className="user-name">
                                         {selectedChat !== null &&
                                             chats[selectedChat].other_name}
                                     </div>

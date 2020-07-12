@@ -63,7 +63,7 @@ function App() {
 
     return (
         <>
-            <AuthContext.Provider value={{auth, setAuth}}>
+            <AuthContext.Provider value={auth}>
                 <LoadingOverlayContext.Provider value={{isLoadingOverlayShown, setIsLoadingOverlayShown, loadingOverlayText, setLoadingOverlayText}}>
                     <LoadingOverlay
                         active={isLoadingOverlayShown}

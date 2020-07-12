@@ -36,8 +36,8 @@ function useRequests() {
     }
 
     function deleteAllCookies() {
-        removeCookie("access_token");
         removeCookie("logged_in");
+        removeCookie("access_token");
         removeCookie("refresh_token");
         removeCookie("account_type");
     }
@@ -53,9 +53,9 @@ function useRequests() {
                     url: "/auth/refresh",
                     data: data,
                 }).then((response) => {
-                    setCookie("logged_in", true);
                     setCookie("access_token", response.data.access_token);
                     setCookie("account_type", response.data.account_type);
+                    setCookie("logged_in", true);
                     resolve();
                 }).catch(() => {
                     reject();
@@ -67,7 +67,13 @@ function useRequests() {
     }
 
     function Logout() {
-        deleteAllCookies();
+        request({
+            url: 'auth/logout',
+            method: 'POST',
+            data: null
+        }).finally(() => {
+            deleteAllCookies();
+        })
     }
 
     async function request(options) {

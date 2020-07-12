@@ -21,7 +21,7 @@ const LawyerCompleteRegisteration = ({}) => {
     };
 
     const [lawyer, setLawyer] = useState(init);
-    const [errors, , validate] = useValidation(LawyerInfoValidations);
+    const [errors, addError, validate] = useValidation(LawyerInfoValidations);
     const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
     const [accreditationOptions, setAccreditationOptions] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
@@ -141,7 +141,16 @@ const LawyerCompleteRegisteration = ({}) => {
                 data: data
             }).then((response) => {
                 toast.success("Profile updated successfully");
-            }).catch((error) => {});
+            }).catch((error) => {
+                const _errors = error.response.data.errors;
+                console.log({...error});
+                const fields = [];
+                for (const field in _errors) {
+                    fields.push(field);
+                }
+                console.log(_errors);
+                addError(fields, _errors);
+            });
         });
     };
     const OnChangeHandler = ({target: {value, name}}) => {
@@ -171,7 +180,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageSelect
                         name="type"
-                        errors={errors.type}
+                        errors={errors.type ? errors.type : errors.lawyer_type}
                         value={lawyer.type}
                         placeholder={"Select type.."}
                         options={lawyerTypeOptions}
@@ -181,7 +190,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
                         disabled={lawyer.type !== 0}
-                        errors={errors.other}
+                        errors={errors.other ? errors.other : errors.lawyer_type}
                         type={"text"}
                         name="other"
                         placeholder={"Other.."}
@@ -195,6 +204,7 @@ const LawyerCompleteRegisteration = ({}) => {
                     <ErrorMessageInput
                         type={"text"}
                         name="yearLicensed"
+                        errors={errors.years_licenced}
                         value={lawyer.yearLicensed}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Year licensed"}
@@ -203,6 +213,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-9 col-md-9 col-sm-9">
                     <ErrorMessageInput
                         type={"text"}
+                        errors={errors.regulator}
                         name="regulatedBy"
                         value={lawyer.regulatedBy}
                         OnChangeHandler={OnChangeHandler}
@@ -214,6 +225,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-8">
                     <ErrorMessageInput
                         type={"text"}
+                        errors={errors.institution}
                         name="education"
                         value={lawyer.education}
                         OnChangeHandler={OnChangeHandler}
@@ -223,6 +235,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-3 col-md-3 col-sm-2">
                     <ErrorMessageInput
                         type={"text"}
+                        errors={errors.graduation_year}
                         name="graduation_year"
                         value={lawyer.graduation_year}
                         OnChangeHandler={OnChangeHandler}
@@ -233,6 +246,7 @@ const LawyerCompleteRegisteration = ({}) => {
                     <ErrorMessageInput
                         type={"text"}
                         name="course"
+                        errors={errors.course}
                         value={lawyer.course}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Course Name"}
@@ -255,6 +269,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageSelect
                         multi={true}
+                        errors={errors.accreditations}
                         name="accreditations"
                         className="floating"
                         value={lawyer.accreditations}
@@ -270,7 +285,7 @@ const LawyerCompleteRegisteration = ({}) => {
                         <textarea
                             className="form-control"
                             name="bio"
-                            style={{minHeight: "100px"}}
+                            style={{ minHeight: "100px" }}
                             form="regForm"
                             value={lawyer.bio}
                             onChange={OnChangeHandler}

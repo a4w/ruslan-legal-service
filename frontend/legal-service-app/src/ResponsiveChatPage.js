@@ -6,8 +6,9 @@ import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
+import History from "./History";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -28,7 +29,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
             let selected_chat_idx = null;
             const chats = response.chats.map((chat, i) => {
                 if (chat.id === initialSelectedChat) {
-                    selected_chat_idx = i;
+                    selected_chat_idx = initialSelectedChat;
+                }
+                if (match.params.chatId && chat.id === parseInt(match.params.chatId)) {
+                    selected_chat_idx = parseInt(match.params.chatId);
                 }
                 return {
                     id: chat.id,
@@ -37,7 +41,6 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
             });
             setChats(chats);
             if (chats.length > 0) {
-                setSelectedChat(0);
                 if (selected_chat_idx !== null) {
                     setSelectedChat(selected_chat_idx);
                 }
@@ -149,7 +152,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                         </form>
                         <ChatUserList
                             chats={chats}
-                            onChatSelection={(index) => setSelectedChat(index)}
+                            onChatSelection={(index) => {
+                                History.replace(`/chat/${index}`);
+                                setSelectedChat(index);
+                            }}
                         />
                     </div>
                 </div>}

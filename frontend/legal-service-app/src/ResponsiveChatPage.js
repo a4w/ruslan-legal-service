@@ -38,7 +38,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 const other = chat.participants[0].id == me.id? chat.participants[1] : chat.participants[0];
                 return {
                     id: chat.id,
-                    ...other
+                    account: other
                 };
             });
             setChats(chats);
@@ -177,7 +177,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                     <div className="avatar avatar-online">
                                     {selectedChat !== null &&
                                         <Img
-                                            src={chats[selectedChat].profile_picture}
+                                            src={chats[selectedChat].account.profile_picture}
                                             alt="User Image"
                                             className="avatar-img rounded-circle"
                                         />
@@ -187,7 +187,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                 <div className="media-body">
                                     <div className="user-name">
                                         {selectedChat !== null &&
-                                            chats[selectedChat].full_name}
+                                            chats[selectedChat].account.full_name}
                                     </div>
                                 </div>
                             </div>

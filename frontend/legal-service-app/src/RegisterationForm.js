@@ -49,7 +49,8 @@ const RegisterationForm = ({back}) => {
                     .then((response) => {
                         console.log("success", response);
                     })
-                    .catch((_errors) => {
+                    .catch((errors) => {
+                        const _errors = errors.response.data.errors;
                         const fields = [];
                         for (const field in _errors) {
                             fields.push(field);

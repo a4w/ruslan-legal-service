@@ -55,7 +55,6 @@ const ClientDashboardSidebar = () => {
                                 <NavTab to="/client-dashboard/messages">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
-                                    <small className="unread-msg">23</small>
                                 </NavTab>
                             </li>
                             <li>

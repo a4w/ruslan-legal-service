@@ -90,7 +90,6 @@ const LawyerDashboardSidebar = () => {
                                 <NavTab exact to="/dashboard/messages">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
-                                    <small className="unread-msg">23</small>
                                 </NavTab>
                             </li>
                             <li>

@@ -38,12 +38,12 @@ const LoginForm = ({back}) => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-                        setCookie("logged_in", true, {path: '/'});
                         setCookie("access_token", data.access_token, {path: '/'});
                         setCookie("account_type", data.account_type, {path: '/'});
                         if (data.refresh_token) {
                             setCookie("refresh_token", data.refresh_token, {path: '/'});
                         }
+                        setCookie("logged_in", true, {path: '/'});
 
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');

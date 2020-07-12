@@ -426,6 +426,7 @@ const LawyerCard = ({account, lawyer}) => {
                                 state: {lawyer: lawyer},
                             }}
                             className="btn view-btn"
+                            style={{fontSize: "12px"}} 
                         >
                             View Profile
                         </Link>

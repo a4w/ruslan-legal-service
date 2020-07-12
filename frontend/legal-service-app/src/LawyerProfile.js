@@ -47,7 +47,7 @@ const LawyerProfile = ({match}) => {
 
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
-
+    const account = lawyer.account;
     return (
         <div className="card">
             <div className="card-body">
@@ -55,7 +55,7 @@ const ProfileCard = ({lawyer}) => {
                     <div className="lawyer-info-left">
                         <div className="law-img">
                             <Img
-                                src={lawyer.profile_picture}
+                                src={account.profile_picture}
                                 className="img-fluid"
                                 alt="Lawyer Profile"
                             />
@@ -98,10 +98,6 @@ const ProfileCard = ({lawyer}) => {
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
-                                <li>
-                                    <i className="far fa-comment"></i> ##
-                                    Feedback
-                                </li>
                                 <li>
                                     <i className="fas fa-map-marker-alt"></i>{" "}
                                     {`${lawyer.account.city}, ${lawyer.account.country}`}

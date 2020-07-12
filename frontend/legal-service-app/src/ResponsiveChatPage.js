@@ -7,6 +7,7 @@ import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
 import History from "./History";
+import Img from "./Img";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
@@ -29,20 +30,23 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             let selected_chat_idx = null;
             const chats = response.chats.map((chat, i) => {
                 if (chat.id === initialSelectedChat) {
-                    selected_chat_idx = initialSelectedChat;
+                    selected_chat_idx = i;
                 }
                 if (match.params.chatId && chat.id === parseInt(match.params.chatId)) {
-                    selected_chat_idx = parseInt(match.params.chatId);
+                    selected_chat_idx = i;
                 }
+                const other = chat.participants[0].id == me.id? chat.participants[1] : chat.participants[0];
                 return {
                     id: chat.id,
-                    other_name: chat.participants[0].id == me.id ? chat.participants[1].name : chat.participants[0].name
+                    ...other
                 };
             });
             setChats(chats);
             if (chats.length > 0) {
                 if (selected_chat_idx !== null) {
                     setSelectedChat(selected_chat_idx);
+                }else{
+                    setSelectedChat(0);
                 }
             }
         }).catch((error) => {
@@ -50,10 +54,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         });
     }, []);
 
-    useInterval(() => {
-        console.log("Loading");
-        loadMessages();
-    }, 3000);
+    // useInterval(() => {
+    //     console.log("Loading");
+    //     loadMessages();
+    // }, 3000);
 
     // Load chat messages on chat change
     useEffect(() => {
@@ -171,17 +175,19 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                 </button>}
                                 <div className="media-img-wrap">
                                     <div className="avatar avatar-online">
-                                        <img
-                                            src="/test.jpg"
+                                    {selectedChat !== null &&
+                                        <Img
+                                            src={chats[selectedChat].profile_picture}
                                             alt="User Image"
                                             className="avatar-img rounded-circle"
                                         />
+                                    }
                                     </div>
                                 </div>{" "}
                                 <div className="media-body">
                                     <div className="user-name">
                                         {selectedChat !== null &&
-                                            chats[selectedChat].other_name}
+                                            chats[selectedChat].full_name}
                                     </div>
                                 </div>
                             </div>

@@ -123,11 +123,11 @@ export const editEmailValidations = (data, field) => {
 export const LawyerInfoValidations = (data, field) => {
     return validate("LawyerCompleteRegisteration", () => {
         vest.only(field);
-        test("type", "Please select a type", () => {
-            enforce(data.type.toString()).isNotEmpty();
-        });
+        // test("type", "Please select a type", () => {
+        //     enforce(data.type).isTruthy();
+        // });
         test("other", "Please enter a type", () => {
-            const addOther = data.type.toString() === "other";
+            const addOther = data.type === 0;
             if (addOther) {
                 enforce(data.other.toString()).isNotEmpty();
             }

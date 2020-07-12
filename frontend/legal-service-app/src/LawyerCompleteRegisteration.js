@@ -94,8 +94,8 @@ const LawyerCompleteRegisteration = ({}) => {
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type = data.lawyer_type_id;
-            // Shitty code from a shitty person
+            nextLawyer.type = data.lawyer_type_id? data.lawyer_type_id:0;
+            // hotty code from a hot person
             if (data.lawyer_type_id > 2) {
                 nextLawyer.type = 0;
                 nextLawyer.other = data.lawyer_type.type;
@@ -113,6 +113,7 @@ const LawyerCompleteRegisteration = ({}) => {
             });
             nextLawyer.bio = data.biography;
             setLawyer(nextLawyer);
+            validate(nextLawyer);
         }).catch((error) => {
         });
     }, []);
@@ -165,6 +166,7 @@ const LawyerCompleteRegisteration = ({}) => {
         const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         validate(newData, name);
+        validate(newData, "other");
     };
     const MultiselectHandler = ({name, values}) => {
         console.log(name, values);

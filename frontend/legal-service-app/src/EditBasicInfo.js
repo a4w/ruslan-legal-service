@@ -41,26 +41,27 @@ const EditBasicInfo = () => {
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
                 setSaving(true);
-            }
-            request({
-                url: 'account/personal-info',
-                method: 'POST',
-                data: user
-            }).then((response) => {
-                setSaving(false);
-                toast.success("Profile updated successfully!");
-            }).catch((error) => {
-            });
-            if (user.profile_picture !== null) {
-                const formData = new FormData();
-                const file = user.profile_picture;
-                formData.append('profile_picture', file);
                 request({
-                    url: 'account/upload-profile-picture',
+                    url: 'account/personal-info',
                     method: 'POST',
-                    data: formData
+                    data: user
                 }).then((response) => {
-                }).catch((error) => { });
+                    setSaving(false);
+                    toast.success("Profile updated successfully!");
+                }).catch((error) => {
+                    toast.error("An error occurred");
+                });
+                if (user.profile_picture !== null) {
+                    const formData = new FormData();
+                    const file = user.profile_picture;
+                    formData.append('profile_picture', file);
+                    request({
+                        url: 'account/upload-profile-picture',
+                        method: 'POST',
+                        data: formData
+                    }).then((response) => {
+                    }).catch((error) => { });
+                }
             }
         });
     };

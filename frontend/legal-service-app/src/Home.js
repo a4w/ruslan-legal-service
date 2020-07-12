@@ -371,7 +371,7 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget" style={{width: 'auto', margin: 'auto'}}>
+        <div className="profile-widget" style={{width: 'auto', margin: 'auto', minHeight: "520px"}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
@@ -442,7 +442,7 @@ const LawyerCard = ({account, lawyer}) => {
                         </Link>
                     </div>
                 </div>
-                <ul className="available-info mt-2" style={{minHeight: "125px"}} >
+                <ul className="available-info mt-2">
                     {account.city && <li>
                         <i className="fas fa-map-marker-alt"></i>{" "}
                         {`${account.city}, ${account.country}`}

@@ -54,10 +54,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         });
     }, []);
 
-    // useInterval(() => {
-    //     console.log("Loading");
-    //     loadMessages();
-    // }, 3000);
+    useInterval(() => {
+        console.log("Loading");
+        loadMessages();
+    }, 3000);
 
     // Load chat messages on chat change
     useEffect(() => {

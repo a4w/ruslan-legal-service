@@ -3,10 +3,9 @@ import "./assets/css/VideoComponent.css"
 import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone, FaChevronLeft} from "react-icons/fa"
 import {BsChatSquareQuote} from "react-icons/bs"
 import {connect, createLocalTracks} from "twilio-video"
-import {request} from "./Axios.js"
 import {toast} from "react-toastify"
-import ChatPage from "./ChatPage"
 import ResponsiveChatPage from "./ResponsiveChatPage"
+import useRequests from "./useRequests"
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -17,6 +16,8 @@ const VideoComponent = ({appointment_id}) => {
     const [room, setRoom] = useState(null);
     const [localTracks, setLocalTracks] = useState(null);
     const [chatId, setChatId] = useState(null);
+
+    const {request} = useRequests();
 
     const handleSoundControl = () => {
         setIsMuted(!isMuted);

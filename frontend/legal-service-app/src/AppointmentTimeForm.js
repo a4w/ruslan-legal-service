@@ -2,10 +2,10 @@ import React, {useState, useEffect, useMemo, useContext} from "react";
 import moment from "moment";
 import {FaCheck} from "react-icons/fa";
 import Config from "./Config";
-import {request} from "./Axios"
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import {toast} from "react-toastify";
 import {LoadingOverlayContext} from "./App"
+import useRequests from "./useRequests";
 
 const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
 
@@ -18,6 +18,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         }
         return price;
     };
+
+    const {request} = useRequests();
 
     const loadingContext = useContext(LoadingOverlayContext);
 

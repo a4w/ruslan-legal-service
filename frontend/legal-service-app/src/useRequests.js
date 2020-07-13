@@ -83,7 +83,7 @@ function useRequests() {
             method: 'POST',
             data: null
         }).finally(() => {
-            setAuth({...auth, isLoggedIn: false});
+            setAuth({});
         });
     }
 

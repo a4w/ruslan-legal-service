@@ -2,11 +2,11 @@ import React, {useState, useEffect} from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
-import {request} from "./Axios";
 import {Elements} from "@stripe/react-stripe-js"
 import {loadStripe} from "@stripe/stripe-js"
 import Config from "./Config";
 import CheckoutForm from "./CheckoutForm";
+import useRequests from "./useRequests";
 
 const stripe = loadStripe(Config.stripe_api_key);
 
@@ -14,6 +14,7 @@ const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
     const [isTimeSelected, setIsTimeSelected] = useState(false);
     const [clientSecret, setClientSecret] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: `/lawyer/${LawyerId}`, method: "GET"})
             .then((data) => {

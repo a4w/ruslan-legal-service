@@ -104,6 +104,9 @@ export const editBasicInfoValidation = (data, field) => {
         test("phone", `${phone} is not a valid phone number`, () => {
             enforce(parseInt(phone)).isNumeric();
         });
+        test("profile", `Image size exceeds 2MB`, () => {
+            enforce(data.profile_picture.size/(1024**2) <= 2).isTruthy();
+        });
     });
 };
 export const editEmailValidations = (data, field) => {
@@ -123,11 +126,11 @@ export const editEmailValidations = (data, field) => {
 export const LawyerInfoValidations = (data, field) => {
     return validate("LawyerCompleteRegisteration", () => {
         vest.only(field);
-        test("type", "Please select a type", () => {
-            enforce(data.type.toString()).isNotEmpty();
-        });
+        // test("type", "Please select a type", () => {
+        //     enforce(data.type).isTruthy();
+        // });
         test("other", "Please enter a type", () => {
-            const addOther = data.type.toString() === "other";
+            const addOther = data.type === 0;
             if (addOther) {
                 enforce(data.other.toString()).isNotEmpty();
             }

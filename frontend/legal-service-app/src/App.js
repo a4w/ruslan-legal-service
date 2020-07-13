@@ -32,6 +32,7 @@ import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
+import PostRegistration from "./PostRegistration";
 
 
 export const LoadingOverlayContext = React.createContext(null);
@@ -108,7 +109,6 @@ function App() {
                                 <Route path="/blogs">
                                     <Route path="/blogs" component={Blogs} />
                                 </Route>
-
                                 <Route path="/blog/:blogId" component={BlogDetails} />
                                 <Route
                                     exact

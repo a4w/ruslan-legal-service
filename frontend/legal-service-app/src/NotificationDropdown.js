@@ -138,7 +138,7 @@ const Notification = ({data: {type, notification_data}}) => {
                 <p
                     className="noti-details"
                 >
-                    <span class="noti-title">
+                    <span className="noti-title">
                         {`${notification_data.sender_name} Sent you a message!`}
                     </span>
                     <br />

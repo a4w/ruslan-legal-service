@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Modal from './ModalRouted';
-import { request } from "./Axios";
+import useRequests from "./useRequests";
 
-const AppointmentDetails = ({match})=>{
-    const [appointment, setAppointment] = useState({ id: 0 });
-    useEffect(()=>{
-        request({ url: `/appointment/${match.params.appId}`, method: "GET" })
-            .then((res) => {                
+const AppointmentDetails = ({match}) => {
+    const [appointment, setAppointment] = useState({id: 0});
+    const {request} = useRequests();
+    useEffect(() => {
+        request({url: `/appointment/${match.params.appId}`, method: "GET"})
+            .then((res) => {
                 setAppointment(res.appointment);
             })
             .catch((err) => {});
-    },[]);
+    }, []);
     return (
         <Modal header={"Appointment Details"} width={"40%"}>
             {appointment && <Details appointment={appointment} />}
         </Modal>
     );
 }
-const Details = ({appointment}) =>{
+const Details = ({appointment}) => {
     const appointment_time = new Date(appointment.appointment_time);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
@@ -40,25 +41,25 @@ const Details = ({appointment}) =>{
                     <li>
                         <div className="details-header">
                             <div className="row">
-                            <div className="col-md-6 pl-0">
-                                <span className="title">{`#APT${id}`}</span>
-                                <span className="text">
-                                    {`${day} at ${time}`}
-                                </span>
-                            </div>
+                                <div className="col-md-6 pl-0">
+                                    <span className="title">{`#APT${id}`}</span>
+                                    <span className="text">
+                                        {`${day} at ${time}`}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </li>
                     <li>
                         <span className="title">Status:</span>
-                        <br/>
+                        <br />
                         <button
                             type="button"
                             className={`btn bg-${
                                 appointment.status === "DONE"
                                     ? "success"
                                     : "warning"
-                            }-light btn-sm`}
+                                }-light btn-sm`}
                         >
                             {appointment.status}
                         </button>

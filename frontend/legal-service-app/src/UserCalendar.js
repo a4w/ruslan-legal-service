@@ -3,6 +3,7 @@ import moment from "moment";
 import "./UserCalendar.css";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);

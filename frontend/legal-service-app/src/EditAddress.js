@@ -3,8 +3,8 @@ import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {editAddressValidations} from "./Validations";
 import {FaSpinner} from "react-icons/fa";
-import {request} from "./Axios";
 import {toast} from 'react-toastify';
+import useRequests from "./useRequests";
 const EditAddress = () => {
     const initAddress = {
         address: "",
@@ -17,6 +17,7 @@ const EditAddress = () => {
     const [address, setAddress] = useState(initAddress);
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editAddressValidations);
+    const {request} = useRequests();
 
     useEffect(() => {
         // Load profile data

@@ -25,13 +25,13 @@ function useRequests() {
     }, [auth]);
 
     function requireLogin() {
-        setAuth({...auth, loggedIn: false});
+        setAuth({...auth, isLoggedIn: false});
         if (routeMatch.params[routeMatch.params.length - 1] === "login") {
             history.push(routeMatch.params[0]);
         }
     }
 
-    function refreshAccessToken() {
+    function fetchNewAccessToken() {
         return new Promise((resolve, reject) => {
             if (auth.refreshToken) {
                 const data = {
@@ -43,9 +43,9 @@ function useRequests() {
                     data: data,
                 }).then((response) => {
                     setAuth({
-                        accessToken: response.data.accessToken,
+                        ...auth,
+                        accessToken: response.data.access_token,
                         accountType: response.data.account_type,
-                        refreshToken: response.data.refresh_token || null,
                         isLoggedIn: true
                     });
                     resolve();
@@ -55,6 +55,25 @@ function useRequests() {
             } else {
                 reject();
             }
+        });
+    }
+
+    function refreshAccessToken() {
+        return new Promise((resolve, reject) => {
+            axiosClient.request({
+                method: "POST",
+                url: "/auth/refresh-current-token"
+            }).then((response) => {
+                setAuth({
+                    ...auth,
+                    accessToken: response.data.access_token,
+                    accountType: response.data.account_type,
+                    isLoggedIn: true
+                });
+                resolve();
+            }).catch(() => {
+                reject();
+            });
         });
     }
 
@@ -78,7 +97,7 @@ function useRequests() {
                 // Unauthorized request
                 if (status === 401) {
                     // If there is a refresh token then refresh
-                    refreshAccessToken().catch(requireLogin);
+                    fetchNewAccessToken().catch(requireLogin);
                 } else if (status === 403) { // Forbidden
                     requireLogin();
                 } else {
@@ -92,7 +111,7 @@ function useRequests() {
         return await axiosClient.request(options).then(onSuccess).catch(onError);
     }
 
-    return {request, Logout, refreshAccessToken};
+    return {request, Logout, fetchNewAccessToken, refreshAccessToken};
 }
 
 export default useRequests;

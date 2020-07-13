@@ -464,16 +464,29 @@ const LawyerCard = ({account, lawyer}) => {
                     </div>
                 </div>
                 <ul className="available-info mt-2">
-                    {account.city && <li>
-                        <i className="fas fa-map-marker-alt"></i>{" "}
-                        {`${account.city}, ${account.country}`}
-                    </li>}
+                    <li>
+                        <i class="far fa-comment"></i>{" "}
+                        {lawyer.ratings_count} Feedback
+                    </li>
+                    {lawyer.account.city &&
+                    lawyer.account.country ? (
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                        </li>
+                    ) : (
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            Not listed :)
+                        </li>
+                    )}
                     <Discount
                         secsTillEnd={new Date(lawyer.discount_end)}
                         cost={lawyer.price_per_hour}
                         costAfterDiscount={lawyer.discounted_price_per_hour}
                         isPercent={lawyer.is_percent_discount}
                         discount={lawyer.discount}
+                        currency={lawyer.currency_symbol}
                     />
                 </ul>
             </div>

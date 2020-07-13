@@ -1,14 +1,12 @@
 import React, {useState} from "react";
-import {request} from "./Axios";
 import {registrationValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {FaSpinner} from "react-icons/fa";
-import history from "./History";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
-import {Link} from "react-router-dom";
 import History from "./History";
+import useRequests from "./useRequests";
 
 const RegisterationForm = ({back}) => {
     const initUser = {
@@ -19,6 +17,7 @@ const RegisterationForm = ({back}) => {
         password: "",
         isClient: true,
     };
+    const {request} = useRequests();
 
     const [user, setUser] = useState(initUser);
     const [isRegistering, setIsRegistering] = useState(false);

@@ -13,6 +13,7 @@ import moment from "moment";
 import PageHead from "./PageHead";
 import "./Home.css"
 import useRequests from "./useRequests";
+import useValidation from "./useValidation";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -179,9 +180,14 @@ const Home = () => {
 
 const SearchLawyerByName = () => {
     const [results, setResults] = useState([]);
+    const [, , run] = useValidation();
+    const [term, setTerm] = useState("");
     const {request} = useRequests();
     const OnChangeHandler = ({target: {value}}) => {
-        const term = value;
+        setTerm(value);
+    };
+    const OnSubmitHandler = (e)=>{
+        e.preventDefault()
         request({
             url: `/lawyer/search?term=${term}`,
             method: 'GET'
@@ -190,7 +196,7 @@ const SearchLawyerByName = () => {
         }).catch(error => {
             setResults([]);
         });
-    };
+    }
     return (
         <form style={{marginTop: "8px"}}>
             <div className="row form-row">
@@ -200,6 +206,7 @@ const SearchLawyerByName = () => {
                             className="form-control"
                             placeholder="Enter Lawyer Name"
                             onChange={OnChangeHandler}
+                            value={term}
                         />
 
                         {results.length > 0 && <div style={{
@@ -209,7 +216,10 @@ const SearchLawyerByName = () => {
                             backgroundColor: '#fff',
                             borderRadius: '0px 0px 10px 10px',
                             border: '1px solid #ccc',
-                            marginRight: '5px'
+                            marginRight: '5px',
+                            maxHeight: "300px",
+                            overflowY: "auto",
+                            zIndex: "999"
                         }}>
                             {results.map((lawyer) => {
                                 console.log(lawyer);
@@ -238,7 +248,7 @@ const SearchLawyerByName = () => {
                         type="submit"
                         style={{height: "46px"}}
                         className="btn btn-block btn-primary search-btn"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={OnSubmitHandler}
                     >
                         <i className="fas fa-search"></i>
                     </button>

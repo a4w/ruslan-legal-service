@@ -73,6 +73,22 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
+                                <li>
+                                    <i class="far fa-comment"></i>{" "}
+                                    {lawyer.ratings_count} Feedback
+                                </li>
+                                {lawyer.account.city &&
+                                lawyer.account.country ? (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        Not listed :)
+                                    </li>
+                                )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}

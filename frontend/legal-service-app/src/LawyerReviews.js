@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import StarRatings from "react-star-ratings";
 import moment from "moment";
-import {request} from "./Axios";
 import Img from "./Img";
+import useRequests from "./useRequests";
 
 const LawyerReviews = ({lawyer}) => {
     const [comments, setComments] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         if (!lawyer)
             request({url: "/lawyer/me", method: "GET"})

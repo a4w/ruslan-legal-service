@@ -42,6 +42,7 @@ import LoadingOverlay from "react-loading-overlay"
 import {FaSpinner} from "react-icons/fa";
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
+import PostRegistration from "./PostRegistration";
 
 const cookie = new Cookies();
 
@@ -130,6 +131,9 @@ function App() {
                             </Route>
                             <Route path="/calendar">
                                 <UserCalendar />
+                            </Route>
+                            <Route path="/post-register">
+                                <PostRegistration />
                             </Route>
                             <Route path="/not-found">
                                 <NotFound />

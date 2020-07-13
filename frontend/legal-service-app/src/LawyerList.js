@@ -50,6 +50,7 @@ function LawyerList(props) {
         setParams(next);
         console.log("Sort: ", next);
         getList(next);
+        setPopUp(null);
     };
 
     useEffect(() => {
@@ -76,6 +77,7 @@ function LawyerList(props) {
             offset: 0,
             length: length,
         };
+        setPopUp(null);
         setParams(next);
         // params["filter_by"] = filter.filters;
         getList(next);
@@ -147,7 +149,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         />
                     </div>
                 </div>
-                <div className="filter-widget mb-0 ml-2" style={{width: "40%"}}>
+                {/* <div className="filter-widget mb-0 ml-2" style={{width: "40%"}}>
                     <Select
                         className="form-control mb-0"
                         value={filter.filters}
@@ -158,7 +160,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
                         }
                         style={{minHeight: "46px"}}
                     />
-                </div>
+                </div> */}
                 <div className="btn-search align-left ml-2" style={{Width: "10%"}}>
                     <button
                         type="button"

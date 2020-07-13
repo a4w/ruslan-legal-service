@@ -3,13 +3,14 @@ import {editEmailValidations} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {FaSpinner} from "react-icons/fa";
-import {request} from "./Axios";
 import {toast} from 'react-toastify';
+import useRequests from "./useRequests";
 
 const EditEmail = ({email}) => {
     const [user, setUser] = useState({email: email ? email : ""});
     const [isSaving, setSaving] = useState(false);
     const [errors, addError, runValidation] = useValidation(editEmailValidations);
+    const {request} = useRequests();
 
     useEffect(() => {
         // Load profile data

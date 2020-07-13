@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 import History from "./History";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
-import {refreshAccessToken} from "./Axios"
 import {AuthContext} from "./App";
+import useRequests from "./useRequests";
 
 const NavBar = () => {
     const [auth,] = useContext(AuthContext);
@@ -29,6 +29,7 @@ const NavBar = () => {
         return () => window.removeEventListener("resize", Menu);
     });
 
+    const {refreshAccessToken} = useRequests();
     // Attempt automatic login
     useEffect(() => {
         if (!auth.isLoggedIn) {

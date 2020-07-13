@@ -23,7 +23,6 @@ import "./assets/css/datepicker.css";
 import "./assets/css/style.css";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
-import Cookies from "universal-cookie";
 import UserCalendar from "./UserCalendar";
 import BookLawyerModal from "./BookLawyerModal";
 import BlogDetails from "./BlogDetails"
@@ -34,7 +33,6 @@ import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
 
-const cookie = new Cookies();
 
 export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
@@ -81,14 +79,14 @@ function App() {
                             {/* <NavBar /> */}
                             <Route component={NavBar} />
                             <Route path="(.+)/login" render={(props) => {
-                                if (cookie.get('logged_in') === "true") {
+                                if (auth.isLoggedIn) {
                                     return <Redirect to={props.match.params[0]} />
                                 } else {
                                     return <LoginModal back={props.match.params[0]} />
                                 }
                             }} />
                             <Route path="(.+)/register" render={(props) => {
-                                if (cookie.get('logged_in')) {
+                                if (auth.isLoggedIn) {
                                     return <Redirect to={props.match.params[0]} />
                                 } else {
                                     return <RegisterModal back={props.match.params[0]} />

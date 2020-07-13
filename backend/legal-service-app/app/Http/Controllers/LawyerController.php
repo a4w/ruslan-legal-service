@@ -53,22 +53,22 @@ class LawyerController extends Controller
                 break;
         }
 
-        $dat_table = DB::table('lawyers as ld')->where('ld.schedule', '<>', null)
-            ->selectRaw('ld.id')
-            ->selectRaw('COUNT(`ratings`.`id`) AS `ratings_count`')
+        $dat_table = DB::table('lawyers as lawyer_data')->where('lawyer_data.schedule', '<>', null)
+            ->selectRaw('`lawyer_data`.`id` AS `lawyer_id`')
+            ->selectRaw('COUNT(IFNULL(`ratings`.`id`,0)) AS `ratings_count`')
             ->selectRaw('AVG(IFNULL(`ratings`.`rating`,0)) AS `ratings_average`')
             ->leftJoin('appointments', function (JoinClause $join) {
-                $join->on('ld.id', '=', 'appointments.lawyer_id');
+                $join->on('lawyer_data.id', '=', 'appointments.lawyer_id');
             })
             ->leftJoin('ratings', function (JoinClause $join) {
                 $join->on('appointments.id', 'ratings.appointment_id');
             })
-            ->groupBy(['ld.id'])
+            ->groupBy(['lawyer_data.id'])
             ->toSql();
 
         $lawyers = Lawyer::fullyRegistered()
-            ->join(DB::raw('(' . $dat_table . ') ld'), function (JoinClause $join) {
-                $join->on('ld.id', '=', 'lawyers.id');
+            ->join(DB::raw('(' . $dat_table . ') `lawyer_data`'), function (JoinClause $join) {
+                $join->on('lawyer_data.lawyer_id', '=', 'lawyers.id');
             })
             ->whereHas('account', function ($query) use ($location) {
                 if ($location === null) {
@@ -76,17 +76,14 @@ class LawyerController extends Controller
                 }
                 return $query->where('city', $location);
             })
-            ->whereHas('practice_areas', function ($query) use ($practice_areas) {
-                if ($practice_areas === null) {
-                    return $query;
-                }
-                return $query->whereIN('id', $practice_areas);
+            ->when($practice_areas, function ($query, $areas) {
+                return $query->whereIn('lawyers.id', $areas);
             })
-
             ->orderBy($sort[0], $sort[1])
             ->limit($length)
             ->skip($offset)
             ->get();
+
         if ($available_on !== null) {
             $lawyers = $lawyers->filter(function ($item) use ($available_on) {
                 // Check if available on selected date

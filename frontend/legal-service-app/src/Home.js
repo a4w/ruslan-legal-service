@@ -540,8 +540,8 @@ const BlogCard = ({blog}) => {
                             src={blog.cover_photo_link}
                             alt="Post Image"
                             style={{
-                                maxWidth: '100%',
-                                height: '200px'
+                                maxWidth: "100%",
+                                height: "200px",
                             }}
                         />
                     </Link>
@@ -567,15 +567,13 @@ const BlogCard = ({blog}) => {
                     <h3 className="blog-title">
                         <Link to={`/blog/${id}`}>{blog.title}</Link>
                     </h3>
-                    <p className="mb-0">
-                        <ul className="tags">
-                            <li>
-                                <a href="#" className="tag">
-                                    {blog.tag.area}
-                                </a>
-                            </li>
-                        </ul>
-                    </p>
+                    <ul className="tags mt-2">
+                        <li>
+                            <a href="#" className="tag">
+                                {blog.tag.area}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

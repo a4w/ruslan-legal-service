@@ -92,7 +92,7 @@ function useRequests() {
         return await axiosClient.request(options).then(onSuccess).catch(onError);
     }
 
-    return {request, Logout};
+    return {request, Logout, refreshAccessToken};
 }
 
 export default useRequests;

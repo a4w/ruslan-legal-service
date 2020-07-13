@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState, useEffect, useRef, useContext} from "react";
 import {Link} from "react-router-dom";
-import Cookies from "universal-cookie";
 import History from "./History";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
@@ -9,7 +8,6 @@ import {refreshAccessToken} from "./Axios"
 import {AuthContext} from "./App";
 
 const NavBar = () => {
-    const cookie = new Cookies();
     const [auth,] = useContext(AuthContext);
     const [open, setOpen] = useState(true);
     const ref = useRef(null);

@@ -33,7 +33,6 @@ import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
-import {useCookies} from "react-cookie"
 
 const cookie = new Cookies();
 
@@ -41,29 +40,24 @@ export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
 
 function App() {
-    const [cookies, ,] = useCookies(['access_token', 'logged_in', 'refresh_token', 'account_type']);
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
     const [loadingOverlayText, setLoadingOverlayText] = useState("");
 
-    const [auth, setAuth] = useState({
-        accessToken: cookies.access_token,
-        refreshToken: cookies.refresh_token,
-        isLoggedIn: cookies.logged_in === "true",
-        isClient: cookies.account_type === "CLIENT"
-    });
-
+    const defaultAuthState = {
+        accessToken: null,
+        accountType: null,
+        refreshToken: null,
+        isLoggedIn: false
+    };
+    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")) || defaultAuthState);
     useEffect(() => {
-        setAuth({
-            accessToken: cookies.access_token,
-            refreshToken: cookies.refresh_token,
-            isLoggedIn: cookies.logged_in === "true",
-            isClient: cookies.account_type === "CLIENT"
-        });
-    }, [cookies])
+        // Update local storage
+        localStorage.setItem("auth", JSON.stringify(auth));
+    }, [auth])
 
     return (
         <>
-            <AuthContext.Provider value={auth}>
+            <AuthContext.Provider value={[auth, setAuth]}>
                 <LoadingOverlayContext.Provider value={{isLoadingOverlayShown, setIsLoadingOverlayShown, loadingOverlayText, setLoadingOverlayText}}>
                     <LoadingOverlay
                         active={isLoadingOverlayShown}
@@ -87,7 +81,7 @@ function App() {
                             {/* <NavBar /> */}
                             <Route component={NavBar} />
                             <Route path="(.+)/login" render={(props) => {
-                                if (cookie.get('logged_in')) {
+                                if (cookie.get('logged_in') === "true") {
                                     return <Redirect to={props.match.params[0]} />
                                 } else {
                                     return <LoginModal back={props.match.params[0]} />

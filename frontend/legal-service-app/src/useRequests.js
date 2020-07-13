@@ -3,7 +3,6 @@ import {useEffect, useContext} from "react";
 import {AuthContext} from "./App";
 import {useHistory, useRouteMatch} from "react-router";
 import axios from "axios";
-import {useCookies} from "react-cookie"
 
 const axiosClient = axios.create({
     baseURL: Config.api_url,
@@ -15,31 +14,21 @@ const axiosClient = axios.create({
 
 function useRequests() {
 
-    const auth = useContext(AuthContext);
-    const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'logged_in', 'refresh_token', 'account_type']);
+    const [auth, setAuth] = useContext(AuthContext);
     const history = useHistory();
     const routeMatch = useRouteMatch();
 
     useEffect(() => {
-        console.log("Updating accessToken");
-        console.log(auth);
         axiosClient.defaults.headers.common = {
             Authorization: `Bearer ${auth.accessToken}`,
         };
     }, [auth]);
 
     function requireLogin() {
-        deleteAllCookies();
+        setAuth({...auth, loggedIn: false});
         if (routeMatch.params[routeMatch.params.length - 1] === "login") {
             history.push(routeMatch.params[0]);
         }
-    }
-
-    function deleteAllCookies() {
-        removeCookie("logged_in");
-        removeCookie("access_token");
-        removeCookie("refresh_token");
-        removeCookie("account_type");
     }
 
     function refreshAccessToken() {
@@ -53,9 +42,12 @@ function useRequests() {
                     url: "/auth/refresh",
                     data: data,
                 }).then((response) => {
-                    setCookie("access_token", response.data.access_token);
-                    setCookie("account_type", response.data.account_type);
-                    setCookie("logged_in", true);
+                    setAuth({
+                        accessToken: response.data.accessToken,
+                        accountType: response.data.account_type,
+                        refreshToken: response.data.refresh_token || null,
+                        isLoggedIn: true
+                    });
                     resolve();
                 }).catch(() => {
                     reject();
@@ -72,8 +64,8 @@ function useRequests() {
             method: 'POST',
             data: null
         }).finally(() => {
-            deleteAllCookies();
-        })
+            setAuth({...auth, isLoggedIn: false});
+        });
     }
 
     async function request(options) {

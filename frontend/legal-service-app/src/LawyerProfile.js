@@ -94,18 +94,18 @@ const ProfileCard = ({lawyer}) => {
                         <div className="session-infos">
                             <ul>
                                 <li>
-                                    <i class="far fa-comment"></i>{" "}
+                                    <i className="far fa-comment"></i>{" "}
                                     {lawyer.ratings_count} Feedback
                                 </li>
                                 {lawyer.account.city &&
                                 lawyer.account.country ? (
                                     <li>
-                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
                                         {`${lawyer.account.city}, ${lawyer.account.country}`}
                                     </li>
                                 ) : (
                                     <li>
-                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
                                         Not listed :)
                                     </li>
                                 )}
@@ -155,8 +155,8 @@ const Details = ({lawyer, match}) => {
         <div className="card">
             <div className="card-body pt-0">
                 <NavBar lawyer={lawyer} match={match} />
-                <Switch>
-                    <div className="tab-content pt-0">
+                <div className="tab-content pt-0">
+                    <Switch>
                         <Route exact path={`${path}`}>
                             {" "}
                             <Redirect to={`${path}/overview`} />
@@ -174,8 +174,8 @@ const Details = ({lawyer, match}) => {
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}
                         </Route>
-                    </div>
-                </Switch>
+                    </Switch>
+                </div>
             </div>
         </div>
     );
@@ -220,6 +220,7 @@ const Overview = ({lawyer}) => {
     ];
     return (
         <div className="col-md-12 col-lg-9">
+            <PracticeAreas lawyer={lawyer} />
             <Bio bio={biography} />
             <Education
                 course={course}
@@ -230,6 +231,21 @@ const Overview = ({lawyer}) => {
         </div>
     );
 };
+const PracticeAreas = ({lawyer}) => {
+    return (
+        <div className="widget about-widget">
+            <h4 className="widget-title">Practice Areas</h4>
+            <div className="session-services mb-0">
+                <p>
+                    {lawyer.practice_areas &&
+                        lawyer.practice_areas.map((area) => (
+                            <span key={area.id}>{area.area}</span>
+                        ))}
+                </p>
+            </div>
+        </div>
+    );
+}
 const Bio = ({bio}) => {
     return (
         <div className="widget about-widget">

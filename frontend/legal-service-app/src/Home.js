@@ -424,7 +424,7 @@ const LawyerCard = ({account, lawyer}) => {
                     </>
                     }
                 </div>
-                <div className="rating">
+                <div className="rating mt-2">
                     <StarRatings
                         rating={parseFloat(lawyer.ratings_average)}
                         starRatedColor="gold"

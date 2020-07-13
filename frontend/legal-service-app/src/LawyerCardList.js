@@ -4,6 +4,7 @@ import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Img from "./Img";
+import Config from "./Config";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
     console.log(lawyers);
@@ -73,12 +74,29 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
+                                <li>
+                                    <i class="far fa-comment"></i>{" "}
+                                    {lawyer.ratings_count} Feedback
+                                </li>
+                                {lawyer.account.city &&
+                                lawyer.account.country ? (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        Not listed :)
+                                    </li>
+                                )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     discount={lawyer.discount}
                                     isPercent={lawyer.is_percent_discount}
+                                    currency = {lawyer.currency_symbol}
                                 />
                             </ul>
                         </div>
@@ -110,7 +128,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
     );
 };
 
-const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) => {
+const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount, currency}) => {
     return (
         <Countdown
             date={secsTillEnd}
@@ -120,7 +138,8 @@ const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount}) =
                     cost: cost,
                     discount: costAfterDiscount,
                     discountValue: discount,
-                    isPercent: isPercent
+                    isPercent: isPercent,
+                    currency: currency? currency : Config.default_currency_symbol
                 })
             }
         />
@@ -135,13 +154,14 @@ const LawyerCountDownRenderer = ({
     cost,
     discount,
     isPercent,
-    discountValue
+    discountValue,
+    currency
 }) => {
     if (completed) {
         return (
             <li>
                 <i className="far fa-money-bill-alt"></i>
-                <label className="text-lg text-primary">&pound;{cost}</label>
+                <label className="text-lg text-primary">{`${currency}${cost}`}</label>
             </li>
         );
     } else {
@@ -152,16 +172,16 @@ const LawyerCountDownRenderer = ({
                     <span className="text-md text-success">
                         {isPercent ?
                             `${discountValue}% discount` :
-                            `${discountValue} GBP discount`}
+                            `${currency}${discountValue} discount`}
                     </span>
                 </li>
                 <li>
                     <i className="far fa-money-bill-alt"></i>
                     <label className="text-lg text-success">
-                        &pound;{discount}
+                        {currency}{discount}
                         &nbsp;
                         <strike className="text-lg text-danger">
-                            &pound;{cost}
+                            {`${currency} ${cost}`}
                         </strike>
                     </label>
                 </li>

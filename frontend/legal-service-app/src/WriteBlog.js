@@ -8,6 +8,7 @@ import useValidation from "./useValidation";
 import {blogTitleValidations} from "./Validations";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
+import BlogImg from "./BlogImg";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -203,7 +204,7 @@ const BlogPage = () => {
     return (
         <div className="blog blog-single-post">
             <div className="blog-image">
-                <img
+                <BlogImg
                     alt="Cover"
                     src={coverData.cover}
                     className="img-fluid"

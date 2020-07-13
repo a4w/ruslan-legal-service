@@ -11,6 +11,7 @@ import {Route, Switch, Redirect} from "react-router-dom";
 import History from "./History";
 import ScheduleForm from "./ScheduleForm";
 import UserCalendar from "./UserCalendar";
+import LawyerBlogs from "./LawyerBlogs";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -32,6 +33,9 @@ const LawyerDashboardTabs = () => {
             </Route>
             <Route exact path="/dashboard/reviews">
                 <LawyerReviews />
+            </Route>
+            <Route path="/dashboard/blogs">
+                <LawyerBlogs />
             </Route>
             <Route exact path="/dashboard/messages">
                 <Redirect to="/chat" />

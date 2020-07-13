@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import StarRatings from "react-star-ratings";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
 import Img from "./Img";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import useRequests from "./useRequests";
 
 const LawyerRating = ({appId, lawyerId}) => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
     const [account, setAccount] = useState({});
+    const {request} = useRequests();
     const imgStyle = {
         borderRadius: "120px",
         height: "120px",
         width: "120px",
         objectFit: "cover",
     };
-    useEffect(()=>{
-        request({ url: `lawyer/${lawyerId}`, method: "GET" })
+    useEffect(() => {
+        request({url: `lawyer/${lawyerId}`, method: "GET"})
             .then((data) => {
                 setAccount(data.lawyer.account);
             })
             .catch((e) => {});
-    },[]);
+    }, []);
     const OnSubmitHandler = (e) => {
         e.preventDefault();
         console.log("done");
         request({
             url: `/rating/rate/${appId}`,
             method: "POST",
-            data: { rating: rating, comment: review },
+            data: {rating: rating, comment: review},
         })
             .then((data) => {
                 toast.success("Thank You!");
@@ -36,8 +37,8 @@ const LawyerRating = ({appId, lawyerId}) => {
             .catch((e) => {
                 toast.error("An error occured");
             });
-        
-        
+
+
     };
     return (
         <div className="content">
@@ -54,13 +55,13 @@ const LawyerRating = ({appId, lawyerId}) => {
                     </div>
                     <div
                         className="profile-det-info mt-4"
-                        style={{ textAlign: "center" }}
+                        style={{textAlign: "center"}}
                     >
                         <h2>{`${account.name} ${account.surname}`}</h2>
                     </div>
                     <div
                         className="justify-content-center"
-                        style={{ display: "flex" }}
+                        style={{display: "flex"}}
                     >
                         <StarRatings
                             rating={rating}
@@ -81,13 +82,13 @@ const LawyerRating = ({appId, lawyerId}) => {
                                     ? "form-group form-focus"
                                     : "form-group form-focus focused")
                             }
-                            style={{ display: "flex", height: "auto" }}
+                            style={{display: "flex", height: "auto"}}
                         >
                             <textarea
-                                style={{ height: "auto" }}
+                                style={{height: "auto"}}
                                 className="form-control"
                                 value={review}
-                                onChange={({ target: { value } }) =>
+                                onChange={({target: {value}}) =>
                                     setReview(value)
                                 }
                             ></textarea>

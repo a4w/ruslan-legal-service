@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
-import {useCookies} from "react-cookie";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 
@@ -23,7 +22,6 @@ const LoginForm = ({back}) => {
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
 
-    const [cookies, setCookie, removeCookie] = useCookies(['access_token', 'logged_in', 'refresh_token', 'account_type']);
     const {request} = useRequests();
 
     const [auth, setAuth] = useContext(AuthContext);
@@ -47,20 +45,6 @@ const LoginForm = ({back}) => {
                             refreshToken: data.refresh_token || null,
                             isLoggedIn: true
                         });
-
-                        /*console.log("ACCESS TOKEN");
-                        localStorage.set("access_token", data.access_token);
-                        localStorage.set("access_token", data.access_token);
-                        setCookie("access_token", data.access_token, {path: '/'});
-                        console.log("ACCOUNT TYPE");
-                        setCookie("account_type", data.account_type, {path: '/'});
-                        if (data.refresh_token) {
-                            console.log("REFRESH TOKEN");
-                            setCookie("refresh_token", data.refresh_token, {path: '/'});
-                        }
-                        console.log("LOGGED IN");
-                        setCookie("logged_in", true, {path: '/'});*/
-
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }

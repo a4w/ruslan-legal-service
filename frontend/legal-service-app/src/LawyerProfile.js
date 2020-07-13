@@ -65,12 +65,6 @@ const ProfileCard = ({lawyer}) => {
                             <h4 className="lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
-                            <p className="lawyer-speciality">
-                                {lawyer.practice_areas &&
-                                    lawyer.practice_areas.map((area) => (
-                                        <h6 key={area.id}>{area.area}</h6>
-                                    ))}
-                            </p>
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>
@@ -100,15 +94,28 @@ const ProfileCard = ({lawyer}) => {
                         <div className="session-infos">
                             <ul>
                                 <li>
-                                    <i className="fas fa-map-marker-alt"></i>{" "}
-                                    {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    <i class="far fa-comment"></i>{" "}
+                                    {lawyer.ratings_count} Feedback
                                 </li>
+                                {lawyer.account.city &&
+                                lawyer.account.country ? (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        Not listed :)
+                                    </li>
+                                )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     isPercent={lawyer.is_percent_discount}
                                     discount={lawyer.discount}
+                                    currency={lawyer.currency_symbol}
                                 />
                             </ul>
                         </div>

@@ -2,16 +2,17 @@ import React, {useState, useEffect, useRef} from "react";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
-import {request} from "./Axios"
 import BlogImg from "./BlogImg";
 import Img from "./Img";
 import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 import PageHead from "./PageHead";
+import useRequests from "./useRequests";
 
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
     const [blog, setBlog] = useState(null);
+    const {request} = useRequests();
     console.log(match);
     useEffect(() => {
         request({

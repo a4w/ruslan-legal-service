@@ -5,7 +5,7 @@ import "./Tabs.css";
 import history from "./History";
 import WriteBlog from "./WriteBlog";
 import BlogList from "./BlogList";
-import { request } from "./Axios";
+import useRequests from "./useRequests";
 
 const LawyerBlogs = () => {
     const path = "/dashboard/blogs";
@@ -51,6 +51,7 @@ const LawyerBlogs = () => {
 
 const Blogs = ()=>{
     const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/me", method: "GET"})
             .then((data) => {

@@ -2,7 +2,7 @@
     "name": "legal-service-app",
     "version": "0.1.0",
     "private": true,
-    "homepage": "./",
+    "homepage": "/",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.13.0",
         "@stripe/react-stripe-js": "^1.1.2",

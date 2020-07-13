@@ -371,7 +371,7 @@ const PopularLawyers = () => {
 }
 const LawyerCard = ({account, lawyer}) => {
     return (
-        <div className="profile-widget" style={{width: 'auto', margin: 'auto'}}>
+        <div className="profile-widget" style={{width: 'auto', margin: 'auto', minHeight: "520px"}}>
             <div className="lawyer-img">
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
@@ -392,9 +392,17 @@ const LawyerCard = ({account, lawyer}) => {
                 </h3>
                 <div className="session-services">
                     {lawyer.practice_areas &&
-                        lawyer.practice_areas.map((area) => (
-                            <span key={area.id}>{area.area}</span>
-                        ))}
+                    <>
+                        {lawyer.practice_areas.map((area, i) =>{ 
+                            if(i < 2)
+                                return(<span key={area.id}>{area.area}</span>)
+                        })}
+                        {lawyer.practice_areas.length > 2 &&
+                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                {`+${lawyer.practice_areas.length - 2} more`}
+                            </Link>}
+                    </>
+                    }
                 </div>
                 <div className="rating">
                     <StarRatings
@@ -418,6 +426,7 @@ const LawyerCard = ({account, lawyer}) => {
                                 state: {lawyer: lawyer},
                             }}
                             className="btn view-btn"
+                            style={{fontSize: "12px"}} 
                         >
                             View Profile
                         </Link>
@@ -434,7 +443,7 @@ const LawyerCard = ({account, lawyer}) => {
                         </Link>
                     </div>
                 </div>
-                <ul className="available-info mt-2" style={{minHeight: "125px"}} >
+                <ul className="available-info mt-2">
                     {account.city && <li>
                         <i className="fas fa-map-marker-alt"></i>{" "}
                         {`${account.city}, ${account.country}`}

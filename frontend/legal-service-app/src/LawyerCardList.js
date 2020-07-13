@@ -55,9 +55,18 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 <div>{lawyer.biography}</div>
                             </div>
                             <div className="session-services">
-                                {lawyer.practice_areas.map((area, i) => {
-                                    return (<span key={area.id}>{area.area}</span>);
+                            {lawyer.practice_areas &&
+                            <>
+                                {lawyer.practice_areas.map((area, i) =>{ 
+                                    if(i < 2)
+                                        return(<span key={area.id}>{area.area}</span>)
                                 })}
+                                {lawyer.practice_areas.length > 2 &&
+                                    <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                        {`+${lawyer.practice_areas.length - 2} more`}
+                                    </Link>}
+                            </>
+                            }
                             </div>
                         </div>
                     </div>

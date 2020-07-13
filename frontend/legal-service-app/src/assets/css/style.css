@@ -2974,7 +2974,17 @@ html.menu-opened body {
     font-size: 12px;
     padding: 3px 10px;
 }
+.session-services a {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 12px;
+    padding: 3px 10px;
+}
 .session-services span + span {
+    margin-left: 5px;
+}
+.session-services span + a {
     margin-left: 5px;
 }
 .session-infos {

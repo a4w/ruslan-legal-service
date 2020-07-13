@@ -81,18 +81,25 @@ const NotificationDropdown = () => {
 
 const Notifications = ({setNew}) => {
     const [notifications, setNotifications] = useState([]);
+    const [isFetching, setIsFetching] = useState(false);
     const {request} = useRequests();
     const [auth,] = useContext(AuthContext);
     const getNotifications = () => {
         if (auth.isLoggedIn) {
             return;
         }
+        if(isFetching)
+            return;
+        setIsFetching(true);
         request({url: "/account/notifications", method: "GET"})
             .then((data) => {
                 setNotifications([...data.notifications]);
                 setNew(data.notifications.length);
             })
-            .catch((err) => {});
+            .catch((err) => {})
+            .finally(() => {
+                setIsFetching(false);
+            });
     }
     useEffect(getNotifications, []);
     const MarkAsRead = (notification) => {

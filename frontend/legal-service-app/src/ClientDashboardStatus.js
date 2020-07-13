@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
+import {Link, Route, Router, Switch, Redirect} from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
 import Img from "./Img";
-import { request } from "./Axios";
 import moment from "moment";
 import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 
 const ClientDashboardStatus = () => {
-    const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+    const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
     return (
         <div className="row">
             <div className="col-12">
@@ -34,13 +34,14 @@ const Appointment = ({
     const [appStatus, setStatus] = useState(
         "badge badge-pill bg-success-light"
     );
+    const {request} = useRequests();
     const [lawyer, setLawyer] = useState(null);
     useEffect(() => {
         if (status === "UPCOMING")
             setStatus("badge badge-pill bg-warning-light");
         else if (status === "CANCELLED")
             setStatus("badge badge-pill bg-danger-light");
-        request({ url: `lawyer/${lawyer_id}`, method: "GET" })
+        request({url: `lawyer/${lawyer_id}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
                 console.log(data.lawyer);
@@ -124,11 +125,11 @@ const AppointmentsTable = (props) => {
             <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <table 
+                        <table
                             className="table table-hover table-center mb-0"
                             style={{backgroundColor: "white", display: "block"}}
                         >
-                            <tbody style={{ width: "100%", display: "table" }}>
+                            <tbody style={{width: "100%", display: "table"}}>
                                 <tr>
                                     <th>Lawyer</th>
                                     <th>Appt Date</th>
@@ -149,6 +150,7 @@ const AppointmentsTable = (props) => {
 };
 const UpcomingAppointments = () => {
     const [upcoming, setUpcoming] = useState([]);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/client/appointments?upcoming=true",
@@ -170,6 +172,7 @@ const UpcomingAppointments = () => {
 };
 const AllAppointments = () => {
     const [all, setAll] = useState([]);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/client/appointments?upcoming=false",
@@ -189,7 +192,7 @@ const AllAppointments = () => {
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ appointments }) => {
+const AppointmentsListTabs = ({appointments}) => {
     const path = "/client-dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -199,7 +202,7 @@ const AppointmentsListTabs = ({ appointments }) => {
                     <Nav className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         >
                             <li className="nav-item">
                                 <NavTab to={`${path}/upcoming`}>
@@ -229,7 +232,7 @@ const AppointmentsListTabs = ({ appointments }) => {
         </div>
     );
 };
-const Billings = ({ billings }) => {
+const Billings = ({billings}) => {
     return (
         <BillingTable>
             {billings.map((bill) => (

@@ -2,15 +2,15 @@ import React, {useState, useEffect} from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
 import {Router, Switch, Route, withRouter, Link} from "react-router-dom";
-import BlogDetails from "./BlogDetails";
 import History from "./History";
-import {request} from "./Axios";
 import queryString from "query-string"
 import BlogImg from "./BlogImg";
 import moment from "moment";
 import PageHead from "./PageHead";
+import useRequests from "./useRequests";
 
 const Blogs = (props) => {
+    const {request} = useRequests();
     const [blogs, setBlogs] = useState(null);
     const OnSubmitHandler = (e) => {
         e.preventDefault();
@@ -101,6 +101,7 @@ const Search = ({OnSubmitHandler}) => {
 
 const LatestBlogs = () => {
     const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: `/blogs/latest/${3}`, method: "GET"})
             .then((response) => {
@@ -173,6 +174,7 @@ const Catagories = ({cats}) => {
 
 const TagsList = ({TagFilterHandler}) => {
     const [tags, setTags] = useState();
+    const {request} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/practice-areas", method: "GET"})
             .then((data) => {

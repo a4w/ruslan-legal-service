@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import {resetPasswordValidation} from "./Validations";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 
 const ResetPasswordForm = (props) => {
     const {match} = {...props};
@@ -14,6 +14,7 @@ const ResetPasswordForm = (props) => {
 
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(resetPasswordValidation);
+    const {request} = useRequests();
 
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};

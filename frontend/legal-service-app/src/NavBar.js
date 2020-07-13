@@ -10,7 +10,7 @@ import {AuthContext} from "./App";
 
 const NavBar = () => {
     const cookie = new Cookies();
-    const auth = useContext(AuthContext);
+    const [auth,] = useContext(AuthContext);
     const [open, setOpen] = useState(true);
     const ref = useRef(null);
     const CloseOnOutsideClick = () => {

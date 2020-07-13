@@ -14,7 +14,7 @@ const UserDropdown = () => {
 
     const {request, Logout} = useRequests();
 
-    const auth = useContext(AuthContext);
+    const [auth,] = useContext(AuthContext);
 
     useEffect(() => {
         if (!auth.isLoggedIn) {

@@ -32,7 +32,8 @@ import NotFound from "./NotFound";
 import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
-import PostRegistration from "./PostRegistration";
+import {useCookies} from "react-cookie"
+import moment from "moment"
 
 
 export const LoadingOverlayContext = React.createContext(null);
@@ -42,16 +43,41 @@ function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
     const [loadingOverlayText, setLoadingOverlayText] = useState("");
 
+    const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn']);
+
     const defaultAuthState = {
         accessToken: null,
         accountType: null,
         refreshToken: null,
         isLoggedIn: false
     };
-    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")) || defaultAuthState);
+    const [auth, setAuth] = useState(defaultAuthState);
+
+    // Read persistent state
+    useEffect(() => {
+        // All, each in a cookie
+        let readAuth = {};
+        for (const key in auth) {
+            readAuth[key] = cookies[key] || defaultAuthState[key];
+        }
+        setAuth(readAuth);
+    }, []);
+
     useEffect(() => {
         // Update local storage
-        localStorage.setItem("auth", JSON.stringify(auth));
+        /*const toBeSaved = Object.assign({}, auth);
+        delete toBeSaved.isLoggedIn;
+        localStorage.setItem("auth", JSON.stringify(toBeSaved));*/
+        const persistent_cookies = ['refreshToken'];
+        for (const key in auth) {
+            let config = {
+                path: '/'
+            };
+            if (persistent_cookies.includes(key)) {
+                config.expires = moment().add(30, "days").toDate();
+            }
+            setCookie(key, auth[key], config);
+        }
     }, [auth])
 
     return (

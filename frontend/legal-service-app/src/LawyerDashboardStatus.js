@@ -4,11 +4,11 @@ import Nav from "react-bootstrap/Nav";
 import {Router, Route, Link, Redirect, Switch} from "react-router-dom";
 import history from "./History";
 import {NavTab} from "react-router-tabs";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
 import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icons/fa";
 import Img from "./Img";
 import History from "./History";
+import useRequests from "./useRequests";
 
 const LawyerDashboardStatus = () => {
     return (
@@ -35,6 +35,7 @@ const LawyerStatus = () => {
     const [numberOfDoneAppointments, setNumberOfDoneAppointments] = useState(0);
     const [numberOfUpcomingAppointments, setNumberOfUpcomingAppointments] = useState(0);
     const [nextAppointmentDate, setNextAppointmentDate] = useState(null);
+    const {request} = useRequests();
 
     useEffect(() => {
         request({
@@ -130,6 +131,7 @@ const ListItem = ({appointment}) => {
         hour: "numeric",
         minute: "numeric",
     });
+    const {request} = useRequests();
     const cancelAppointment = (id) => {
         request({
             url: `/appointment/${id}/cancel`,
@@ -201,7 +203,7 @@ const AppointmentsTable = (props) => {
                             className="table table-hover table-center mb-0"
                             style={{backgroundColor: "white", display: "block"}}
                         >
-                            <tbody style={{ width: "100%", display: "table" }}>
+                            <tbody style={{width: "100%", display: "table"}}>
                                 <tr>
                                     <th>Client Name</th>
                                     <th>Appt Date</th>
@@ -221,6 +223,7 @@ const AppointmentsTable = (props) => {
 
 const UpcomingAppointments = () => {
     const [upcoming, setUpcoming] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=true",
@@ -242,6 +245,7 @@ const UpcomingAppointments = () => {
 };
 const AllAppointments = () => {
     const [all, setAll] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",

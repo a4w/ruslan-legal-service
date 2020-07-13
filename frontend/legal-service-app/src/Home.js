@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Select from "react-dropdown-select";
 import History from "./History";
-import {request} from "./Axios"
 import * as $ from "jquery"
 import Slider from "react-slick";
 import Img from "./Img";
@@ -13,12 +12,14 @@ import queryString from "query-string"
 import moment from "moment";
 import PageHead from "./PageHead";
 import "./Home.css"
+import useRequests from "./useRequests";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
     const [practiceAreas, setPracticeAreas] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
     const [isLocationBased, setIsLocationBased] = useState(false);
+    const {request} = useRequests();
 
     useEffect(() => {
         request({
@@ -178,6 +179,7 @@ const Home = () => {
 
 const SearchLawyerByName = () => {
     const [results, setResults] = useState([]);
+    const {request} = useRequests();
     const OnChangeHandler = ({target: {value}}) => {
         const term = value;
         request({
@@ -283,6 +285,7 @@ var settings = {
 };
 const AreaOfExpertices = () => {
     const [areas, setAreas] = useState([]);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "lawyer/practice-areas",
@@ -331,6 +334,7 @@ const SlickIcon = ({url, label}) => {
 const PopularLawyers = () => {
     const [lawyers, setLawyers] = useState([]);
     const params = queryString.stringify({length: 6, order: "ratings"});
+    const {request} = useRequests();
 
     useEffect(() => {
         request({
@@ -454,6 +458,7 @@ const LawyerCard = ({account, lawyer}) => {
 
 const LatestBlogs = () => {
     const [blogs, setBlogs] = useState([]);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: `/blogs/latest/${4}`, method: "GET"})
             .then((response) => {

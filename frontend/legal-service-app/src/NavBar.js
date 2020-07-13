@@ -29,16 +29,18 @@ const NavBar = () => {
         return () => window.removeEventListener("resize", Menu);
     });
 
-    const {refreshAccessToken} = useRequests();
+    const {refreshAccessToken, fetchNewAccessToken} = useRequests();
     // Attempt automatic login
     useEffect(() => {
         if (!auth.isLoggedIn) {
-            refreshAccessToken()
-                .then(() => {
-                    window.location.reload();
-                }).catch(() => {})
+            refreshAccessToken().then(() => {
+            }).catch(() => {
+                console.log("Fetching new access token");
+                fetchNewAccessToken()
+                    .catch(() => {})
+            })
         }
-    }, []);
+    }, [auth]);
 
     return (
         <header className="header">

@@ -1433,7 +1433,6 @@ button.bg-danger:hover {
     display: none;
     float: left;
     height: 100%;
-    min-height: 500px;
     min-width: 260px;
 }
 [dir='rtl'] .slick-slide {

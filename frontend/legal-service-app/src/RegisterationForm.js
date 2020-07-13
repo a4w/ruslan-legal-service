@@ -48,6 +48,7 @@ const RegisterationForm = ({back}) => {
                 request({url: url, method: "POST", data: user})
                     .then((response) => {
                         console.log("success", response);
+                        History.replace("/post-register");
                     })
                     .catch((errors) => {
                         const _errors = errors.response.data.errors;

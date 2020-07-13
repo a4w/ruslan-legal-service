@@ -5,7 +5,7 @@ import "./Tabs.css";
 import history from "./History";
 import WriteBlog from "./WriteBlog";
 import BlogList from "./BlogList";
-import { request } from "./Axios";
+import useRequests from "./useRequests";
 
 const LawyerBlogs = () => {
     const path = "/dashboard/blogs";
@@ -17,7 +17,7 @@ const LawyerBlogs = () => {
                     <div className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         >
                             <li>
                                 <NavTab exact to={`${path}/my-blogs`}>
@@ -49,8 +49,9 @@ const LawyerBlogs = () => {
     );
 };
 
-const Blogs = ()=>{
+const Blogs = () => {
     const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/me", method: "GET"})
             .then((data) => {

@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import GoogleLogin from "react-google-login";
 import Config from "./Config";
-import {request, setAccessToken, setAccountType} from "./Axios"
+import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
 const GoogleButton = ({register}) => {
+    const {request} = useRequests();
+    const [auth, setAuth] = useContext(AuthContext);
     const responseGoogle = (response) => {
         console.log(response);
         const data = {
@@ -17,10 +20,11 @@ const GoogleButton = ({register}) => {
             method: 'POST',
             data: data
         }).then(response => {
-            console.log(response);
-            setAccessToken(response.access_token);
-            setAccountType(response.account_type);
-            window.location.reload();
+            setAuth({
+                accessToken: response.access_token,
+                accountType: data.account_type,
+                isLoggedIn: true
+            });
         }).catch(error => {
             console.log(error);
         });

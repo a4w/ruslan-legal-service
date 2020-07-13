@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react"
 import "./ChatPage.css";
 import {FaCogs, FaPaperclip} from "react-icons/fa";
-import {request} from "./Axios"
 import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
+import useRequests from "./useRequests";
 import History from "./History";
-import Img from "./Img";
+import Img from "./Img"
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
@@ -18,6 +18,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     const [isFetching, setIsFetching] = useState(false);
     const [myId, setMyId] = useState(null);
 
+    const {request} = useRequests();
     // Load chats from server
     const [chats, setChats] = useState([]);
     useEffect(() => {

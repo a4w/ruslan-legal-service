@@ -6,9 +6,9 @@ import DatePicker from "react-datepicker";
 import {FaSearch} from "react-icons/fa";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
-import {request} from "./Axios";
 import queryString from "query-string"
 import PageHead from "./PageHead";
+import useRequests from "./useRequests";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -22,6 +22,8 @@ function LawyerList(props) {
         offset: offset,
         length: length,
     });
+
+    const {request} = useRequests();
 
     const getList = (params, keep = false) => {
         console.log("params : ", params);
@@ -55,7 +57,7 @@ function LawyerList(props) {
 
     useEffect(() => {
         console.log(params);
-        getList(params);        
+        getList(params);
 
     }, []);
 
@@ -250,6 +252,7 @@ const AvgCalendar = ({lawyer}) => {
     }
     const [availability, setAvailability] = useState(initAvail);
     const [avgSlotLength, setAvgSlotLength] = useState(1);
+    const {request} = useRequests();
     useEffect(() => {
         if (lawyer !== null) {
             request({

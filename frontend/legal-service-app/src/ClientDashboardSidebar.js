@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
 import Nav from "react-bootstrap/Nav";
 import {NavTab} from "react-router-tabs";
-import {request, LogOut} from "./Axios";
 import Img from "./Img";
+import useRequests from "./useRequests";
 
 const ClientDashboardSidebar = () => {
     const [account, setAccount] = useState({});
+    const {request, Logout} = useRequests();
     useEffect(() => {
         request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
@@ -70,7 +71,7 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <a href="#" onClick={LogOut}>
+                                <a href="#" onClick={Logout}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
                                 </a>

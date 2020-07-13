@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import {Link} from "react-router-dom";
-import Cookies from "universal-cookie";
 import History from "./History";
 import UserDropdown from "./UserDropdown";
 import NotificationDropdown from "./NotificationDropdown";
-import {refreshAccessToken} from "./Axios"
+import {AuthContext} from "./App";
+import useRequests from "./useRequests";
 
 const NavBar = () => {
-    const cookie = new Cookies();
-    const [logged_in, setLoggedIn] = useState(cookie.get('logged_in'));
+    const [auth,] = useContext(AuthContext);
     const [open, setOpen] = useState(true);
     const ref = useRef(null);
     const CloseOnOutsideClick = () => {
@@ -26,20 +25,22 @@ const NavBar = () => {
     };
     useEffect(Menu, []);
     useEffect(() => {
-        setLoggedIn(cookie.get('logged_in'));
         window.addEventListener("resize", Menu);
         return () => window.removeEventListener("resize", Menu);
     });
 
+    const {refreshAccessToken, fetchNewAccessToken} = useRequests();
     // Attempt automatic login
     useEffect(() => {
-        if (!logged_in) {
-            refreshAccessToken()
-                .then(() => {
-                    window.location.reload();
-                }).catch(() => {})
+        if (!auth.isLoggedIn) {
+            refreshAccessToken().then(() => {
+            }).catch(() => {
+                console.log("Fetching new access token");
+                fetchNewAccessToken()
+                    .catch(() => {})
+            })
         }
-    }, []);
+    }, [auth]);
 
     return (
         <header className="header">
@@ -92,7 +93,7 @@ const NavBar = () => {
                             <Link
                                 to={`${History.location.pathname}/login`}
                                 style={{
-                                    visibility: logged_in
+                                    visibility: auth.isLoggedIn
                                         ? "hidden"
                                         : "visible",
                                 }}
@@ -115,7 +116,7 @@ const NavBar = () => {
                             </p>
                         </div>
                     </li>
-                    <li className="nav-item" style={{display: logged_in ? "none" : ""}}>
+                    <li className="nav-item" style={{display: auth.isLoggedIn ? "none" : ""}}>
                         <Link
                             className="nav-link header-login"
                             to={`${History.location.pathname}/login`}
@@ -123,8 +124,8 @@ const NavBar = () => {
                             login / Signup{" "}
                         </Link>
                     </li>
-                    {logged_in && (<NotificationDropdown />)}
-                    {logged_in && (<UserDropdown />)}
+                    {auth.isLoggedIn && (<NotificationDropdown />)}
+                    {auth.isLoggedIn && (<UserDropdown />)}
                 </ul>
             </nav>
         </header>

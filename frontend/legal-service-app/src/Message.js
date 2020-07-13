@@ -1,9 +1,10 @@
 import React from "react";
-import {request} from "./Axios"
 import FileDownload from "js-file-download"
 import {FaDownload} from "react-icons/fa"
+import useRequests from "./useRequests";
 
 const Message = ({isOutgoing, content, timestamp, type = "text", link = null}) => {
+    const {request} = useRequests();
     const handleDownload = () => {
         request({
             url: link,

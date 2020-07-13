@@ -3,8 +3,8 @@ import ErrorMessageSelect from "./ErrorMessageSelect";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import {LawyerInfoValidations} from "./Validations";
-import {request} from "./Axios"
 import {toast} from "react-toastify"
+import useRequests from "./useRequests";
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
@@ -19,6 +19,7 @@ const LawyerCompleteRegisteration = ({}) => {
         accreditations: [],
         bio: "",
     };
+    const {request} = useRequests();
 
     const [lawyer, setLawyer] = useState(init);
     const [errors, addError, validate] = useValidation(LawyerInfoValidations);

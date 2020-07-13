@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
-import {request} from "./Axios";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 import Img from "./Img";
+import useRequests from "./useRequests";
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();
+    const {request} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/appointments", method: "GET"})
             .then((data) => {
@@ -27,6 +28,7 @@ const AppointmentCard = ({appointment}) => {
     const {client} = {...appointment};
     const {account} = {...client};
     const appointment_time = new Date(appointment.appointment_time);
+    const {request} = useRequests();
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
         month: "long",

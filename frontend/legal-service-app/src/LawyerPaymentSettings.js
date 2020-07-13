@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react"
-import {request} from "./Axios"
+import useRequests from "./useRequests";
 
 const PaymentSettings = () => {
     const [connectionLink, setConnectionLink] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         // Load connection link
         request({

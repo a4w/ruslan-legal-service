@@ -1,15 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import moment from "moment";
 import "./UserCalendar.css";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
-import Cookies from "universal-cookie";
+import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [monthAppointments, setMonthAppointments] = useState(null);
+
+    const {request} = useRequests();
+    const [auth,] = useContext(AuthContext);
+
     const nextMonth = () => {
         setCurrentDate(moment(currentDate).add(1, 'month').toDate());
 
@@ -23,8 +27,7 @@ const UserCalendar = () => {
         setSelectedDate(day);
     };
     useEffect(() => {
-        const cookie = new Cookies();
-        const type = cookie.get("account_type");
+        const type = auth.accountType;
         if (type)
             request({
                 url: `/${type.toLowerCase()}/appointments`,
@@ -33,10 +36,10 @@ const UserCalendar = () => {
                 .then((data) => {
                     setAppointments(data.appointments);
                 })
-                .catch((err) => {
-                    toast.error("An error occired couldn't load appointments");
+                .catch(() => {
+                    toast.error("An error occurred couldn't load appointments");
                 });
-        else toast.error("An error occired couldn't load appointments");
+        else toast.error("An error occurred couldn't load appointments");
     }, []);
     useEffect(() => {
         const next = new Array(moment(currentDate).daysInMonth() + 1);
@@ -65,18 +68,18 @@ const UserCalendar = () => {
                                     nextMonth={nextMonth}
                                 />
                             </div>
-                            <div style={{overflowX:"auto"}}>
-                            <div style={{minWidth:"750px"}}>
-                                <HeaderDays />
-                            </div>
-                            <div style={{minWidth:"750px"}}>
-                                <CalendarCells
-                                    currentDate={currentDate}
-                                    onDateClick={onDateClick}
-                                    selectedDate={selectedDate}
-                                    appointments={monthAppointments}
-                                />
-                            </div>
+                            <div style={{overflowX: "auto"}}>
+                                <div style={{minWidth: "750px"}}>
+                                    <HeaderDays />
+                                </div>
+                                <div style={{minWidth: "750px"}}>
+                                    <CalendarCells
+                                        currentDate={currentDate}
+                                        onDateClick={onDateClick}
+                                        selectedDate={selectedDate}
+                                        appointments={monthAppointments}
+                                    />
+                                </div>
 
                             </div>
                         </div>

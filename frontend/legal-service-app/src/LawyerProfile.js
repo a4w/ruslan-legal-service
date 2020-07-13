@@ -11,15 +11,16 @@ import {
     Redirect,
 } from "react-router-dom";
 import History from "./History";
-import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import BlogList from "./BlogList";
 import Img from "./Img";
 import LawyerBooking from "./LawyerBooking";
+import useRequests from "./useRequests";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
         request({url: `lawyer/${lawyerID}`, method: "GET"})
@@ -134,6 +135,7 @@ const Details = ({lawyer, match}) => {
     const path = match.url;
     console.log(match);
     const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
             .then((data) => {

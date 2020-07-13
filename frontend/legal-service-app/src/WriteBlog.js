@@ -4,10 +4,10 @@ import {FaPencilAlt, FaDigitalTachograph} from "react-icons/fa";
 import ErrorMessageInput from "./ErrorMessageInput";
 import ErrorMessageSelect from "./ErrorMessageSelect";
 import Select from "react-dropdown-select";
-import {request} from "./Axios";
 import useValidation from "./useValidation";
 import {blogTitleValidations} from "./Validations";
 import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 import BlogImg from "./BlogImg";
 
 const EditStyles = {
@@ -120,6 +120,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 const BlogPage = () => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
+    const {request} = useRequests();
     const [tagOptions, setTagOptions] = useState([]);
     const [tags, selectedTags] = useState(null);
     const [errors, , runValidation] = useValidation(blogTitleValidations);

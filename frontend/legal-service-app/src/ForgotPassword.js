@@ -2,13 +2,13 @@ import React, {useState, useEffect} from "react";
 import {editEmailValidations} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
-import History from "./History";
+import useRequests from "./useRequests";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [errors, , runValidation] = useValidation(editEmailValidations);
+    const {request} = useRequests();
 
     const OnChangeHandler = (event) => {
         setEmail(event.target.value);

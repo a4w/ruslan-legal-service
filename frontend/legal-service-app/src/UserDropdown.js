@@ -1,24 +1,27 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef, useContext} from "react";
 import {Link} from "react-router-dom";
-import {LogOut, request} from "./Axios";
 import Img from "./Img";
-import Cookies from "universal-cookie";
+import useRequests from "./useRequests"
+import {AuthContext} from "./App";
 
 const UserDropdown = () => {
-    const cookie = new Cookies();
-    const [isClient, setIsClient] = useState(cookie.get('account_type') === "CLIENT");
+    const [auth,] = useContext(AuthContext);
+    const [isClient, setIsClient] = useState(auth.accountType);
     const ref = useRef(null);
     const [menuToggle, setMenuToggle] = useState(false);
     const [user, setUser] = useState({});
 
+    const {request, Logout} = useRequests();
+
+
     useEffect(() => {
-        if (!cookie.get('logged_in')) {
+        if (!auth.isLoggedIn) {
             return;
         }
         request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
                 setUser(data.profile_data);
-                setIsClient(cookie.get('account_type') === "CLIENT");
+                setIsClient(auth.accountType === "CLIENT");
             })
             .catch((err) => {});
     }, []);
@@ -109,7 +112,7 @@ const UserDropdown = () => {
                     className="dropdown-item"
                     onClick={() => {
                         handleButtonClick();
-                        LogOut();
+                        Logout();
                     }}
                 >
                     Logout

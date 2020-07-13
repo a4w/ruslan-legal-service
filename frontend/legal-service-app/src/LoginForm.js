@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import {request, setAccessToken, setRefreshToken, setAccountType} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
+import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
 
 const LoginForm = ({back}) => {
@@ -20,6 +21,10 @@ const LoginForm = ({back}) => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
+
+    const {request} = useRequests();
+
+    const [auth, setAuth] = useContext(AuthContext);
 
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
@@ -34,22 +39,15 @@ const LoginForm = ({back}) => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-
-                        if (data.access_token)
-                            setAccessToken(data.access_token);
-                        if (data.refresh_token)
-                            setRefreshToken(data.refresh_token);
-                        if (data.account_type)
-                            setAccountType(data.account_type);
-
-                        console.debug(data.account);
-                        console.debug(data.account.fully_registered);
-
+                        setAuth({
+                            accessToken: data.access_token,
+                            accountType: data.account_type,
+                            refreshToken: data.refresh_token || null,
+                            isLoggedIn: true
+                        });
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push('/dashboard/settings');
                         }
-                        window.location.reload();
-
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

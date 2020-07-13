@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { editBasicInfoValidation } from "./Validations";
+import React, {useState, useEffect} from "react";
+import {editBasicInfoValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { FaSpinner } from "react-icons/fa";
-import { request } from "./Axios";
-import { toast } from "react-toastify";
+import {FaSpinner} from "react-icons/fa";
+import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 import Img from "./Img";
 
 const EditBasicInfo = () => {
@@ -19,6 +19,7 @@ const EditBasicInfo = () => {
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
     const [errors, , runValidation] = useValidation(editBasicInfoValidation);
+    const {request} = useRequests();
 
     useEffect(() => {
         // Load profile data
@@ -26,13 +27,13 @@ const EditBasicInfo = () => {
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            setUser({ ...response.profile_data, profile_picture_url:response.profile_data.profile_picture});
-        }).catch((error) => { });
+            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
+        }).catch((error) => {});
     }, []);
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };

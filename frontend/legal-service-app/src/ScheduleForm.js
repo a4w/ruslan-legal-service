@@ -11,9 +11,10 @@ import DatePicker from "react-datepicker";
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import useValidation from "./useValidation";
 import {scheduleSettingValidation} from "./Validations";
-import {request} from "./Axios"
+import useRequests from "./useRequests";
 
 const ScheduleForm = ({}) => {
+    const {request} = useRequests();
 
     const TIME_FORMAT = "HH:mm";
 

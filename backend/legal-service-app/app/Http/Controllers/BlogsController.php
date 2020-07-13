@@ -85,7 +85,7 @@ class BlogsController extends Controller
         return RespondJSON::success(['blogs' => $blogs]);
     }
 
-    public function searchBlogs(JSONRequest $request)
+    public function searchBlogs(Request $request)
     {
         $request->validate([
             'term' => ['required', 'string', 'min:1']

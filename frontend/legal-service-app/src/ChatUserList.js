@@ -11,7 +11,7 @@ const ChatUserList = ({chats, onChatSelection, swipe}) => {
                             <ChatUserListItem
                                 key={chat.id}
                                 chat_index={i}
-                                other_name={chat.other_name}
+                                other_name={chat.account.full_name}
                                 handleClick={onChatSelection}
                             />
                         );

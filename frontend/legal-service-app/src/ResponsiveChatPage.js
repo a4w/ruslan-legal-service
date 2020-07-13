@@ -6,8 +6,10 @@ import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
+import History from "./History";
+import Img from "./Img";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -30,16 +32,21 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                 if (chat.id === initialSelectedChat) {
                     selected_chat_idx = i;
                 }
+                if (match.params.chatId && chat.id === parseInt(match.params.chatId)) {
+                    selected_chat_idx = i;
+                }
+                const other = chat.participants[0].id == me.id? chat.participants[1] : chat.participants[0];
                 return {
                     id: chat.id,
-                    other_name: chat.participants[0].id == me.id ? chat.participants[1].name : chat.participants[0].name
+                    account: other
                 };
             });
             setChats(chats);
             if (chats.length > 0) {
-                setSelectedChat(0);
                 if (selected_chat_idx !== null) {
                     setSelectedChat(selected_chat_idx);
+                }else{
+                    setSelectedChat(0);
                 }
             }
         }).catch((error) => {
@@ -129,27 +136,30 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                         className={"chat-cont-left"}
                         style={{maxWidth: '100%'}}
                     >
-                        <div class="chat-header">
+                        <div className="chat-header">
                             <span>Chats</span>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                <i class="fas fa-times"></i>
+                            <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
+                                <i className="fas fa-times"></i>
                             </button>
                         </div>
-                        <form class="chat-search">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <i class="fas fa-search"></i>
+                        <form className="chat-search">
+                            <div className="input-group">
+                                <div className="input-group-prepend">
+                                    <i className="fas fa-search"></i>
                                 </div>
                                 <input
                                     type="text"
-                                    class="form-control"
+                                    className="form-control"
                                     placeholder="Search"
                                 />
                             </div>
                         </form>
                         <ChatUserList
                             chats={chats}
-                            onChatSelection={(index) => setSelectedChat(index)}
+                            onChatSelection={(index) => {
+                                History.replace(`/chat/${index}`);
+                                setSelectedChat(index);
+                            }}
                         />
                     </div>
                 </div>}
@@ -159,23 +169,25 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null}) => 
                         style={{maxWidth: '100%'}}
                     >
                         <div className="chat-header">
-                            <div class="media">
-                                {list_chats && <button class="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                    <i class="fas fa-chevron-left"></i>
+                            <div className="media">
+                                {list_chats && <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
+                                    <i className="fas fa-chevron-left"></i>
                                 </button>}
-                                <div class="media-img-wrap">
-                                    <div class="avatar avatar-online">
-                                        <img
-                                            src="/test.jpg"
+                                <div className="media-img-wrap">
+                                    <div className="avatar avatar-online">
+                                    {selectedChat !== null &&
+                                        <Img
+                                            src={chats[selectedChat].account.profile_picture}
                                             alt="User Image"
-                                            class="avatar-img rounded-circle"
+                                            className="avatar-img rounded-circle"
                                         />
+                                    }
                                     </div>
                                 </div>{" "}
-                                <div class="media-body">
-                                    <div class="user-name">
+                                <div className="media-body">
+                                    <div className="user-name">
                                         {selectedChat !== null &&
-                                            chats[selectedChat].other_name}
+                                            chats[selectedChat].account.full_name}
                                     </div>
                                 </div>
                             </div>

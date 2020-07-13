@@ -197,6 +197,24 @@ const SearchLawyerByName = () => {
             setResults([]);
         });
     }
+    const dropdownStyle = {
+        position: 'absolute',
+        display: 'block',
+        width: '99%',
+        backgroundColor: '#fff',
+        borderRadius: '0px 0px 10px 10px',
+        border: '1px solid #ccc',
+        marginRight: '5px',
+        maxHeight: "300px",
+        overflowY: "auto",
+        zIndex: "999"
+    };
+    const imgStyle = {
+        width: '50px',
+        height: '50px',
+        borderRadius: '3px',
+        marginRight: '10px'
+    };
     return (
         <form style={{marginTop: "8px"}}>
             <div className="row form-row">
@@ -208,34 +226,22 @@ const SearchLawyerByName = () => {
                             onChange={OnChangeHandler}
                             value={term}
                         />
-
-                        {results.length > 0 && <div style={{
-                            position: 'absolute',
-                            display: 'block',
-                            width: '99%',
-                            backgroundColor: '#fff',
-                            borderRadius: '0px 0px 10px 10px',
-                            border: '1px solid #ccc',
-                            marginRight: '5px',
-                            maxHeight: "300px",
-                            overflowY: "auto",
-                            zIndex: "999"
-                        }}>
+                        {results.length > 0 && <div style={dropdownStyle}>
                             {results.map((lawyer) => {
                                 console.log(lawyer);
                                 return (
                                     <>
                                         <div className="inline-search-result">
-                                            <a href={`/profile/${lawyer.id}`}>
-                                                <Img alt={lawyer.full_name} className="rounded-circle" src={lawyer.account.profile_picture} style={{
-                                                    width: '50px',
-                                                    height: '50px',
-                                                    borderRadius: '3px',
-                                                    marginRight: '10px'
-                                                }} />
+                                            <Link to={`/profile/${lawyer.id}`}>
+                                                <Img 
+                                                    alt={lawyer.full_name} 
+                                                    className="rounded-circle" 
+                                                    src={lawyer.account.profile_picture} 
+                                                    style={imgStyle} 
+                                                />
                                                 <b>{lawyer.account.full_name}</b>
                                                 <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </>
                                 );

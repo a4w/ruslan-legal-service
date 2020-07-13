@@ -85,7 +85,7 @@ const Notifications = ({setNew}) => {
     const {request} = useRequests();
     const [auth,] = useContext(AuthContext);
     const getNotifications = () => {
-        if (auth.isLoggedIn) {
+        if (!auth.isLoggedIn) {
             return;
         }
         if(isFetching)

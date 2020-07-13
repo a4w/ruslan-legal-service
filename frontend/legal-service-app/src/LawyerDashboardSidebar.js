@@ -2,9 +2,8 @@ import React, {useEffect, useState} from "react";
 import Nav from "react-bootstrap/Nav";
 import {NavTab} from "react-router-tabs";
 import StarRatings from "react-star-ratings";
-import {request} from "./Axios";
-import {LogOut} from "./Axios";
 import Img from "./Img";
+import useRequests from "./useRequests";
 
 const LawyerDashboardSidebar = () => {
     const init = {
@@ -19,6 +18,7 @@ const LawyerDashboardSidebar = () => {
     };
     const [lawyer, setLawyer] = useState(init);
     const [account, setAccount] = useState(init.account);
+    const {request, Logout} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/me", method: "GET"})
             .then((data) => {
@@ -106,7 +106,7 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <a href="#" onClick={LogOut}>
+                                <a href="#" onClick={Logout}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
                                 </a>

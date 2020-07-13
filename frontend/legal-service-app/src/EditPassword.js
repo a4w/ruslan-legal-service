@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { editPasswordValidation } from "./Validations";
+import React, {useState} from "react";
+import {editPasswordValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { request } from "./Axios";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 
 const EditPassword = () => {
     const initUser = {
@@ -11,12 +11,13 @@ const EditPassword = () => {
         newPassword: "",
         passwordConfirm: "",
     };
+    const {request} = useRequests();
 
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(editPasswordValidation);
 
-    const OnChangeHandler = ({ target: { name, value } }) => {
-        const nextUser = { ...user, [name]: value };
+    const OnChangeHandler = ({target: {name, value}}) => {
+        const nextUser = {...user, [name]: value};
         setUser(nextUser);
         runValidation(nextUser, name);
     };

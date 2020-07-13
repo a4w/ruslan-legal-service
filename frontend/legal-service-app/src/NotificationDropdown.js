@@ -1,16 +1,18 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import {MdNotificationsActive} from "react-icons/md";
 import "./Notification.css";
 import moment from "moment";
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
-import Cookies from "universal-cookie";
 import useRequests from "./useRequests"
+import {AuthContext} from "./App";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [newNotification, setNew] = useState(0);
+
     const {request} = useRequests();
+
     const ref = useRef(null);
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -77,12 +79,12 @@ const NotificationDropdown = () => {
     );
 };
 
-const cookie = new Cookies();
 const Notifications = ({setNew}) => {
     const [notifications, setNotifications] = useState([]);
     const {request} = useRequests();
+    const [auth,] = useContext(AuthContext);
     const getNotifications = () => {
-        if (!cookie.get('logged_in')) {
+        if (auth.isLoggedIn) {
             return;
         }
         request({url: "/account/notifications", method: "GET"})

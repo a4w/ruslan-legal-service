@@ -39,9 +39,8 @@ const LawyerBlogs = () => {
                         <Route path={`${path}/my-blogs`}>
                             <Blogs />
                         </Route>
-                        <Route path={`${path}/write-blog`}>
-                            <WriteBlog />
-                        </Route>
+                        <Route path={`${path}/write-blog/:blogId`} component={WriteBlog}/>
+                        <Route path={`${path}/write-blog`} component={WriteBlog}/>
                     </Switch>
                 </div>
             </div>

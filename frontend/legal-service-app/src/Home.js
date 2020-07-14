@@ -461,18 +461,18 @@ const LawyerCard = ({account, lawyer}) => {
                 </div>
                 <ul className="available-info mt-2">
                     <li>
-                        <i class="far fa-comment"></i>{" "}
+                        <i className="far fa-comment"></i>{" "}
                         {lawyer.ratings_count} Feedback
                     </li>
                     {lawyer.account.city &&
                     lawyer.account.country ? (
                         <li>
-                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            <i className="fas fa-map-marker-alt"></i>{" "}
                             {`${lawyer.account.city}, ${lawyer.account.country}`}
                         </li>
                     ) : (
                         <li>
-                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            <i className="fas fa-map-marker-alt"></i>{" "}
                             Not listed :)
                         </li>
                     )}

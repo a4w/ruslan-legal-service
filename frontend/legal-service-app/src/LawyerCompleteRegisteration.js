@@ -186,7 +186,7 @@ const LawyerCompleteRegisteration = ({}) => {
         <form onSubmit={OnSubmitHandler} id="regForm">
             {show && 
                 <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-                    <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                    <Alert.Heading>Warning!</Alert.Heading>
                     <p>
                         Please fill all your lawyer info and provide a schedule to
                         be listed

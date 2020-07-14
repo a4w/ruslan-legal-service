@@ -5,6 +5,8 @@ import useValidation from "./useValidation";
 import {LawyerInfoValidations} from "./Validations";
 import {toast} from "react-toastify"
 import useRequests from "./useRequests";
+import { Alert } from "react-bootstrap";
+import History from "./History";
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
@@ -26,8 +28,11 @@ const LawyerCompleteRegisteration = ({}) => {
     const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
     const [accreditationOptions, setAccreditationOptions] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
+        if (History.location.state && History.location.state.showAlert)
+            setShow(true);
         request({
             url: 'lawyer/types',
             method: 'GET'
@@ -179,6 +184,15 @@ const LawyerCompleteRegisteration = ({}) => {
 
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
+            {show && 
+                <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+                    <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                    <p>
+                        Please fill all your lawyer info and provide a schedule to
+                        be listed
+                    </p>
+                </Alert>
+            }
             <div className="form-row">
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageSelect

@@ -46,7 +46,10 @@ const LoginForm = ({back}) => {
                             isLoggedIn: true
                         });
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
-                            History.push('/dashboard/settings');
+                            History.push({
+                                pathname: "/dashboard/settings/lawyer-info",
+                                state: { showAlert: true },
+                            });
                         }
                     })
                     .catch((_errors) => {

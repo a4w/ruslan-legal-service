@@ -24,7 +24,7 @@ const ButtonStyles = {
     borderColor: "transparent",
 };
 
-const WriteBlog = ({md_content, md_preview}) => {
+const WriteBlog = ({md_content, md_preview, blog}) => {
     const md_initial = [
         `
 # This is a header
@@ -59,7 +59,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
         loaderStackEdit.openFile({
             name: "blog post",
             content: {
-                text: md_initial[0]
+                text: blog? blog.body: md_initial[0]
             }
         }, true);
 
@@ -103,7 +103,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
                 <textarea
                     className="form-control"
                     style={{height: "800px"}}
-                    value={md_initial}
+                    value={blog? blog.body: md_initial[0]}
                     ref={md_content}
                     style={{visibility: "hidden"}}
                 ></textarea>
@@ -118,7 +118,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     );
 };
 
-const BlogPage = () => {
+const BlogPage = ({match}) => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const {request} = useRequests();
@@ -127,6 +127,7 @@ const BlogPage = () => {
     const [errors, , runValidation] = useValidation(blogTitleValidations);
     const md_preview = useRef(null);
     const md_content = useRef(null);
+    const [blog, setBlog] = useState(null);
 
     const showSelectedCover = (e) => {
         const input = e.target;
@@ -149,6 +150,16 @@ const BlogPage = () => {
     });
 
     useEffect(() => {
+        if (match.params.blogId) {
+            request({
+                url: `/blogs/${match.params.blogId}`,
+                method: 'GET'
+            }).then(response => {
+                setBlog(response.blog);
+            }).catch(error => {
+                console.error("Error occurred loading blog post");
+            });
+        }
         request({
             url: 'lawyer/practice-areas',
             method: 'GET'
@@ -275,7 +286,20 @@ const BlogPage = () => {
                 </div>
             </div>
             <div className="blog-content">
-                <WriteBlog md_content={md_content} md_preview={md_preview} />
+                {match.params.blogId ? (
+                    blog && (
+                        <WriteBlog
+                            md_content={md_content}
+                            md_preview={md_preview}
+                            blog={blog}
+                        />
+                    )
+                ) : (
+                    <WriteBlog
+                        md_content={md_content}
+                        md_preview={md_preview}
+                    />
+                )}
             </div>
             <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
         </div>

@@ -17,7 +17,7 @@ const Blogs = (props) => {
         const search = e.target[0].value;
         const term = queryString.stringify({term: search});
         if (search !== "") {
-            request({url: `/blogs/all?${term}`, method: "GET"})
+            request({url: `/blogs/search?${term}`, method: "GET"})
                 .then((data) => {
                     console.log(data);
                     setBlogs(data.blogs);

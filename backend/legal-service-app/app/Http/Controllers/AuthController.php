@@ -22,6 +22,10 @@ class AuthController extends Controller
 
     public function login(JSONRequest $request)
     {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:8']
+        ]);
         $credentials = $request->only('email', 'password');
         $credentials['email'] = Str::lower($credentials['email']);
         if (!$token = auth()->attempt($credentials)) {

@@ -22,7 +22,10 @@ class AccountController extends Controller
     {
         // Get user to reset his password
         $user = Account::firstWhere('email', Str::lower($request->get('email')));
-        $user->sendPasswordResetNotification();
+        if ($user !== null) {
+            $user->sendPasswordResetNotification();
+        }
+        // Blind success
         return RespondJSON::success();
     }
 

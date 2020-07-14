@@ -2,6 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import Img from "./Img";
 import BlogImg from "./BlogImg";
+import moment from "moment";
 
 const BlogList = ({blogs}) => {
     if (blogs)
@@ -59,7 +60,7 @@ const Blog = ({blog}) => {
                         </li>
                         <li>
                             <i className="far fa-clock"></i>{" "}
-                            {new Date(blog.created_at).toLocaleTimeString()}
+                            {moment(blog.publish_date).format("Do of MMMM, hh:mm a")}
                         </li>
                     </ul>
                     <h3 className="blog-title">

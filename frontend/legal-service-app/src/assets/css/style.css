@@ -5763,7 +5763,7 @@ html.menu-opened body {
     display: block;
     position: relative;
     width: 100%;
-    height: auto;
+    height: 290px;
 }
 .blog-image img {
     -webkit-transform: translateZ(0);
@@ -5909,7 +5909,8 @@ html.menu-opened body {
 }
 .post-thumb {
     border-radius: 4px;
-    width: 80px;
+    width: 90px;
+    height: 60px;
     float: left;
     overflow: hidden;
 }

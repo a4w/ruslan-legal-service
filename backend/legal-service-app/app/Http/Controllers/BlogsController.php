@@ -74,6 +74,8 @@ class BlogsController extends Controller
         $blog->update($request->only(['title', 'body']));
         $practice_area = PracticeArea::find($request->get('tag_id'));
         $blog->tag()->associate($practice_area);
+        // Update status to under review
+        $blog->status = "UNDER_REVIEW";
         $blog->save();
         return RespondJSON::success(['blog' => $blog]);
     }

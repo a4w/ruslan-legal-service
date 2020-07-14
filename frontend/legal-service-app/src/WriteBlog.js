@@ -123,7 +123,7 @@ const BlogPage = ({match}) => {
     const [title, setTitle] = useState("");
     const {request} = useRequests();
     const [tagOptions, setTagOptions] = useState([]);
-    const [tags, selectedTags] = useState(null);
+    const [tag, selectedTags] = useState(null);
     const [errors, , runValidation] = useValidation(blogTitleValidations);
     const md_preview = useRef(null);
     const md_content = useRef(null);
@@ -180,7 +180,7 @@ const BlogPage = ({match}) => {
     }, []);
     const Submit = async (e) => {
         e.preventDefault();
-        runValidation({title: title, tags: tags}).then(
+        runValidation({title: title, tags: tag}).then(
             async (hasErrors, _) => {
                 console.log(hasErrors, _);
                 if (!hasErrors) {
@@ -190,12 +190,12 @@ const BlogPage = ({match}) => {
                         callback: (result) => {
                             if (result) {
                                 request({
-                                    url: "/blogs/add",
+                                    url: blog?  `/blogs/edit/${blog.id}`:"/blogs/add",
                                     method: "POST",
                                     data: {
                                         title: title,
                                         body: md_content.current.value,
-                                        tag_id: tags.value,
+                                        tag_id: tag,
                                     },
                                 }).then((data) => {
                                     const id = data.blog.id;
@@ -276,7 +276,7 @@ const BlogPage = ({match}) => {
                             <ErrorMessageSelect
                                 options={tagOptions}
                                 searchable
-                                value={tags}
+                                value={tag}
                                 errors={errors.tags}
                                 style
                                 name="area_id"

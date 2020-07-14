@@ -43,31 +43,18 @@ function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
     const [loadingOverlayText, setLoadingOverlayText] = useState("");
 
-    const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn']);
+    const [cookies, setCookie,] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn']);
 
+    // Attempt loading persistent data
     const defaultAuthState = {
-        accessToken: null,
-        accountType: null,
-        refreshToken: null,
-        isLoggedIn: false
+        accessToken: cookies.accessToken || null,
+        accountType: cookies.accountType || null,
+        refreshToken: cookies.refreshToken || null,
+        isLoggedIn: cookies.isLoggedIn || false
     };
     const [auth, setAuth] = useState(defaultAuthState);
 
-    // Read persistent state
     useEffect(() => {
-        // All, each in a cookie
-        let readAuth = {};
-        for (const key in auth) {
-            readAuth[key] = cookies[key] || defaultAuthState[key];
-        }
-        setAuth(readAuth);
-    }, []);
-
-    useEffect(() => {
-        // Update local storage
-        /*const toBeSaved = Object.assign({}, auth);
-        delete toBeSaved.isLoggedIn;
-        localStorage.setItem("auth", JSON.stringify(toBeSaved));*/
         const persistent_cookies = ['refreshToken'];
         for (const key in auth) {
             let config = {

@@ -3,6 +3,7 @@ import {useEffect, useContext} from "react";
 import {AuthContext} from "./App";
 import {useHistory, useRouteMatch} from "react-router";
 import axios from "axios";
+import bootbox from "bootbox"
 
 const axiosClient = axios.create({
     baseURL: Config.api_url,
@@ -99,7 +100,7 @@ function useRequests() {
                     // If there is a refresh token then refresh
                     fetchNewAccessToken().catch(requireLogin);
                 } else if (status === 403) { // Forbidden
-                    requireLogin();
+                    bootbox.alert("Current account cannot perform the action required");
                 } else {
                     // Some other normal error occurred
                 }

@@ -39,7 +39,7 @@ const ClientDashboardSidebar = () => {
                                 ) : (
                                     <li>
                                         <i className="fas fa-map-marker-alt"></i>{" "}
-                                        Not listed :)
+                                        -
                                     </li>
                                 )}
                             </h5>

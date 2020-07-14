@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 import Img from "./Img";
 import useRequests from "./useRequests";
+import bootbox from "bootbox"
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();

@@ -8,6 +8,7 @@ import Img from "./Img";
 import moment from "moment";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
+import bootbox from "bootbox"
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];

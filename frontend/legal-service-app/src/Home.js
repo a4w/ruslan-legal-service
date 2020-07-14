@@ -392,16 +392,12 @@ const PopularLawyers = () => {
 const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget" style={{width: 'auto', margin: 'auto', minHeight: "520px"}}>
-            <div className="lawyer-img">
+            <div className="lawyer-img" style={{maxWidth: '100%', height: '150px'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
                         className="img-fluid"
-                        alt="User Image"
-                        style={{
-                            maxWidth: '100%',
-                            height: '150px'
-                        }}
                         src={account.profile_picture}
+                        alt="User Image"
                     />
                 </Link>
             </div>
@@ -465,18 +461,18 @@ const LawyerCard = ({account, lawyer}) => {
                 </div>
                 <ul className="available-info mt-2">
                     <li>
-                        <i class="far fa-comment"></i>{" "}
+                        <i className="far fa-comment"></i>{" "}
                         {lawyer.ratings_count} Feedback
                     </li>
                     {lawyer.account.city &&
                     lawyer.account.country ? (
                         <li>
-                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            <i className="fas fa-map-marker-alt"></i>{" "}
                             {`${lawyer.account.city}, ${lawyer.account.country}`}
                         </li>
                     ) : (
                         <li>
-                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            <i className="fas fa-map-marker-alt"></i>{" "}
                             Not listed :)
                         </li>
                     )}
@@ -533,16 +529,12 @@ const BlogCard = ({blog}) => {
     return (
         <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
-                <div className="blog-image">
+                <div className="blog-image" style={{height: "180px"}}>
                     <Link to={`/blog/${id}`}>
                         <BlogImg
                             className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
-                            style={{
-                                maxWidth: "100%",
-                                height: "200px",
-                            }}
                         />
                     </Link>
                 </div>

@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import BlogImg from "./BlogImg";
 import bootbox from "bootbox"
+import History from "./History";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -24,7 +25,7 @@ const ButtonStyles = {
     borderColor: "transparent",
 };
 
-const WriteBlog = ({md_content, md_preview}) => {
+const WriteBlog = ({md_content, md_preview, blog, onContentChange}) => {
     const md_initial = [
         `
 # This is a header
@@ -51,7 +52,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 
 `,
     ];
-
+    
     const loaderStackEdit = new Stackedit();
 
     const stackedit = new Stackedit();
@@ -59,7 +60,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
         loaderStackEdit.openFile({
             name: "blog post",
             content: {
-                text: md_initial[0]
+                text: blog? blog.body: md_initial[0]
             }
         }, true);
 
@@ -82,7 +83,9 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     stackedit.on("fileChange", (file) => {
         md_content.current.value = file.content.text;
         md_preview.current.innerHTML = file.content.html;
+        onContentChange(md_content.current.value);
     });
+    // Got what I'm doing?
 
     // stackedit.on("fileClose", (file) => {
     //     md_content.current.value = file.content.text;
@@ -103,7 +106,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
                 <textarea
                     className="form-control"
                     style={{height: "800px"}}
-                    value={md_initial}
+                    value={blog? blog.body: md_initial[0]}
                     ref={md_content}
                     style={{visibility: "hidden"}}
                 ></textarea>
@@ -118,15 +121,17 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     );
 };
 
-const BlogPage = () => {
+const BlogPage = ({match}) => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const {request} = useRequests();
     const [tagOptions, setTagOptions] = useState([]);
-    const [tags, selectedTags] = useState(null);
+    const [tag, selectedTags] = useState(null);
     const [errors, , runValidation] = useValidation(blogTitleValidations);
     const md_preview = useRef(null);
     const md_content = useRef(null);
+    const [blog, setBlog] = useState(null);
+    const [content, setContent] = useState("");
 
     const showSelectedCover = (e) => {
         const input = e.target;
@@ -149,6 +154,19 @@ const BlogPage = () => {
     });
 
     useEffect(() => {
+        if (match.params.blogId) {
+            request({
+                url: `/blogs/${match.params.blogId}`,
+                method: 'GET'
+            }).then(response => {
+                setBlog(response.blog);
+                setTitle(response.blog.title);
+                selectedTags(response.blog.tag.id);
+                setCoverData({...coverData, cover:response.blog.cover_photo_link})
+            }).catch(error => {
+                console.error("Error occurred loading blog post");
+            });
+        }
         request({
             url: 'lawyer/practice-areas',
             method: 'GET'
@@ -166,7 +184,7 @@ const BlogPage = () => {
     }, []);
     const Submit = async (e) => {
         e.preventDefault();
-        runValidation({title: title, tags: tags}).then(
+        runValidation({title: title, tags: tag}).then(
             async (hasErrors, _) => {
                 console.log(hasErrors, _);
                 if (!hasErrors) {
@@ -176,16 +194,17 @@ const BlogPage = () => {
                         callback: (result) => {
                             if (result) {
                                 request({
-                                    url: "/blogs/add",
+                                    url: blog?  `/blogs/edit/${blog.id}`:"/blogs/add",
                                     method: "POST",
                                     data: {
                                         title: title,
-                                        body: md_content.current.value,
-                                        tag_id: tags.value,
+                                        body: content,
+                                        tag_id: tag,
                                     },
                                 }).then((data) => {
                                     const id = data.blog.id;
                                     const formData = new FormData();
+                                    setBlog(data.blog);
                                     formData.append('cover_photo', coverData.coverFile);
                                     if (coverData.coverFile !== "") {
                                         request({
@@ -195,7 +214,8 @@ const BlogPage = () => {
                                         }).then(() => {
                                             toast.success("Submitted successfully");
                                         }).catch(() => {
-                                            toast.error("An error has occurred");
+                                            toast.error("An error has occurred Uploading blog cover");
+                                            History.replace(`${History.location.pathname}/${id}`);
                                         });
                                     } else {
                                         toast.success("Submitted successfully");
@@ -262,12 +282,12 @@ const BlogPage = () => {
                             <ErrorMessageSelect
                                 options={tagOptions}
                                 searchable
-                                value={tags}
+                                value={tag}
                                 errors={errors.tags}
                                 style
+                                name="area_id"
                                 OnChangeHandler={(values) => {
-                                    console.log(values);
-                                    selectedTags(values);
+                                    selectedTags(values.value);
                                 }}
                             />
                         </li>
@@ -275,7 +295,22 @@ const BlogPage = () => {
                 </div>
             </div>
             <div className="blog-content">
-                <WriteBlog md_content={md_content} md_preview={md_preview} />
+                {match.params.blogId ? (
+                    blog && (
+                        <WriteBlog
+                            md_content={md_content}
+                            md_preview={md_preview}
+                            onContentChange={(new_content)=>{setContent(new_content)}}
+                            blog={blog}
+                        />
+                    )
+                ) : (
+                    <WriteBlog
+                        md_content={md_content}
+                        md_preview={md_preview}
+                        onContentChange={(new_content)=>{setContent(new_content)}}
+                    />
+                )}
             </div>
             <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
         </div>

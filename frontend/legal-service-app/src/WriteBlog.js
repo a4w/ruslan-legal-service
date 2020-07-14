@@ -156,6 +156,9 @@ const BlogPage = ({match}) => {
                 method: 'GET'
             }).then(response => {
                 setBlog(response.blog);
+                setTitle(response.blog.title);
+                selectedTags(response.blog.tag.id);
+                setCoverData({...coverData, cover:response.blog.cover_photo_link})
             }).catch(error => {
                 console.error("Error occurred loading blog post");
             });
@@ -276,9 +279,9 @@ const BlogPage = ({match}) => {
                                 value={tags}
                                 errors={errors.tags}
                                 style
+                                name="area_id"
                                 OnChangeHandler={(values) => {
-                                    console.log(values);
-                                    selectedTags(values);
+                                    selectedTags(values.value);
                                 }}
                             />
                         </li>

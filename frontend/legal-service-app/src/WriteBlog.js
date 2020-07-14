@@ -24,7 +24,7 @@ const ButtonStyles = {
     borderColor: "transparent",
 };
 
-const WriteBlog = ({md_content, md_preview, blog}) => {
+const WriteBlog = ({md_content, md_preview, blog, onContentChange}) => {
     const md_initial = [
         `
 # This is a header
@@ -51,7 +51,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 
 `,
     ];
-
+    
     const loaderStackEdit = new Stackedit();
 
     const stackedit = new Stackedit();
@@ -82,7 +82,9 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     stackedit.on("fileChange", (file) => {
         md_content.current.value = file.content.text;
         md_preview.current.innerHTML = file.content.html;
+        onContentChange(md_content.current.value);
     });
+    // Got what I'm doing?
 
     // stackedit.on("fileClose", (file) => {
     //     md_content.current.value = file.content.text;
@@ -128,6 +130,7 @@ const BlogPage = ({match}) => {
     const md_preview = useRef(null);
     const md_content = useRef(null);
     const [blog, setBlog] = useState(null);
+    const [content, setContent] = useState("");
 
     const showSelectedCover = (e) => {
         const input = e.target;
@@ -194,12 +197,13 @@ const BlogPage = ({match}) => {
                                     method: "POST",
                                     data: {
                                         title: title,
-                                        body: md_content.current.value,
+                                        body: content,
                                         tag_id: tag,
                                     },
                                 }).then((data) => {
                                     const id = data.blog.id;
                                     const formData = new FormData();
+                                    setBlog(data.blog);
                                     formData.append('cover_photo', coverData.coverFile);
                                     if (coverData.coverFile !== "") {
                                         request({
@@ -294,6 +298,7 @@ const BlogPage = ({match}) => {
                         <WriteBlog
                             md_content={md_content}
                             md_preview={md_preview}
+                            onContentChange={(new_content)=>{setContent(new_content)}}
                             blog={blog}
                         />
                     )
@@ -301,6 +306,7 @@ const BlogPage = ({match}) => {
                     <WriteBlog
                         md_content={md_content}
                         md_preview={md_preview}
+                        onContentChange={(new_content)=>{setContent(new_content)}}
                     />
                 )}
             </div>

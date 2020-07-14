@@ -34,6 +34,7 @@ import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
 import {useCookies} from "react-cookie"
 import moment from "moment"
+import PostRegistration from "./PostRegistration"
 
 
 export const LoadingOverlayContext = React.createContext(null);
@@ -149,6 +150,7 @@ function App() {
                                 <Route path="/calendar">
                                     <UserCalendar />
                                 </Route>
+                                <Route path="/post-register" component={PostRegistration} />
                                 <Route path="/not-found">
                                     <NotFound />
                                 </Route>

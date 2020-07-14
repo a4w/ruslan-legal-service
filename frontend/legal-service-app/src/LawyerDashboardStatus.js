@@ -9,6 +9,7 @@ import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icon
 import Img from "./Img";
 import History from "./History";
 import useRequests from "./useRequests";
+import bootbox from "bootbox"
 
 const LawyerDashboardStatus = () => {
     return (
@@ -133,13 +134,21 @@ const ListItem = ({appointment}) => {
     });
     const {request} = useRequests();
     const cancelAppointment = (id) => {
-        request({
-            url: `/appointment/${id}/cancel`,
-            method: 'POST'
-        }).then(response => {
-            toast.success("Appointment is cancelled");
-        }).catch(error => {
-            toast.error("Appointment couldn't be cancelled");
+        bootbox.confirm({
+            title: 'This will cancel the appointment',
+            message: 'Are you sure you would like to cancel ?',
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: `/appointment/${id}/cancel`,
+                        method: 'POST'
+                    }).then(response => {
+                        toast.success("Appointment is cancelled");
+                    }).catch(error => {
+                        toast.error("Appointment couldn't be cancelled");
+                    });
+                } else {}
+            }
         });
     };
     return (

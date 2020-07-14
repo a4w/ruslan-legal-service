@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import BlogImg from "./BlogImg";
 import bootbox from "bootbox"
+import History from "./History";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -213,7 +214,8 @@ const BlogPage = ({match}) => {
                                         }).then(() => {
                                             toast.success("Submitted successfully");
                                         }).catch(() => {
-                                            toast.error("An error has occurred");
+                                            toast.error("An error has occurred Uploading blog cover");
+                                            History.replace(`${History.location.pathname}/${id}`);
                                         });
                                     } else {
                                         toast.success("Submitted successfully");

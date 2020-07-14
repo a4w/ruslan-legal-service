@@ -8,6 +8,7 @@ import Img from "./Img";
 import moment from "moment";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
+import bootbox from "bootbox"
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
@@ -50,16 +51,22 @@ const Appointment = ({
     }, []);
     const Cancel = (e) => {
         e.preventDefault();
-        request({
-            url: `/appointment/${id}/cancel`,
-            method: "POST",
-        })
-            .then((response) => {
-                toast.success("Appointment is cancelled");
-            })
-            .catch((error) => {
-                toast.error("Appointment couldn't be cancelled");
-            });
+        bootbox.confirm({
+            title: 'This will cancel the appointment',
+            message: 'Are you sure you would like to cancel ?',
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: `/appointment/${id}/cancel`,
+                        method: 'POST'
+                    }).then(response => {
+                        toast.success("Appointment is cancelled");
+                    }).catch(error => {
+                        toast.error("Appointment couldn't be cancelled");
+                    });
+                } else {}
+            }
+        });
     };
     return (
         <tr>

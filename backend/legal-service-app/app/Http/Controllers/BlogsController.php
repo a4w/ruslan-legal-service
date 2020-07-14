@@ -54,6 +54,32 @@ class BlogsController extends Controller
         return RespondJSON::success(['blog' => $blog]);
     }
 
+    public function editBlogPost(JSONRequest $request, Blog $blog)
+    {
+        $request->validate([
+            'title' => ['required', 'max:255'],
+            'body' => ['required'],
+            'tag_id' => ['required', 'exists:practice_areas,id']
+        ]);
+        /** @var Account */
+        $user = Auth::user();
+        if (!$user->isLawyer()) {
+            return RespondJSON::forbidden();
+        }
+        /** @var Lawyer */
+        $lawyer = $user->lawyer;
+        if (!$lawyer->blogs->contains($blog)) {
+            return RespondJSON::notFound();
+        }
+        $blog->update($request->only(['title', 'body']));
+        $practice_area = PracticeArea::find($request->get('tag_id'));
+        $blog->tag()->associate($practice_area);
+        // Update status to under review
+        $blog->status = "UNDER_REVIEW";
+        $blog->save();
+        return RespondJSON::success(['blog' => $blog]);
+    }
+
     public function uploadCover(Request $request, Blog $blog)
     {
         $request->validate([
@@ -81,11 +107,11 @@ class BlogsController extends Controller
     public function latestBlogs($number)
     {
         $number = (int) $number;
-        $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date')->get();
+        $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date', 'DESC')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
 
-    public function searchBlogs(JSONRequest $request)
+    public function searchBlogs(Request $request)
     {
         $request->validate([
             'term' => ['required', 'string', 'min:1']

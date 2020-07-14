@@ -9,6 +9,7 @@ import {blogTitleValidations} from "./Validations";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import BlogImg from "./BlogImg";
+import bootbox from "bootbox"
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -169,33 +170,41 @@ const BlogPage = () => {
             async (hasErrors, _) => {
                 console.log(hasErrors, _);
                 if (!hasErrors) {
-                    request({
-                        url: "/blogs/add",
-                        method: "POST",
-                        data: {
-                            title: title,
-                            body: md_content.current.value,
-                            tag_id: tags.value,
-                        },
-                    }).then((data) => {
-                        const id = data.blog.id;
-                        const formData = new FormData();
-                        formData.append('cover_photo', coverData.coverFile);
-                        if (coverData.coverFile !== "") {
-                            request({
-                                url: `/blogs/${id}/upload-cover`,
-                                method: "POST",
-                                data: formData
-                            }).then(() => {
-                                toast.success("Submitted successfully");
-                            }).catch(() => {
-                                toast.error("An error has occurred");
-                            });
-                        } else {
-                            toast.success("Submitted successfully");
+                    bootbox.confirm({
+                        title: "Continue",
+                        message: "This will put the blog to be reviewed by our admins, You will be notified once it's approved and published.",
+                        callback: (result) => {
+                            if (result) {
+                                request({
+                                    url: "/blogs/add",
+                                    method: "POST",
+                                    data: {
+                                        title: title,
+                                        body: md_content.current.value,
+                                        tag_id: tags.value,
+                                    },
+                                }).then((data) => {
+                                    const id = data.blog.id;
+                                    const formData = new FormData();
+                                    formData.append('cover_photo', coverData.coverFile);
+                                    if (coverData.coverFile !== "") {
+                                        request({
+                                            url: `/blogs/${id}/upload-cover`,
+                                            method: "POST",
+                                            data: formData
+                                        }).then(() => {
+                                            toast.success("Submitted successfully");
+                                        }).catch(() => {
+                                            toast.error("An error has occurred");
+                                        });
+                                    } else {
+                                        toast.success("Submitted successfully");
+                                    }
+                                }).catch(() => {
+                                    toast.error("An error has occurred");
+                                });
+                            }
                         }
-                    }).catch(() => {
-                        toast.error("An error has occurred");
                     });
                 }
             }

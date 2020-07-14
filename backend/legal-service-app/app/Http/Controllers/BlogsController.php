@@ -81,7 +81,7 @@ class BlogsController extends Controller
     public function latestBlogs($number)
     {
         $number = (int) $number;
-        $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date')->get();
+        $blogs = Blog::where('status', 'PUBLISHED')->limit($number)->orderBy('publish_date', 'DESC')->get();
         return RespondJSON::success(['blogs' => $blogs]);
     }
 

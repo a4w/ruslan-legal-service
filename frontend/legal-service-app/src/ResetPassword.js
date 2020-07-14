@@ -4,6 +4,8 @@ import useValidation from "./useValidation";
 import {resetPasswordValidation} from "./Validations";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
+import {FaSpinner} from "react-icons/fa";
+import History from "./History";
 
 const ResetPasswordForm = (props) => {
     const {match} = {...props};
@@ -14,6 +16,7 @@ const ResetPasswordForm = (props) => {
 
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(resetPasswordValidation);
+    const [submitting, setSubmitting] = useState(false);
     const {request} = useRequests();
 
     const OnChangeHandler = ({target: {name, value}}) => {
@@ -30,14 +33,21 @@ const ResetPasswordForm = (props) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                setSubmitting(true);
                 console.log("safe");
                 request({
                     url: `/account/reset-password/${match.params.Token}`,
                     method: "POST",
                     data: {new_password: user.newPassword},
-                }).then((data) => {
-                    toast.success("Password Reset successfuly");
-                });
+                })
+                    .then((data) => {
+                        toast.success("Password Reset successfuly");
+                        History.replace("/home");
+                    })
+                    .catch((error) => {})
+                    .finally(()=>{
+                        setSubmitting(false);
+                    });
             }
         });
     };
@@ -67,10 +77,16 @@ const ResetPasswordForm = (props) => {
                     </div>
                     <div className="form-row">
                         <button
-                            className="btn btn-primary btn-block btn-lg login-btn "
                             type="submit"
+                            className={
+                                "btn btn-primary btn-block btn-lg login-btn " +
+                                (submitting ? "cursor-not-allowed" : "")
+                            }
+                            type="submit"
+                            disabled={submitting}
                         >
-                            Save
+                            {submitting && <FaSpinner className="icon-spin" />}
+                            &nbsp;{submitting ? "" : "Save"}
                         </button>
                     </div>
                 </form>

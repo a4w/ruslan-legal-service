@@ -65,12 +65,6 @@ const ProfileCard = ({lawyer}) => {
                             <h4 className="lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
-                            <p className="lawyer-speciality">
-                                {lawyer.practice_areas &&
-                                    lawyer.practice_areas.map((area) => (
-                                        <h6 key={area.id}>{area.area}</h6>
-                                    ))}
-                            </p>
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>
@@ -100,15 +94,28 @@ const ProfileCard = ({lawyer}) => {
                         <div className="session-infos">
                             <ul>
                                 <li>
-                                    <i className="fas fa-map-marker-alt"></i>{" "}
-                                    {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    <i className="far fa-comment"></i>{" "}
+                                    {lawyer.ratings_count} Feedback
                                 </li>
+                                {lawyer.account.city &&
+                                lawyer.account.country ? (
+                                    <li>
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
+                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
+                                        Not listed :)
+                                    </li>
+                                )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     isPercent={lawyer.is_percent_discount}
                                     discount={lawyer.discount}
+                                    currency={lawyer.currency_symbol}
                                 />
                             </ul>
                         </div>
@@ -148,8 +155,8 @@ const Details = ({lawyer, match}) => {
         <div className="card">
             <div className="card-body pt-0">
                 <NavBar lawyer={lawyer} match={match} />
-                <Switch>
-                    <div className="tab-content pt-0">
+                <div className="tab-content pt-0">
+                    <Switch>
                         <Route exact path={`${path}`}>
                             {" "}
                             <Redirect to={`${path}/overview`} />
@@ -167,8 +174,8 @@ const Details = ({lawyer, match}) => {
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}
                         </Route>
-                    </div>
-                </Switch>
+                    </Switch>
+                </div>
             </div>
         </div>
     );
@@ -213,6 +220,7 @@ const Overview = ({lawyer}) => {
     ];
     return (
         <div className="col-md-12 col-lg-9">
+            <PracticeAreas lawyer={lawyer} />
             <Bio bio={biography} />
             <Education
                 course={course}
@@ -223,6 +231,21 @@ const Overview = ({lawyer}) => {
         </div>
     );
 };
+const PracticeAreas = ({lawyer}) => {
+    return (
+        <div className="widget about-widget">
+            <h4 className="widget-title">Practice Areas</h4>
+            <div className="session-services mb-0">
+                <p>
+                    {lawyer.practice_areas &&
+                        lawyer.practice_areas.map((area) => (
+                            <span key={area.id}>{area.area}</span>
+                        ))}
+                </p>
+            </div>
+        </div>
+    );
+}
 const Bio = ({bio}) => {
     return (
         <div className="widget about-widget">

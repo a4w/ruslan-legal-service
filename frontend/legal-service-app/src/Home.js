@@ -13,6 +13,7 @@ import moment from "moment";
 import PageHead from "./PageHead";
 import "./Home.css"
 import useRequests from "./useRequests";
+import useValidation from "./useValidation";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -179,9 +180,14 @@ const Home = () => {
 
 const SearchLawyerByName = () => {
     const [results, setResults] = useState([]);
+    const [, , run] = useValidation();
+    const [term, setTerm] = useState("");
     const {request} = useRequests();
     const OnChangeHandler = ({target: {value}}) => {
-        const term = value;
+        setTerm(value);
+    };
+    const OnSubmitHandler = (e)=>{
+        e.preventDefault()
         request({
             url: `/lawyer/search?term=${term}`,
             method: 'GET'
@@ -190,6 +196,24 @@ const SearchLawyerByName = () => {
         }).catch(error => {
             setResults([]);
         });
+    }
+    const dropdownStyle = {
+        position: 'absolute',
+        display: 'block',
+        width: '99%',
+        backgroundColor: '#fff',
+        borderRadius: '0px 0px 10px 10px',
+        border: '1px solid #ccc',
+        marginRight: '5px',
+        maxHeight: "300px",
+        overflowY: "auto",
+        zIndex: "999"
+    };
+    const imgStyle = {
+        width: '50px',
+        height: '50px',
+        borderRadius: '3px',
+        marginRight: '10px'
     };
     return (
         <form style={{marginTop: "8px"}}>
@@ -200,32 +224,24 @@ const SearchLawyerByName = () => {
                             className="form-control"
                             placeholder="Enter Lawyer Name"
                             onChange={OnChangeHandler}
+                            value={term}
                         />
-
-                        {results.length > 0 && <div style={{
-                            position: 'absolute',
-                            display: 'block',
-                            width: '99%',
-                            backgroundColor: '#fff',
-                            borderRadius: '0px 0px 10px 10px',
-                            border: '1px solid #ccc',
-                            marginRight: '5px'
-                        }}>
+                        {results.length > 0 && <div style={dropdownStyle}>
                             {results.map((lawyer) => {
                                 console.log(lawyer);
                                 return (
                                     <>
                                         <div className="inline-search-result">
-                                            <a href={`/profile/${lawyer.id}`}>
-                                                <Img alt={lawyer.full_name} className="rounded-circle" src={lawyer.account.profile_picture} style={{
-                                                    width: '50px',
-                                                    height: '50px',
-                                                    borderRadius: '3px',
-                                                    marginRight: '10px'
-                                                }} />
+                                            <Link to={`/profile/${lawyer.id}`}>
+                                                <Img 
+                                                    alt={lawyer.full_name} 
+                                                    className="rounded-circle" 
+                                                    src={lawyer.account.profile_picture} 
+                                                    style={imgStyle} 
+                                                />
                                                 <b>{lawyer.account.full_name}</b>
                                                 <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </>
                                 );
@@ -238,7 +254,7 @@ const SearchLawyerByName = () => {
                         type="submit"
                         style={{height: "46px"}}
                         className="btn btn-block btn-primary search-btn"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={OnSubmitHandler}
                     >
                         <i className="fas fa-search"></i>
                     </button>
@@ -408,7 +424,7 @@ const LawyerCard = ({account, lawyer}) => {
                     </>
                     }
                 </div>
-                <div className="rating">
+                <div className="rating mt-2">
                     <StarRatings
                         rating={parseFloat(lawyer.ratings_average)}
                         starRatedColor="gold"
@@ -448,16 +464,29 @@ const LawyerCard = ({account, lawyer}) => {
                     </div>
                 </div>
                 <ul className="available-info mt-2">
-                    {account.city && <li>
-                        <i className="fas fa-map-marker-alt"></i>{" "}
-                        {`${account.city}, ${account.country}`}
-                    </li>}
+                    <li>
+                        <i class="far fa-comment"></i>{" "}
+                        {lawyer.ratings_count} Feedback
+                    </li>
+                    {lawyer.account.city &&
+                    lawyer.account.country ? (
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                        </li>
+                    ) : (
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>{" "}
+                            Not listed :)
+                        </li>
+                    )}
                     <Discount
                         secsTillEnd={new Date(lawyer.discount_end)}
                         cost={lawyer.price_per_hour}
                         costAfterDiscount={lawyer.discounted_price_per_hour}
                         isPercent={lawyer.is_percent_discount}
                         discount={lawyer.discount}
+                        currency={lawyer.currency_symbol}
                     />
                 </ul>
             </div>
@@ -511,8 +540,8 @@ const BlogCard = ({blog}) => {
                             src={blog.cover_photo_link}
                             alt="Post Image"
                             style={{
-                                maxWidth: '100%',
-                                height: '200px'
+                                maxWidth: "100%",
+                                height: "200px",
                             }}
                         />
                     </Link>
@@ -538,15 +567,13 @@ const BlogCard = ({blog}) => {
                     <h3 className="blog-title">
                         <Link to={`/blog/${id}`}>{blog.title}</Link>
                     </h3>
-                    <p className="mb-0">
-                        <ul className="tags">
-                            <li>
-                                <a href="#" className="tag">
-                                    {blog.tag.area}
-                                </a>
-                            </li>
-                        </ul>
-                    </p>
+                    <ul className="tags mt-2">
+                        <li>
+                            <a href="#" className="tag">
+                                {blog.tag.area}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

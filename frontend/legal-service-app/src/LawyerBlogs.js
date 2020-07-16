@@ -29,6 +29,11 @@ const LawyerBlogs = () => {
                                     Write Blog
                                 </NavTab>
                             </li>
+                            <li>
+                                <NavTab exact to={`${path}/edit-blog`}>
+                                    Edit Blog
+                                </NavTab>
+                            </li>
                         </ul>
                     </div>
 
@@ -39,7 +44,7 @@ const LawyerBlogs = () => {
                         <Route path={`${path}/my-blogs`}>
                             <Blogs />
                         </Route>
-                        <Route path={`${path}/write-blog/:blogId`} component={WriteBlog}/>
+                        <Route path={`${path}/edit-blog/:blogId`} component={WriteBlog}/>
                         <Route path={`${path}/write-blog`} component={WriteBlog}/>
                     </Switch>
                 </div>

@@ -25,7 +25,7 @@ const LawyerBlogs = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to={`${path}/write-blog`}>
+                                <NavTab exact to={`${path}/write-blog`}>
                                     Write Blog
                                 </NavTab>
                             </li>

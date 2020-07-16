@@ -30,18 +30,9 @@ const ClientDashboardSidebar = () => {
                             </h5>
                             <h5 className="mb-0">
                                 <i className="fas fa-map-marker-alt"></i>{" "}
-                                {account.city &&
-                                account.country ? (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
-                                        {`${account.city}, ${account.country}`}
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
-                                        -
-                                    </li>
-                                )}
+                                {account.city && account.country
+                                    ? `${account.city}, ${account.country}`
+                                    : "-"}
                             </h5>
                         </div>
                     </div>

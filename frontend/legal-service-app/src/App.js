@@ -151,7 +151,7 @@ function App() {
                                     <UserCalendar />
                                 </Route>
                                 <Route path="/post-register" component={PostRegistration} />
-                                <Route path="/not-found">
+                                <Route path="/not-found" status={404}>
                                     <NotFound />
                                 </Route>
                                 <Route>

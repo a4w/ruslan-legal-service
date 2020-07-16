@@ -4,19 +4,19 @@ import Img from "./Img";
 import BlogImg from "./BlogImg";
 import moment from "moment";
 
-const BlogList = ({blogs}) => {
+const BlogList = ({blogs, editable}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
                 {blogs.map((blog) => (
-                    <Blog key={blog.id} blog={blog} />
+                    <Blog key={blog.id} blog={blog} editable={editable} />
                 ))}
             </div>
         );
     else return <Blog />;
 };
 
-const Blog = ({blog}) => {
+const Blog = ({blog, editable}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (

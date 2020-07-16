@@ -68,6 +68,6 @@ const Blogs = ()=>{
             })
             .catch((err) => {});
     }, []);
-    return blogs && <BlogList blogs={blogs} />
+    return blogs && <BlogList blogs={blogs} editable={true} />
 }
 export default LawyerBlogs;

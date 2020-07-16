@@ -47,13 +47,15 @@ const Blog = ({blog, editable}) => {
                             alt="Post Image"
                         />
                     </Link>
-                    <Link
-                        to={`/dashboard/blogs/edit-blog/${id}`}
-                        className="btn btn-primary"
-                        style={ButtonStyle}
-                    >
-                        Edit
-                    </Link>
+                    {editable && 
+                        <Link
+                            to={`/dashboard/blogs/edit-blog/${id}`}
+                            className="btn btn-primary"
+                            style={ButtonStyle}
+                        >
+                            Edit
+                        </Link>
+                    }
                 </div>
                 <div className="blog-content">
                     <ul className="entry-meta meta-item">

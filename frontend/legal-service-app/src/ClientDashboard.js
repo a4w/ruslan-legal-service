@@ -16,7 +16,7 @@ const ClientDashboard = () => {
             />
             <div className="row">
                 <div className="col-12 d-md-none">
-                    <button className="btn btn-primary mb-2 sticky-top float-right btn-block" data-toggle="collapse" data-target="#dashboard_nav"><FaBars /></button>
+                    <button className="btn btn-primary mb-2 sticky-top float-right btn-block" data-toggle="collapse" data-target="#dashboard_nav" style={{zIndex: 0}}><FaBars /></button>
                 </div>
                 <div className="col-12 col-md-3 col-lg-3 collapse d-md-block" id="dashboard_nav">
                     <StickyBox>

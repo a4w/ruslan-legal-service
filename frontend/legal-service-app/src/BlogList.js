@@ -16,6 +16,18 @@ const BlogList = ({blogs, editable}) => {
     else return <Blog />;
 };
 
+const ButtonStyle = {
+    position: "absolute",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    msTransform: "translate(-50%, -50%)",
+    padding: "12px 24px",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+    height: "80px",
+};
+
 const Blog = ({blog, editable}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
@@ -34,6 +46,13 @@ const Blog = ({blog, editable}) => {
                             src={blog.cover_photo_link}
                             alt="Post Image"
                         />
+                    </Link>
+                    <Link
+                        to={`/dashboard/blogs/edit-blog/${id}`}
+                        className="btn btn-primary"
+                        style={ButtonStyle}
+                    >
+                        Edit
                     </Link>
                 </div>
                 <div className="blog-content">

@@ -30,7 +30,7 @@ const LawyerBlogs = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to={`${path}/edit-blog`}>
+                                <NavTab to={`${path}/edit-blog/`}>
                                     Edit Blog
                                 </NavTab>
                             </li>

@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import useInterval from "./useInterval";
 import useRequests from "./useRequests"
 import {AuthContext} from "./App";
+import NoContent from "./NoContent";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -115,7 +116,7 @@ const Notifications = ({setNew}) => {
     }, 3000);
     return (
         <ul className="notification-list">
-            {notifications &&
+            {notifications && notifications.length ? (
                 notifications.map((notification) => (
                     <li className="notification-message" key={notification.id}>
                         <a href="#" onClick={() => MarkAsRead(notification.id)}>
@@ -133,7 +134,10 @@ const Notifications = ({setNew}) => {
                             </div>
                         </a>
                     </li>
-                ))}
+                ))
+            ) : (
+                <NoContent>There are no new notifications</NoContent>
+            )}
         </ul>
     );
 };

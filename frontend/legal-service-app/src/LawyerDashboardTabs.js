@@ -12,6 +12,7 @@ import History from "./History";
 import ScheduleForm from "./ScheduleForm";
 import UserCalendar from "./UserCalendar";
 import LawyerBlogs from "./LawyerBlogs";
+import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -38,7 +39,7 @@ const LawyerDashboardTabs = () => {
                 <LawyerBlogs />
             </Route>
             <Route exact path="/dashboard/messages">
-                <Redirect to="/chat" />
+                <ResponsiveChatPage />
             </Route>
             <Route path="/dashboard/settings">
                 <EditPersonal />
@@ -47,7 +48,7 @@ const LawyerDashboardTabs = () => {
                 <EditPassword />
             </Route>
             <Route exact path="/dashboard/logout">
-                <Redirect replace to="/" />
+                <Redirect to="/" />
             </Route>
         </Switch>
     );

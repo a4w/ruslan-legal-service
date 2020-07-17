@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import Img from "./Img";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
+import NoContent from "./NoContent";
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();
@@ -18,9 +19,16 @@ const LawyerAppointments = () => {
     }, []);
     return (
         <div className="appointments">
-            {appointments && appointments.map((appointment) => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-            ))}
+            {appointments && appointments.length ? (
+                appointments.map((appointment) => (
+                    <AppointmentCard
+                        key={appointment.id}
+                        appointment={appointment}
+                    />
+                ))
+            ) : (
+                <NoContent>There are no appointments yet</NoContent>
+            )}
         </div>
     );
 };

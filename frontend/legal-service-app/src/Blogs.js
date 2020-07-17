@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
 import {Router, Switch, Route, withRouter, Link} from "react-router-dom";
@@ -8,12 +8,15 @@ import BlogImg from "./BlogImg";
 import moment from "moment";
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App";
 
 const Blogs = (props) => {
     const {request} = useRequests();
     const [blogs, setBlogs] = useState(null);
+    const loading = useContext(LoadingOverlayContext);
     const OnSubmitHandler = (e) => {
         e.preventDefault();
+        loading.setIsLoadingOverlayShown(true);
         const search = e.target[0].value;
         const term = queryString.stringify({term: search});
         if (search !== "") {
@@ -22,25 +25,36 @@ const Blogs = (props) => {
                     console.log(data);
                     setBlogs(data.blogs);
                 })
-                .catch(() => {});
+                .catch(() => {})
+                .finally(() => {
+                    loading.setIsLoadingOverlayShown(false);
+                });
         }
     };
     const TagFilterHandler = (id) => {
+        loading.setIsLoadingOverlayShown(true);
         const term = queryString.stringify({tag: id});
         request({url: `/blogs/all?${term}`, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            });
     };
     useEffect(() => {
+        loading.setIsLoadingOverlayShown(true);
         request({url: "/blogs/all", method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            });
     }, []);
     return (
         <Router history={History}>

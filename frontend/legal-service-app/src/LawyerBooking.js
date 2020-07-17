@@ -4,11 +4,11 @@ import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import {Elements} from "@stripe/react-stripe-js"
 import {loadStripe} from "@stripe/stripe-js"
-import Config from "./Config";
 import CheckoutForm from "./CheckoutForm";
 import useRequests from "./useRequests";
+import env from "./env"
 
-const stripe = loadStripe(Config.stripe_api_key);
+const stripe = loadStripe(env.stripe_api_key);
 
 const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);

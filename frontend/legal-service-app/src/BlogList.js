@@ -4,19 +4,31 @@ import Img from "./Img";
 import BlogImg from "./BlogImg";
 import moment from "moment";
 
-const BlogList = ({blogs}) => {
+const BlogList = ({blogs, editable}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
                 {blogs.map((blog) => (
-                    <Blog key={blog.id} blog={blog} />
+                    <Blog key={blog.id} blog={blog} editable={editable} />
                 ))}
             </div>
         );
     else return <Blog />;
 };
 
-const Blog = ({blog}) => {
+const ButtonStyle = {
+    position: "absolute",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    msTransform: "translate(-50%, -50%)",
+    padding: "12px 24px",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+    height: "80px",
+};
+
+const Blog = ({blog, editable}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
@@ -35,6 +47,15 @@ const Blog = ({blog}) => {
                             alt="Post Image"
                         />
                     </Link>
+                    {editable && 
+                        <Link
+                            to={`/dashboard/blogs/edit-blog/${id}`}
+                            className="btn btn-primary"
+                            style={ButtonStyle}
+                        >
+                            Edit
+                        </Link>
+                    }
                 </div>
                 <div className="blog-content">
                     <ul className="entry-meta meta-item">

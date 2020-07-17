@@ -2,6 +2,7 @@ import React from "react";
 import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
 import EditBasicInfo from "./EditBasicInfo";
+import PageHead from "./PageHead";
 
 const ProfileSettings = () => {
     return (

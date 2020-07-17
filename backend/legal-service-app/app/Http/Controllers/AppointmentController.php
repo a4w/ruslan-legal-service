@@ -182,6 +182,6 @@ class AppointmentController extends Controller
         if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
             return RespondJSON::forbidden();
         }
-        return RespondJSON::success($appointment);
+        return RespondJSON::success(['appointment' => $appointment]);
     }
 }

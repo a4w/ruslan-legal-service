@@ -3,14 +3,19 @@ import {Link} from "react-router-dom";
 import Img from "./Img";
 import BlogImg from "./BlogImg";
 import moment from "moment";
+import NoContent from "./NoContent";
 
 const BlogList = ({blogs, editable}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
-                {blogs.map((blog) => (
-                    <Blog key={blog.id} blog={blog} editable={editable} />
-                ))}
+                {blogs.length ? (
+                    blogs.map((blog) => (
+                        <Blog key={blog.id} blog={blog} editable={editable} />
+                    ))
+                ) : (
+                    <NoContent>There ara no published blogs</NoContent>
+                )}
             </div>
         );
     else return <Blog />;

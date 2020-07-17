@@ -19,6 +19,8 @@ import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App"
 import { toast } from "react-toastify";
+import SpinnerButton from "./SpinnerButton";
+import { NavTab } from "react-router-tabs";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -53,7 +55,9 @@ const ProfileCard = ({lawyer}) => {
     const account = lawyer.account;
     const auth = useContext(AuthContext);
     const {request} = useRequests();
-    const StartChat = ()=>{
+    const [loading, setLoading] = useState(false);
+    const StartChat = () => {
+        setLoading(true);
         const myID = auth.account_id;
         const url = `/chat/${myID}/${lawyer.id}`;
         request({ url: url, method: "POST" })
@@ -62,9 +66,11 @@ const ProfileCard = ({lawyer}) => {
             })
             .catch(() => {
                 toast.error("An error occured");
+            })
+            .finally(() => {
+                setLoading(false);
             });
-        
-    }
+    };
     return (
         <div className="card">
             <div className="card-body">
@@ -136,9 +142,9 @@ const ProfileCard = ({lawyer}) => {
                             </ul>
                         </div>
                         <div className="lawyer-action">
-                            <button className="btn btn-white msg-btn" onClick={StartChat}>
+                            <SpinnerButton className="btn btn-white msg-btn" onClick={StartChat} loading={loading}>
                                 Chat with this lawyer! <i className="far fa-comment-alt"></i>
-                            </button>
+                            </SpinnerButton>
                         </div>
                         <div className="session-booking">
                             <Link
@@ -208,16 +214,16 @@ const NavBar = ({match}) => {
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <Link to={`${path}/overview`}>Overview</Link>
+                    <NavTab to={`${path}/overview`}>Overview</NavTab>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/reviews`}>Reviews</Link>
+                    <NavTab to={`${path}/reviews`}>Reviews</NavTab>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/hours`}>Business Hours</Link>
+                    <NavTab to={`${path}/hours`}>Business Hours</NavTab>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/blogs`}>Blogs</Link>
+                    <NavTab to={`${path}/blogs`}>Blogs</NavTab>
                 </li>
             </ul>
         </nav>

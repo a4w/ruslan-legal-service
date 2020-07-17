@@ -14,6 +14,10 @@ const EditPersonal = () => {
     // const path = history.location.pathname;
     return (
         <Router history={history}>
+            <PageHead
+                title={"Edit profile | Lawbe.co.uk"}
+                description={"Edit your profile | Lawbe.co.uk"}
+            />
             <div className="card">
                 <div className="card-body pt-0">
                     <div className="user-tabs mb-4">

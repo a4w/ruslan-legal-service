@@ -136,13 +136,18 @@ const Post = ({blog, lawyer}) => {
                     <ul>
                         <li>
                             <div className="post-author">
-                                <a href="doctor-profile.html">
+                                <Link
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: { lawyer: lawyer },
+                                    }}
+                                >
                                     <Img
                                         src={account.profile_picture}
                                         alt="Post Author"
                                     />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
-                                </a>
+                                </Link>
                             </div>
                         </li>
                         <li>

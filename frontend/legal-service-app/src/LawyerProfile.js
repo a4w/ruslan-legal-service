@@ -216,7 +216,7 @@ const Overview = ({lawyer}) => {
 
     const specializations = [
         `Regulated By: ${regulator ? regulator.regulator : ""}`,
-        `Years licenced: ${years_licenced}`,
+        `Year licenced: ${years_licenced}`,
     ];
     return (
         <div className="col-md-12 col-lg-9">

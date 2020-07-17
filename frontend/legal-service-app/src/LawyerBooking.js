@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
@@ -9,6 +9,7 @@ import useRequests from "./useRequests";
 import env from "./env"
 import Config from "./Config";
 import moment from "moment";
+import {LoadingOverlayContext} from "./App";
 
 const stripe = loadStripe(env.stripe_api_key);
 
@@ -19,12 +20,17 @@ const LawyerBooking = ({LawyerId}) => {
     const [orderData, setOrderData] = useState({total_price: 0, currency_symbol: Config.default_currency_symbol});
     const [selectedAppointments, setSelectedAppointments] = useState([]);
     const {request} = useRequests();
+    const loader = useContext(LoadingOverlayContext);
     useEffect(() => {
+        loader.setIsLoadingOverlayShown(true);
         request({url: `/lawyer/${LawyerId}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
             })
-            .catch((err) => {});
+            .catch((err) => {})
+            .finally(() => {
+                loader.setIsLoadingOverlayShown(false);
+            })
 
     }, []);
 

@@ -28,7 +28,6 @@ const NavBar = () => {
         window.addEventListener("resize", Menu);
         return () => window.removeEventListener("resize", Menu);
     });
-
     const {refreshAccessToken, fetchNewAccessToken} = useRequests();
     // Attempt automatic login
     useEffect(() => {
@@ -80,17 +79,18 @@ const NavBar = () => {
                         </a>
                     </div>
                     <ul className="main-nav">
-                        <li>
+                        <li onClick={CloseOnOutsideClick}>
                             <Link to="/">Home</Link>
                         </li>
-                        <li className="has-submenu">
+                        <li onClick={CloseOnOutsideClick}>
                             <Link to="/list">Lawyers</Link>
-                        </li>
-                        <li className="has-submenu">
+                        </li >
+                        <li onClick={CloseOnOutsideClick}>
                             <Link to="/blogs">Blogs</Link>
                         </li>
                         <li className="login-link">
                             <Link
+                                onClick={CloseOnOutsideClick}
                                 to={`${History.location.pathname}/login`}
                                 style={{
                                     visibility: auth.isLoggedIn
@@ -116,7 +116,7 @@ const NavBar = () => {
                             </p>
                         </div>
                     </li>
-                    <li className="nav-item" style={{display: auth.isLoggedIn ? "none" : ""}}>
+                    <li className="nav-item singup" style={{display: auth.isLoggedIn ? "none" : ""}}>
                         <Link
                             className="nav-link header-login"
                             to={`${History.location.pathname}/login`}

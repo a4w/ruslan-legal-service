@@ -14,6 +14,7 @@ import PageHead from "./PageHead";
 import "./Home.css"
 import useRequests from "./useRequests";
 import useValidation from "./useValidation";
+import SpinnerButton from "./SpinnerButton";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -178,7 +179,8 @@ const Home = () => {
 };
 
 const SearchLawyerByName = () => {
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [, , run] = useValidation();
     const [term, setTerm] = useState("");
     const {request} = useRequests();
@@ -187,6 +189,7 @@ const SearchLawyerByName = () => {
     };
     const OnSubmitHandler = (e) => {
         e.preventDefault()
+        setLoading(true);
         request({
             url: `/lawyer/search?term=${term}`,
             method: 'GET'
@@ -194,6 +197,8 @@ const SearchLawyerByName = () => {
             setResults(response.lawyers);
         }).catch(error => {
             setResults([]);
+        }).finally(()=>{
+            setLoading(false);
         });
     }
     const dropdownStyle = {
@@ -225,8 +230,9 @@ const SearchLawyerByName = () => {
                             onChange={OnChangeHandler}
                             value={term}
                         />
-                        {results.length > 0 && <div style={dropdownStyle}>
-                            {results.map((lawyer) => {
+                        {results && <div style={dropdownStyle}>
+                            {results.length?
+                            results.map((lawyer) => {
                                 console.log(lawyer);
                                 return (
                                     <>
@@ -244,19 +250,23 @@ const SearchLawyerByName = () => {
                                         </div>
                                     </>
                                 );
-                            })}
+                            })
+                            :(
+                            <h5>no matches found</h5>
+                            )}
                         </div>}
                     </div>
                 </div>
                 <div className="col-auto">
-                    <button
+                    <SpinnerButton
                         type="submit"
                         style={{height: "46px"}}
                         className="btn btn-block btn-primary search-btn"
                         onClick={OnSubmitHandler}
+                        loading={loading}
                     >
                         <i className="fas fa-search"></i>
-                    </button>
+                    </SpinnerButton>
                 </div>
 
             </div>

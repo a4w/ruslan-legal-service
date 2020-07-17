@@ -8,6 +8,7 @@ import useInterval from "./useInterval";
 import useRequests from "./useRequests";
 import History from "./History";
 import Img from "./Img"
+import NoContent from "./NoContent";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
@@ -132,8 +133,11 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     return (
         <>
             <div className="row no-gutters">
-                {list_chats && <div className="col-12 col-md-4 col-lg-3 collapse show h-100" id="chat_list">
-                    <div
+            {list_chats && chats.length?
+            <>
+                {list_chats && 
+                <div className="col-12 col-md-4 col-lg-3 collapse show h-100" id="chat_list">
+                <div
                         className={"chat-cont-left"}
                         style={{maxWidth: '100%'}}
                     >
@@ -225,7 +229,12 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                         </div>
                     </div>
                 </div>
-
+            </>
+            :
+            <NoContent>
+                No chats available
+            </NoContent>
+            }
             </div>
         </>
     );

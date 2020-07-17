@@ -3072,6 +3072,9 @@ html.menu-opened body {
     background-color: #09e5ab;
     border-color: #09e5ab;
     color: #fff;
+}.msg-btn {
+    width: 100%;
+    font-size: 14px;
 }
 .call-btn:hover, .call-btn:focus {
     background-color: #09e5ab;

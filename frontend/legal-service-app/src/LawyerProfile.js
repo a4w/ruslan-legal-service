@@ -17,6 +17,7 @@ import BlogList from "./BlogList";
 import Img from "./Img";
 import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
+import {FiMessageCircle} from "react-icons/fi";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -64,7 +65,7 @@ const ProfileCard = ({lawyer}) => {
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
-                            </h4>
+                            </h4> 
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>
@@ -119,7 +120,11 @@ const ProfileCard = ({lawyer}) => {
                                 />
                             </ul>
                         </div>
-                        <div className="lawyer-action"></div>
+                        <div className="lawyer-action">
+                            <button className="btn btn-white msg-btn">
+                                Chat with this lawyer! <i className="far fa-comment-alt"></i>
+                            </button>
+                        </div>
                         <div className="session-booking">
                             <Link
                                 className="apt-btn"

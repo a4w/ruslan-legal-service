@@ -61,6 +61,7 @@ const Appointment = ({
                         method: 'POST'
                     }).then(response => {
                         toast.success("Appointment is cancelled");
+                        window.location.reload();
                     }).catch(error => {
                         toast.error("Appointment couldn't be cancelled");
                     });

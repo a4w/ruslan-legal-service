@@ -33,7 +33,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 </strong>
                             </h4>
                             <p className="lawyer-education">
-                                {lawyer.years_licenced} Years . {lawyer.institution}
+                                licenced in: {lawyer.years_licenced}. {lawyer.institution}
                             </p>
                             <p className="lawyer-department">
                                 <strong>{lawyer.lawyer_type.type}</strong>

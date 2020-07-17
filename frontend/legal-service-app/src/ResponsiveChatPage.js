@@ -37,7 +37,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 if (match.params.chatId && chat.id === parseInt(match.params.chatId)) {
                     selected_chat_idx = i;
                 }
-                const other = chat.participants[0].id == me.id? chat.participants[1] : chat.participants[0];
+                const other = chat.participants[0].id == me.id ? chat.participants[1] : chat.participants[0];
                 return {
                     id: chat.id,
                     account: other
@@ -47,7 +47,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             if (chats.length > 0) {
                 if (selected_chat_idx !== null) {
                     setSelectedChat(selected_chat_idx);
-                }else{
+                } else {
                     setSelectedChat(0);
                 }
             }
@@ -136,7 +136,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             {list_chats && chats.length?
             <>
                 {list_chats && 
-                <div className="col-12 col-md-4 col-lg-3 collapse show h-100" id="chat_list">
+                <div className="col-12 col-md-4 col-lg-3 collapse show h-100" id="chat_list" style={{position: 'absolute'}}>
                 <div
                         className={"chat-cont-left"}
                         style={{maxWidth: '100%'}}
@@ -180,13 +180,13 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                 </button>}
                                 <div className="media-img-wrap">
                                     <div className="avatar avatar-online">
-                                    {selectedChat !== null &&
-                                        <Img
-                                            src={chats[selectedChat].account.profile_picture}
-                                            alt="User Image"
-                                            className="avatar-img rounded-circle"
-                                        />
-                                    }
+                                        {selectedChat !== null &&
+                                            <Img
+                                                src={chats[selectedChat].account.profile_picture}
+                                                alt="User Image"
+                                                className="avatar-img rounded-circle"
+                                            />
+                                        }
                                     </div>
                                 </div>{" "}
                                 <div className="media-body">

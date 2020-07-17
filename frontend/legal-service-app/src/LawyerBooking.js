@@ -9,7 +9,8 @@ import useRequests from "./useRequests";
 import env from "./env"
 import Config from "./Config";
 import moment from "moment";
-import {LoadingOverlayContext} from "./App";
+import {LoadingOverlayContext, AuthContext} from "./App";
+import {useHistory, useLocation} from "react-router";
 
 const stripe = loadStripe(env.stripe_api_key);
 
@@ -21,6 +22,15 @@ const LawyerBooking = ({LawyerId}) => {
     const [selectedAppointments, setSelectedAppointments] = useState([]);
     const {request} = useRequests();
     const loader = useContext(LoadingOverlayContext);
+    const [auth,] = useContext(AuthContext);
+    const history = useHistory();
+    const location = useLocation();
+    useEffect(() => {
+        console.log(auth);
+        if (!auth.isLoggedIn) {
+            history.push(`${location.pathname}/login`);
+        }
+    }, [])
     useEffect(() => {
         loader.setIsLoadingOverlayShown(true);
         request({url: `/lawyer/${LawyerId}`, method: "GET"})

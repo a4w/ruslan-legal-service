@@ -7100,8 +7100,19 @@ html.menu-opened body {
     .header-nav {
         padding-left: 15px;
         padding-right: 15px;
+        height: 110px;
     }
     .header-navbar-rht {
+        margin: 0px;
+        display: inline-flex;
+        right: 0%;
+        position: absolute;
+        width: unset;
+    }
+    .header-navbar-rht li {
+        padding: 0px;
+    }
+    .header-navbar-rht li.singup {
         display: none;
     }
     .main-nav li.login-link {
@@ -7118,7 +7129,7 @@ html.menu-opened body {
         z-index: 99;
     }
     .navbar-brand.logo {
-        width: 100%;
+        width: 70%;
         text-align: center;
         margin-right: 0;
     }

@@ -9,6 +9,7 @@ import {
     Route,
     matchPath,
     Redirect,
+    NavLink,
 } from "react-router-dom";
 import History from "./History";
 import "./Tabs.css";
@@ -98,17 +99,17 @@ const ProfileCard = ({lawyer}) => {
                                     {lawyer.ratings_count} Feedback
                                 </li>
                                 {lawyer.account.city &&
-                                lawyer.account.country ? (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
-                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
+                                    lawyer.account.country ? (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
+                                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
                                         -
-                                    </li>
-                                )}
+                                        </li>
+                                    )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
@@ -188,19 +189,19 @@ const NavBar = ({match}) => {
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <Link to={`${path}/overview`}>Overview</Link>
+                    <NavLink replace to={`${path}/overview`}>Overview</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/reviews`}>Reviews</Link>
+                    <NavLink replace to={`${path}/reviews`}>Reviews</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/hours`}>Business Hours</Link>
+                    <NavLink replace to={`${path}/hours`}>Business Hours</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/blogs`}>Blogs</Link>
+                    <NavLink replace to={`${path}/blogs`}>Blogs</NavLink>
                 </li>
             </ul>
-        </nav>
+        </nav >
     );
 };
 

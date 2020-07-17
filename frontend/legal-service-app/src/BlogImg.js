@@ -6,7 +6,7 @@ const BlogImg = ({src, className, alt, style}) => {
             src={src ? src : "/blog-02.jpg"}
             className={className ? className : ""}
             alt={alt ? alt : "img"}
-            style={style}
+            style={{height: '100%', maxWidth: '100%', width: 'unset', margin: 'auto', display: 'block', ...style}}
         />
     );
 }

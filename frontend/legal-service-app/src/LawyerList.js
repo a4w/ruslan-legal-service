@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
@@ -9,6 +9,7 @@ import "./Calendar.css";
 import queryString from "query-string"
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import LoadingOverlay from "react-loading-overlay";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -243,6 +244,7 @@ const PopUp = ({lawyer}) => {
 const AvgCalendar = ({lawyer}) => {
     // Get availability
     const [days, setDays] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     let initAvail = [];
     for (let i = 0; i < 7; ++i) {
         initAvail.push([]);
@@ -255,6 +257,7 @@ const AvgCalendar = ({lawyer}) => {
     const {request} = useRequests();
     useEffect(() => {
         if (lawyer !== null) {
+            setIsLoading(true);
             request({
                 url: `lawyer/${lawyer.id}/schedule`,
                 method: 'POST',
@@ -291,50 +294,61 @@ const AvgCalendar = ({lawyer}) => {
                 setAvailability(nextAvailability);
             }).catch((error) => {
                 console.log(error);
+            }).finally(() => {
+                setIsLoading(false);
             });
         }
     }, [lawyer]);
     return (
-        <table className="calender">
-            <thead>
-                <tr>
-                    <th colSpan="2"></th>
-                    {days.map((day) => (
-                        <th key={day}>{day.substr(0, 3)}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colSpan="2">Morning</td>
-                    {availability.map((a, i) => {
-                        const brightness = (a[0] * avgSlotLength) / (6 * 60);
-                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
-                    })}
-                </tr>
-                <tr>
-                    <td colSpan="2">Afternoon</td>
-                    {availability.map((a, i) => {
-                        const brightness = (a[1] * avgSlotLength) / (6 * 60);
-                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
-                    })}
-                </tr>
-                <tr>
-                    <td colSpan="2">Evening</td>
-                    {availability.map((a, i) => {
-                        const brightness = (a[2] * avgSlotLength) / (6 * 60);
-                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
-                    })}
-                </tr>
-                <tr>
-                    <td colSpan="2">Night</td>
-                    {availability.map((a, i) => {
-                        const brightness = (a[3] * avgSlotLength) / (6 * 60);
-                        return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
-                    })}
-                </tr>
-            </tbody>
-        </table>
+
+        <>
+            <LoadingOverlay
+                active={isLoading}
+                spinner
+                text={"Loading"}
+            >
+                <table className="calender">
+                    <thead>
+                        <tr>
+                            <th colSpan="2"></th>
+                            {days.map((day) => (
+                                <th key={day}>{day.substr(0, 3)}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colSpan="2">Morning</td>
+                            {availability.map((a, i) => {
+                                const brightness = (a[0] * avgSlotLength) / (6 * 60);
+                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                            })}
+                        </tr>
+                        <tr>
+                            <td colSpan="2">Afternoon</td>
+                            {availability.map((a, i) => {
+                                const brightness = (a[1] * avgSlotLength) / (6 * 60);
+                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                            })}
+                        </tr>
+                        <tr>
+                            <td colSpan="2">Evening</td>
+                            {availability.map((a, i) => {
+                                const brightness = (a[2] * avgSlotLength) / (6 * 60);
+                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                            })}
+                        </tr>
+                        <tr>
+                            <td colSpan="2">Night</td>
+                            {availability.map((a, i) => {
+                                const brightness = (a[3] * avgSlotLength) / (6 * 60);
+                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                            })}
+                        </tr>
+                    </tbody>
+                </table>
+            </LoadingOverlay>
+        </>
     );
     return <div className="popup-calender-cell">test</div>;
 };

@@ -146,6 +146,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                         {schedule !== null && schedule.days.map((day, i) => {
                             return (
                                 <div className="col" key={day.date}>
+                                    {day.slots.length === 0 && (<span className="d-block text-center text-muted text-xs">No slots available</span>)}
                                     {day.slots.map((slot, j) => {
                                         const discountedPrice = calculateDiscountedPrice((slot.length / 60) * schedule.price_per_hour)
                                         return (

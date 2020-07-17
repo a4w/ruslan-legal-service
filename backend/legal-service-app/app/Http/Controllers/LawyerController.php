@@ -166,6 +166,7 @@ class LawyerController extends Controller
         // Get from and days to show
         $days_to_show = (int) $request->get('days_to_show', 7);
         $from_date = new Carbon($request->get('from', now()));
+        $from_date->setTime(0, 0, 0, 0);
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
 

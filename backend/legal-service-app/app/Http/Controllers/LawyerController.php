@@ -55,7 +55,7 @@ class LawyerController extends Controller
 
         $dat_table = DB::table('lawyers as lawyer_data')->where('lawyer_data.schedule', '<>', null)
             ->selectRaw('`lawyer_data`.`id` AS `lawyer_id`')
-            ->selectRaw('COUNT(IFNULL(`ratings`.`id`,0)) AS `ratings_count`')
+            ->selectRaw('COUNT(`ratings`.`id`,0) AS `ratings_count`')
             ->selectRaw('AVG(IFNULL(`ratings`.`rating`,0)) AS `ratings_average`')
             ->leftJoin('appointments', function (JoinClause $join) {
                 $join->on('lawyer_data.id', '=', 'appointments.lawyer_id');

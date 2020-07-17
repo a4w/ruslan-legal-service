@@ -11,7 +11,7 @@ const LawyerDashboard = () => {
     return (
         <Router history={History}>
             <PageHead
-                title={"Edit profile | Lawbe.co.uk"}
+                title={"Dashboard | Lawbe.co.uk"}
                 description={"Edit your profile | Lawbe.co.uk"}
             />
             <div className="row">

@@ -116,7 +116,7 @@ const NavBar = () => {
                             </p>
                         </div>
                     </li>
-                    <li className="nav-item" style={{display: auth.isLoggedIn ? "none" : ""}}>
+                    <li className="nav-item singup" style={{display: auth.isLoggedIn ? "none" : ""}}>
                         <Link
                             className="nav-link header-login"
                             to={`${History.location.pathname}/login`}

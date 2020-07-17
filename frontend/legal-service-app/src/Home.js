@@ -80,13 +80,12 @@ const Home = () => {
                 title="Find and book lawyers in your area | Lawbe"
                 description="Lawbe helps you find, compare and book meetings with the best lawyers from the comfort of your home"
             />
-            <div className="container-fluid">
+            <div className="container-fluid" style={{padding: 'unset'}}>
                 <div className="cover d-flex" style={{
                     height: '80vh',
                     flexDirection: 'column',
                     'justifyContent': 'center',
                     position: 'relative',
-                    margin: '-30px',
                     width: '100vw'
                 }}>
                     <video autoPlay muted loop style={{
@@ -186,7 +185,7 @@ const SearchLawyerByName = () => {
     const OnChangeHandler = ({target: {value}}) => {
         setTerm(value);
     };
-    const OnSubmitHandler = (e)=>{
+    const OnSubmitHandler = (e) => {
         e.preventDefault()
         request({
             url: `/lawyer/search?term=${term}`,
@@ -233,11 +232,11 @@ const SearchLawyerByName = () => {
                                     <>
                                         <div className="inline-search-result">
                                             <Link to={`/profile/${lawyer.id}`}>
-                                                <Img 
-                                                    alt={lawyer.full_name} 
-                                                    className="rounded-circle" 
-                                                    src={lawyer.account.profile_picture} 
-                                                    style={imgStyle} 
+                                                <Img
+                                                    alt={lawyer.full_name}
+                                                    className="rounded-circle"
+                                                    src={lawyer.account.profile_picture}
+                                                    style={imgStyle}
                                                 />
                                                 <b>{lawyer.account.full_name}</b>
                                                 <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
@@ -408,16 +407,16 @@ const LawyerCard = ({account, lawyer}) => {
                 </h3>
                 <div className="session-services">
                     {lawyer.practice_areas &&
-                    <>
-                        {lawyer.practice_areas.map((area, i) =>{ 
-                            if(i < 2)
-                                return(<span key={area.id}>{area.area}</span>)
-                        })}
-                        {lawyer.practice_areas.length > 2 &&
-                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                {`+${lawyer.practice_areas.length - 2} more`}
-                            </Link>}
-                    </>
+                        <>
+                            {lawyer.practice_areas.map((area, i) => {
+                                if (i < 2)
+                                    return (<span key={area.id}>{area.area}</span>)
+                            })}
+                            {lawyer.practice_areas.length > 2 &&
+                                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                    {`+${lawyer.practice_areas.length - 2} more`}
+                                </Link>}
+                        </>
                     }
                 </div>
                 <div className="rating mt-2">
@@ -442,7 +441,7 @@ const LawyerCard = ({account, lawyer}) => {
                                 state: {lawyer: lawyer},
                             }}
                             className="btn view-btn"
-                            style={{fontSize: "12px"}} 
+                            style={{fontSize: "12px"}}
                         >
                             View Profile
                         </Link>
@@ -465,17 +464,17 @@ const LawyerCard = ({account, lawyer}) => {
                         {lawyer.ratings_count} Feedback
                     </li>
                     {lawyer.account.city &&
-                    lawyer.account.country ? (
-                        <li>
-                            <i className="fas fa-map-marker-alt"></i>{" "}
-                            {`${lawyer.account.city}, ${lawyer.account.country}`}
-                        </li>
-                    ) : (
-                        <li>
-                            <i className="fas fa-map-marker-alt"></i>{" "}
+                        lawyer.account.country ? (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                                {`${lawyer.account.city}, ${lawyer.account.country}`}
+                            </li>
+                        ) : (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
                             -
-                        </li>
-                    )}
+                            </li>
+                        )}
                     <Discount
                         secsTillEnd={new Date(lawyer.discount_end)}
                         cost={lawyer.price_per_hour}

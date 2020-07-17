@@ -58,7 +58,7 @@ const ProfileCard = ({lawyer}) => {
         const url = `/chat/${myID}/${lawyer.id}`;
         request({ url: url, method: "POST" })
             .then(() => {
-                History.push(`/chat/${lawyer.id}`);
+                History.push(`/chat/${lawyer.id - 1}`);
             })
             .catch(() => {
                 toast.error("An error occured");

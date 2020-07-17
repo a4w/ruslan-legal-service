@@ -3193,11 +3193,9 @@ html.menu-opened body {
     padding: 0;
 }
 .service-list ul li {
-    float: left;
     margin: 6px 0;
     padding-left: 25px;
     position: relative;
-    width: 33%;
 }
 .service-list ul li::before {
     color: #ccc;
@@ -7053,9 +7051,6 @@ html.menu-opened body {
     }
     .submit-btn-bottom {
         margin-bottom: 20px;
-    }
-    .service-list ul li {
-        width: 50%;
     }
     .grid-blog .blog-title {
         min-height: inherit;

@@ -9,6 +9,7 @@ import "./Calendar.css";
 import queryString from "query-string"
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App"
 import LoadingOverlay from "react-loading-overlay";
 
 function LawyerList(props) {
@@ -23,10 +24,12 @@ function LawyerList(props) {
         offset: offset,
         length: length,
     });
+    const loading = useContext(LoadingOverlayContext);
 
     const {request} = useRequests();
 
     const getList = (params, keep = false) => {
+        loading.setIsLoadingOverlayShown(true);
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
         request({
@@ -38,7 +41,10 @@ function LawyerList(props) {
                 if (keep) setLawyers([...lawyers, ...data.lawyers]);
                 else setLawyers(data.lawyers);
             })
-            .catch((_errors) => {});
+            .catch((_errors) => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            })
     };
 
     const SortHandler = ([{value}]) => {

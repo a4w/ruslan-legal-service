@@ -42,7 +42,7 @@ export const AuthContext = React.createContext(null);
 
 function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
-    const [loadingOverlayText, setLoadingOverlayText] = useState("");
+    const [loadingOverlayText, setLoadingOverlayText] = useState("Loading...");
 
     const [cookies, setCookie,] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn']);
 

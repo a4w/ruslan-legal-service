@@ -22,7 +22,7 @@ const GoogleButton = ({register}) => {
         }).then(response => {
             setAuth({
                 accessToken: response.access_token,
-                accountType: data.account_type,
+                accountType: response.account_type,
                 isLoggedIn: true
             });
         }).catch(error => {

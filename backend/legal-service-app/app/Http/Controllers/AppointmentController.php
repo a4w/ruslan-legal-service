@@ -86,7 +86,7 @@ class AppointmentController extends Controller
                 $appointment->payment_intent_id = $paymentIntent->id;
                 $appointment->save();
             }
-            return RespondJSON::with(['client_secret' => $paymentIntent->client_secret]);
+            return RespondJSON::success(['client_secret' => $paymentIntent->client_secret, 'total_price' => $total_price, 'appointments' => $appointments, 'currency_symbol' => config('app.currency_symbol')]);
         } catch (Exception $e) {
             return RespondJSON::unknownError();
         }

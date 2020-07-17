@@ -96,7 +96,11 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             // Go to checkout with the client secret
             toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
             const client_secret = response.client_secret;
-            handleSelection({client_secret});
+            const appointments = response.appointments;
+            const total_price = response.total_price;
+            const currency_symbol = response.currency_symbol;
+
+            handleSelection({client_secret, appointments, total_price, currency_symbol});
         }).catch(error => {
         }).finally(() => {
             loadingContext.setIsLoadingOverlayShown(false);

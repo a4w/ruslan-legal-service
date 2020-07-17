@@ -7,6 +7,8 @@ import {loadStripe} from "@stripe/stripe-js"
 import CheckoutForm from "./CheckoutForm";
 import useRequests from "./useRequests";
 import env from "./env"
+import Config from "./Config";
+import moment from "moment";
 import {LoadingOverlayContext} from "./App";
 
 const stripe = loadStripe(env.stripe_api_key);
@@ -15,6 +17,8 @@ const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
     const [isTimeSelected, setIsTimeSelected] = useState(false);
     const [clientSecret, setClientSecret] = useState(null);
+    const [orderData, setOrderData] = useState({total_price: 0, currency_symbol: Config.default_currency_symbol});
+    const [selectedAppointments, setSelectedAppointments] = useState([]);
     const {request} = useRequests();
     const loader = useContext(LoadingOverlayContext);
     useEffect(() => {
@@ -30,9 +34,13 @@ const LawyerBooking = ({LawyerId}) => {
 
     }, []);
 
-    const handleTimeSelection = ({client_secret}) => {
+    const handleTimeSelection = ({client_secret, total_price, currency_symbol, appointments}) => {
         setClientSecret(client_secret);
-        console.log(client_secret);
+        setOrderData({
+            total_price,
+            currency_symbol,
+        })
+        setSelectedAppointments(appointments);
         setIsTimeSelected(true);
     };
 
@@ -40,12 +48,32 @@ const LawyerBooking = ({LawyerId}) => {
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12" style={{minHeight: '400px'}}>
+                    <div className={isTimeSelected ? "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" : "col-12"} style={{minHeight: '400px'}}>
                         {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}
                         {isTimeSelected &&
-                            <Elements stripe={stripe}>
-                                <CheckoutForm client_secret={clientSecret} />
-                            </Elements>
+                            <>
+                                <h1 className="text-center">Checkout</h1>
+                                <div className="m-2">
+                                    <ol>
+                                        {selectedAppointments.map((appointment) => {
+                                            return (
+                                                <>
+                                                    <li>
+                                                        <div className="d-block text-center">
+                                                            <span><b>{new Date(appointment.appointment_time).toLocaleString()}</b> for <b>{appointment.duration} minutes</b></span>
+                                                            <span>&nbsp;:&nbsp;<b>{orderData.currency_symbol} {appointment.price}</b></span>
+                                                        </div>
+                                                    </li>
+                                                </>
+                                            );
+                                        })}
+                                    </ol>
+                                </div>
+                                <h4 className="text-center">Total: {orderData.currency_symbol} {orderData.total_price}</h4>
+                                <Elements stripe={stripe}>
+                                    <CheckoutForm client_secret={clientSecret} />
+                                </Elements>
+                            </>
                         }
                     </div>
                 </div>

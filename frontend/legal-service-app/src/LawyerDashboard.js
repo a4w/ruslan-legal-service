@@ -14,7 +14,7 @@ const LawyerDashboard = () => {
                 title={"Dashboard | Lawbe.co.uk"}
                 description={"Edit your profile | Lawbe.co.uk"}
             />
-            <div className="row">
+            <div className="row no-gutters">
                 <div className="col-12 d-md-none">
                     <button className="btn btn-primary mb-2 sticky-top float-right btn-block" data-toggle="collapse" data-target="#dashboard_nav" style={{zIndex: 0}}><FaBars /></button>
                 </div>

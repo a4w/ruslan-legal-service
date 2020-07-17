@@ -8,6 +8,7 @@ import {NavTab} from "react-router-tabs";
 import "./Tabs.css";
 import history from "./History";
 import LawyerPaymentSettings from "./LawyerPaymentSettings"
+import PageHead from "./PageHead";
 
 const EditPersonal = () => {
     const path = "/dashboard/settings";

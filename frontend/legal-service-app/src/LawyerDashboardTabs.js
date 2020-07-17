@@ -47,7 +47,7 @@ const LawyerDashboardTabs = () => {
                 <EditPassword />
             </Route>
             <Route exact path="/dashboard/logout">
-                <Redirect replace to="/" />
+                <Redirect to="/" />
             </Route>
         </Switch>
     );

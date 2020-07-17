@@ -4,11 +4,14 @@ import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
 import {FaSearch} from "react-icons/fa";
+import {MdClear} from "react-icons/md";
+import {AiOutlineCloseCircle} from "react-icons/ai";
 import StickyBox from "react-sticky-box";
 import "./Calendar.css";
 import queryString from "query-string"
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import { get } from "jquery";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -84,6 +87,11 @@ function LawyerList(props) {
         // params["filter_by"] = filter.filters;
         getList(next);
     }
+    const filterClear = ()=>{
+        const next = { offset: 0, length: length };
+        setParams(next);
+        getList(next);
+    }
     return (
         <div>
             <PageHead
@@ -98,6 +106,7 @@ function LawyerList(props) {
                     filter={filter}
                     setFilter={setFilter}
                     filterHandler={filterHandler}
+                    filterClear={filterClear}
                 />
             </StickyBox>
 
@@ -175,31 +184,45 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     );
 };
 
-const LawyerListHeader = ({params, OnChangeHandler, selectedValue, filter, setFilter, filterHandler}) => {
+const LawyerListHeader = ({
+    params,
+    OnChangeHandler,
+    selectedValue,
+    filter,
+    setFilter,
+    filterHandler,
+    filterClear,
+}) => {
     const options = [
-        {value: "ratings", label: "Rating"},
-        {value: "price", label: "Price"},
-        {value: "popular", label: "Popular"},
+        { value: "ratings", label: "Rating" },
+        { value: "price", label: "Price" },
+        { value: "popular", label: "Popular" },
     ];
     return (
         <div className="breadcrumb-bar">
             <div className="container-fluid">
                 <div className="row align-items-center">
                     <form className="card-body form-row p-2">
-                        <div className="filter-widget mb-0" style={{width: "40%"}}>
+                        <div
+                            className="filter-widget mb-0"
+                            style={{ width: "40%" }}
+                        >
                             <div className="cal-icon">
                                 <DatePicker
                                     className="form-control mb-0"
                                     selected={filter.date}
                                     onChange={(date) =>
-                                        setFilter({...filter, date: date})
+                                        setFilter({ ...filter, date: date })
                                     }
                                     minDate={new Date()}
                                     placeholderText="Available on"
                                 />
                             </div>
                         </div>
-                        <div className="btn-search align-left ml-2" style={{Width: "10%"}}>
+                        <div
+                            className="btn-search align-left ml-2"
+                            style={{ Width: "10%" }}
+                        >
                             <button
                                 type="button"
                                 className="btn btn-block font-weight-bold"
@@ -208,7 +231,19 @@ const LawyerListHeader = ({params, OnChangeHandler, selectedValue, filter, setFi
                                 <FaSearch />
                             </button>
                         </div>
-                    </form>            
+                        <div
+                            className="btn-search align-left ml-2"
+                            style={{ Width: "10%" }}
+                        >
+                            <button
+                                type="button"
+                                className="btn btn-block font-weight-bold"
+                                onClick={filterClear}
+                            >
+                                <AiOutlineCloseCircle />
+                            </button>
+                        </div>
+                    </form>
                     <div className="sort-by">
                         <span className="sort-title">Sort by</span>
                         <span className="sortby-fliter">

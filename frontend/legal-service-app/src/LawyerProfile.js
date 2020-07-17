@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
 import {Discount} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
@@ -17,7 +17,8 @@ import BlogList from "./BlogList";
 import Img from "./Img";
 import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
-import {FiMessageCircle} from "react-icons/fi";
+import {AuthContext} from "./App"
+import { toast } from "react-toastify";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -50,6 +51,20 @@ const LawyerProfile = ({match}) => {
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
     const account = lawyer.account;
+    const auth = useContext(AuthContext);
+    const {request} = useRequests();
+    const StartChat = ()=>{
+        const myID = auth.account_id;
+        const url = `/chat/${myID}/${lawyer.id}`;
+        request({ url: url, method: "POST" })
+            .then(() => {
+                History.push(`/chat/${lawyer.id}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            });
+        
+    }
     return (
         <div className="card">
             <div className="card-body">
@@ -121,7 +136,7 @@ const ProfileCard = ({lawyer}) => {
                             </ul>
                         </div>
                         <div className="lawyer-action">
-                            <button className="btn btn-white msg-btn">
+                            <button className="btn btn-white msg-btn" onClick={StartChat}>
                                 Chat with this lawyer! <i className="far fa-comment-alt"></i>
                             </button>
                         </div>

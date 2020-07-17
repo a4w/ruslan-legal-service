@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import GoogleLogin from "react-google-login";
-import Config from "./Config";
+import env from "./env";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 
@@ -31,7 +31,7 @@ const GoogleButton = ({register}) => {
     };
     return (
         <GoogleLogin
-            clientId={Config.google_client_id}
+            clientId={env.google_client_id}
             render={(renderProps) => (
                 <a
                     href="//"

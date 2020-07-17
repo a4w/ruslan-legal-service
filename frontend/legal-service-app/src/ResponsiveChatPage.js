@@ -231,7 +231,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 </div>
             </>
             :
-            <NoContent>
+            <NoContent label="Open a lawyer profile and send a message!">
                 No chats available
             </NoContent>
             }

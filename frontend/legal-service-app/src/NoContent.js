@@ -10,7 +10,7 @@ const NoContent = (props) => {
                         <i className="fa fa-warning"></i> {props.children}
                     </h3>
                     <p className="h4 font-weight-normal">
-                        Please re-try another time
+                        {props.label? props.label:"Please re-try another time"}
                     </p>
                 </div>
             </div>

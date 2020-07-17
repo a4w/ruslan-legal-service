@@ -538,12 +538,13 @@ const BlogCard = ({blog}) => {
     return (
         <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
-                <div className="blog-image" style={{height: "180px"}}>
+                <div className="" style={{maxWidth: '100%', height: '150px'}}>
                     <Link to={`/blog/${id}`}>
                         <BlogImg
                             className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            style={{}}
                         />
                     </Link>
                 </div>
@@ -555,6 +556,7 @@ const BlogCard = ({blog}) => {
                                     <Img
                                         src={account.profile_picture}
                                         alt="Post Author"
+                                        style={{maxWidth: '40px'}}
                                     />
                                     <span>{`${account.name} ${account.surname}`}</span>
                                 </Link>

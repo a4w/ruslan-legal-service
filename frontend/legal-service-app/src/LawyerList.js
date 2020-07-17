@@ -97,13 +97,11 @@ function LawyerList(props) {
                 title="Available Lawyers list | Lawbe"
                 description="A list of the best lawyers from all across the country, book them now!"
             />
-            <LawyerListHeader
-                params={params}
-                OnChangeHandler={SortHandler}
-                selectedValue={sortBy}
-            />
             <StickyBox style={{zIndex: 6}}>
-                <LawyerSearchFilter
+                <LawyerListHeader
+                    params={params}
+                    OnChangeHandler={SortHandler}
+                    selectedValue={sortBy}
                     filter={filter}
                     setFilter={setFilter}
                     filterHandler={filterHandler}
@@ -184,7 +182,7 @@ const LawyerSearchFilter = ({filter, setFilter, filterHandler}) => {
     );
 };
 
-const LawyerListHeader = ({params, OnChangeHandler, selectedValue}) => {
+const LawyerListHeader = ({params, OnChangeHandler, selectedValue, filter, setFilter, filterHandler}) => {
     const options = [
         {value: "ratings", label: "Rating"},
         {value: "price", label: "Price"},
@@ -194,36 +192,40 @@ const LawyerListHeader = ({params, OnChangeHandler, selectedValue}) => {
         <div className="breadcrumb-bar">
             <div className="container-fluid">
                 <div className="row align-items-center">
-                    <div className="col-md-8 col-12">
-                        <nav
-                            aria-label="breadcrumb"
-                            className="page-breadcrumb"
-                        >
-                            <ol className="breadcrumb">
-                                <li className="breadcrumb-item">
-                                    <Link to="/">Home</Link>
-                                </li>
-                                <li
-                                    className="breadcrumb-item active"
-                                    aria-current="page"
-                                >
-                                    Search
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div className="col-md-4 col-12 d-md-block d-none">
-                        <div className="sort-by">
-                            <span className="sort-title">Sort by</span>
-                            <span className="sortby-fliter">
-                                <Select
-                                    className="select-form-control"
-                                    value={selectedValue}
-                                    options={options}
-                                    onChange={OnChangeHandler}
+                    <form className="card-body form-row p-2">
+                        <div className="filter-widget mb-0" style={{width: "40%"}}>
+                            <div className="cal-icon">
+                                <DatePicker
+                                    className="form-control mb-0"
+                                    selected={filter.date}
+                                    onChange={(date) =>
+                                        setFilter({...filter, date: date})
+                                    }
+                                    minDate={new Date()}
+                                    placeholderText="Available on"
                                 />
-                            </span>
+                            </div>
                         </div>
+                        <div className="btn-search align-left ml-2" style={{Width: "10%"}}>
+                            <button
+                                type="button"
+                                className="btn btn-block font-weight-bold"
+                                onClick={filterHandler}
+                            >
+                                <FaSearch />
+                            </button>
+                        </div>
+                    </form>            
+                    <div className="sort-by">
+                        <span className="sort-title">Sort by</span>
+                        <span className="sortby-fliter">
+                            <Select
+                                className="select-form-control"
+                                value={selectedValue}
+                                options={options}
+                                onChange={OnChangeHandler}
+                            />
+                        </span>
                     </div>
                 </div>
             </div>

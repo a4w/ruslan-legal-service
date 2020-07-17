@@ -25,8 +25,13 @@ const LawyerBlogs = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to={`${path}/write-blog`}>
+                                <NavTab exact to={`${path}/write-blog`}>
                                     Write Blog
+                                </NavTab>
+                            </li>
+                            <li>
+                                <NavTab to={`${path}/edit-blog/`}>
+                                    Edit Blog
                                 </NavTab>
                             </li>
                         </ul>
@@ -39,7 +44,7 @@ const LawyerBlogs = () => {
                         <Route path={`${path}/my-blogs`}>
                             <Blogs />
                         </Route>
-                        <Route path={`${path}/write-blog/:blogId`} component={WriteBlog}/>
+                        <Route path={`${path}/edit-blog/:blogId`} component={WriteBlog}/>
                         <Route path={`${path}/write-blog`} component={WriteBlog}/>
                     </Switch>
                 </div>
@@ -63,6 +68,6 @@ const Blogs = ()=>{
             })
             .catch((err) => {});
     }, []);
-    return blogs && <BlogList blogs={blogs} />
+    return blogs && <BlogList blogs={blogs} editable={true} />
 }
 export default LawyerBlogs;

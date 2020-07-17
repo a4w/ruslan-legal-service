@@ -37,11 +37,7 @@ const LawyerCompleteRegisteration = ({}) => {
             url: 'lawyer/types',
             method: 'GET'
         }).then((response) => {
-            let types = response.types.filter((_, i) => {
-                if (i < 2) {
-                    return true;
-                }
-            }).map((type, _) => {
+            let types = response.types.map((type, _) => {
                 return {
                     label: type.type,
                     value: type.id,

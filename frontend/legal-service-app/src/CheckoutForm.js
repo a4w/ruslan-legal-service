@@ -59,7 +59,7 @@ const CheckoutForm = ({client_secret}) => {
             setSucceeded(true);
             // Continue
             toast.success("Thank you, the appointment is successfully reserved")
-            History.push("/dashboard");
+            History.push("/client-dashboard");
         }
     };
     return (

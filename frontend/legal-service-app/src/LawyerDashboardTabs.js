@@ -12,7 +12,6 @@ import History from "./History";
 import ScheduleForm from "./ScheduleForm";
 import UserCalendar from "./UserCalendar";
 import LawyerBlogs from "./LawyerBlogs";
-import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -39,7 +38,7 @@ const LawyerDashboardTabs = () => {
                 <LawyerBlogs />
             </Route>
             <Route exact path="/dashboard/messages">
-                <ResponsiveChatPage />
+                <Redirect to="/chat" />
             </Route>
             <Route path="/dashboard/settings">
                 <EditPersonal />

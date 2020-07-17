@@ -15,6 +15,7 @@ import "./Home.css"
 import useRequests from "./useRequests";
 import useValidation from "./useValidation";
 import SpinnerButton from "./SpinnerButton";
+import {FaQuestionCircle, FaRegQuestionCircle} from "react-icons/fa";
 
 const Home = () => {
     const [location, setLocation] = useState({value: null, label: "Select location"});
@@ -187,8 +188,7 @@ const SearchLawyerByName = () => {
     const OnChangeHandler = ({target: {value}}) => {
         setTerm(value);
     };
-    const OnSubmitHandler = (e) => {
-        e.preventDefault()
+    useEffect(() => {
         setLoading(true);
         request({
             url: `/lawyer/search?term=${term}`,
@@ -197,10 +197,11 @@ const SearchLawyerByName = () => {
             setResults(response.lawyers);
         }).catch(error => {
             setResults([]);
-        }).finally(()=>{
+        }).finally(() => {
             setLoading(false);
         });
-    }
+
+    }, [term]);
     const dropdownStyle = {
         position: 'absolute',
         display: 'block',
@@ -230,30 +231,30 @@ const SearchLawyerByName = () => {
                             onChange={OnChangeHandler}
                             value={term}
                         />
-                        {results && <div style={dropdownStyle}>
-                            {results.length?
-                            results.map((lawyer) => {
-                                console.log(lawyer);
-                                return (
-                                    <>
-                                        <div className="inline-search-result">
-                                            <Link to={`/profile/${lawyer.id}`}>
-                                                <Img
-                                                    alt={lawyer.full_name}
-                                                    className="rounded-circle"
-                                                    src={lawyer.account.profile_picture}
-                                                    style={imgStyle}
-                                                />
-                                                <b>{lawyer.account.full_name}</b>
-                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                            </Link>
-                                        </div>
-                                    </>
-                                );
-                            })
-                            :(
-                            <h5>no matches found</h5>
-                            )}
+                        {results && term.trim() !== "" && <div style={dropdownStyle}>
+                            {(results.length) ?
+                                results.map((lawyer) => {
+                                    console.log(lawyer);
+                                    return (
+                                        <>
+                                            <div className="inline-search-result">
+                                                <Link to={`/profile/${lawyer.id}`}>
+                                                    <Img
+                                                        alt={lawyer.full_name}
+                                                        className="rounded-circle"
+                                                        src={lawyer.account.profile_picture}
+                                                        style={imgStyle}
+                                                    />
+                                                    <b>{lawyer.account.full_name}</b>
+                                                    <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
+                                                </Link>
+                                            </div>
+                                        </>
+                                    );
+                                })
+                                : (
+                                    <span className="d-block text-center p-3"><FaRegQuestionCircle />&nbsp;no matches found</span>
+                                )}
                         </div>}
                     </div>
                 </div>
@@ -262,7 +263,6 @@ const SearchLawyerByName = () => {
                         type="submit"
                         style={{height: "46px"}}
                         className="btn btn-block btn-primary search-btn"
-                        onClick={OnSubmitHandler}
                         loading={loading}
                     >
                         <i className="fas fa-search"></i>

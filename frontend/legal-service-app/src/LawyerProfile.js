@@ -19,7 +19,7 @@ import Img from "./Img";
 import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App"
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
 
 const LawyerProfile = ({match}) => {
@@ -58,9 +58,9 @@ const ProfileCard = ({lawyer}) => {
     const [loading, setLoading] = useState(false);
     const StartChat = () => {
         setLoading(true);
-        const myID = auth.account_id;
+        const myID = auth.accountId;
         const url = `/chat/${myID}/${lawyer.id}`;
-        request({ url: url, method: "POST" })
+        request({url: url, method: "POST"})
             .then(() => {
                 History.push(`/chat/${lawyer.id - 1}`);
             })
@@ -86,7 +86,7 @@ const ProfileCard = ({lawyer}) => {
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
-                            </h4> 
+                            </h4>
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>

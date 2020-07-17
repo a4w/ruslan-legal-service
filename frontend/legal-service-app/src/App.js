@@ -44,14 +44,15 @@ function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
     const [loadingOverlayText, setLoadingOverlayText] = useState("Loading...");
 
-    const [cookies, setCookie,] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn']);
+    const [cookies, setCookie,] = useCookies(['accessToken', 'accountType', 'refreshToken', 'isLoggedIn', 'accountId']);
 
     // Attempt loading persistent data
     const defaultAuthState = {
         accessToken: cookies.accessToken || null,
         accountType: cookies.accountType || null,
         refreshToken: cookies.refreshToken || null,
-        isLoggedIn: (cookies.isLoggedIn === "true") || false
+        isLoggedIn: (cookies.isLoggedIn === "true") || false,
+        accountId: null
     };
     const [auth, setAuth] = useState(defaultAuthState);
 

@@ -1,12 +1,12 @@
-import Config from "./Config"
 import {useEffect, useContext} from "react";
 import {AuthContext} from "./App";
 import {useHistory, useRouteMatch} from "react-router";
 import axios from "axios";
 import bootbox from "bootbox"
+import env from "./env"
 
 const axiosClient = axios.create({
-    baseURL: Config.api_url,
+    baseURL: env.api_url,
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json"

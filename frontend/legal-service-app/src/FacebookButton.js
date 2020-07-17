@@ -1,17 +1,17 @@
 import React from "react";
 import FacebookLogin from 'react-facebook-login';
-import Config from "./Config";
+import env from "./env";
 
-const FacebookButton = ({register})=>{
+const FacebookButton = ({register}) => {
     const ResponseCallback = (response) => {
         console.log(response);
     };
     return (
         <FacebookLogin
-            appId={Config.facebook_app_id}
+            appId={env.facebook_app_id}
             cssClass="btn btn-facebook btn-block"
             icon="fab fa-facebook-f mr-1"
-            textButton={register? " Register":" Login"}
+            textButton={register ? " Register" : " Login"}
             fields="name,email,picture"
             callback={ResponseCallback}
         />

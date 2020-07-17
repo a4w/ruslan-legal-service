@@ -11,7 +11,7 @@ import "./Calendar.css";
 import queryString from "query-string"
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
-import { get } from "jquery";
+import {get} from "jquery";
 import {LoadingOverlayContext} from "./App"
 import LoadingOverlay from "react-loading-overlay";
 
@@ -94,8 +94,8 @@ function LawyerList(props) {
         // params["filter_by"] = filter.filters;
         getList(next);
     }
-    const filterClear = ()=>{
-        const next = { offset: 0, length: length };
+    const filterClear = () => {
+        const next = {offset: 0, length: length};
         setParams(next);
         getList(next);
     }
@@ -201,9 +201,9 @@ const LawyerListHeader = ({
     filterClear,
 }) => {
     const options = [
-        { value: "ratings", label: "Rating" },
-        { value: "price", label: "Price" },
-        { value: "popular", label: "Popular" },
+        {value: "ratings", label: "Rating"},
+        {value: "price", label: "Price"},
+        {value: "popular", label: "Popular"},
     ];
     return (
         <div className="breadcrumb-bar">
@@ -212,14 +212,14 @@ const LawyerListHeader = ({
                     <form className="card-body form-row p-2">
                         <div
                             className="filter-widget mb-0"
-                            style={{ width: "40%" }}
+                            style={{width: "40%"}}
                         >
                             <div className="cal-icon">
                                 <DatePicker
                                     className="form-control mb-0"
                                     selected={filter.date}
                                     onChange={(date) =>
-                                        setFilter({ ...filter, date: date })
+                                        setFilter({...filter, date: date})
                                     }
                                     minDate={new Date()}
                                     placeholderText="Available on"
@@ -228,7 +228,7 @@ const LawyerListHeader = ({
                         </div>
                         <div
                             className="btn-search align-left ml-2"
-                            style={{ Width: "10%" }}
+                            style={{Width: "10%"}}
                         >
                             <button
                                 type="button"
@@ -240,7 +240,7 @@ const LawyerListHeader = ({
                         </div>
                         <div
                             className="btn-search align-left ml-2"
-                            style={{ Width: "10%" }}
+                            style={{Width: "10%"}}
                         >
                             <button
                                 type="button"
@@ -271,7 +271,7 @@ const LawyerListHeader = ({
 const PopUp = ({lawyer}) => {
     return (
         lawyer && (
-            <div className="card flex-fill mr-2">
+            <div className="card flex-fill mr-2 d-none d-lg-flex">
                 <div className="m-2">
                     <div className="card-body p-0">
                         <div style={{display: "inline"}}>

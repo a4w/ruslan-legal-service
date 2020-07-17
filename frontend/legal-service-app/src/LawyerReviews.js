@@ -3,6 +3,7 @@ import StarRatings from "react-star-ratings";
 import moment from "moment";
 import Img from "./Img";
 import useRequests from "./useRequests";
+import NoContent from "./NoContent";
 
 const LawyerReviews = ({lawyer}) => {
     const [comments, setComments] = useState(null);
@@ -23,11 +24,18 @@ const ReviewList = ({comments}) => {
     return (
         <div className="lawyer-review review-listing">
             <ul className="comments-list">
-                {comments && comments.map((comment) => (
-                    <li key={comment.id}>
-                        <Comment comment={comment} account={comment.appointment.client.account} />
-                    </li>
-                ))}
+                {comments && comments.length ? (
+                    comments.map((comment) => (
+                        <li key={comment.id}>
+                            <Comment
+                                comment={comment}
+                                account={comment.appointment.client.account}
+                            />
+                        </li>
+                    ))
+                ) : (
+                    <NoContent>There are no reviews yet</NoContent>
+                )}
             </ul>
         </div>
     );

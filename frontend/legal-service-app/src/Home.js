@@ -178,7 +178,7 @@ const Home = () => {
 };
 
 const SearchLawyerByName = () => {
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState(null);
     const [, , run] = useValidation();
     const [term, setTerm] = useState("");
     const {request} = useRequests();
@@ -225,8 +225,9 @@ const SearchLawyerByName = () => {
                             onChange={OnChangeHandler}
                             value={term}
                         />
-                        {results.length > 0 && <div style={dropdownStyle}>
-                            {results.map((lawyer) => {
+                        {results && <div style={dropdownStyle}>
+                            {results.length?
+                            results.map((lawyer) => {
                                 console.log(lawyer);
                                 return (
                                     <>
@@ -244,7 +245,10 @@ const SearchLawyerByName = () => {
                                         </div>
                                     </>
                                 );
-                            })}
+                            })
+                            :(
+                            <h4>no matches found</h4>
+                            )}
                         </div>}
                     </div>
                 </div>

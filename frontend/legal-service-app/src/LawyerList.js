@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
@@ -9,6 +9,7 @@ import "./Calendar.css";
 import queryString from "query-string"
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App"
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -22,10 +23,12 @@ function LawyerList(props) {
         offset: offset,
         length: length,
     });
+    const loading = useContext(LoadingOverlayContext);
 
     const {request} = useRequests();
 
     const getList = (params, keep = false) => {
+        loading.setIsLoadingOverlayShown(true);
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
         request({
@@ -37,7 +40,10 @@ function LawyerList(props) {
                 if (keep) setLawyers([...lawyers, ...data.lawyers]);
                 else setLawyers(data.lawyers);
             })
-            .catch((_errors) => {});
+            .catch((_errors) => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            })
     };
 
     const SortHandler = ([{value}]) => {

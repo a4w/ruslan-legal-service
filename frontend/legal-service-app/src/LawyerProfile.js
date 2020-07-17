@@ -20,7 +20,6 @@ import useRequests from "./useRequests";
 import {AuthContext} from "./App"
 import { toast } from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
-import { NavTab } from "react-router-tabs";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -214,16 +213,16 @@ const NavBar = ({match}) => {
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <NavTab to={`${path}/overview`}>Overview</NavTab>
+                    <Link to={`${path}/overview`}>Overview</Link>
                 </li>
                 <li className="nav-item">
-                    <NavTab to={`${path}/reviews`}>Reviews</NavTab>
+                    <Link to={`${path}/reviews`}>Reviews</Link>
                 </li>
                 <li className="nav-item">
-                    <NavTab to={`${path}/hours`}>Business Hours</NavTab>
+                    <Link to={`${path}/hours`}>Business Hours</Link>
                 </li>
                 <li className="nav-item">
-                    <NavTab to={`${path}/blogs`}>Blogs</NavTab>
+                    <Link to={`${path}/blogs`}>Blogs</Link>
                 </li>
             </ul>
         </nav>

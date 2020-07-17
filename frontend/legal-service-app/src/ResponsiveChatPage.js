@@ -197,7 +197,13 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                 </div>
                             </div>
                         </div>
+                        {messages && messages.length? 
                         <MessagesList messages={messages} user_id={myId} />
+                        :
+                        <NoContent label="send a message now!">
+                            There are no messages to display
+                        </NoContent>
+                        }
                         <div className="chat-footer">
                             <div className="input-group">
                                 <div className="input-group-prepend">

@@ -43,12 +43,13 @@ const LoginForm = ({back}) => {
                             accessToken: data.access_token,
                             accountType: data.account_type,
                             refreshToken: data.refresh_token || null,
-                            isLoggedIn: true
+                            isLoggedIn: true,
+                            accountId: data.account.account.id
                         });
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push({
                                 pathname: "/dashboard/settings/lawyer-info",
-                                state: { showAlert: true },
+                                state: {showAlert: true},
                             });
                         }
                     })

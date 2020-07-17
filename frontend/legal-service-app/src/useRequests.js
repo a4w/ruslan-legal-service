@@ -93,7 +93,8 @@ function useRequests() {
                             accessToken: null,
                             accountType: null,
                             refreshToken: null,
-                            isLoggedIn: null
+                            isLoggedIn: null,
+                            accountId: null
                         });
                     });
                 }

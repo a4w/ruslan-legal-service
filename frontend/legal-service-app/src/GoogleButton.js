@@ -23,7 +23,8 @@ const GoogleButton = ({register}) => {
             setAuth({
                 accessToken: response.access_token,
                 accountType: response.account_type,
-                isLoggedIn: true
+                isLoggedIn: true,
+                accountId: response.account.account.id,
             });
         }).catch(error => {
             console.log(error);

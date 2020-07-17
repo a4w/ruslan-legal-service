@@ -79,13 +79,21 @@ function useRequests() {
     }
 
     function Logout() {
-        request({
-            url: 'auth/logout',
-            method: 'POST',
-            data: null
-        }).finally(() => {
-            setAuth({});
-        });
+        bootbox.confirm({
+            title: "Confirm",
+            message: "Are you sure you would like to logout of lawbe ?",
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: 'auth/logout',
+                        method: 'POST',
+                        data: null
+                    }).finally(() => {
+                        setAuth({});
+                    });
+                }
+            }
+        })
     }
 
     async function request(options) {

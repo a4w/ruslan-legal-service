@@ -87,7 +87,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 ) : (
                                     <li>
                                         <i class="fas fa-map-marker-alt"></i>{" "}
-                                        Not listed :)
+                                        -
                                     </li>
                                 )}
                                 <Discount

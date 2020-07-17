@@ -106,7 +106,7 @@ const ProfileCard = ({lawyer}) => {
                                 ) : (
                                     <li>
                                         <i className="fas fa-map-marker-alt"></i>{" "}
-                                        Not listed :)
+                                        -
                                     </li>
                                 )}
                                 <Discount

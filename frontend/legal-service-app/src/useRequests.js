@@ -89,7 +89,12 @@ function useRequests() {
                         method: 'POST',
                         data: null
                     }).finally(() => {
-                        setAuth({});
+                        setAuth({
+                            accessToken: null,
+                            accountType: null,
+                            refreshToken: null,
+                            isLoggedIn: null
+                        });
                     });
                 }
             }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
 import {Discount} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
@@ -18,6 +18,9 @@ import BlogList from "./BlogList";
 import Img from "./Img";
 import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
+import {AuthContext} from "./App"
+import { toast } from "react-toastify";
+import SpinnerButton from "./SpinnerButton";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -50,6 +53,24 @@ const LawyerProfile = ({match}) => {
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
     const account = lawyer.account;
+    const auth = useContext(AuthContext);
+    const {request} = useRequests();
+    const [loading, setLoading] = useState(false);
+    const StartChat = () => {
+        setLoading(true);
+        const myID = auth.account_id;
+        const url = `/chat/${myID}/${lawyer.id}`;
+        request({ url: url, method: "POST" })
+            .then(() => {
+                History.push(`/chat/${lawyer.id - 1}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
     return (
         <div className="card">
             <div className="card-body">
@@ -65,7 +86,7 @@ const ProfileCard = ({lawyer}) => {
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
-                            </h4>
+                            </h4> 
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>
@@ -120,7 +141,11 @@ const ProfileCard = ({lawyer}) => {
                                 />
                             </ul>
                         </div>
-                        <div className="lawyer-action"></div>
+                        <div className="lawyer-action">
+                            <SpinnerButton className="btn btn-white msg-btn" onClick={StartChat} loading={loading}>
+                                Chat with this lawyer! <i className="far fa-comment-alt"></i>
+                            </SpinnerButton>
+                        </div>
                         <div className="session-booking">
                             <Link
                                 className="apt-btn"

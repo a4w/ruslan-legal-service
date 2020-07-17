@@ -11,6 +11,7 @@ import useRequests from "./useRequests";
 import BlogImg from "./BlogImg";
 import bootbox from "bootbox"
 import History from "./History";
+import SpinnerButton from "./SpinnerButton";
 
 const EditStyles = {
     backgroundColor: "#2c2c2c",
@@ -132,6 +133,7 @@ const BlogPage = ({match}) => {
     const md_content = useRef(null);
     const [blog, setBlog] = useState(null);
     const [content, setContent] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const showSelectedCover = (e) => {
         const input = e.target;
@@ -193,6 +195,7 @@ const BlogPage = ({match}) => {
                         message: "This will put the blog to be reviewed by our admins, You will be notified once it's approved and published.",
                         callback: (result) => {
                             if (result) {
+                                setLoading(true);
                                 request({
                                     url: blog?  `/blogs/edit/${blog.id}`:"/blogs/add",
                                     method: "POST",
@@ -222,6 +225,8 @@ const BlogPage = ({match}) => {
                                     }
                                 }).catch(() => {
                                     toast.error("An error has occurred");
+                                }).finally(()=>{
+                                    setLoading(false);
                                 });
                             }
                         }
@@ -312,7 +317,13 @@ const BlogPage = ({match}) => {
                     />
                 )}
             </div>
-            <button className="btn btn-primary" onClick={Submit}>Submit blog for review</button>
+            <SpinnerButton
+                className="btn btn-primary"
+                onClick={Submit}
+                loading={loading}
+            >
+                Submit blog for review
+            </SpinnerButton>
         </div>
     );
 };

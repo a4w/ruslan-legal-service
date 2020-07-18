@@ -70,7 +70,16 @@ function LawyerList(props) {
         getList(params);
 
     }, []);
-
+    useEffect(()=>{
+        console.log(props.location.search);
+        const next = {
+            ...queryString.parse(props.location.search),
+            offset: 0,
+            length: length,
+        };
+        setParams(next);
+        getList(next);
+    },[props.location.search]);
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);

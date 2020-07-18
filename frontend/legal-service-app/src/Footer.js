@@ -1,9 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import History from "./History";
+import useRequests from "./useRequests";
 
 const Footer = () => {
+    const [practiceAreas, setPracticeAreas] = useState([]);
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: 'lawyer/practice-areas',
+            method: 'GET'
+        }).then(response => {
+            setPracticeAreas(response.areas);
+        });
+    }, []);
     return (
         <footer className="footer">
             <div className="footer-top">
@@ -52,39 +63,24 @@ const Footer = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Clients</h2>
+                                <h2 className="footer-title">Practice Areas</h2>
                                 <ul>
-                                    <li>
-                                        <Link to="/list">
-                                            Search for Lawyers
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/login`}
-                                        >
-                                            Client Login
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/register`}
-                                        >
-                                            Client Register
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/list">Booking</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/client-dashboard">
-                                            Client Dashboard
-                                        </Link>
-                                    </li>
+                                    {practiceAreas.map((area, i) => (
+                                        <li key={i}>
+                                            <Link
+                                                to={{
+                                                    pathname: "/list",
+                                                    search: `?practice_areas=${area.id}`,
+                                                }}
+                                            >
+                                                {area.area}
+                                            </Link>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
-                        <div className="col-lg-3 col-md-6">
+                        {/* <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-menu">
                                 <h2 className="footer-title">For Lawyers</h2>
                                 <ul>
@@ -119,7 +115,7 @@ const Footer = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-contact">

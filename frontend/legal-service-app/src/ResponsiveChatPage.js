@@ -9,6 +9,7 @@ import useRequests from "./useRequests";
 import History from "./History";
 import Img from "./Img"
 import NoContent from "./NoContent";
+import SpinnerButton from "./SpinnerButton";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
 
@@ -95,9 +96,11 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             });
         }
     };
+    const [isSending, setIsSending] = useState(false);
 
     const handleMessageSend = () => {
         const chat_id = chats[selectedChat].id;
+        setIsSending(true);
         if (file === null) {
             request({
                 url: `/chat/${chat_id}`,
@@ -110,6 +113,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 setMessage("");
             }).catch((error) => {
                 console.log(error);
+            }).finally(() => {
+                setIsSending(false);
             });
         } else {
             // Send file
@@ -127,120 +132,123 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 toast.error("The maximum file size is 2 MB");
             }).finally(() => {
                 setFile(null);
+                setIsSending(false);
             });
         }
     };
     return (
         <>
             <div className="row no-gutters">
-            {list_chats && chats.length?
-            <>
-                {list_chats && 
-                <div className="col-12 col-md-4 col-lg-3 collapse show h-100" id="chat_list" style={{position: 'absolute'}}>
-                <div
-                        className={"chat-cont-left"}
-                        style={{maxWidth: '100%'}}
-                    >
-                        <div className="chat-header">
-                            <span>Chats</span>
-                            <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <form className="chat-search">
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                    <i className="fas fa-search"></i>
-                                </div>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search"
-                                />
-                            </div>
-                        </form>
-                        <ChatUserList
-                            chats={chats}
-                            onChatSelection={(index) => {
-                                History.replace(`/chat/${index}`);
-                                setSelectedChat(index);
-                            }}
-                        />
-                    </div>
-                </div>}
-                <div className="col">
-                    <div
-                        className="chat-cont-right"
-                        style={{maxWidth: '100%'}}
-                    >
-                        <div className="chat-header">
-                            <div className="media">
-                                {list_chats && <button className="btn btn-link" data-toggle="collapse" data-target="#chat_list" role="button">
-                                    <i className="fas fa-chevron-left"></i>
-                                </button>}
-                                <div className="media-img-wrap">
-                                    <div className="avatar avatar-online">
-                                        {selectedChat !== null &&
-                                            <Img
-                                                src={chats[selectedChat].account.profile_picture}
-                                                alt="User Image"
-                                                className="avatar-img rounded-circle"
+                {list_chats && chats.length ?
+                    <>
+                        {list_chats &&
+                            <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">
+                                <div
+                                    className={"chat-cont-left"}
+                                    style={{maxWidth: '100%'}}
+                                >
+                                    <div className="chat-header">
+                                        <span>Chats</span>
+                                        <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
+                                            <i className="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <form className="chat-search">
+                                        <div className="input-group">
+                                            <div className="input-group-prepend">
+                                                <i className="fas fa-search"></i>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Search"
                                             />
-                                        }
+                                        </div>
+                                    </form>
+                                    <ChatUserList
+                                        chats={chats}
+                                        onChatSelection={(index) => {
+                                            History.replace(`/chat/${index}`);
+                                            setSelectedChat(index);
+                                        }}
+                                    />
+                                </div>
+                            </div>}
+                        <div className="col">
+                            <div
+                                className="chat-cont-right"
+                                style={{maxWidth: '100%'}}
+                            >
+                                <div className="chat-header">
+                                    <div className="media">
+                                        {list_chats && <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
+                                            <i className="fas fa-chevron-left"></i>
+                                        </button>}
+                                        <div className="media-img-wrap">
+                                            <div className="avatar avatar-online">
+                                                {selectedChat !== null &&
+                                                    <Img
+                                                        src={chats[selectedChat].account.profile_picture}
+                                                        alt="User Image"
+                                                        className="avatar-img rounded-circle"
+                                                    />
+                                                }
+                                            </div>
+                                        </div>{" "}
+                                        <div className="media-body">
+                                            <div className="user-name">
+                                                {selectedChat !== null &&
+                                                    chats[selectedChat].account.full_name}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>{" "}
-                                <div className="media-body">
-                                    <div className="user-name">
-                                        {selectedChat !== null &&
-                                            chats[selectedChat].account.full_name}
+                                </div>
+                                <MessagesList messages={messages} user_id={myId} />
+                                <div className="chat-footer">
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <div className="btn-file btn">
+                                                <FaPaperclip />
+                                                <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
+                                            </div>
+                                        </div>
+                                        <input
+                                            value={file === null ? message : file.name}
+                                            disabled={file !== null || isSending}
+                                            onChange={(e) => {
+                                                setMessage(e.target.value);
+                                            }}
+                                            type="text"
+                                            className="input-msg-send form-control"
+                                            placeholder="Type something"
+
+                                            onKeyPress={event => {
+                                                if (event.key === 'Enter') {
+                                                    handleMessageSend();
+                                                }
+                                            }}
+
+                                        />
+                                        <div className="input-group-append">
+                                            <SpinnerButton
+                                                type="button"
+                                                className="btn msg-send-btn"
+                                                onClick={handleMessageSend}
+                                                loading={isSending}
+                                            >
+                                                <i className="fab fa-telegram-plane"></i>
+                                            </SpinnerButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {messages && messages.length? 
-                        <MessagesList messages={messages} user_id={myId} />
-                        :
-                        <NoContent label="send a message now!">
-                            There are no messages to display
-                        </NoContent>
-                        }
-                        <div className="chat-footer">
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                    <div className="btn-file btn">
-                                        <FaPaperclip />
-                                        <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
-                                    </div>
-                                </div>
-                                <input
-                                    value={file === null ? message : file.name}
-                                    disabled={file !== null}
-                                    onChange={(e) => {
-                                        setMessage(e.target.value);
-                                    }}
-                                    type="text"
-                                    className="input-msg-send form-control"
-                                    placeholder="Type something"
-                                />
-                                <div className="input-group-append">
-                                    <button
-                                        type="button"
-                                        className="btn msg-send-btn"
-                                        onClick={handleMessageSend}
-                                    >
-                                        <i className="fab fa-telegram-plane"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-            :
-            <NoContent label="Open a lawyer profile and send a message!">
-                No chats available
+                    </>
+                    :
+                    <NoContent label="Open a lawyer profile and send a message!">
+                        No chats available
             </NoContent>
-            }
+                }
             </div>
         </>
     );

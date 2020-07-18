@@ -59,6 +59,7 @@ const UserDropdown = () => {
                         src={user.profile_picture}
                         style={{width: "31"}}
                         alt={user.name}
+                        overwrite={false}
                     />
                 </span>
             </a>

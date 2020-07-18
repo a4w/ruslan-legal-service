@@ -77,7 +77,7 @@ const ProfileCard = ({lawyer}) => {
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="law-img">
+                        <div className="law-img" style={{maxHeight:"250px"}}>
                             <Img
                                 src={account.profile_picture}
                                 className="img-fluid"

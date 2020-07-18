@@ -49,6 +49,7 @@ const Comment = ({comment, account = {}}) => {
                 className="avatar rounded-circle"
                 alt="User"
                 src={account.profile_picture}
+                overwrite={false}
             />
             <div className="comment-body" style={{width: "100%"}}>
                 <div className="meta-data">

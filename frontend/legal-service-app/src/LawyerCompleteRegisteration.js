@@ -7,6 +7,7 @@ import {toast} from "react-toastify"
 import useRequests from "./useRequests";
 import { Alert } from "react-bootstrap";
 import History from "./History";
+import SpinnerButton from "./SpinnerButton";
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
@@ -29,6 +30,7 @@ const LawyerCompleteRegisteration = ({}) => {
     const [accreditationOptions, setAccreditationOptions] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
     const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (History.location.state && History.location.state.showAlert)
@@ -125,6 +127,7 @@ const LawyerCompleteRegisteration = ({}) => {
             if (hasErrors) {
                 return;
             }
+            setLoading(true);
             // Assuming validation works otherwise another check is needed here
             const data = {
                 lawyer_type_id: lawyer.type,
@@ -153,6 +156,8 @@ const LawyerCompleteRegisteration = ({}) => {
                 }
                 console.log(_errors);
                 addError(fields, _errors);
+            }).finally(()=>{
+                setLoading(false)
             });
         });
     };
@@ -308,12 +313,13 @@ const LawyerCompleteRegisteration = ({}) => {
             </div>
             <div className="form-row">
                 <div className="col-lg-12 col-md-12 col-sm-12">
-                    <button
+                    <SpinnerButton
                         className="btn btn-primary btn-block btn-lg login-btn "
                         type="submit"
+                        loading={loading}
                     >
                         &nbsp;Save
-                    </button>
+                    </SpinnerButton>
                 </div>
             </div>
         </form>

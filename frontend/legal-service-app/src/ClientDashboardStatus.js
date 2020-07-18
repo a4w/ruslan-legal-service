@@ -9,6 +9,7 @@ import moment from "moment";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
+import { NoContentRow } from "./LawyerDashboardStatus";
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
@@ -172,9 +173,13 @@ const UpcomingAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {upcoming.map((appointment) => (
-                <Appointment key={appointment.id} {...appointment} />
-            ))}
+            {upcoming.length ? (
+                upcoming.map((appointment) => (
+                    <Appointment key={appointment.id} {...appointment} />
+                ))
+            ) : (
+                <NoContentRow>No upcoming appointments yet</NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };
@@ -194,9 +199,15 @@ const AllAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {all.map((appointment) => (
-                <Appointment key={appointment.id} {...appointment} />
-            ))}
+            {all.length ? (
+                all.map((appointment) => (
+                    <Appointment key={appointment.id} {...appointment} />
+                ))
+            ) : (
+                <NoContentRow>
+                    You have no appointments, book a lawyer now!
+                </NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };

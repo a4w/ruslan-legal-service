@@ -33,7 +33,7 @@ const LawyerDashboardSidebar = () => {
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <a className="booking-doc-img">
-                        <Img src={account.profile_picture} alt="Lawyer's Photo" />
+                        <Img src={account.profile_picture} alt="Lawyer's Photo" overwrite={false} />
                     </a>
                     <div className="profile-det-info">
                         <h3>{`${account.full_name}`}</h3>

@@ -111,7 +111,7 @@ const Appointment = ({
                         <>
                             <Link
                                 className="btn btn-sm bg-success-light m-1"
-                                to={`/video/${appointment.id}`}
+                                to={`/video/${id}`}
                             >
                                 <i className="fas fa-user"></i> Join
                         </Link>

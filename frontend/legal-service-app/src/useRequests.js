@@ -47,7 +47,8 @@ function useRequests() {
                         ...auth,
                         accessToken: response.data.access_token,
                         accountType: response.data.account_type,
-                        isLoggedIn: true
+                        isLoggedIn: true,
+                        accountId: response.data.account.account.id
                     });
                     resolve();
                 }).catch(() => {
@@ -69,7 +70,8 @@ function useRequests() {
                     ...auth,
                     accessToken: response.data.access_token,
                     accountType: response.data.account_type,
-                    isLoggedIn: true
+                    isLoggedIn: true,
+                    accountId: response.data.account.account.id
                 });
                 resolve();
             }).catch(() => {

@@ -123,6 +123,9 @@ const Appointment = ({
                             <i className="fas fa-star"></i> Rate
                         </Link>
                     )}
+                    <Link to={`${History.location.pathname}/details/${id}`} className="btn btn-sm bg-info-light">
+                        <i className="far fa-eye"></i> View
+                    </Link>
                 </div>
             </td>
         </tr>

@@ -8,7 +8,9 @@ const GoogleButton = ({register}) => {
     const {request} = useRequests();
     const [auth, setAuth] = useContext(AuthContext);
     const responseGoogle = (response) => {
-        console.log(response);
+        if (typeof response.tokenObj !== "undefined") {
+            return;
+        }
         const data = {
             id_token: response.tokenObj.id_token,
             name: response.profileObj.givenName,

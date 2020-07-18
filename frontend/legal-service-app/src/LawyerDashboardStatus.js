@@ -287,9 +287,13 @@ const AllAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {all && all.map((appointment) => (
-                <ListItem key={appointment.id} appointment={appointment} />
-            ))}
+            {all && all.length ? (
+                all.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>You don't have any appointments yet</NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };

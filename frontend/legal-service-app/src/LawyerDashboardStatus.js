@@ -328,3 +328,4 @@ const AppointmentsListTabs = () => {
     );
 };
 export default LawyerDashboardStatus;
+export {NoContentRow};

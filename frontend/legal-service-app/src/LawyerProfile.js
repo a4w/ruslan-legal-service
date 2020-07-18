@@ -53,7 +53,7 @@ const LawyerProfile = ({match}) => {
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
     const account = lawyer.account;
-    const auth = useContext(AuthContext);
+    const [auth, ] = useContext(AuthContext);
     const {request} = useRequests();
     const [loading, setLoading] = useState(false);
     const StartChat = () => {

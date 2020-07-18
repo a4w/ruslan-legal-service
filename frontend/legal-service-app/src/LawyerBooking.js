@@ -11,6 +11,8 @@ import Config from "./Config";
 import moment from "moment";
 import {LoadingOverlayContext, AuthContext} from "./App";
 import {useHistory, useLocation} from "react-router";
+import Img from "./Img";
+import { Link } from "react-router-dom";
 
 const stripe = loadStripe(env.stripe_api_key);
 
@@ -58,6 +60,7 @@ const LawyerBooking = ({LawyerId}) => {
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
+                    {lawyer && <LawyerCardRoundded lawyer={lawyer} />}
                     <div className={isTimeSelected ? "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" : "col-12"} style={{minHeight: '400px'}}>
                         {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}
                         {isTimeSelected &&
@@ -111,6 +114,56 @@ const TodayIs = () => {
         </div>
     );
 };
+
+const LawyerCardRoundded = ({ lawyer }) => {
+    const { account } = { ...lawyer };
+    const imgStyle = {
+        borderRadius: "120px",
+        height: "120px",
+        width: "120px",
+        objectFit: "cover",
+    };
+    return (
+        <div style={{ width: "100%", marginBottom: "3%" }}>
+            <div className="profile-info-widget justify-content-center">
+                <Link
+                    to={`profile/${lawyer.id}`}
+                    className="booking-lawyer-img"
+                >
+                    <Img
+                        src={account.profile_picture}
+                        className="img-fluid"
+                        style={imgStyle}
+                    />
+                </Link>
+            </div>
+            <div
+                className="profile-det-info mt-4"
+                style={{
+                    textAlign: "center",
+                }}
+            >
+                <h2>{`${account.name} ${account.surname}`}</h2>
+            </div>
+            <div
+                className="justify-content-center"
+                style={{
+                    display: "flex",
+                }}
+            >
+                <StarRatings
+                    rating={lawyer.ratings_average}
+                    starRatedColor="gold"
+                    starDimension="20px"
+                    starSpacing="0px"
+                    numberOfStars={5}
+                    name="rating"
+                />
+            </div>
+        </div>
+    );
+};
+
 const LawyerCard = ({lawyer}) => {
     return (lawyer &&
         <div className="card">

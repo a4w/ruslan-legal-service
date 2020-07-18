@@ -44,7 +44,7 @@ const LoginForm = ({back}) => {
                             accountType: data.account_type,
                             refreshToken: data.refresh_token || null,
                             isLoggedIn: true,
-                            accountId: data.account.account.id
+                            accountId: data.user_id
                         });
                         if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
                             History.push({

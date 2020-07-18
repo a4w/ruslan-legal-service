@@ -20,7 +20,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="law-img">
+                        <div className="law-img" style={{maxHeight: "250px"}}>
                             <strong>{}</strong>
                             <Img className="img-fluid" src={lawyer.account.profile_picture} />
                         </div>

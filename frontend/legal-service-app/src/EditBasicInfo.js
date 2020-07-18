@@ -92,6 +92,7 @@ const EditBasicInfo = () => {
                                 <Img
                                     src={user.profile_picture_url}
                                     alt="User"
+                                    overwrite={false}
                                 />
                             </div>
                             <div className="upload-img">

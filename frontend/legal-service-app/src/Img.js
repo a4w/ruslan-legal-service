@@ -1,16 +1,17 @@
 import React from "react";
 
-const Img = ({src, className, alt, style}) => {
+const Img = ({src, className, alt, style, overwrite = true}) => {
     const OnError = (e) => {
         e.target.src = "/undraw_male_avatar.svg";
         e.target.onError = null;
     };
+    const ImgStyle = {height: '100%', maxWidth: '100%', width: 'unset', margin: 'auto', display: 'block', ...style};
     return (
         <img
             src={src ? src : ""}
             className={className ? className : ""}
             alt={alt ? alt : "img"}
-            style={{height: '100%', maxWidth: '100%', width: 'unset', margin: 'auto', display: 'block', ...style}}
+            style={overwrite? ImgStyle: style}
             onError={OnError}
         />
     );

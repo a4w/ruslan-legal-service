@@ -48,8 +48,8 @@ const UserDropdown = () => {
                 }`}
             ref={ref}
         >
-            <Link
-                to="#"
+            <a
+                href="#"
                 className="dropdown-toggle nav-link"
                 onClick={handleButtonClick}
             >
@@ -61,7 +61,7 @@ const UserDropdown = () => {
                         alt={user.name}
                     />
                 </span>
-            </Link>
+            </a>
             <div
                 className={`dropdown-menu dropdown-menu-right ${
                     menuToggle ? "show" : ""

@@ -1,10 +1,15 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Modal from './ModalRouted';
 import useRequests from "./useRequests";
+import { AuthContext } from "./App";
+import Img from "./Img";
 
 const AppointmentDetails = ({match}) => {
-    const [appointment, setAppointment] = useState({id: 0});
+    const [appointment, setAppointment] = useState(null);
+    const [auth,] = useContext(AuthContext);
+    const [isClient, setIsClient] = useState(auth.accountType);
     const {request} = useRequests();
+    console.log(isClient);
     useEffect(() => {
         request({url: `/appointment/${match.params.appId}`, method: "GET"})
             .then((res) => {
@@ -14,11 +19,20 @@ const AppointmentDetails = ({match}) => {
     }, []);
     return (
         <Modal header={"Appointment Details"} width={"40%"}>
-            {appointment && <Details appointment={appointment} />}
+            {appointment && (
+                <Details
+                    appointment={appointment}
+                    account={
+                        isClient === "CLIENT"
+                            ? appointment.lawyer.account
+                            : appointment.client.account
+                    }
+                />
+            )}
         </Modal>
     );
 }
-const Details = ({appointment}) => {
+const Details = ({appointment, account}) => {
     const appointment_time = new Date(appointment.appointment_time);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
@@ -38,6 +52,21 @@ const Details = ({appointment}) => {
         <div className="modal-content">
             <div className="modal-body">
                 <ul className="info-details">
+                    <li style={{ display: "flex" }}>
+                        <a href="#" className="avatar avatar-sm mr-2">
+                            <Img
+                                className="avatar-img rounded-circle"
+                                src={account.profile_picture}
+                                alt="User"
+                            />
+                        </a>
+                        <h4
+                            className="table-avatar"
+                            style={{ marginTop: "auto" }}
+                        >
+                            {account.name + " " + account.surname}
+                        </h4>
+                    </li>
                     <li>
                         <div className="details-header">
                             <div className="row">
@@ -59,7 +88,7 @@ const Details = ({appointment}) => {
                                 appointment.status === "DONE"
                                     ? "success"
                                     : "warning"
-                                }-light btn-sm`}
+                            }-light btn-sm`}
                         >
                             {appointment.status}
                         </button>
@@ -77,4 +106,5 @@ const Details = ({appointment}) => {
         </div>
     );
 }
+
 export default AppointmentDetails;

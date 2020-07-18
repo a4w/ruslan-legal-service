@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 import {Link} from "react-router-dom";
+import History from "./History";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
@@ -97,14 +98,10 @@ const CalendarEvent = ({appointment}) => {
     // console.log(duration);
 
     return (
-        <>
-            <Link to={`details/${appointment.id}`}>
-                <div className="test">
-                    <b>{moment(appointment.appointment_time).format("hh:mm a")}</b> for{" "}
-                    <b>{appointment.duration}</b> minutes
+        <div className="test" onClick={()=>History.push(`${History.location.pathname}/details/${appointment.id}`)}> 
+            <b>{moment(appointment.appointment_time).format("hh:mm a")}</b> for{" "}
+            <b>{appointment.duration}</b> minutes
         </div>
-            </Link>
-        </>
     );
 }
 const HeaderDays = () => {

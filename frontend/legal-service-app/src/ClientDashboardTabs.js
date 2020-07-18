@@ -14,7 +14,7 @@ const ClientDashboardTabs = () => {
             <Route path="/client-dashboard/status">
                 <ClientDashboardStatus />
             </Route>
-            <Route exact path="/client-dashboard/calendar">
+            <Route path="/client-dashboard/calendar">
                 <UserCalendar />
             </Route>
             <Route path="/client-dashboard/messages">

@@ -1757,6 +1757,8 @@ button.bg-danger:hover {
 .header-navbar-rht li .dropdown-menu {
     border: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: -296px;    
 }
 .header-navbar-rht .dropdown-toggle::after {
     display: none;
@@ -7520,4 +7522,14 @@ min-width: 100%;
     font-weight: 600;
     min-width: 200px;
     padding: 10px 20px;
+}
+@media only screen and (max-width:430px) {
+    .header-navbar-rht li .dropdown-menu::before{
+        display: none;
+        content: counter;
+	}
+	.header-navbar-rht li .dropdown-menu{
+		position: absolute;
+		left: -221px;
+	}
 }

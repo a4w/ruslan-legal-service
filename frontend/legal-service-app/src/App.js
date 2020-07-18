@@ -52,7 +52,7 @@ function App() {
         accountType: cookies.accountType || null,
         refreshToken: cookies.refreshToken || null,
         isLoggedIn: (cookies.isLoggedIn === "true") || false,
-        accountId: null
+        accountId: cookies.accountId || null
     };
     const [auth, setAuth] = useState(defaultAuthState);
 

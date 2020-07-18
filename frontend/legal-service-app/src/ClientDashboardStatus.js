@@ -9,7 +9,7 @@ import moment from "moment";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
-import { NoContentRow } from "./LawyerDashboardStatus";
+import {NoContentRow} from "./LawyerDashboardStatus";
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
@@ -32,6 +32,7 @@ const Appointment = ({
     price,
     duration,
     is_cancellable,
+    can_be_started,
 }) => {
     const [appStatus, setStatus] = useState(
         "badge badge-pill bg-success-light"
@@ -106,6 +107,16 @@ const Appointment = ({
             </td>
             <td className="text-right">
                 <div className="table-action">
+                    {can_be_started &&
+                        <>
+                            <Link
+                                className="btn btn-sm bg-success-light m-1"
+                                to={`/video/${appointment.id}`}
+                            >
+                                <i className="fas fa-user"></i> Join
+                        </Link>
+                        </>
+                    }
                     {is_cancellable && (
                         <a
                             href="//"
@@ -181,8 +192,8 @@ const UpcomingAppointments = () => {
                     <Appointment key={appointment.id} {...appointment} />
                 ))
             ) : (
-                <NoContentRow>No upcoming appointments yet</NoContentRow>
-            )}
+                    <NoContentRow>No upcoming appointments yet</NoContentRow>
+                )}
         </AppointmentsTable>
     );
 };
@@ -207,10 +218,10 @@ const AllAppointments = () => {
                     <Appointment key={appointment.id} {...appointment} />
                 ))
             ) : (
-                <NoContentRow>
-                    You have no appointments, book a lawyer now!
-                </NoContentRow>
-            )}
+                    <NoContentRow>
+                        You have no appointments, book a lawyer now!
+                    </NoContentRow>
+                )}
         </AppointmentsTable>
     );
 };

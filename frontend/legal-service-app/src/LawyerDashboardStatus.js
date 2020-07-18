@@ -232,7 +232,7 @@ const AppointmentsTable = (props) => {
 };
 
 const UpcomingAppointments = () => {
-    const [upcoming, setUpcoming] = useState(null);
+    const [upcoming, setUpcoming] = useState([]);
     const {request} = useRequests();
     useEffect(() => {
         request({
@@ -247,12 +247,30 @@ const UpcomingAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {upcoming && upcoming.map((appointment) => (
-                <ListItem key={appointment.id} appointment={appointment} />
-            ))}
+            {upcoming && upcoming.length ? (
+                upcoming.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>no upcoming appointments</NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };
+
+const NoContentRow = (props)=>{
+    return (
+        <tr>
+            <td
+                colspan="100%"
+                style={{ textAlign: "center", fontSize: "larger" }}
+            >
+                {props.children}
+            </td>
+        </tr>
+    );
+}
+
 const AllAppointments = () => {
     const [all, setAll] = useState(null);
     const {request} = useRequests();
@@ -269,9 +287,13 @@ const AllAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {all && all.map((appointment) => (
-                <ListItem key={appointment.id} appointment={appointment} />
-            ))}
+            {all && all.length ? (
+                all.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>You don't have any appointments yet</NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };
@@ -306,3 +328,4 @@ const AppointmentsListTabs = () => {
     );
 };
 export default LawyerDashboardStatus;
+export {NoContentRow};

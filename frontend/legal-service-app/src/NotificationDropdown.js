@@ -136,7 +136,7 @@ const Notifications = ({setNew}) => {
                     </li>
                 ))
             ) : (
-                <NoContent>There are no new notifications</NoContent>
+                <NoContent imageStyle={{width:"50%"}} label=" " >There are no new notifications</NoContent>
             )}
         </ul>
     );

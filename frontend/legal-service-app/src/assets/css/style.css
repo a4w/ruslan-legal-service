@@ -2625,6 +2625,7 @@ html.menu-opened body {
 .section-lawyer .profile-widget {
     box-shadow: 2px 2px 13px rgba(0, 0, 0, 0.1);
     margin-bottom: 0;
+    min-height: 560px;
 }
 .about-content p {
     font-size: 14px;
@@ -7063,6 +7064,11 @@ html.menu-opened body {
     }
     .blog-view .blog-title {
         font-size: 22px;
+    }
+    .section-lawyer .profile-widget {
+        box-shadow: 2px 2px 13px rgba(0, 0, 0, 0.1);
+        margin-bottom: 0;
+        min-height: 460px;
     }
 }
 

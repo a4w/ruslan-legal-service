@@ -21,6 +21,7 @@ import useRequests from "./useRequests";
 import {AuthContext} from "./App"
 import {toast} from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
+import {FaCommentAlt} from "react-icons/fa";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -53,7 +54,7 @@ const LawyerProfile = ({match}) => {
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
     const account = lawyer.account;
-    const auth = useContext(AuthContext);
+    const [auth,] = useContext(AuthContext);
     const {request} = useRequests();
     const [loading, setLoading] = useState(false);
     const StartChat = () => {
@@ -141,11 +142,11 @@ const ProfileCard = ({lawyer}) => {
                                 />
                             </ul>
                         </div>
-                        <div className="lawyer-action">
+                        {auth.isLoggedIn && auth.accountType === "CLIENT" && <div className="lawyer-action">
                             <SpinnerButton className="btn btn-white msg-btn" onClick={StartChat} loading={loading}>
-                                Chat with this lawyer! <i className="far fa-comment-alt"></i>
+                                <FaCommentAlt />&nbsp;Chat with this lawyer!
                             </SpinnerButton>
-                        </div>
+                        </div>}
                         <div className="session-booking">
                             <Link
                                 className="apt-btn"

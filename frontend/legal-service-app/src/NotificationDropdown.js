@@ -62,7 +62,6 @@ const NotificationDropdown = () => {
                 className={`dropdown-menu notifications ${
                     notificationToggle ? "show" : ""
                     }`}
-                style={{position: "absolute", left: "-296px"}}
             >
                 <div className="topnav-dropdown-header">
                     <span className="notification-title">Notifications</span>

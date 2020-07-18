@@ -87,7 +87,7 @@ const Details = ({appointment, account}) => {
                             className={`btn bg-${
                                 appointment.status === "DONE"
                                     ? "success"
-                                    : "warning"
+                                    : "danger"
                             }-light btn-sm`}
                         >
                             {appointment.status}

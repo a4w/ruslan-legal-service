@@ -53,7 +53,7 @@ const NavBar = () => {
                         </span>
                     </a>
                     <Link className="navbar-brand logo" to="/">
-                        <b>Lawbe</b>.co.uk
+                        <img src="/logo2.png" style={{maxWidth: '100%', maxHeight: '100%'}} />
                     </Link>
                 </div>
                 <div

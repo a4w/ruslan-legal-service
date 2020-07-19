@@ -254,6 +254,11 @@ const SearchLawyerByName = () => {
                             placeholder="Enter Lawyer Name"
                             onChange={OnChangeHandler}
                             value={term}
+                            style={{
+                                borderRadius: '50px',
+                                fontSize: '1.2em',
+                                padding: '20px'
+                            }}
                         />
                         {results && term.trim() !== "" && <div style={dropdownStyle}>
                             {(results.length) ?
@@ -285,7 +290,7 @@ const SearchLawyerByName = () => {
                 <div className="col-auto">
                     <SpinnerButton
                         type="submit"
-                        style={{height: "46px"}}
+                        style={{height: "46px", borderRadius: '50%'}}
                         className="btn btn-block btn-primary search-btn"
                         loading={loading}
                     >

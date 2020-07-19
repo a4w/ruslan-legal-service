@@ -169,8 +169,9 @@ class LawyerController extends Controller
         $from_date->setTime(0, 0, 0, 0);
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
+        $to_date->setTime(23, 59, 59);
 
-        $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
+        $output['from'] = $from_date->format(AppointmentHelper::DATETIME_FORMAT);
         $output['number_of_days'] = $days_to_show;
 
         // Get appointments and pre-process them for fast checking

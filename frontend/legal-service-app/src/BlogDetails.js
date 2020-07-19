@@ -139,12 +139,13 @@ const Post = ({blog, lawyer}) => {
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
-                                        state: { lawyer: lawyer },
+                                        state: {lawyer: lawyer},
                                     }}
                                 >
                                     <Img
                                         src={account.profile_picture}
                                         alt="Post Author"
+                                        style={{maxHeight: '40px'}}
                                     />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>

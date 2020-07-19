@@ -11,7 +11,7 @@ import Img from "./Img"
 import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -142,7 +142,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     return (
         <>
             <div className="row no-gutters">
-                {list_chats && chats.length ?
+                {(list_chats && chats.length) || showContent?
                     <>
                         {list_chats &&
                             <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">

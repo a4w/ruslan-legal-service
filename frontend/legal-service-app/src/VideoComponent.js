@@ -182,7 +182,7 @@ const VideoComponent = ({appointment_id}) => {
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none')}>
                     <button onClick={handleChatToggle} className="btn btn-primary btn-block"><FaChevronLeft /></button>
-                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} />
+                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} />
                 </div>
             </div>
         </>

@@ -99,6 +99,18 @@ const Home = () => {
                     }}>
                         <source src="video.mp4" type="video/mp4" />
                     </video>
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        top: 0,
+                        minWidth: '100vw',
+                        minHeight: '10px',
+                        zIndex: -1000,
+                        backgroundColor: 'rgba(9,229,225,0.2)'
+                    }}>
+
+                    </div>
                     <div className="row">
                         <div className="col-12">
                             <h1 className="font-weight-bold text-center d-block text-light" style={{fontSize: '2.5em'}}>Search Lawyer, Book an Appointment</h1>

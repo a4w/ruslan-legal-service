@@ -188,6 +188,7 @@ const ScheduleForm = ({}) => {
                         is_percent_discount: (globalSettings.discount_type === 1),
                         discount_amount: globalSettings.discount_amount,
                         discount_end: globalSettings.discount_end,
+                        timezone: moment().format('Z')
                     }
                 }
             };

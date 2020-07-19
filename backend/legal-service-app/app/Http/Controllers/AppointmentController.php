@@ -50,7 +50,7 @@ class AppointmentController extends Controller
             }
             // Check 2
             $slot_weekday = AppointmentHelper::dayToIndex($slot_datetime->dayName);
-            $slot_time = $slot['time'];
+            $slot_time = $slot_datetime->format('H:i');
             $slot_length = $slot['length'];
             $is_real_slot = false;
             foreach ($lawyer->schedule[$slot_weekday]['slots'] as $schedule_slot) {

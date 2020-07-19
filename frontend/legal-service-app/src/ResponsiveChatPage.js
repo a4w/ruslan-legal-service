@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
 import "./ChatPage.css";
-import {FaCogs, FaPaperclip} from "react-icons/fa";
+import {FaCogs, FaPaperclip, FaRegQuestionCircle} from "react-icons/fa";
 import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
@@ -12,6 +12,8 @@ import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
 import useValidation from "./useValidation";
 import {ChatMessageValidation} from "./Validations";
+import { Link } from "react-router-dom";
+import { AuthContext } from "./App";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
     const inputRef = useRef(null);
@@ -166,18 +168,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             <i className="fas fa-times"></i>
                                         </button>
                                     </div>
-                                    <form className="chat-search">
-                                        <div className="input-group">
-                                            <div className="input-group-prepend">
-                                                <i className="fas fa-search"></i>
-                                            </div>
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Search"
-                                            />
-                                        </div>
-                                    </form>
+                                    <SearchLawyerByName />
                                     <ChatUserList
                                         chats={chats}
                                         onChatSelection={(index) => {
@@ -268,5 +259,118 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         </>
     );
 };
+const SearchLawyerByName = () => {
+    const [results, setResults] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [, , run] = useValidation();
+    const [term, setTerm] = useState("");
+    const {request} = useRequests();
+    const [auth,] = useContext(AuthContext);
 
+    const OnChangeHandler = ({target: {value}}) => {
+        setTerm(value);
+    };
+
+    useEffect(() => {
+        setLoading(true);
+        request({
+            url: `/lawyer/search?term=${term}`,
+            method: 'GET'
+        }).then(response => {
+            setResults(response.lawyers);
+        }).catch(error => {
+            setResults([]);
+        }).finally(() => {
+            setLoading(false);
+        });
+
+    }, [term]);
+    const dropdownStyle = {
+        position: 'absolute',
+        display: 'block',
+        width: '99%',
+        backgroundColor: '#fff',
+        borderRadius: '10px',
+        border: '1px solid #ccc',
+        marginRight: '5px',
+        maxHeight: "300px",
+        overflowY: "auto",
+        zIndex: "999",
+        top: "47px"
+    };
+    const imgStyle = {
+        width: '50px',
+        height: '50px',
+        borderRadius: '3px',
+        marginRight: '10px',
+        display: "inline",
+    };
+    const StartChat = (id) => {
+        setLoading(true);
+        const myID = auth.accountId;
+        const url = `/chat/${myID}/${id}`;
+        request({url: url, method: "POST"})
+            .then(() => {
+                History.replace(`/chat/${id - 1}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+    return (
+        <form className="chat-search" onSubmit={(e)=>{e.preventDefault();}}>
+            <div className="input-group">
+                <div className="input-group-prepend">
+                    <SpinnerButton style={{display: "contents"}} loading={loading}>
+                        <i className="fas fa-search"></i>
+                    </SpinnerButton>
+                </div>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search"
+                    onChange={OnChangeHandler}
+                    value={term}
+                />
+                {results && term.trim() !== "" && (
+                    <div style={dropdownStyle}>
+                        {results.length ? (
+                            results.map((lawyer, i) => {
+                                return (
+                                    <div className="inline-search-result" key={i}>
+                                        <a href="#" onClick={()=> StartChat(lawyer.id)}>
+                                            <Img
+                                                alt={lawyer.full_name}
+                                                className="rounded-circle"
+                                                src={
+                                                    lawyer.account
+                                                        .profile_picture
+                                                }
+                                                style={imgStyle}
+                                            />
+                                            <b>
+                                                {lawyer.account.full_name}
+                                            </b>
+                                            <span className="text-muted text-sm ml-3">
+                                                {lawyer.lawyer_type.type}
+                                            </span>
+                                        </a>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <span className="d-block text-center p-3">
+                                <FaRegQuestionCircle />
+                                &nbsp;no matches found
+                            </span>
+                        )}
+                    </div>
+                )}
+            </div>
+        </form>
+    );
+};
 export default ResponsiveChatPage;

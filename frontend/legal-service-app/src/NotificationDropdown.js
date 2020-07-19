@@ -69,8 +69,8 @@ const NotificationDropdown = () => {
                 <div className="noti-content" style={{display: ""}}>
                     <Notifications setNew={setNew} />
                 </div>
-                <div className="topnav-dropdown-footer" onClick={MarkAllRead}>
-                    <a href="" className="clear-noti">
+                <div className="topnav-dropdown-footer">
+                    <a href="#" className="clear-noti" onClick={MarkAllRead}>
                         Mark all read
                     </a>
                 </div>

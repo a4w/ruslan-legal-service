@@ -69,19 +69,52 @@ const ScheduleForm = ({}) => {
             method: 'GET'
         }).then(response => {
             console.log(response);
-            const nextSchedule = response.schedule.map((day) => {
-                return {
-                    ...day,
-                    slots: day.slots.map(slot => {
-                        const time = moment(slot.time, "HH:mm");
-                        return {
-                            ...slot,
-                            time,
-                            end_time: time.clone().add(slot.length, "minutes")
-                        };
-                    })
-                };
-            });
+            //const nextSchedule = response.schedule.map((day, i) => {
+            //    return {
+            //        ...schedule[i],
+            //        ...day,
+            //        slots: day.slots.map(slot => {
+            //            const time = moment(slot.time, "HH:mm");
+            //            return {
+            //                ...slot,
+            //                time,
+            //                end_time: time.clone().add(slot.length, "minutes")
+            //            };
+            //        })
+            //    };
+            //});
+            // Process timezone
+            const nextSchedule = schedule.slice();
+            const weekReducer = (action, day) => {
+                if (action === '+') {
+                    return (day + 1) % 7;
+                } else if (action === '-') {
+                    return (day + 6) % 7;
+                }
+                return day;
+            }
+            for (let i = 0; i < response.schedule.length; ++i) {
+                const slots = response.schedule[i].slots;
+                let day = i;
+                for (let j = 0; j < slots.length; ++j) {
+                    const slot = slots[j];
+                    const time_obj = moment.utc(slot.time, "HH:mm").local();
+                    const time_utc = moment.utc(slot.time, "HH:mm");
+                    console.log(time_obj.format('D'), time_utc.format('D'));
+                    if (time_utc.format('D') < time_obj.format('D')) {
+                        day = weekReducer('+', day);
+                    } else if (time_utc.day() > time_obj.day()) {
+                        day = weekReducer('-', day);
+                    }
+                    console.log(time_obj);
+                    nextSchedule[day].slots.push({
+                        ...slot,
+                        time: time_obj,
+                        end_time: time_obj.clone().add(slot.length, "minutes")
+                    });
+                }
+            }
+
             setSchedule(nextSchedule);
             const nextGlobalSettings = {
                 price: response.price_per_hour,

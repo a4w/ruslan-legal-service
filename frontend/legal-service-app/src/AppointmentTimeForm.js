@@ -96,7 +96,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         const dayIdx = button.dataset.day;
         const slotIdx = button.dataset.slot;
         const slot = schedule.days[dayIdx].slots[slotIdx];
-        slot.datetime = schedule.days[dayIdx].date + " " + slot.time;
+        slot.datetime = moment(schedule.days[dayIdx].date + " " + slot.time).utc().format("Y-MM-DD HH:mm");
         if (button.classList.contains('selected')) {
             const nextSelectedSlots = selectedSlots.filter(currentSlot => {
                 if (currentSlot == slot) {

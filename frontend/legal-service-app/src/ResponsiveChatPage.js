@@ -15,7 +15,7 @@ import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
 import {AuthContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -40,7 +40,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 if (chat.id === initialSelectedChat) {
                     selected_chat_idx = i;
                 }
-                if (match.params.chatId && chat.id === parseInt(match.params.chatId)) {
+                if (match !== null && match.params.chatId && chat.id === parseInt(match.params.chatId)) {
                     selected_chat_idx = i;
                 }
                 const other = chat.participants[0].id == me.id ? chat.participants[1] : chat.participants[0];
@@ -60,7 +60,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         }).catch((error) => {
             console.log(error);
         });
-    }, []);
+    }, [initialSelectedChat]);
 
     useInterval(() => {
         console.log("Loading");

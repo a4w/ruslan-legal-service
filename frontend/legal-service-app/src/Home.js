@@ -544,7 +544,6 @@ const BlogCard = ({blog}) => {
                             className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
-                            style={{}}
                         />
                     </Link>
                 </div>

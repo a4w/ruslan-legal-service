@@ -165,6 +165,7 @@ const ScheduleForm = ({}) => {
             if (hasErrors) {
                 return;
             }
+
             const toSend = {
                 schedule: {
                     days: schedule.map((day) => {
@@ -322,6 +323,11 @@ const ScheduleForm = ({}) => {
                 <div className="col">
                     <div className="row form-row">
                         <div className="col-12">
+                            <span className="text-muted p-2 float-left" style={{
+                                backgroundColor: 'rgba(0,0,0,0.05)',
+                                borderRadius: '5px',
+                                margin: '5px 0px 5px 0px'
+                            }}><FaClock />&nbsp;All times are shown in your local timezone <strong>(UTC{moment().format('Z')})</strong></span>
                             <button className="btn btn-sm btn-info float-right mb-1" onClick={
                                 () => {
                                     setIsSideShown(!isSideShown);

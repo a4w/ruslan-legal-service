@@ -183,3 +183,11 @@ export const blogTitleValidations = (data, field) => {
         });
     });
 };
+
+export const ChatMessageValidation = (data, field=null) => {
+    return validate("ResponsiveChatPage", () => {
+        test("message", "Message is too long", () => {
+            enforce(data.message.toString().length <= 949).isTruthy();
+        });
+    });
+};

@@ -77,7 +77,7 @@ const Appointment = ({
                 {lawyer && (
                     <h2 className="table-avatar">
                         <Link
-                            to={`profile/${lawyer_id}`}
+                            to={`/profile/${lawyer_id}`}
                             className="avatar avatar-sm mr-2"
                         >
                             <Img
@@ -86,7 +86,7 @@ const Appointment = ({
                                 alt="User Image"
                             />
                         </Link>
-                        <Link to={`profile/${lawyer_id}`}>
+                        <Link to={`/profile/${lawyer_id}`}>
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
                             <span>{lawyer.lawyer_type.type}</span>
                         </Link>

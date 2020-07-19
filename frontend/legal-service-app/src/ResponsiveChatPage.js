@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import "./ChatPage.css";
 import {FaCogs, FaPaperclip} from "react-icons/fa";
 import ChatUserList from "./ChatUserList"
@@ -11,8 +11,8 @@ import Img from "./Img"
 import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
-
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
+    const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
     const [file, setFile] = useState(null);
@@ -98,7 +98,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     };
     const [isSending, setIsSending] = useState(false);
 
-    const handleMessageSend = () => {
+    const handleMessageSend = (e) => {
+        e.preventDefault();
         const chat_id = chats[selectedChat].id;
         setIsSending(true);
         if (file === null) {
@@ -115,6 +116,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 console.log(error);
             }).finally(() => {
                 setIsSending(false);
+                inputRef.current.focus();
             });
         } else {
             // Send file
@@ -133,13 +135,14 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).finally(() => {
                 setFile(null);
                 setIsSending(false);
+                inputRef.current.focus();
             });
         }
     };
     return (
         <>
             <div className="row no-gutters">
-                {list_chats && chats.length ?
+                {(list_chats && chats.length) || showContent?
                     <>
                         {list_chats &&
                             <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">
@@ -185,7 +188,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             <i className="fas fa-chevron-left"></i>
                                         </button>}
                                         <div className="media-img-wrap">
-                                            <div className="avatar avatar-online">
+                                            <div className="avatar">
                                                 {selectedChat !== null &&
                                                     <Img
                                                         src={chats[selectedChat].account.profile_picture}
@@ -218,13 +221,14 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             onChange={(e) => {
                                                 setMessage(e.target.value);
                                             }}
+                                            ref={inputRef}
                                             type="text"
                                             className="input-msg-send form-control"
                                             placeholder="Type something"
-
+                                            autofocus 
                                             onKeyPress={event => {
                                                 if (event.key === 'Enter') {
-                                                    handleMessageSend();
+                                                    handleMessageSend(event);
                                                 }
                                             }}
 

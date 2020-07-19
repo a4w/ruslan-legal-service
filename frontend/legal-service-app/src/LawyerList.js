@@ -14,6 +14,8 @@ import useRequests from "./useRequests";
 import {get} from "jquery";
 import {LoadingOverlayContext} from "./App"
 import LoadingOverlay from "react-loading-overlay";
+import Img from "./Img";
+import StarRatings from "react-star-ratings";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -278,9 +280,53 @@ const LawyerListHeader = ({
 };
 
 const PopUp = ({lawyer}) => {
+    const { account } = { ...lawyer };
+    const imgStyle = {
+        borderRadius: "120px",
+        height: "100px",
+        width: "100px",
+        objectFit: "cover",
+    };
     return (
         lawyer && (
             <div className="card flex-fill mr-2 d-none d-lg-flex">
+                 <div style={{ width: "100%", marginBottom: "3%", marginTop:"3%" }}>
+                    <div className="profile-info-widget justify-content-center">
+                        <Link
+                            to={`profile/${lawyer.id}`}
+                            className="booking-lawyer-img"
+                        >
+                            <Img
+                                src={account.profile_picture}
+                                className="img-fluid"
+                                style={imgStyle}
+                            />
+                        </Link>
+                    </div>
+                    <div
+                        className="profile-det-info mt-4"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        <h2>{`${account.name} ${account.surname}`}</h2>
+                    </div>
+                    <div
+                        className="justify-content-center"
+                        style={{
+                            display: "flex",
+                        }}
+                    >
+                        <starRatings
+                            rating={lawyer.ratings_average}
+                            starRatedColor="gold"
+                            starDimension="20px"
+                            starSpacing="0px"
+                            numberOfStars={5}
+                            name="rating"
+                        />
+                    </div>
+                </div>
                 <div className="m-2">
                     <div className="card-body p-0">
                         <div style={{display: "inline"}}>

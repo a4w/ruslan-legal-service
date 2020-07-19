@@ -51,6 +51,7 @@ const VideoComponent = ({appointment_id}) => {
             url: `/appointment/${appointment_id}/get-room-access-token`,
             method: "GET"
         }).then((response) => {
+            console.log(response);
             setRoomSID(response.room_sid);
             setAccessToken(response.access_token);
             setChatId(response.chat_id);

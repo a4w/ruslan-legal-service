@@ -12,8 +12,8 @@ import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
 import useValidation from "./useValidation";
 import {ChatMessageValidation} from "./Validations";
-import { Link } from "react-router-dom";
-import { AuthContext } from "./App";
+import {Link} from "react-router-dom";
+import {AuthContext} from "./App";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
     const inputRef = useRef(null);
@@ -154,7 +154,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     return (
         <>
             <div className="row no-gutters">
-                {(list_chats && chats.length) || showContent?
+                {(list_chats && chats.length) || showContent ?
                     <>
                         {list_chats &&
                             <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">
@@ -172,7 +172,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                     <ChatUserList
                                         chats={chats}
                                         onChatSelection={(index) => {
-                                            History.replace(`/chat/${index}`);
+                                            History.replace(`/chat/${chats[index].id}`);
                                             setSelectedChat(index);
                                         }}
                                     />
@@ -227,7 +227,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             type="text"
                                             className="input-msg-send form-control"
                                             placeholder="Type something"
-                                            autofocus 
+                                            autofocus
                                             onKeyPress={event => {
                                                 if (event.key === 'Enter') {
                                                     handleMessageSend(event);
@@ -311,7 +311,7 @@ const SearchLawyerByName = () => {
         const url = `/chat/${myID}/${id}`;
         request({url: url, method: "POST"})
             .then(() => {
-                History.replace(`/chat/${id - 1}`);
+                History.replace(`/chat/${id}`);
             })
             .catch(() => {
                 toast.error("An error occured");
@@ -321,7 +321,7 @@ const SearchLawyerByName = () => {
             });
     };
     return (
-        <form className="chat-search" onSubmit={(e)=>{e.preventDefault();}}>
+        <form className="chat-search" onSubmit={(e) => {e.preventDefault();}}>
             <div className="input-group">
                 <div className="input-group-prepend">
                     <SpinnerButton style={{display: "contents"}} loading={loading}>
@@ -341,7 +341,7 @@ const SearchLawyerByName = () => {
                             results.map((lawyer, i) => {
                                 return (
                                     <div className="inline-search-result" key={i}>
-                                        <a href="#" onClick={()=> StartChat(lawyer.id)}>
+                                        <a href="#" onClick={() => StartChat(lawyer.id)}>
                                             <Img
                                                 alt={lawyer.full_name}
                                                 className="rounded-circle"
@@ -362,11 +362,11 @@ const SearchLawyerByName = () => {
                                 );
                             })
                         ) : (
-                            <span className="d-block text-center p-3">
-                                <FaRegQuestionCircle />
+                                <span className="d-block text-center p-3">
+                                    <FaRegQuestionCircle />
                                 &nbsp;no matches found
-                            </span>
-                        )}
+                                </span>
+                            )}
                     </div>
                 )}
             </div>

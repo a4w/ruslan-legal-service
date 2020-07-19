@@ -188,7 +188,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             <i className="fas fa-chevron-left"></i>
                                         </button>}
                                         <div className="media-img-wrap">
-                                            <div className="avatar avatar-online">
+                                            <div className="avatar">
                                                 {selectedChat !== null &&
                                                     <Img
                                                         src={chats[selectedChat].account.profile_picture}

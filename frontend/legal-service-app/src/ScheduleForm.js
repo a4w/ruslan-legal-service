@@ -161,39 +161,44 @@ const ScheduleForm = ({}) => {
     }
 
     const handleSaveClick = () => {
-        const toSend = {
-            schedule: {
-                days: schedule.map((day) => {
-                    let newDay = {
-                        ...day, slots: day.slots.map((slot) => {
-                            let newSlots = {
-                                ...slot,
-                                time: slot.time.format(TIME_FORMAT),
-
-                            };
-                            delete newSlots.end_time;
-                            return newSlots;
-                        })
-                    };
-                    return newDay;
-                }),
-                settings: {
-                    price_per_hour: globalSettings.price,
-                    enable_discount: (globalSettings.discount_type !== 0),
-                    is_percent_discount: (globalSettings.discount_type === 1),
-                    discount_amount: globalSettings.discount_amount,
-                    discount_end: globalSettings.discount_end,
-                }
+        runValidation(globalSettings).then((hasErrors) => {
+            if (hasErrors) {
+                return;
             }
-        };
-        request({
-            url: '/lawyer/update-schedule',
-            method: 'POST',
-            data: toSend
-        }).then((response) => {
-            toast.success("Schedule saved successfully");
-        }).catch((error) => {
-            console.debug(error);
+            const toSend = {
+                schedule: {
+                    days: schedule.map((day) => {
+                        let newDay = {
+                            ...day, slots: day.slots.map((slot) => {
+                                let newSlots = {
+                                    ...slot,
+                                    time: slot.time.format(TIME_FORMAT),
+
+                                };
+                                delete newSlots.end_time;
+                                return newSlots;
+                            })
+                        };
+                        return newDay;
+                    }),
+                    settings: {
+                        price_per_hour: globalSettings.price,
+                        enable_discount: (globalSettings.discount_type !== 0),
+                        is_percent_discount: (globalSettings.discount_type === 1),
+                        discount_amount: globalSettings.discount_amount,
+                        discount_end: globalSettings.discount_end,
+                    }
+                }
+            };
+            request({
+                url: '/lawyer/update-schedule',
+                method: 'POST',
+                data: toSend
+            }).then((response) => {
+                toast.success("Schedule saved successfully");
+            }).catch((error) => {
+                console.debug(error);
+            });
         });
     };
 

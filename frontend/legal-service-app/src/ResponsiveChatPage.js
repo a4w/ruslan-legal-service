@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import "./ChatPage.css";
 import {FaCogs, FaPaperclip} from "react-icons/fa";
 import ChatUserList from "./ChatUserList"
@@ -12,7 +12,7 @@ import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match}) => {
-
+    const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
     const [file, setFile] = useState(null);
@@ -98,7 +98,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     };
     const [isSending, setIsSending] = useState(false);
 
-    const handleMessageSend = () => {
+    const handleMessageSend = (e) => {
+        e.preventDefault();
         const chat_id = chats[selectedChat].id;
         setIsSending(true);
         if (file === null) {
@@ -115,6 +116,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 console.log(error);
             }).finally(() => {
                 setIsSending(false);
+                inputRef.current.focus();
             });
         } else {
             // Send file
@@ -133,6 +135,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).finally(() => {
                 setFile(null);
                 setIsSending(false);
+                inputRef.current.focus();
             });
         }
     };
@@ -218,13 +221,14 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             onChange={(e) => {
                                                 setMessage(e.target.value);
                                             }}
+                                            ref={inputRef}
                                             type="text"
                                             className="input-msg-send form-control"
                                             placeholder="Type something"
-
+                                            autofocus 
                                             onKeyPress={event => {
                                                 if (event.key === 'Enter') {
-                                                    handleMessageSend();
+                                                    handleMessageSend(event);
                                                 }
                                             }}
 

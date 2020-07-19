@@ -38,11 +38,42 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             method: 'POST',
             data: {
                 days_to_show: days,
-                from: fromDateTime.format(Config.momentsjs_default_datetime_format)
+                from: fromDateTime.utc().format(Config.momentsjs_default_date_format)
             }
         }).then(response => {
             response.discount_type = response.enable_discount ? response.is_percent_discount ? 1 : 2 : 0;
-            setSchedule({...response, days: [...response.schedule.days]});
+            // Convert to local timezone
+            const days = response.schedule.days;
+            const nextDays = days.map((day) => {
+                return {name: day.name, date: day.date, slots: []}
+            });
+            for (let i = 0; i < days.length; ++i) {
+                const date = days[i].date;
+                const slots = days[i].slots;
+                let day_idx = i;
+                for (let j = 0; j < slots.length; ++j) {
+                    const slot = slots[j];
+                    const appointment_date = moment.utc(date + " " + slot.time).local();
+                    const utc_time = moment.utc(date + " " + slot.time);
+                    console.log(appointment_date);
+                    if (utc_time.format(Config.momentsjs_default_date_format) < appointment_date.format(Config.momentsjs_default_date_format)) {
+                        console.log("OFF PLUS");
+                        day_idx++;
+                    } else if (utc_time.format(Config.momentsjs_default_date_format) > appointment_date.format(Config.momentsjs_default_date_format)) {
+                        console.log("OFF MINUS");
+                        day_idx--;
+                    }
+                    if (day_idx >= 0 && day_idx < days.length) {
+                        const end_date = moment.utc(date + " " + slot.to).local();
+                        nextDays[day_idx].slots.push({
+                            ...slot,
+                            time: appointment_date.format('HH:mm'),
+                            to: end_date.format("HH:mm")
+                        });
+                    }
+                }
+            }
+            setSchedule({...response, days: nextDays});
 
         }).catch(error => {
             console.log(error);
@@ -65,7 +96,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         const dayIdx = button.dataset.day;
         const slotIdx = button.dataset.slot;
         const slot = schedule.days[dayIdx].slots[slotIdx];
-        slot.datetime = schedule.days[dayIdx].date + " " + slot.time;
+        slot.datetime = moment(schedule.days[dayIdx].date + " " + slot.time).utc().format("Y-MM-DD HH:mm");
         if (button.classList.contains('selected')) {
             const nextSelectedSlots = selectedSlots.filter(currentSlot => {
                 if (currentSlot == slot) {

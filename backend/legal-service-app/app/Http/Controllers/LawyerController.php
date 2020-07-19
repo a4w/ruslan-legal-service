@@ -169,8 +169,9 @@ class LawyerController extends Controller
         $from_date->setTime(0, 0, 0, 0);
         $to_date = new Carbon($from_date);
         $to_date->addDays($days_to_show);
+        $to_date->setTime(23, 59, 59);
 
-        $output['from'] = now()->format(AppointmentHelper::DATETIME_FORMAT);
+        $output['from'] = $from_date->format(AppointmentHelper::DATETIME_FORMAT);
         $output['number_of_days'] = $days_to_show;
 
         // Get appointments and pre-process them for fast checking
@@ -270,6 +271,8 @@ class LawyerController extends Controller
             'schedule.settings.is_percent_discount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'boolean'],
             'schedule.settings.discount_amount' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'min:0', 'numeric'],
             'schedule.settings.discount_end' => ['exclude_if:schedule.settings.enable_discount,false', 'required', 'date'],
+
+            'schedule.settings.timezone' => ['required', 'date_format:P'],
         ]);
         /** @var Account **/
         $user = Auth::user();
@@ -277,14 +280,48 @@ class LawyerController extends Controller
             return RespondJSON::forbidden();
         }
         $lawyer = $user->lawyer;
-        $incoming_schedule = collect($request->input('schedule.days'))->map(function ($day) {
-            $day['slots'] = collect($day['slots'])->map(function ($slot) {
-                $slot = collect($slot);
-                return $slot->only('time', 'length');
-            });
-            return $day;
-        });
 
+        //$incoming_schedule = collect($request->input('schedule.days'))->map(function ($day) {
+        //    $day['slots'] = collect($day['slots'])->map(function ($slot) {
+        //        $slot = collect($slot);
+        //        return $slot->only('time', 'length');
+        //    });
+        //    return $day;
+        //});
+
+        // Adjust schedule to timezone
+        $week_reducer = function ($action, $day) {
+            switch ($action) {
+                case '+':
+                    $day = ($day + 1) % 7;
+                case '-':
+                    $day = ($day + 6) % 7;
+            }
+            return $day;
+        };
+        $incoming_schedule = [];
+        for ($i = 0; $i < 7; ++$i) {
+            $incoming_schedule[$i] = ['slots' => []];
+        }
+        $days = $request->input('schedule.days');
+        $timezone = $request->input('schedule.settings.timezone');
+        for ($i = 0; $i < count($days); ++$i) {
+            $slots = $days[$i]['slots'];
+            $day = $i;
+            for ($j = 0; $j < count($slots); ++$j) {
+                $slot = $slots[$j];
+                // Add timezone offset
+                $time_obj = new Carbon($slot['time'], $timezone);
+                $time_utc = (new Carbon($time_obj))->tz('UTC');
+                if ($time_utc->day < $time_obj->day) {
+                    $day = $week_reducer('-', $day);
+                } else if ($time_utc->day > $time_obj->day) {
+                    $day = $week_reducer('+', $day);
+                }
+                $time = $time_utc->format('H:i');
+                $incoming_schedule[$day]['slots'][] = ['time' => $time, 'length' => $slot['length']];
+            }
+        }
 
         // Save schedule
         $lawyer->schedule = $incoming_schedule;

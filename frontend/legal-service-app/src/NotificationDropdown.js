@@ -88,7 +88,7 @@ const Notifications = ({setNew}) => {
         if (!auth.isLoggedIn) {
             return;
         }
-        if(isFetching)
+        if (isFetching)
             return;
         setIsFetching(true);
         request({url: "/account/notifications", method: "GET"})
@@ -112,7 +112,7 @@ const Notifications = ({setNew}) => {
     }
     useInterval(() => {
         getNotifications();
-    }, 3000);
+    }, 20000);
     return (
         <ul className="notification-list">
             {notifications && notifications.length ? (
@@ -135,8 +135,8 @@ const Notifications = ({setNew}) => {
                     </li>
                 ))
             ) : (
-                <NoContent imageStyle={{width:"50%"}} label=" " >There are no new notifications</NoContent>
-            )}
+                    <NoContent imageStyle={{width: "50%"}} label=" " >There are no new notifications</NoContent>
+                )}
         </ul>
     );
 };

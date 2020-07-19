@@ -69,19 +69,52 @@ const ScheduleForm = ({}) => {
             method: 'GET'
         }).then(response => {
             console.log(response);
-            const nextSchedule = response.schedule.map((day) => {
-                return {
-                    ...day,
-                    slots: day.slots.map(slot => {
-                        const time = moment(slot.time, "HH:mm");
-                        return {
-                            ...slot,
-                            time,
-                            end_time: time.clone().add(slot.length, "minutes")
-                        };
-                    })
-                };
-            });
+            //const nextSchedule = response.schedule.map((day, i) => {
+            //    return {
+            //        ...schedule[i],
+            //        ...day,
+            //        slots: day.slots.map(slot => {
+            //            const time = moment(slot.time, "HH:mm");
+            //            return {
+            //                ...slot,
+            //                time,
+            //                end_time: time.clone().add(slot.length, "minutes")
+            //            };
+            //        })
+            //    };
+            //});
+            // Process timezone
+            const nextSchedule = schedule.slice();
+            const weekReducer = (action, day) => {
+                if (action === '+') {
+                    return (day + 1) % 7;
+                } else if (action === '-') {
+                    return (day + 6) % 7;
+                }
+                return day;
+            }
+            for (let i = 0; i < response.schedule.length; ++i) {
+                const slots = response.schedule[i].slots;
+                let day = i;
+                for (let j = 0; j < slots.length; ++j) {
+                    const slot = slots[j];
+                    const time_obj = moment.utc(slot.time, "HH:mm").local();
+                    const time_utc = moment.utc(slot.time, "HH:mm");
+                    console.log(time_obj.format('D'), time_utc.format('D'));
+                    if (time_utc.format('D') < time_obj.format('D')) {
+                        day = weekReducer('+', day);
+                    } else if (time_utc.day() > time_obj.day()) {
+                        day = weekReducer('-', day);
+                    }
+                    console.log(time_obj);
+                    nextSchedule[day].slots.push({
+                        ...slot,
+                        time: time_obj,
+                        end_time: time_obj.clone().add(slot.length, "minutes")
+                    });
+                }
+            }
+
             setSchedule(nextSchedule);
             const nextGlobalSettings = {
                 price: response.price_per_hour,
@@ -161,39 +194,46 @@ const ScheduleForm = ({}) => {
     }
 
     const handleSaveClick = () => {
-        const toSend = {
-            schedule: {
-                days: schedule.map((day) => {
-                    let newDay = {
-                        ...day, slots: day.slots.map((slot) => {
-                            let newSlots = {
-                                ...slot,
-                                time: slot.time.format(TIME_FORMAT),
-
-                            };
-                            delete newSlots.end_time;
-                            return newSlots;
-                        })
-                    };
-                    return newDay;
-                }),
-                settings: {
-                    price_per_hour: globalSettings.price,
-                    enable_discount: (globalSettings.discount_type !== 0),
-                    is_percent_discount: (globalSettings.discount_type === 1),
-                    discount_amount: globalSettings.discount_amount,
-                    discount_end: globalSettings.discount_end,
-                }
+        runValidation(globalSettings).then((hasErrors) => {
+            if (hasErrors) {
+                return;
             }
-        };
-        request({
-            url: '/lawyer/update-schedule',
-            method: 'POST',
-            data: toSend
-        }).then((response) => {
-            toast.success("Schedule saved successfully");
-        }).catch((error) => {
-            console.debug(error);
+
+            const toSend = {
+                schedule: {
+                    days: schedule.map((day) => {
+                        let newDay = {
+                            ...day, slots: day.slots.map((slot) => {
+                                let newSlots = {
+                                    ...slot,
+                                    time: slot.time.format(TIME_FORMAT),
+
+                                };
+                                delete newSlots.end_time;
+                                return newSlots;
+                            })
+                        };
+                        return newDay;
+                    }),
+                    settings: {
+                        price_per_hour: globalSettings.price,
+                        enable_discount: (globalSettings.discount_type !== 0),
+                        is_percent_discount: (globalSettings.discount_type === 1),
+                        discount_amount: globalSettings.discount_amount,
+                        discount_end: globalSettings.discount_end,
+                        timezone: moment().format('Z')
+                    }
+                }
+            };
+            request({
+                url: '/lawyer/update-schedule',
+                method: 'POST',
+                data: toSend
+            }).then((response) => {
+                toast.success("Schedule saved successfully");
+            }).catch((error) => {
+                console.debug(error);
+            });
         });
     };
 
@@ -317,6 +357,11 @@ const ScheduleForm = ({}) => {
                 <div className="col">
                     <div className="row form-row">
                         <div className="col-12">
+                            <span className="text-muted p-2 float-left" style={{
+                                backgroundColor: 'rgba(0,0,0,0.05)',
+                                borderRadius: '5px',
+                                margin: '5px 0px 5px 0px'
+                            }}><FaClock />&nbsp;All times are shown in your local timezone <strong>(UTC{moment().format('Z')})</strong></span>
                             <button className="btn btn-sm btn-info float-right mb-1" onClick={
                                 () => {
                                     setIsSideShown(!isSideShown);

@@ -10,6 +10,8 @@ import History from "./History";
 import Img from "./Img"
 import NoContent from "./NoContent";
 import SpinnerButton from "./SpinnerButton";
+import useValidation from "./useValidation";
+import {ChatMessageValidation} from "./Validations";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match, showContent = false}) => {
     const inputRef = useRef(null);
@@ -19,6 +21,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     const [messages, setMessages] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const [myId, setMyId] = useState(null);
+    const [errors, , runValidation] = useValidation(ChatMessageValidation);
 
     const {request} = useRequests();
     // Load chats from server
@@ -103,20 +106,27 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         const chat_id = chats[selectedChat].id;
         setIsSending(true);
         if (file === null) {
-            request({
-                url: `/chat/${chat_id}`,
-                method: 'POST',
-                data: {
-                    content: message
+            runValidation({message: message}).then((hasErrors, _) => {
+                if (hasErrors) {
+                    toast.error(errors.message[0]);
+                    setIsSending(false);
+                    return;
                 }
-            }).then((_) => {
-                loadMessages();
-                setMessage("");
-            }).catch((error) => {
-                console.log(error);
-            }).finally(() => {
-                setIsSending(false);
-                inputRef.current.focus();
+                request({
+                    url: `/chat/${chat_id}`,
+                    method: 'POST',
+                    data: {
+                        content: message
+                    }
+                }).then((_) => {
+                    loadMessages();
+                    setMessage("");
+                }).catch((error) => {
+                    console.log(error);
+                }).finally(() => {
+                    setIsSending(false);
+                    inputRef.current.focus();
+                });
             });
         } else {
             // Send file
@@ -220,6 +230,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             disabled={file !== null || isSending}
                                             onChange={(e) => {
                                                 setMessage(e.target.value);
+                                                runValidation(e.target.value);
                                             }}
                                             ref={inputRef}
                                             type="text"

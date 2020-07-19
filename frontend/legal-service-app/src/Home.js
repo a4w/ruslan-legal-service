@@ -107,16 +107,28 @@ const Home = () => {
                         minWidth: '100vw',
                         minHeight: '10px',
                         zIndex: -1000,
-                        backgroundColor: 'rgba(9,229,225,0.2)'
+                        backgroundColor: 'rgba(9,125,225,0.2)'
                     }}>
 
                     </div>
                     <div className="row">
                         <div className="col-12">
-                            <h1 className="font-weight-bold text-center d-block text-light" style={{fontSize: '2.5em'}}>Search Lawyer, Book an Appointment</h1>
-                            <p className="text-center d-block text-lg text-light">
+                            <div className="cover-container">
+                                <h1 className="font-weight-bold text-center d-block text-light cover-text" style={{fontSize: '5em'}}><span style={{
+                                    color: '#09e5ab',
+                                    padding: '20px',
+                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                    display: 'inline-block',
+                                    borderRadius: '6px',
+                                }}>Search Lawyers</span> Book an Appointment</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <p className="text-center d-block text-light" style={{fontSize: '2em'}}>
                                 Discover the best lawyers the city nearest to you.
-                        </p>
+                            </p>
                         </div>
                     </div>
                     <div className="row">

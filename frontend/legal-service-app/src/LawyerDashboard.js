@@ -23,7 +23,7 @@ const LawyerDashboard = () => {
                         <LawyerDashboardSidebar />
                     </StickyBox>
                 </div>
-                <div className="col">
+                <div className="col-12 col-md-9">
                     <div className="row">
                         <div className="col-12">
                             <LawyerDashboardTabs />

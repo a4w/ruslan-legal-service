@@ -114,7 +114,7 @@ const Home = () => {
                     <div className="row">
                         <div className="col-12">
                             <div className="cover-container">
-                                <h1 className="font-weight-bold text-center d-block text-light cover-text" style={{fontSize: '5em'}}><span style={{
+                                <h1 className="font-weight-bold text-center d-block text-light cover-text" style={{fontSize: 'calc(1vw + 3em)'}}><span style={{
                                     color: '#09e5ab',
                                     padding: '20px',
                                     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -242,7 +242,8 @@ const SearchLawyerByName = () => {
         width: '50px',
         height: '50px',
         borderRadius: '3px',
-        marginRight: '10px'
+        marginRight: '10px',
+        display: 'inline-block'
     };
     return (
         <form style={{marginTop: "8px"}}>
@@ -584,7 +585,7 @@ const BlogCard = ({blog}) => {
                                     <Img
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{maxWidth: '40px'}}
+                                        style={{maxWidth: '40px', height: '40px'}}
                                     />
                                     <span>{`${account.name} ${account.surname}`}</span>
                                 </Link>

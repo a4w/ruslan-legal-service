@@ -10,6 +10,7 @@ import Img from "./Img";
 import History from "./History";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
+import Status from "./Status";
 
 const LawyerDashboardStatus = () => {
     return (
@@ -173,7 +174,9 @@ const ListItem = ({appointment}) => {
                 {day}
                 <span className="d-block text-info">{time}</span>
             </td>
-            <td className="text-center">{appointment.status}</td>
+            <td className="text-center">
+                <Status appStatus={appointment.status} />
+            </td>
             <td className="text-center">{appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">

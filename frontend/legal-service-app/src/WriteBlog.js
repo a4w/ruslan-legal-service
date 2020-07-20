@@ -66,7 +66,8 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
         }, true);
 
         loaderStackEdit.on("fileChange", (file) => {
-            md_preview.current.innerHTML = file.content.html;
+            if(md_preview.current)
+                md_preview.current.innerHTML =  file.content.html;
         });
 
     }, []);

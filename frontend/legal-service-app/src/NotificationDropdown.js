@@ -7,6 +7,7 @@ import useInterval from "./useInterval";
 import useRequests from "./useRequests"
 import {AuthContext} from "./App";
 import NoContent from "./NoContent";
+import {Link} from "react-router-dom";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -105,6 +106,7 @@ const Notifications = ({setNew}) => {
     const MarkAsRead = (notification) => {
         request({url: `/account/notification/${notification}`, method: "GET"})
             .then((res) => {
+                getNotifications();
             })
             .catch((err) => {
                 toast.error("An Error Occured");
@@ -145,11 +147,37 @@ const Notification = ({data: {type, notification_data}}) => {
     switch (type) {
         case "INCOMING_MESSAGE":
             return (
-                <p
-                    className="noti-details"
-                >
+                <Link to={`/chat/${notification_data.chat_id}`}>
+                    <p className="noti-details">
+                        <span className="noti-title">
+                            {`${notification_data.sender_name} Sent you a message!`}
+                        </span>
+                        <br />
+                        {notification_data.message_hint}
+                    </p>
+                </Link>
+            );
+        case "APPOINTMENT_RESERVATION":
+            return (
+                <p className="noti-details">
                     <span className="noti-title">
-                        {`${notification_data.sender_name} Sent you a message!`}
+                        {`${notification_data.client_name} has booked assesion with you at ${notification_data.date} for ${notification_data.price}!`}
+                    </span>
+                </p>
+            );
+        case "UPCOMING_APPOINTMENT":
+            return (
+                <p className="noti-details">
+                    <span className="noti-title">
+                        {`There is an upcoming appointment!`}
+                    </span>
+                </p>
+            );
+        case "APPOINTMENT_CANCELLED":
+            return (
+                <p className="noti-details">
+                    <span className="noti-title">
+                        {`An appointment has been cancelled!`}
                     </span>
                     <br />
                     {notification_data.message_hint}

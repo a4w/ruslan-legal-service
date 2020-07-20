@@ -43,6 +43,12 @@ function LawyerList(props) {
             method: "GET",
         })
             .then((data) => {
+                data.lawyers = data.lawyers.map((lawyer) => {
+                    return {
+                        ...lawyer,
+                        biography: lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")
+                    };
+                });
                 if (keep) setLawyers([...lawyers, ...data.lawyers]);
                 else setLawyers(data.lawyers);
             })
@@ -72,7 +78,7 @@ function LawyerList(props) {
         getList(params);
 
     }, []);
-    useEffect(()=>{
+    useEffect(() => {
         console.log(props.location.search);
         const next = {
             ...queryString.parse(props.location.search),
@@ -81,7 +87,7 @@ function LawyerList(props) {
         };
         setParams(next);
         getList(next);
-    },[props.location.search]);
+    }, [props.location.search]);
     const GetMore = (e) => {
         e.preventDefault();
         setOffset(offset + length);
@@ -280,7 +286,7 @@ const LawyerListHeader = ({
 };
 
 const PopUp = ({lawyer}) => {
-    const { account } = { ...lawyer };
+    const {account} = {...lawyer};
     const imgStyle = {
         borderRadius: "120px",
         height: "100px",
@@ -290,7 +296,7 @@ const PopUp = ({lawyer}) => {
     return (
         lawyer && (
             <div className="card flex-fill mr-2 d-none d-lg-flex">
-                 <div style={{ width: "100%", marginBottom: "3%", marginTop:"3%" }}>
+                <div style={{width: "100%", marginBottom: "3%", marginTop: "3%"}}>
                     <div className="profile-info-widget justify-content-center">
                         <Link
                             to={`profile/${lawyer.id}`}

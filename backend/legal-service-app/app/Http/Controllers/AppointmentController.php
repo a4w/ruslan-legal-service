@@ -8,6 +8,7 @@ use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
+use App\Notifications\AppointmentCancelled;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -172,6 +173,8 @@ class AppointmentController extends Controller
         Refund::create([
             'payment_intent' => $appointment->payment_intent_id
         ]);
+        $appointment->client->notify(new AppointmentCancelled($appointment));
+        $appointment->lawyer->notify(new AppointmentCancelled($appointment));
         return RespondJSON::success();
     }
 

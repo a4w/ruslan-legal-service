@@ -584,7 +584,7 @@ const BlogCard = ({blog}) => {
                                     <Img
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{maxWidth: '40px'}}
+                                        style={{maxWidth: '40px', height: '40px'}}
                                     />
                                     <span>{`${account.name} ${account.surname}`}</span>
                                 </Link>

@@ -2,11 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Mail\MessageReceived as MailMessageReceived;
 use App\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MessageReceived extends Notification implements ShouldQueue
@@ -33,7 +35,23 @@ class MessageReceived extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('emails.account.incoming_message', ['sender' => $this->message->sender]);
+        return (new MailMessageReceived($this->message))->delay(now()->addSeconds(30));
+    }
+
+    public function doSend($event)
+    {
+        if ($event->channel === "database") {
+            return true;
+        }
+        // Check if is already read
+        $notifiable = $event->notifiable;
+        $notifications = $notifiable->unreadNotifications;
+        $notifications->map(function ($notification) {
+            if ($notification->id === $this->id) {
+                return true;
+            }
+        });
+        return false;
     }
 
 

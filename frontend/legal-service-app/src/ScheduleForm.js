@@ -12,6 +12,7 @@ import {OverlayTrigger, Popover} from "react-bootstrap"
 import useValidation from "./useValidation";
 import {scheduleSettingValidation} from "./Validations";
 import useRequests from "./useRequests";
+import SpinnerButton from "./SpinnerButton";
 
 const ScheduleForm = ({}) => {
     const {request} = useRequests();
@@ -23,6 +24,7 @@ const ScheduleForm = ({}) => {
     const [numberOfDaysShown, setNumberOfDaysShown] = useState(1);
     const [firstIndexShown, setFirstIndexShown] = useState(0);
     const [visibleSchedule, setVisibleSchedule] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const schedule_container = useRef(null);
 
@@ -198,6 +200,7 @@ const ScheduleForm = ({}) => {
             if (hasErrors) {
                 return;
             }
+            setLoading(true);
 
             const toSend = {
                 schedule: {
@@ -233,6 +236,8 @@ const ScheduleForm = ({}) => {
                 toast.success("Schedule saved successfully");
             }).catch((error) => {
                 console.debug(error);
+            }).finally(()=>{
+                setLoading(false);
             });
         });
     };
@@ -451,9 +456,9 @@ const ScheduleForm = ({}) => {
 
                     <div className="row form-row">
                         <div className="col">
-                            <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
+                            <SpinnerButton loading={loading} className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
                                 <FaSave />&nbsp;Save schedule
-                                </button>
+                            </SpinnerButton>
                         </div>
                     </div>
                 </div>

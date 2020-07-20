@@ -7536,3 +7536,7 @@ min-width: 100%;
 		left: -221px;
 	}
 }
+
+.img-fluid{
+    height: -webkit-fill-available;
+}

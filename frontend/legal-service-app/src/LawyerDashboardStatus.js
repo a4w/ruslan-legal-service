@@ -265,7 +265,7 @@ const NoContentRow = (props)=>{
     return (
         <tr>
             <td
-                colspan="100%"
+                colSpan="100%"
                 style={{ textAlign: "center", fontSize: "larger" }}
             >
                 {props.children}

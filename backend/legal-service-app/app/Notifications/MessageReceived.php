@@ -35,7 +35,7 @@ class MessageReceived extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessageReceived($this->message))->delay(now()->addSeconds(30));
+        return (new MailMessageReceived($this->message))->delay(now()->addMinutes(5));
     }
 
     public function doSend($event)

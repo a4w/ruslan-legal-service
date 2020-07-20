@@ -242,7 +242,8 @@ const SearchLawyerByName = () => {
         width: '50px',
         height: '50px',
         borderRadius: '3px',
-        marginRight: '10px'
+        marginRight: '10px',
+        display: 'inline-block'
     };
     return (
         <form style={{marginTop: "8px"}}>

@@ -71,6 +71,8 @@ const Modal = (props) => {
                     outline: "0",
                     width: props.width ? props.width : "90%",
                     margin: "auto",
+                    maxHeight: "100%",
+                    overflow: "auto",
                 }}
                 ref={ref}
             >

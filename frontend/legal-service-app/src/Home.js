@@ -114,7 +114,7 @@ const Home = () => {
                     <div className="row">
                         <div className="col-12">
                             <div className="cover-container">
-                                <h1 className="font-weight-bold text-center d-block text-light cover-text" style={{fontSize: '5em'}}><span style={{
+                                <h1 className="font-weight-bold text-center d-block text-light cover-text" style={{fontSize: 'calc(1vw + 3em)'}}><span style={{
                                     color: '#09e5ab',
                                     padding: '20px',
                                     backgroundColor: 'rgba(0,0,0,0.5)',

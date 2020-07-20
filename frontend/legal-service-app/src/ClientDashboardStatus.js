@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
 import {NoContentRow} from "./LawyerDashboardStatus";
+import Status from "./Status";
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
@@ -34,16 +35,9 @@ const Appointment = ({
     is_cancellable,
     can_be_started,
 }) => {
-    const [appStatus, setStatus] = useState(
-        "badge badge-pill bg-success-light"
-    );
     const {request} = useRequests();
     const [lawyer, setLawyer] = useState(null);
     useEffect(() => {
-        if (status === "UPCOMING")
-            setStatus("badge badge-pill bg-warning-light");
-        else if (status === "CANCELLED")
-            setStatus("badge badge-pill bg-danger-light");
         request({url: `lawyer/${lawyer_id}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
@@ -103,7 +97,7 @@ const Appointment = ({
             <td>{`${duration} minutes`}</td>
             <td>{price}</td>
             <td>
-                <span className={appStatus}>{status.toLowerCase()}</span>
+                <Status appStatus={status} />
             </td>
             <td className="text-right">
                 <div className="table-action">

@@ -450,11 +450,13 @@ const LawyerCard = ({account, lawyer}) => {
         <div className="profile-widget">
             <div className="lawyer-img" style={{maxWidth: '100%'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                    <Img
-                        className="img-fluid"
-                        src={account.profile_picture}
-                        alt="User Image"
-                    />
+                    <div style={{height: '170px'}}>
+                        <Img
+                            className="img-fluid"
+                            src={account.profile_picture}
+                            alt="User Image"
+                        />
+                    </div>
                 </Link>
             </div>
             <div className="pro-content">

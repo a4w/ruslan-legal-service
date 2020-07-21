@@ -173,8 +173,8 @@ class AppointmentController extends Controller
         Refund::create([
             'payment_intent' => $appointment->payment_intent_id
         ]);
-        $appointment->client->notify(new AppointmentCancelled($appointment));
-        $appointment->lawyer->notify(new AppointmentCancelled($appointment));
+        $appointment->client->account->notify(new AppointmentCancelled($appointment));
+        $appointment->lawyer->account->notify(new AppointmentCancelled($appointment));
         return RespondJSON::success();
     }
 

@@ -6171,7 +6171,7 @@ html.menu-opened body {
     padding: 20px;
 }
 .grid-blog .entry-meta {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;

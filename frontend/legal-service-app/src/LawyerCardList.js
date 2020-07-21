@@ -168,17 +168,20 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-                    <i className="fa fa-check-circle" aria-hidden="true"></i>
-                    <span className="text-md text-success">
-                        {isPercent ?
-                            `${discountValue}% discount` :
-                            `${currency}${discountValue} discount`}
+
+                    <span className="text-md text-success" style={{}}>
+                        <i className="fa fa-check-circle" aria-hidden="true"></i>
+                        <strong>
+                            {isPercent ?
+                                `${discountValue}% discount` :
+                                `${currency}${discountValue} discount`}
+                        </strong>
                     </span>
                 </li>
                 <li>
                     <i className="far fa-money-bill-alt"></i>
                     <label className="text-lg text-success">
-                        {currency}{discount}
+                        <span style={{fontWeight: 'bold'}}>{currency}{discount}</span>
                         &nbsp;
                         <strike className="text-lg text-danger">
                             {`${currency} ${cost}`}

@@ -2888,9 +2888,7 @@ html.menu-opened body {
 }
 .lawyer-info-right {
     margin-left: auto;
-    -ms-flex: 0 0 200px;
-    flex: 0 0 200px;
-    max-width: 200px;
+    width: 300px;
 }
 .law-img {
     -ms-flex: 0 0 150px;
@@ -3006,6 +3004,7 @@ html.menu-opened body {
     display: block;
     line-height: 30px;
     color: #4E4852;
+    border-bottom: 1px dashed #ddd;
 }
 .session-infos ul li i {
     font-size: 15px;

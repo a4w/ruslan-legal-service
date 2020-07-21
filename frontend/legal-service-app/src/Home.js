@@ -454,6 +454,7 @@ const LawyerCard = ({account, lawyer}) => {
                         className="img-fluid"
                         src={account.profile_picture}
                         alt="User Image"
+                        style={{maxHeight: '170px'}}
                     />
                 </Link>
             </div>

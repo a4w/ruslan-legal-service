@@ -50,11 +50,11 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             for (let i = 0; i < days.length; ++i) {
                 const date = days[i].date;
                 const slots = days[i].slots;
-                let day_idx = i;
                 for (let j = 0; j < slots.length; ++j) {
                     const slot = slots[j];
                     const appointment_date = moment.utc(date + " " + slot.time).local();
                     const utc_time = moment.utc(date + " " + slot.time);
+                    let day_idx = i;
                     console.log(appointment_date);
                     if (utc_time.format(Config.momentsjs_default_date_format) < appointment_date.format(Config.momentsjs_default_date_format)) {
                         day_idx++;

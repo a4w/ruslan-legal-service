@@ -7,7 +7,7 @@ import Img from "./Img";
 import BlogImg from "./BlogImg";
 import {Discount} from "./LawyerCardList";
 import StarRatings from "react-star-ratings";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
 import PageHead from "./PageHead";
@@ -51,7 +51,6 @@ const Home = () => {
         $.get("https://ipinfo.io", function (response) {
             const city = response.city;
             for (let i = 0; i < locationOptions.length; ++i) {
-                console.log(city, locationOptions[i].value);
                 if (city.toLowerCase() == locationOptions[i].value) {
                     setLocation(locationOptions[i]);
                     setIsLocationBased(true);
@@ -245,62 +244,80 @@ const SearchLawyerByName = () => {
         marginRight: '10px',
         display: 'inline-block'
     };
-    return (
-        <form style={{marginTop: "8px"}}>
-            <div className="row form-row">
-                <div className="col">
-                    <div className="form-group" style={{minWidth: "93%"}}>
-                        <input
-                            className="form-control"
-                            placeholder="Enter Lawyer Name"
-                            onChange={OnChangeHandler}
-                            value={term}
-                            style={{
-                                borderRadius: '50px',
-                                fontSize: '1.2em',
-                                padding: '20px'
-                            }}
-                        />
-                        {results && term.trim() !== "" && <div style={dropdownStyle}>
-                            {(results.length) ?
-                                results.map((lawyer) => {
-                                    console.log(lawyer);
-                                    return (
-                                        <>
-                                            <div className="inline-search-result">
-                                                <Link to={`/profile/${lawyer.id}`}>
-                                                    <Img
-                                                        alt={lawyer.full_name}
-                                                        className="rounded-circle"
-                                                        src={lawyer.account.profile_picture}
-                                                        style={imgStyle}
-                                                    />
-                                                    <b>{lawyer.account.full_name}</b>
-                                                    <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                                </Link>
-                                            </div>
-                                        </>
-                                    );
-                                })
-                                : (
-                                    <span className="d-block text-center p-3"><FaRegQuestionCircle />&nbsp;no matches found</span>
-                                )}
-                        </div>}
-                    </div>
-                </div>
-                <div className="col-auto">
-                    <SpinnerButton
-                        type="submit"
-                        style={{height: "46px", borderRadius: '50%'}}
-                        className="btn btn-block btn-primary search-btn"
-                        loading={loading}
-                    >
-                        <i className="fas fa-search"></i>
-                    </SpinnerButton>
-                </div>
+    const [selectedIdx, setSelectedIdx] = useState(0);
+    const history = useHistory();
 
+    return (
+        <div className="row form-row">
+            <div className="col">
+                <div className="form-group" style={{minWidth: "93%"}}>
+                    <input
+                        className="form-control"
+                        placeholder="Enter Lawyer Name"
+                        onChange={OnChangeHandler}
+                        onKeyUp={(event) => {
+                            if (results === null || results.length === 0)
+                                return;
+                            const ARROW_UP = 38;
+                            const ARROW_DOWN = 40;
+                            const ENTER = 13;
+                            switch (event.keyCode) {
+                                case ARROW_DOWN:
+                                    setSelectedIdx((selectedIdx + 1) % results.length);
+                                    break;
+                                case ARROW_UP:
+                                    setSelectedIdx((selectedIdx + results.length - 1) % results.length);
+                                    break;
+                                case ENTER:
+                                    history.push(`/profile/${results[selectedIdx].id}`);
+                                    break;
+                            }
+                        }}
+                        value={term}
+                        style={{
+                            borderRadius: '50px',
+                            fontSize: '1.2em',
+                            padding: '20px'
+                        }}
+                    />
+                    {results && term.trim() !== "" && <div style={dropdownStyle}>
+                        {(results.length) ?
+                            results.map((lawyer, i) => {
+                                return (
+                                    <>
+                                        <div className={"inline-search-result " + (i === selectedIdx ? 'highlight-result' : '')}>
+                                            <Link to={`/profile/${lawyer.id}`}>
+                                                <Img
+                                                    alt={lawyer.full_name}
+                                                    className="rounded-circle"
+                                                    src={lawyer.account.profile_picture}
+                                                    style={imgStyle}
+                                                />
+                                                <b>{lawyer.account.full_name}</b>
+                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
+                                            </Link>
+                                        </div>
+                                    </>
+                                );
+                            })
+                            : (
+                                <span className="d-block text-center p-3"><FaRegQuestionCircle />&nbsp;no matches found</span>
+                            )}
+                    </div>}
+                </div>
             </div>
-        </form>
+            <div className="col-auto">
+                <SpinnerButton
+                    type="submit"
+                    style={{height: "46px", borderRadius: '50%'}}
+                    className="btn btn-block btn-primary search-btn"
+                    loading={loading}
+                >
+                    <i className="fas fa-search"></i>
+                </SpinnerButton>
+            </div>
+
+        </div>
     );
 };
 export default Home;

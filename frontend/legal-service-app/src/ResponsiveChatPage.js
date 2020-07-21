@@ -169,7 +169,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                             <i className="fas fa-times"></i>
                                         </button>
                                     </div>
-                                    <SearchLawyerByName />
+                                    {/* <SearchLawyerByName /> */}
                                     <ChatUserList
                                         chats={chats}
                                         onChatSelection={(index) => {

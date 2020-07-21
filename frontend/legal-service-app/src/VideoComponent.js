@@ -27,6 +27,10 @@ const VideoComponent = ({appointment_id}) => {
     };
     const handleDisconnection = () => {
         if (room !== null) {
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.stop();
+                publication.unpublish();
+            });
             room.disconnect();
         }
     };
@@ -174,7 +178,7 @@ const VideoComponent = ({appointment_id}) => {
                 <div class="col">
                     <div className="stream" id="incomingMedia">
                         <div className="controls">
-                            <div className="buttons">
+                            <div className={"buttons " + (showChat ? 'd-none' : '')}>
                                 <button class="btn btn-info" onClick={handleChatToggle}><BsChatSquareQuote /></button>
                                 <button class="btn btn-danger" onClick={handleDisconnection}><FaPhoneSlash /></button>
                                 <button class="btn btn-primary" onClick={handleSoundControl}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>

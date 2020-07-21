@@ -198,6 +198,7 @@ const ScheduleForm = ({}) => {
     const handleSaveClick = () => {
         runValidation(globalSettings).then((hasErrors) => {
             if (hasErrors) {
+                setIsSideShown(true);
                 return;
             }
             setLoading(true);
@@ -236,7 +237,7 @@ const ScheduleForm = ({}) => {
                 toast.success("Schedule saved successfully");
             }).catch((error) => {
                 console.debug(error);
-            }).finally(()=>{
+            }).finally(() => {
                 setLoading(false);
             });
         });

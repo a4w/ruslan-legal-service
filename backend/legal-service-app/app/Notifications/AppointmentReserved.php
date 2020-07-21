@@ -12,7 +12,7 @@ class AppointmentReserved extends Notification
 {
     use Queueable;
 
-    private Appointment $appointment;
+    private $appointment;
 
     /**
      * Create a new notification instance.

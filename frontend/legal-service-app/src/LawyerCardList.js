@@ -21,7 +21,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                     <div className="lawyer-info-left">
                         <div className="law-img" style={{maxHeight: "250px"}}>
                             <strong>{}</strong>
-                            <Img className="img-fluid" src={lawyer.account.profile_picture} />
+                            <Img className="" src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">
@@ -55,18 +55,18 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
                             </div>
                             <div className="session-services">
-                            {lawyer.practice_areas &&
-                            <>
-                                {lawyer.practice_areas.map((area, i) =>{ 
-                                    if(i < 2)
-                                        return(<span key={area.id}>{area.area}</span>)
-                                })}
-                                {lawyer.practice_areas.length > 2 &&
-                                    <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                        {`+${lawyer.practice_areas.length - 2} more`}
-                                    </Link>}
-                            </>
-                            }
+                                {lawyer.practice_areas &&
+                                    <>
+                                        {lawyer.practice_areas.map((area, i) => {
+                                            if (i < 2)
+                                                return (<span key={area.id}>{area.area}</span>)
+                                        })}
+                                        {lawyer.practice_areas.length > 2 &&
+                                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                                {`+${lawyer.practice_areas.length - 2} more`}
+                                            </Link>}
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>
@@ -87,15 +87,15 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     <li>
                                         <i className="fas fa-map-marker-alt"></i>{" "}
                                         -
-                                    </li>
-                                )}
+                                        </li>
+                                    )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     discount={lawyer.discount}
                                     isPercent={lawyer.is_percent_discount}
-                                    currency = {lawyer.currency_symbol}
+                                    currency={lawyer.currency_symbol}
                                 />
                             </ul>
                         </div>
@@ -138,7 +138,7 @@ const Discount = ({secsTillEnd, cost, costAfterDiscount, isPercent, discount, cu
                     discount: costAfterDiscount,
                     discountValue: discount,
                     isPercent: isPercent,
-                    currency: currency? currency : Config.default_currency_symbol
+                    currency: currency ? currency : Config.default_currency_symbol
                 })
             }
         />
@@ -167,17 +167,20 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-                    <i className="fa fa-check-circle" aria-hidden="true"></i>
-                    <span className="text-md text-success">
-                        {isPercent ?
-                            `${discountValue}% discount` :
-                            `${currency}${discountValue} discount`}
+
+                    <span className="text-md text-success" style={{}}>
+                        <i className="fa fa-check-circle" aria-hidden="true"></i>
+                        <strong>
+                            {isPercent ?
+                                `${discountValue}% discount` :
+                                `${currency}${discountValue} discount`}
+                        </strong>
                     </span>
                 </li>
                 <li>
                     <i className="far fa-money-bill-alt"></i>
                     <label className="text-lg text-success">
-                        {currency}{discount}
+                        <span style={{fontWeight: 'bold'}}>{currency}{discount}</span>
                         &nbsp;
                         <strike className="text-lg text-danger">
                             {`${currency} ${cost}`}

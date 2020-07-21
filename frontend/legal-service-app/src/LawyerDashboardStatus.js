@@ -157,14 +157,14 @@ const ListItem = ({appointment}) => {
         <tr>
             <td>
                 <h2 className="table-avatar">
-                    <a href="//" className="avatar avatar-sm mr-2">
+                    <a href="#" className="avatar avatar-sm mr-2">
                         <Img
                             className="avatar-img rounded-circle"
                             src={account.profile_picture}
                             alt="User"
                         />
                     </a>
-                    <a href="//">
+                    <a href="#">
                         {account.name + " " + account.surname}
                         <span>{appointment.duration} Minutes</span>
                     </a>

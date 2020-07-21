@@ -457,7 +457,6 @@ const LawyerCard = ({account, lawyer}) => {
                             alt="User Image"
                         />
                     </div>
-
                 </Link>
             </div>
             <div className="pro-content">

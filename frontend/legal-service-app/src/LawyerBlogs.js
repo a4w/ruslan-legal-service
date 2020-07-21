@@ -18,7 +18,7 @@ const LawyerBlogs = () => {
                     <div className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         >
                             <li>
                                 <NavTab exact to={`${path}/my-blogs`}>
@@ -50,12 +50,12 @@ const LawyerBlogs = () => {
                         <Route
                             key={"1"}
                             path={`${path}/edit-blog/:blogId`}
-                            render={(props) => ( <WriteBlog {...props} setIsEditting={setIsEditting} />)}
+                            render={(props) => (<WriteBlog {...props} setIsEditting={setIsEditting} />)}
                         />
                         <Route
                             key={"2"}
                             path={`${path}/write-blog`}
-                            render={(props) => ( <WriteBlog {...props} setIsEditting={setIsEditting} /> )}
+                            render={(props) => (<WriteBlog {...props} setIsEditting={setIsEditting} />)}
                         />
                     </Switch>
                 </div>
@@ -64,21 +64,17 @@ const LawyerBlogs = () => {
     );
 };
 
-const Blogs = ({setIsEditting})=>{
+const Blogs = ({setIsEditting}) => {
     const [blogs, setBlogs] = useState(null);
     const {request} = useRequests();
     useEffect(() => {
         setIsEditting(false);
-        request({url: "/lawyer/me", method: "GET"})
+        request({url: `/blogs/mine`, method: "GET"})
             .then((data) => {
-                request({url: `/blogs/lawyer/${data.lawyer.id}`, method: "GET"})
-                    .then((data) => {
-                        console.log(data);
-                        setBlogs(data.blogs);
-                    })
-                    .catch(() => {});
+                console.log(data);
+                setBlogs(data.blogs);
             })
-            .catch((err) => {});
+            .catch(() => {});
     }, []);
     return blogs && <BlogList blogs={blogs} editable={true} />
 }

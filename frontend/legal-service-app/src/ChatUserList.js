@@ -5,7 +5,7 @@ const ChatUserList = ({chats, onChatSelection, swipe}) => {
     return (
         <>
             <div className="chat-users-list">
-                <div className="chat-scroll">
+                <div className="chat-scroll" style={{height:"467px"}}>
                     {chats.map((chat, i) => {
                         return (
                             <ChatUserListItem

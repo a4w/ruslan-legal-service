@@ -81,6 +81,7 @@ const UserDropdown = () => {
                         <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
+                {isClient &&
                 <Link
                     className="dropdown-item"
                     to={isClient ? "/client-dashboard" : "/dashboard"}
@@ -88,6 +89,7 @@ const UserDropdown = () => {
                 >
                     Dashboard
                 </Link>
+                }
                 <Link
                     className="dropdown-item"
                     to="/chat"
@@ -102,6 +104,7 @@ const UserDropdown = () => {
                 >
                     Agenda
                 </Link>
+                {isClient && 
                 <Link
                     className="dropdown-item"
                     to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}
@@ -109,6 +112,7 @@ const UserDropdown = () => {
                 >
                     Profile Settings
                 </Link>
+                }
                 <button
                     className="dropdown-item"
                     onClick={() => {

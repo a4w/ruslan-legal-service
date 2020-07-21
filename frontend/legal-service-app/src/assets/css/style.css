@@ -3196,6 +3196,7 @@ html.menu-opened body {
     padding-bottom: 0;
 }
 .service-list ul {
+    display: grid;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -3204,6 +3205,7 @@ html.menu-opened body {
     margin: 6px 0;
     padding-left: 25px;
     position: relative;
+    width: auto;
 }
 .service-list ul li::before {
     color: #ccc;
@@ -6177,7 +6179,7 @@ html.menu-opened body {
     padding: 20px;
 }
 .grid-blog .entry-meta {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -7543,9 +7545,9 @@ min-width: 100%;
 	}
 }
 
-.img-fluid{
+/* .img-fluid{
     height: -webkit-fill-available;
-}
+} */
 
 .arrow-left {
   width: 0;

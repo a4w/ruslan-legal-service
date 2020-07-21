@@ -9,6 +9,7 @@ import useRequests from "./useRequests";
 
 const LawyerBlogs = () => {
     const path = "/dashboard/blogs";
+    const [isEditting, setIsEditting] = useState(false);
     // const path = history.location.pathname;
     return (
         <Router history={history}>
@@ -29,11 +30,13 @@ const LawyerBlogs = () => {
                                     Write Blog
                                 </NavTab>
                             </li>
-                            <li>
-                                <NavTab to={`${path}/edit-blog/`}>
-                                    Edit Blog
-                                </NavTab>
-                            </li>
+                            {isEditting && (
+                                <li>
+                                    <NavTab to={`${path}/edit-blog/`}>
+                                        Edit Blog
+                                    </NavTab>
+                                </li>
+                            )}
                         </ul>
                     </div>
 
@@ -42,10 +45,18 @@ const LawyerBlogs = () => {
                             <Redirect replace to={`${path}/my-blogs`} />
                         </Route>
                         <Route path={`${path}/my-blogs`}>
-                            <Blogs />
+                            <Blogs setIsEditting={setIsEditting} />
                         </Route>
-                        <Route path={`${path}/edit-blog/:blogId`} component={WriteBlog}/>
-                        <Route path={`${path}/write-blog`} component={WriteBlog}/>
+                        <Route
+                            key={"1"}
+                            path={`${path}/edit-blog/:blogId`}
+                            render={(props) => ( <WriteBlog {...props} setIsEditting={setIsEditting} />)}
+                        />
+                        <Route
+                            key={"2"}
+                            path={`${path}/write-blog`}
+                            render={(props) => ( <WriteBlog {...props} setIsEditting={setIsEditting} /> )}
+                        />
                     </Switch>
                 </div>
             </div>
@@ -53,10 +64,11 @@ const LawyerBlogs = () => {
     );
 };
 
-const Blogs = ()=>{
+const Blogs = ({setIsEditting})=>{
     const [blogs, setBlogs] = useState(null);
     const {request} = useRequests();
     useEffect(() => {
+        setIsEditting(false);
         request({url: "/lawyer/me", method: "GET"})
             .then((data) => {
                 request({url: `/blogs/lawyer/${data.lawyer.id}`, method: "GET"})

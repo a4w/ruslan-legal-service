@@ -7,6 +7,7 @@ import Img from "./Img";
 import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import env from "./env";
 
 
 const BlogDetails = ({match}) => {
@@ -91,16 +92,17 @@ const AboutAuthor = ({lawyer}) => {
     );
 };
 const ShareSection = ({id}) => {
+    const url = env.url + History.location.pathname
     return (
         <div className="card blog-share clearfix">
             <div className="card-header">
                 <h4 className="card-title">Share the post</h4>
             </div>
             <div className="card-body">
-                <Facebook small circle solid link={History.location.pathname} />
-                <Twitter small circle solid link={History.location.pathname} />
-                <Linkedin small circle solid link={History.location.pathname} />
-                <Google small circle solid link={History.location.pathname} />
+                <Facebook small circle solid link={url} />
+                <Twitter small circle solid link={url} />
+                <Linkedin small circle solid link={url} />
+                <Google small circle solid link={url} />
             </div>
         </div>
     );

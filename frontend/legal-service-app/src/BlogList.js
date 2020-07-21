@@ -92,15 +92,13 @@ const Blog = ({blog, editable}) => {
                     <h3 className="blog-title">
                         <Link to={`/blog/${id}`}>{blog.title}</Link>
                     </h3>
-                    <p className="mb-0">
-                        <ul className="tags">
-                            <li>
-                                <a href="#" className="tag">
-                                    {blog.tag.area}
-                                </a>
-                            </li>
-                        </ul>
-                    </p>
+                    <ul className="tags mt-2">
+                        <li>
+                            <a href="#" className="tag">
+                                {blog.tag.area}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

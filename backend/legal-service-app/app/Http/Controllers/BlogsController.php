@@ -113,6 +113,13 @@ class BlogsController extends Controller
         }
     }
 
+    public function getPersonalLawyerBlogs()
+    {
+        $lawyer = Auth::user()->lawyer;
+        $blogs = $lawyer->blogs;
+        return RespondJSON::success(['blogs' => $blogs]);
+    }
+
     public function latestBlogs($number)
     {
         $number = (int) $number;

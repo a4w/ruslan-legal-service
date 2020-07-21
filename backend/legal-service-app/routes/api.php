@@ -78,6 +78,7 @@ Route::prefix('appointment')->group(function () {
 Route::prefix('blogs')->group(function () {
     Route::get('all', 'BlogsController@getBlogs');
     Route::get('search', 'BlogsController@searchBlogs');
+    Route::get('mine', 'BlogsController@getPersonalLawyerBlogs')->middleware('auth:api');
     Route::get('{blog}', 'BlogsController@getBlog');
     Route::get('/my/{blog}', 'BlogsController@getMyBlog')->middleware('auth:api');
     Route::get('/lawyer/{lawyer}', 'BlogsController@getLawyerBlogs');

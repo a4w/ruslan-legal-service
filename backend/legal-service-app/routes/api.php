@@ -79,6 +79,7 @@ Route::prefix('blogs')->group(function () {
     Route::get('all', 'BlogsController@getBlogs');
     Route::get('search', 'BlogsController@searchBlogs');
     Route::get('{blog}', 'BlogsController@getBlog');
+    Route::get('/my/{blog}', 'BlogsController@getMyBlog')->middleware('auth:api');
     Route::get('/lawyer/{lawyer}', 'BlogsController@getLawyerBlogs');
     Route::post('add', 'BlogsController@addBlogPost')->middleware('auth:api');
     Route::post('edit/{blog}', 'BlogsController@editBlogPost')->middleware('auth:api');

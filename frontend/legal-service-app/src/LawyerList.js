@@ -142,7 +142,7 @@ function LawyerList(props) {
                     <div className="col-12">
                         <div className="content">
                             <div className="row justify-content-center align-content-center">
-                                <div className="col-sm-12 col-md-12 col-lg-6">
+                                <div className="col-sm-12 col-md-12 col-lg-7">
                                     {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
                                     <div className="load-more text-center">
                                         <a

@@ -72,7 +72,7 @@ const Details = ({appointment, account}) => {
                             <div className="row">
                                 <div className="col-md-6 pl-0">
                                     <span className="title">{`#APT${id}`}</span>
-                                    <span className="text">
+                                    <span className="text" style={{display:"inline-block"}}>
                                         {`${day} at ${time}`}
                                     </span>
                                 </div>

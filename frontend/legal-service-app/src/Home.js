@@ -448,7 +448,7 @@ const PopularLawyers = () => {
 const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
-            <div className="lawyer-img" style={{maxWidth: '100%'}}>
+            <div className="" style={{maxWidth: '100%'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <div style={{height: '170px'}}>
                         <Img

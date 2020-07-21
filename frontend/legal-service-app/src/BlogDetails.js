@@ -32,15 +32,18 @@ const BlogDetails = ({match}) => {
                 title={blog !== null && blog.title}
                 description={blog !== null && blog.body.substr(0, 128)}
             />
-            <div className="row">
-                <div className="col-12">
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
 
-                    <div className="blog-view">
-                        {blog && <Post blog={blog} lawyer={lawyer} />}
-                        <ShareSection id={match.params.blogId} />
-                        {lawyer && <AboutAuthor lawyer={lawyer} />}
+                        <div className="blog-view">
+                            {blog && <Post blog={blog} lawyer={lawyer} />}
+                            <ShareSection id={match.params.blogId} />
+                            {lawyer && <AboutAuthor lawyer={lawyer} />}
+                        </div>
                     </div>
                 </div>
+
             </div>
         </>
     );
@@ -125,9 +128,6 @@ const Post = ({blog, lawyer}) => {
             <div className="blog-image">
                 <BlogImg alt="" src={blog.cover_photo_link} style={{
                     maxHeight: '400px',
-                    maxWidth: '100%',
-                    width: 'unset',
-                    height: 'unset',
                     display: 'block',
                     margin: 'auto'
                 }} className="img-fluid" />
@@ -149,7 +149,7 @@ const Post = ({blog, lawyer}) => {
                                         alt="Post Author"
                                         style={{maxHeight: '40px'}}
                                     />
-                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                    <span>&nbsp;{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>

@@ -42,8 +42,12 @@ const LawyerProfile = ({match}) => {
             <div className="content">
                 {lawyer && (
                     <div className="container">
-                        <ProfileCard lawyer={lawyer} match={match} />
-                        <Details lawyer={lawyer} match={match} />
+                        <div className="row">
+                            <div className="col-12">
+                                <ProfileCard lawyer={lawyer} match={match} />
+                                <Details lawyer={lawyer} match={match} />
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -77,7 +81,7 @@ const ProfileCard = ({lawyer}) => {
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="law-img" style={{maxHeight:"250px"}}>
+                        <div className="law-img" style={{maxHeight: "250px"}}>
                             <Img
                                 src={account.profile_picture}
                                 className="img-fluid"

@@ -7,7 +7,7 @@ import Img from "./Img";
 import BlogImg from "./BlogImg";
 import {Discount} from "./LawyerCardList";
 import StarRatings from "react-star-ratings";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import queryString from "query-string"
 import moment from "moment";
 import PageHead from "./PageHead";
@@ -51,7 +51,6 @@ const Home = () => {
         $.get("https://ipinfo.io", function (response) {
             const city = response.city;
             for (let i = 0; i < locationOptions.length; ++i) {
-                console.log(city, locationOptions[i].value);
                 if (city.toLowerCase() == locationOptions[i].value) {
                     setLocation(locationOptions[i]);
                     setIsLocationBased(true);
@@ -245,62 +244,80 @@ const SearchLawyerByName = () => {
         marginRight: '10px',
         display: 'inline-block'
     };
-    return (
-        <form style={{marginTop: "8px"}}>
-            <div className="row form-row">
-                <div className="col">
-                    <div className="form-group" style={{minWidth: "93%"}}>
-                        <input
-                            className="form-control"
-                            placeholder="Enter Lawyer Name"
-                            onChange={OnChangeHandler}
-                            value={term}
-                            style={{
-                                borderRadius: '50px',
-                                fontSize: '1.2em',
-                                padding: '20px'
-                            }}
-                        />
-                        {results && term.trim() !== "" && <div style={dropdownStyle}>
-                            {(results.length) ?
-                                results.map((lawyer) => {
-                                    console.log(lawyer);
-                                    return (
-                                        <>
-                                            <div className="inline-search-result">
-                                                <Link to={`/profile/${lawyer.id}`}>
-                                                    <Img
-                                                        alt={lawyer.full_name}
-                                                        className="rounded-circle"
-                                                        src={lawyer.account.profile_picture}
-                                                        style={imgStyle}
-                                                    />
-                                                    <b>{lawyer.account.full_name}</b>
-                                                    <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                                </Link>
-                                            </div>
-                                        </>
-                                    );
-                                })
-                                : (
-                                    <span className="d-block text-center p-3"><FaRegQuestionCircle />&nbsp;no matches found</span>
-                                )}
-                        </div>}
-                    </div>
-                </div>
-                <div className="col-auto">
-                    <SpinnerButton
-                        type="submit"
-                        style={{height: "46px", borderRadius: '50%'}}
-                        className="btn btn-block btn-primary search-btn"
-                        loading={loading}
-                    >
-                        <i className="fas fa-search"></i>
-                    </SpinnerButton>
-                </div>
+    const [selectedIdx, setSelectedIdx] = useState(0);
+    const history = useHistory();
 
+    return (
+        <div className="row form-row">
+            <div className="col">
+                <div className="form-group" style={{minWidth: "93%"}}>
+                    <input
+                        className="form-control"
+                        placeholder="Enter Lawyer Name"
+                        onChange={OnChangeHandler}
+                        onKeyUp={(event) => {
+                            if (results === null || results.length === 0)
+                                return;
+                            const ARROW_UP = 38;
+                            const ARROW_DOWN = 40;
+                            const ENTER = 13;
+                            switch (event.keyCode) {
+                                case ARROW_DOWN:
+                                    setSelectedIdx((selectedIdx + 1) % results.length);
+                                    break;
+                                case ARROW_UP:
+                                    setSelectedIdx((selectedIdx + results.length - 1) % results.length);
+                                    break;
+                                case ENTER:
+                                    history.push(`/profile/${results[selectedIdx].id}`);
+                                    break;
+                            }
+                        }}
+                        value={term}
+                        style={{
+                            borderRadius: '50px',
+                            fontSize: '1.2em',
+                            padding: '20px'
+                        }}
+                    />
+                    {results && term.trim() !== "" && <div style={dropdownStyle}>
+                        {(results.length) ?
+                            results.map((lawyer, i) => {
+                                return (
+                                    <>
+                                        <div className={"inline-search-result " + (i === selectedIdx ? 'highlight-result' : '')}>
+                                            <Link to={`/profile/${lawyer.id}`}>
+                                                <Img
+                                                    alt={lawyer.full_name}
+                                                    className="rounded-circle"
+                                                    src={lawyer.account.profile_picture}
+                                                    style={imgStyle}
+                                                />
+                                                <b>{lawyer.account.full_name}</b>
+                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
+                                            </Link>
+                                        </div>
+                                    </>
+                                );
+                            })
+                            : (
+                                <span className="d-block text-center p-3"><FaRegQuestionCircle />&nbsp;no matches found</span>
+                            )}
+                    </div>}
+                </div>
             </div>
-        </form>
+            <div className="col-auto">
+                <SpinnerButton
+                    type="submit"
+                    style={{height: "46px", borderRadius: '50%'}}
+                    className="btn btn-block btn-primary search-btn"
+                    loading={loading}
+                >
+                    <i className="fas fa-search"></i>
+                </SpinnerButton>
+            </div>
+
+        </div>
     );
 };
 export default Home;
@@ -431,13 +448,15 @@ const PopularLawyers = () => {
 const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
-            <div className="lawyer-img" style={{maxWidth: '100%', height: '150px'}}>
+            <div className="lawyer-img" style={{maxWidth: '100%'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                    <Img
-                        className="img-fluid"
-                        src={account.profile_picture}
-                        alt="User Image"
-                    />
+                    <div style={{height: '170px'}}>
+                        <Img
+                            className="img-fluid"
+                            src={account.profile_picture}
+                            alt="User Image"
+                        />
+                    </div>
                 </Link>
             </div>
             <div className="pro-content">
@@ -445,19 +464,8 @@ const LawyerCard = ({account, lawyer}) => {
                     <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
-                <div className="session-services">
-                    {lawyer.practice_areas &&
-                        <>
-                            {lawyer.practice_areas.map((area, i) => {
-                                if (i < 2)
-                                    return (<span key={area.id}>{area.area}</span>)
-                            })}
-                            {lawyer.practice_areas.length > 2 &&
-                                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                    {`+${lawyer.practice_areas.length - 2} more`}
-                                </Link>}
-                        </>
-                    }
+                <div className="speciality text-muted">
+                    {lawyer.lawyer_type.type}
                 </div>
                 <div className="rating mt-2">
                     <StarRatings
@@ -473,6 +481,27 @@ const LawyerCard = ({account, lawyer}) => {
                         ({lawyer.ratings.length})
                     </span>
                 </div>
+                <ul className="available-info mt-2">
+                    <li>
+                        <i className="far fa-comment"></i>{" "}
+                        {lawyer.ratings_count} Feedback
+                    </li>
+                    {lawyer.account.city &&
+                        lawyer.account.country ? (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                                {`${lawyer.account.city}, ${lawyer.account.country}`}
+                            </li>
+                        ) : (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                            -
+                            </li>
+                        )}
+                    <li>
+                        <i className="fas fa-money-bill"></i> {lawyer.discounted_price_per_hour !== lawyer.price_per_hour ? (<s>{lawyer.currency_symbol}{lawyer.price_per_hour}</s>) : ("")}&nbsp;<b>{lawyer.currency_symbol}{lawyer.discounted_price_per_hour}</b> per hour
+                    </li>
+                </ul>
                 <div className="row row-sm">
                     <div className="col-6">
                         <Link
@@ -498,32 +527,6 @@ const LawyerCard = ({account, lawyer}) => {
                         </Link>
                     </div>
                 </div>
-                <ul className="available-info mt-2">
-                    <li>
-                        <i className="far fa-comment"></i>{" "}
-                        {lawyer.ratings_count} Feedback
-                    </li>
-                    {lawyer.account.city &&
-                        lawyer.account.country ? (
-                            <li>
-                                <i className="fas fa-map-marker-alt"></i>{" "}
-                                {`${lawyer.account.city}, ${lawyer.account.country}`}
-                            </li>
-                        ) : (
-                            <li>
-                                <i className="fas fa-map-marker-alt"></i>{" "}
-                            -
-                            </li>
-                        )}
-                    <Discount
-                        secsTillEnd={new Date(lawyer.discount_end)}
-                        cost={lawyer.price_per_hour}
-                        costAfterDiscount={lawyer.discounted_price_per_hour}
-                        isPercent={lawyer.is_percent_discount}
-                        discount={lawyer.discount}
-                        currency={lawyer.currency_symbol}
-                    />
-                </ul>
             </div>
         </div>
     );

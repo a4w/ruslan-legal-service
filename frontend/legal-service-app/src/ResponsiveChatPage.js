@@ -93,7 +93,6 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).then((response) => {
                 if (response.messages.length > 0) {
                     setMessages([...messages, ...response.messages]);
-                    if(list_chats === false && messages !== []) notify();
                 }
             }).catch((error) => {
                 console.log(error);
@@ -208,7 +207,13 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <MessagesList messages={messages} user_id={myId} />
+                                <MessagesList
+                                    messages={messages}
+                                    user_id={myId}
+                                    notify={notify}
+                                    showToast={!list_chats}
+                                    last_message={messages.length > 0? messages[messages.length - 1] : null}
+                                />
                                 <div className="chat-footer">
                                     <div className="input-group">
                                         <div className="input-group-prepend">

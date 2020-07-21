@@ -43,7 +43,7 @@ const NavBar = () => {
     }, [auth]);
 
     return (
-        <StickyBox style={{zIndex: 6}}>
+        <StickyBox style={{zIndex: 10}}>
             <header className="header">
                 <nav className="navbar navbar-expand-lg header-nav">
                     <div className="navbar-header">

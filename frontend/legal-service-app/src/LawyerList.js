@@ -124,7 +124,7 @@ function LawyerList(props) {
                 title="Available Lawyers list | Lawbe"
                 description="A list of the best lawyers from all across the country, book them now!"
             />
-            <StickyBox style={{zIndex: 6}}>
+            <StickyBox offsetTop={85} style={{zIndex: 6}}>
                 <LawyerListHeader
                     params={params}
                     OnChangeHandler={SortHandler}

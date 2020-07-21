@@ -57,7 +57,7 @@ const NotificationDropdown = () => {
                 }}
             >
                 <MdNotificationsActive /> {/* <i class="fa fa-bell"></i> */}
-                {newNotification !== 0 && <span className="badge badge-pill">{newNotification}</span>}
+                {newNotification !== 0 && <span className="badge badge-danger badge-pill">{newNotification}</span>}
             </a>
             <div
                 className={`dropdown-menu notifications ${

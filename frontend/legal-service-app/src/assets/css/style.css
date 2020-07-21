@@ -7546,3 +7546,11 @@ min-width: 100%;
 .img-fluid{
     height: -webkit-fill-available;
 }
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #f0f0f0;
+}

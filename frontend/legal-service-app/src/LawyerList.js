@@ -3,7 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
-import {FaSearch} from "react-icons/fa";
+import {FaSearch, FaArrowLeft, FaChevronLeft} from "react-icons/fa";
 import {MdClear} from "react-icons/md";
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import StickyBox from "react-sticky-box";
@@ -135,24 +135,32 @@ function LawyerList(props) {
                 />
             </StickyBox>
 
-            <div className="content">
-                <div className="row justify-content-center align-content-center">
-                    <div className="col-sm-12 col-md-12 col-lg-7">
-                        {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
-                        <div className="load-more text-center">
-                            <a
-                                className="btn btn-primary btn-sm"
-                                href="//"
-                                onClick={GetMore}
-                            >
-                                Load More
-                            </a>
+            <div className="container-fluid">
+
+                <div className="row">
+                    <div className="col-12">
+                        <div className="content">
+                            <div className="row justify-content-center align-content-center">
+                                <div className="col-sm-12 col-md-12 col-lg-6">
+                                    {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
+                                    <div className="load-more text-center">
+                                        <a
+                                            className="btn btn-primary btn-sm"
+                                            href="//"
+                                            onClick={GetMore}
+                                        >
+                                            Load More
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-sm-0 col-md-0 col-lg-5">
+                                    <StickyBox offsetTop={80} offsetBottom={20}>
+                                        <PopUp lawyer={lawyerPopUp} />
+                                    </StickyBox>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-sm-0 col-md-0 col-lg-5">
-                        <StickyBox offsetTop={80} offsetBottom={20}>
-                            <PopUp lawyer={lawyerPopUp} />
-                        </StickyBox>
+
                     </div>
                 </div>
             </div>
@@ -297,6 +305,11 @@ const PopUp = ({lawyer}) => {
     return (
         lawyer && (
             <div className="card flex-fill mr-2 d-none d-lg-flex">
+                <div className="arrow-left" style={{
+                    marginLeft: '-10px'
+                }}>
+
+                </div>
                 <div style={{width: "100%", marginBottom: "3%", marginTop: "3%"}}>
                     <div className="profile-info-widget justify-content-center">
                         <Link

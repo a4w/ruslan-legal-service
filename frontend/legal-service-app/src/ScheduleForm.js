@@ -98,12 +98,12 @@ const ScheduleForm = ({}) => {
             }
             for (let i = 0; i < response.schedule.length; ++i) {
                 const slots = response.schedule[i].slots;
-                let day = i;
                 for (let j = 0; j < slots.length; ++j) {
                     const slot = slots[j];
                     const time_obj = moment.utc(slot.time, "HH:mm").local();
                     const time_utc = moment.utc(slot.time, "HH:mm");
                     console.log(time_obj.format('D'), time_utc.format('D'));
+                    let day = i;
                     if (time_utc.format(Config.momentsjs_default_date_format) < time_obj.format(Config.momentsjs_default_date_format)) {
                         day = weekReducer('+', day);
                     } else if (time_utc.day(Config.momentsjs_default_date_format) > time_obj.format(Config.momentsjs_default_date_format)) {

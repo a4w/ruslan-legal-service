@@ -121,7 +121,7 @@ const Notifications = ({setNew}) => {
     }
     useInterval(() => {
         getNotifications();
-    }, 5000);
+    }, 15000);
     return (
         <ul className="notification-list">
             {notifications && notifications.length ? (

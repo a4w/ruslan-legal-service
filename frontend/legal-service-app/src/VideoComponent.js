@@ -27,6 +27,10 @@ const VideoComponent = ({appointment_id}) => {
     };
     const handleDisconnection = () => {
         if (room !== null) {
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.stop();
+                publication.unpublish();
+            });
             room.disconnect();
         }
     };
@@ -165,14 +169,16 @@ const VideoComponent = ({appointment_id}) => {
             });
         });
     }, []);
-
+    const notify = ()=>{
+        toast.info("A new message has arrived");
+    }
     return (
         <>
             <div class="row no-gutters">
                 <div class="col">
                     <div className="stream" id="incomingMedia">
                         <div className="controls">
-                            <div className="buttons">
+                            <div className={"buttons " + (showChat ? 'd-none' : '')}>
                                 <button class="btn btn-info" onClick={handleChatToggle}><BsChatSquareQuote /></button>
                                 <button class="btn btn-danger" onClick={handleDisconnection}><FaPhoneSlash /></button>
                                 <button class="btn btn-primary" onClick={handleSoundControl}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
@@ -183,7 +189,7 @@ const VideoComponent = ({appointment_id}) => {
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none')}>
                     <button onClick={handleChatToggle} className="btn btn-primary btn-block"><FaChevronLeft /></button>
-                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} />
+                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />
                 </div>
             </div>
         </>

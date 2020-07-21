@@ -1760,7 +1760,7 @@ button.bg-danger:hover {
 }
 .notifications{
     position: absolute;
-    left: -296px;    
+    left: -296px;
 }
 
 .header-navbar-rht .dropdown-toggle::after {
@@ -2888,9 +2888,7 @@ html.menu-opened body {
 }
 .lawyer-info-right {
     margin-left: auto;
-    -ms-flex: 0 0 200px;
-    flex: 0 0 200px;
-    max-width: 200px;
+    width: 300px;
 }
 .law-img {
     -ms-flex: 0 0 150px;
@@ -3006,6 +3004,7 @@ html.menu-opened body {
     display: block;
     line-height: 30px;
     color: #4E4852;
+    border-bottom: 1px dashed #ddd;
 }
 .session-infos ul li i {
     font-size: 15px;
@@ -3197,6 +3196,7 @@ html.menu-opened body {
     padding-bottom: 0;
 }
 .service-list ul {
+    display: grid;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -3205,6 +3205,7 @@ html.menu-opened body {
     margin: 6px 0;
     padding-left: 25px;
     position: relative;
+    width: auto;
 }
 .service-list ul li::before {
     color: #ccc;
@@ -3488,7 +3489,7 @@ html.menu-opened body {
 .day-slot div span.slot-date {
     display: block;
     color: #757575;
-    font-size: 14px;
+    font-size: 12px;
 }
 .day-slot div small.slot-year {
     color: #757575;
@@ -3529,20 +3530,27 @@ html.menu-opened body {
     width: 14.28%;
 }
 .schedule-cont .timing {
-    background-color: #e9e9e9;
-    border: 1px solid #e9e9e9;
+    background-color: #ffffff;
+    border: 1px dashed #ccc;
     border-radius: 3px;
     color: #757575;
     display: block;
-    font-size: 14px;
+    font-size: 11px;
     margin-bottom: 10px;
     padding: 5px 5px;
     text-align: center;
     position: relative;
+    margin: auto;
+    margin-bottom: 5px;
+    font-family: monospace;
+    white-space: nowrap;
 }
 .timing:hover {
-    background-color: #fff;
+    background-color: #09e6ab;
+    color: #ffffff;
+    border: 1px solid #ccc;
 }
+
 .timing:last-child {
     margin-bottom: 0;
 }
@@ -6171,7 +6179,7 @@ html.menu-opened body {
     padding: 20px;
 }
 .grid-blog .entry-meta {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -7537,6 +7545,14 @@ min-width: 100%;
 	}
 }
 
-.img-fluid{
+/* .img-fluid{
     height: -webkit-fill-available;
+} */
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #f0f0f0;
 }

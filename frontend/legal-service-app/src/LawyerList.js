@@ -3,7 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
-import {FaSearch} from "react-icons/fa";
+import {FaSearch, FaArrowLeft, FaChevronLeft} from "react-icons/fa";
 import {MdClear} from "react-icons/md";
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import StickyBox from "react-sticky-box";
@@ -34,6 +34,7 @@ function LawyerList(props) {
     const {request} = useRequests();
 
     const getList = (params, keep = false) => {
+        loading.setLoadingOverlayText("Loading...");
         loading.setIsLoadingOverlayShown(true);
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
@@ -43,14 +44,15 @@ function LawyerList(props) {
             method: "GET",
         })
             .then((data) => {
-                data.lawyers = data.lawyers.map((lawyer) => {
-                    return {
-                        ...lawyer,
-                        biography: lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")
-                    };
-                });
-                if (keep) setLawyers([...lawyers, ...data.lawyers]);
-                else setLawyers(data.lawyers);
+                let _lawyers = new Array();
+                if (!Array.isArray(data.lawyers)) {
+                    Object.keys(data.lawyers).map((key, index) => {
+                        _lawyers.push(data.lawyers[key]);
+                    });
+                } else _lawyers = data.lawyers;
+                console.log(_lawyers);
+                if (keep) setLawyers([...lawyers, ..._lawyers]);
+                else setLawyers(_lawyers);
             })
             .catch((_errors) => {})
             .finally(() => {
@@ -134,24 +136,32 @@ function LawyerList(props) {
                 />
             </StickyBox>
 
-            <div className="content">
-                <div className="row justify-content-center align-content-center">
-                    <div className="col-sm-12 col-md-12 col-lg-7">
-                        {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
-                        <div className="load-more text-center">
-                            <a
-                                className="btn btn-primary btn-sm"
-                                href="//"
-                                onClick={GetMore}
-                            >
-                                Load More
-                            </a>
+            <div className="container-fluid">
+
+                <div className="row">
+                    <div className="col-12">
+                        <div className="content">
+                            <div className="row justify-content-center align-content-center">
+                                <div className="col-sm-12 col-md-12 col-lg-6">
+                                    {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
+                                    <div className="load-more text-center">
+                                        <a
+                                            className="btn btn-primary btn-sm"
+                                            href="//"
+                                            onClick={GetMore}
+                                        >
+                                            Load More
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-sm-0 col-md-0 col-lg-5">
+                                    <StickyBox offsetTop={80} offsetBottom={20}>
+                                        <PopUp lawyer={lawyerPopUp} />
+                                    </StickyBox>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="col-sm-0 col-md-0 col-lg-5">
-                        <StickyBox offsetTop={80} offsetBottom={20}>
-                            <PopUp lawyer={lawyerPopUp} />
-                        </StickyBox>
+
                     </div>
                 </div>
             </div>
@@ -296,6 +306,11 @@ const PopUp = ({lawyer}) => {
     return (
         lawyer && (
             <div className="card flex-fill mr-2 d-none d-lg-flex">
+                <div className="arrow-left" style={{
+                    marginLeft: '-10px'
+                }}>
+
+                </div>
                 <div style={{width: "100%", marginBottom: "3%", marginTop: "3%"}}>
                     <div className="profile-info-widget justify-content-center">
                         <Link
@@ -317,14 +332,31 @@ const PopUp = ({lawyer}) => {
                     >
                         <h2>{`${account.name} ${account.surname}`}</h2>
                     </div>
+
+                    <div
+                        className="profile-det-info"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        <span><strong>{lawyer.lawyer_type.type}</strong></span>
+                    </div>
+                    <div
+                        className="profile-det-info"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        <span>{account.city}</span>
+                    </div>
                     <div
                         className="justify-content-center"
                         style={{
                             display: "flex",
                         }}
                     >
-                        <starRatings
-                            rating={lawyer.ratings_average}
+                        <StarRatings
+                            rating={parseFloat(lawyer.ratings_average)}
                             starRatedColor="gold"
                             starDimension="20px"
                             starSpacing="0px"
@@ -425,28 +457,28 @@ const AvgCalendar = ({lawyer}) => {
                             <td colSpan="2">Morning</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[0] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Afternoon</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[1] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Evening</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[2] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Night</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[3] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                     </tbody>

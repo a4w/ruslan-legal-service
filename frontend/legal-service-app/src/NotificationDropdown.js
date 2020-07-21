@@ -22,6 +22,13 @@ const NotificationDropdown = () => {
             document.removeEventListener("mousedown", handleClickOutside);
     }, [ref]);
 
+    const audio = new Audio("bell.mp3");
+    useEffect(() => {
+        if (newNotification > 0) {
+            audio.play();
+        }
+    }, [newNotification]);
+
     const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
             setNotificationToggle(false);
@@ -34,7 +41,7 @@ const NotificationDropdown = () => {
     const MarkAllRead = () => {
         request({url: "/account/mark-read-notifications", method: "GET"})
             .then((res) => {
-                toast.success("Marked all as read successfuly!");
+                toast.success("Marked all as read successfully!");
             })
             .catch((err) => {
                 toast.error("An Error Occured");
@@ -57,7 +64,7 @@ const NotificationDropdown = () => {
                 }}
             >
                 <MdNotificationsActive /> {/* <i class="fa fa-bell"></i> */}
-                {newNotification !== 0 && <span className="badge badge-pill">{newNotification}</span>}
+                {newNotification !== 0 && <span className="badge badge-danger badge-pill">{newNotification}</span>}
             </a>
             <div
                 className={`dropdown-menu notifications ${
@@ -109,12 +116,12 @@ const Notifications = ({setNew}) => {
                 getNotifications();
             })
             .catch((err) => {
-                toast.error("An Error Occured");
+                toast.error("An Error Occurred");
             });
     }
     useInterval(() => {
         getNotifications();
-    }, 20000);
+    }, 5000);
     return (
         <ul className="notification-list">
             {notifications && notifications.length ? (

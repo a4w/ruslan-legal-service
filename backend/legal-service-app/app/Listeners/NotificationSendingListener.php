@@ -27,9 +27,9 @@ class NotificationSendingListener
      */
     public function handle(NotificationSending $event)
     {
-        if (method_exists($event->notification, 'doSend')) {
-            return $event->notification->doSend($event);
+        if (method_exists($event->notification, 'willCancelSending')) {
+            return !$event->notification->willCancelSending($event);
         }
-        return $b;
+        return true;
     }
 }

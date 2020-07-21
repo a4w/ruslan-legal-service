@@ -6,6 +6,10 @@ const MessagesList = ({messages, user_id}) => {
         var element = document.getElementById("messages_container");
         element.scrollTop = element.scrollHeight;
     }, [messages]);
+    useEffect(() => {
+        var element = document.getElementById("messages_container");
+        element.scrollTop = element.scrollHeight;
+    }, []);
     return (
         <>
             <div className="chat-body">

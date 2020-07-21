@@ -50,17 +50,15 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             for (let i = 0; i < days.length; ++i) {
                 const date = days[i].date;
                 const slots = days[i].slots;
-                let day_idx = i;
                 for (let j = 0; j < slots.length; ++j) {
                     const slot = slots[j];
                     const appointment_date = moment.utc(date + " " + slot.time).local();
                     const utc_time = moment.utc(date + " " + slot.time);
+                    let day_idx = i;
                     console.log(appointment_date);
                     if (utc_time.format(Config.momentsjs_default_date_format) < appointment_date.format(Config.momentsjs_default_date_format)) {
-                        console.log("OFF PLUS");
                         day_idx++;
                     } else if (utc_time.format(Config.momentsjs_default_date_format) > appointment_date.format(Config.momentsjs_default_date_format)) {
-                        console.log("OFF MINUS");
                         day_idx--;
                     }
                     if (day_idx >= 0 && day_idx < days.length) {
@@ -155,7 +153,10 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                     {schedule !== null && schedule.days.map((day, i) => {
                                         return (
                                             <div className="col" key={day.date}>
-                                                <span>{day.name}</span>
+                                                <span style={{
+                                                    fontSize: '14px',
+                                                    margin: '0px 10px 0px 10px'
+                                                }}>{day.name}</span>
                                                 <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
                                             </div>
                                         );
@@ -171,13 +172,16 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                     </div>
                 </div>
 
-                <div className="schedule-cont">
+                <div className="schedule-cont" style={{
+                    overflowY: 'auto',
+                    maxHeight: '350px'
+                }}>
                     <div className="row no-gutters">
                         <div className="col-1"></div>
                         {schedule !== null && schedule.days.map((day, i) => {
                             return (
                                 <div className="col" key={day.date}>
-                                    {day.slots.length === 0 && (<span className="d-block text-center text-muted text-xs">No slots available</span>)}
+                                    {day.slots.length === 0 && (<span className="d-block text-center text-muted" style={{fontSize: '10px'}}>No slots</span>)}
                                     {day.slots.map((slot, j) => {
                                         const discountedPrice = calculateDiscountedPrice((slot.length / 60) * schedule.price_per_hour)
                                         return (
@@ -193,7 +197,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                             {schedule.discount_type !== 0 &&
                                                                 <>
                                                                     <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{schedule.discount_amount} {schedule.discount_type === 1 ? '%' : 'GBP'}</span>
-                                                                    <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{schedule.discount_end}</span>
+                                                                    <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{moment(schedule.discount_end).toDate().toLocaleString()}</span>
                                                                 </>}
                                                         </Popover.Content>
                                                     </Popover>
@@ -204,11 +208,11 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                     key={slot.id}
                                                     data-day={i}
                                                     data-slot={j}
-                                                    className="timing btn-block"
+                                                    className="timing"
                                                     onClick={handleSlotClick}
                                                 >
                                                     <span>
-                                                        {slot.time} - {slot.to}
+                                                        {slot.time} ➡ {slot.to}
                                                     </span>
                                                 </button>
                                             </OverlayTrigger>

@@ -12,7 +12,7 @@ import moment from "moment";
 import {LoadingOverlayContext, AuthContext} from "./App";
 import {useHistory, useLocation} from "react-router";
 import Img from "./Img";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const stripe = loadStripe(env.stripe_api_key);
 
@@ -60,7 +60,7 @@ const LawyerBooking = ({LawyerId}) => {
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
-                    {lawyer && <LawyerCardRoundded lawyer={lawyer} />}
+                    {lawyer && <LawyerCardRounded lawyer={lawyer} />}
                     <div className={isTimeSelected ? "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" : "col-12"} style={{minHeight: '400px'}}>
                         {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}
                         {isTimeSelected &&
@@ -115,8 +115,8 @@ const TodayIs = () => {
     );
 };
 
-const LawyerCardRoundded = ({ lawyer }) => {
-    const { account } = { ...lawyer };
+const LawyerCardRounded = ({lawyer}) => {
+    const {account} = {...lawyer};
     const imgStyle = {
         borderRadius: "120px",
         height: "120px",
@@ -124,7 +124,7 @@ const LawyerCardRoundded = ({ lawyer }) => {
         objectFit: "cover",
     };
     return (
-        <div style={{ width: "100%", marginBottom: "3%" }}>
+        <div style={{width: "100%", marginBottom: "3%"}}>
             <div className="profile-info-widget justify-content-center">
                 <Link
                     to={`profile/${lawyer.id}`}

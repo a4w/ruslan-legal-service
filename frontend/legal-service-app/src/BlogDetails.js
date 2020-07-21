@@ -7,6 +7,7 @@ import Img from "./Img";
 import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
+import env from "./env";
 
 
 const BlogDetails = ({match}) => {
@@ -31,15 +32,18 @@ const BlogDetails = ({match}) => {
                 title={blog !== null && blog.title}
                 description={blog !== null && blog.body.substr(0, 128)}
             />
-            <div className="row">
-                <div className="col-12">
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
 
-                    <div className="blog-view">
-                        {blog && <Post blog={blog} lawyer={lawyer} />}
-                        <ShareSection id={match.params.blogId} />
-                        {lawyer && <AboutAuthor lawyer={lawyer} />}
+                        <div className="blog-view">
+                            {blog && <Post blog={blog} lawyer={lawyer} />}
+                            <ShareSection id={match.params.blogId} />
+                            {lawyer && <AboutAuthor lawyer={lawyer} />}
+                        </div>
                     </div>
                 </div>
+
             </div>
         </>
     );
@@ -88,16 +92,17 @@ const AboutAuthor = ({lawyer}) => {
     );
 };
 const ShareSection = ({id}) => {
+    const url = env.url + History.location.pathname
     return (
         <div className="card blog-share clearfix">
             <div className="card-header">
                 <h4 className="card-title">Share the post</h4>
             </div>
             <div className="card-body">
-                <Facebook small circle solid link={History.location.pathname} />
-                <Twitter small circle solid link={History.location.pathname} />
-                <Linkedin small circle solid link={History.location.pathname} />
-                <Google small circle solid link={History.location.pathname} />
+                <Facebook small circle solid link={url} />
+                <Twitter small circle solid link={url} />
+                <Linkedin small circle solid link={url} />
+                <Google small circle solid link={url} />
             </div>
         </div>
     );
@@ -123,9 +128,6 @@ const Post = ({blog, lawyer}) => {
             <div className="blog-image">
                 <BlogImg alt="" src={blog.cover_photo_link} style={{
                     maxHeight: '400px',
-                    maxWidth: '100%',
-                    width: 'unset',
-                    height: 'unset',
                     display: 'block',
                     margin: 'auto'
                 }} className="img-fluid" />
@@ -147,7 +149,7 @@ const Post = ({blog, lawyer}) => {
                                         alt="Post Author"
                                         style={{maxHeight: '40px'}}
                                     />
-                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                    <span>&nbsp;{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>

@@ -123,7 +123,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     );
 };
 
-const BlogPage = ({match}) => {
+const BlogPage = ({match, setIsEditting}) => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const {request} = useRequests();
@@ -158,6 +158,7 @@ const BlogPage = ({match}) => {
 
     useEffect(() => {
         if (match.params.blogId) {
+            setIsEditting(true);
             request({
                 url: `/blogs/${match.params.blogId}`,
                 method: 'GET'
@@ -169,6 +170,8 @@ const BlogPage = ({match}) => {
             }).catch(error => {
                 console.error("Error occurred loading blog post");
             });
+        }else{
+            setIsEditting(false);
         }
         request({
             url: 'lawyer/practice-areas',
@@ -216,13 +219,14 @@ const BlogPage = ({match}) => {
                                             method: "POST",
                                             data: formData
                                         }).then(() => {
-                                            toast.success("Submitted successfully");
+                                            toast.success("Submitted successfully, you'll be redirected to edit");
                                         }).catch(() => {
-                                            toast.error("An error has occurred Uploading blog cover");
-                                            History.replace(`${History.location.pathname}/${id}`);
+                                            toast.error("An error has occurred Uploading blog cover, you'll be redirected to edit");
                                         });
+                                        History.replace(`/dashboard/blogs/edit-blog/${id}`);
                                     } else {
-                                        toast.success("Submitted successfully");
+                                        toast.success("Submitted successfully, you'll be redirected to edit");
+                                        History.replace(`/dashboard/blogs/edit-blog/${id}`);
                                     }
                                 }).catch(() => {
                                     toast.error("An error has occurred");
@@ -233,6 +237,10 @@ const BlogPage = ({match}) => {
                         }
                     });
                 }
+                if(errors.tags)
+                    toast.error(errors.tags[0]);
+                if(errors.title)
+                    toast.error(errors.title[0]);
             }
         );
     };
@@ -254,7 +262,6 @@ const BlogPage = ({match}) => {
             <div className="blog-title" style={{padding: "3px"}}>
                 <ErrorMessageInput
                     placeholder="Title.."
-                    errors={errors.title}
                     type="text"
                     OnChangeHandler={({target: {value}}) => setTitle(value)}
                     value={title}
@@ -289,7 +296,6 @@ const BlogPage = ({match}) => {
                                 options={tagOptions}
                                 searchable
                                 value={tag}
-                                errors={errors.tags}
                                 style
                                 name="area_id"
                                 OnChangeHandler={(values) => {

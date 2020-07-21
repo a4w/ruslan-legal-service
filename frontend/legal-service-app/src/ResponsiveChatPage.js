@@ -15,7 +15,7 @@ import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
 import {AuthContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -93,6 +93,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).then((response) => {
                 if (response.messages.length > 0) {
                     setMessages([...messages, ...response.messages]);
+                    if(list_chats === false && messages !== []) notify();
                 }
             }).catch((error) => {
                 console.log(error);

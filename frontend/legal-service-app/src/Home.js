@@ -431,7 +431,7 @@ const PopularLawyers = () => {
 const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
-            <div className="lawyer-img" style={{maxWidth: '100%', height: '150px'}}>
+            <div className="lawyer-img" style={{maxWidth: '100%'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
                     <Img
                         className="img-fluid"
@@ -445,19 +445,8 @@ const LawyerCard = ({account, lawyer}) => {
                     <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
-                <div className="session-services">
-                    {lawyer.practice_areas &&
-                        <>
-                            {lawyer.practice_areas.map((area, i) => {
-                                if (i < 2)
-                                    return (<span key={area.id}>{area.area}</span>)
-                            })}
-                            {lawyer.practice_areas.length > 2 &&
-                                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                                    {`+${lawyer.practice_areas.length - 2} more`}
-                                </Link>}
-                        </>
-                    }
+                <div className="speciality text-muted">
+                    {lawyer.lawyer_type.type}
                 </div>
                 <div className="rating mt-2">
                     <StarRatings
@@ -473,6 +462,27 @@ const LawyerCard = ({account, lawyer}) => {
                         ({lawyer.ratings.length})
                     </span>
                 </div>
+                <ul className="available-info mt-2">
+                    <li>
+                        <i className="far fa-comment"></i>{" "}
+                        {lawyer.ratings_count} Feedback
+                    </li>
+                    {lawyer.account.city &&
+                        lawyer.account.country ? (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                                {`${lawyer.account.city}, ${lawyer.account.country}`}
+                            </li>
+                        ) : (
+                            <li>
+                                <i className="fas fa-map-marker-alt"></i>{" "}
+                            -
+                            </li>
+                        )}
+                    <li>
+                        <i className="fas fa-money-bill"></i> {lawyer.discounted_price_per_hour !== lawyer.price_per_hour ? (<s>{lawyer.currency_symbol}{lawyer.price_per_hour}</s>) : ("")}&nbsp;<b>{lawyer.currency_symbol}{lawyer.discounted_price_per_hour}</b> per hour
+                    </li>
+                </ul>
                 <div className="row row-sm">
                     <div className="col-6">
                         <Link
@@ -498,32 +508,6 @@ const LawyerCard = ({account, lawyer}) => {
                         </Link>
                     </div>
                 </div>
-                <ul className="available-info mt-2">
-                    <li>
-                        <i className="far fa-comment"></i>{" "}
-                        {lawyer.ratings_count} Feedback
-                    </li>
-                    {lawyer.account.city &&
-                        lawyer.account.country ? (
-                            <li>
-                                <i className="fas fa-map-marker-alt"></i>{" "}
-                                {`${lawyer.account.city}, ${lawyer.account.country}`}
-                            </li>
-                        ) : (
-                            <li>
-                                <i className="fas fa-map-marker-alt"></i>{" "}
-                            -
-                            </li>
-                        )}
-                    <Discount
-                        secsTillEnd={new Date(lawyer.discount_end)}
-                        cost={lawyer.price_per_hour}
-                        costAfterDiscount={lawyer.discounted_price_per_hour}
-                        isPercent={lawyer.is_percent_discount}
-                        discount={lawyer.discount}
-                        currency={lawyer.currency_symbol}
-                    />
-                </ul>
             </div>
         </div>
     );

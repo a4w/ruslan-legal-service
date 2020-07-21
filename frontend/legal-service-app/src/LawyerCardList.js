@@ -7,7 +7,6 @@ import Img from "./Img";
 import Config from "./Config";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
-    console.log(lawyers);
     if (lawyers)
         return lawyers.map((lawyer) => (
             <LawyerCard key={lawyer.id} setPopUp={setPopUp} lawyer={lawyer} />
@@ -53,7 +52,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 </span>
                             </div>
                             <div className="session-details">
-                                <div>{lawyer.biography}</div>
+                                <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
                             </div>
                             <div className="session-services">
                             {lawyer.practice_areas &&
@@ -75,18 +74,18 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                         <div className="session-infos">
                             <ul>
                                 <li>
-                                    <i class="far fa-comment"></i>{" "}
+                                    <i className="far fa-comment"></i>{" "}
                                     {lawyer.ratings_count} Feedback
                                 </li>
                                 {lawyer.account.city &&
                                 lawyer.account.country ? (
                                     <li>
-                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
                                         {`${lawyer.account.city}, ${lawyer.account.country}`}
                                     </li>
                                 ) : (
                                     <li>
-                                        <i class="fas fa-map-marker-alt"></i>{" "}
+                                        <i className="fas fa-map-marker-alt"></i>{" "}
                                         -
                                     </li>
                                 )}

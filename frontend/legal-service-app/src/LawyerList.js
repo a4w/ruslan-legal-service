@@ -43,14 +43,15 @@ function LawyerList(props) {
             method: "GET",
         })
             .then((data) => {
-                data.lawyers = data.lawyers.map((lawyer) => {
-                    return {
-                        ...lawyer,
-                        biography: lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")
-                    };
-                });
-                if (keep) setLawyers([...lawyers, ...data.lawyers]);
-                else setLawyers(data.lawyers);
+                let _lawyers = new Array();
+                if (!Array.isArray(data.lawyers)) {
+                    Object.keys(data.lawyers).map((key, index) => {
+                        _lawyers.push(data.lawyers[key]);
+                    });
+                } else _lawyers = data.lawyers;
+                console.log(_lawyers);
+                if (keep) setLawyers([...lawyers, ..._lawyers]);
+                else setLawyers(_lawyers);
             })
             .catch((_errors) => {})
             .finally(() => {
@@ -323,8 +324,8 @@ const PopUp = ({lawyer}) => {
                             display: "flex",
                         }}
                     >
-                        <starRatings
-                            rating={lawyer.ratings_average}
+                        <StarRatings
+                            rating={parseFloat(lawyer.ratings_average)}
                             starRatedColor="gold"
                             starDimension="20px"
                             starSpacing="0px"

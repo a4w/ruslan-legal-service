@@ -57,11 +57,12 @@ class LawyerController extends Controller
             ->selectRaw('`lawyer_data`.`id` AS `lawyer_id`')
             ->selectRaw('COUNT(`ratings`.`id`) AS `ratings_count`')
             ->selectRaw('AVG(IFNULL(`ratings`.`rating`,0)) AS `ratings_average`')
-            ->leftJoin('appointments', function (JoinClause $join) {
+            ->join('appointments', function (JoinClause $join) {
                 $join->on('lawyer_data.id', '=', 'appointments.lawyer_id');
             })
-            ->leftJoin('ratings', function (JoinClause $join) {
+            ->join('ratings', function (JoinClause $join) {
                 $join->on('appointments.id', 'ratings.appointment_id');
+                $join->where('ratings.rating', '<>', null);
             })
             ->groupBy(['lawyer_data.id'])
             ->toSql();

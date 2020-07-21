@@ -8,6 +8,7 @@ import useRequests from "./useRequests"
 import {AuthContext} from "./App";
 import NoContent from "./NoContent";
 import {Link} from "react-router-dom";
+import Config from "./Config";
 
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
@@ -165,10 +166,11 @@ const Notification = ({data: {type, notification_data}}) => {
                 </Link>
             );
         case "APPOINTMENT_RESERVATION":
+            const date = new Date(notification_data.date);
             return (
                 <p className="noti-details">
                     <span className="noti-title">
-                        {`${notification_data.client_name} has booked assesion with you at ${notification_data.date} for ${notification_data.price}!`}
+                        {`${notification_data.client_name} has booked assesion with you at ${date.toLocaleString()}`}
                     </span>
                 </p>
             );

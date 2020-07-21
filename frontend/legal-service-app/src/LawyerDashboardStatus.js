@@ -314,8 +314,8 @@ const AppointmentsListTabs = () => {
                 </li>
             </ul>
 
-            <Switch>
-                <div className="tab-content">
+            <div className="tab-content">
+                <Switch>
                     <Route path={`${path}/upcoming`}>
                         <UpcomingAppointments />
                     </Route>
@@ -325,8 +325,8 @@ const AppointmentsListTabs = () => {
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />
                     </Route>
-                </div>
-            </Switch>
+                </Switch>
+            </div>
         </Router>
     );
 };

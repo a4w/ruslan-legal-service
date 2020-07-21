@@ -123,7 +123,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
     );
 };
 
-const BlogPage = ({match}) => {
+const BlogPage = ({match, setIsEditting}) => {
     const [coverData, setCoverData] = useState({cover: "", coverFile: ""});
     const [title, setTitle] = useState("");
     const {request} = useRequests();
@@ -158,6 +158,7 @@ const BlogPage = ({match}) => {
 
     useEffect(() => {
         if (match.params.blogId) {
+            setIsEditting(true);
             request({
                 url: `/blogs/${match.params.blogId}`,
                 method: 'GET'
@@ -169,6 +170,8 @@ const BlogPage = ({match}) => {
             }).catch(error => {
                 console.error("Error occurred loading blog post");
             });
+        }else{
+            setIsEditting(false);
         }
         request({
             url: 'lawyer/practice-areas',

@@ -77,7 +77,7 @@ const UserDropdown = () => {
                         />
                     </div>
                     <div className="user-text">
-                        <h6>{`${user.name} ${user.surname}`}</h6>
+                        <h6>{user.name? `${user.name} ${user.surname}`: "loading..."}</h6>
                         <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>

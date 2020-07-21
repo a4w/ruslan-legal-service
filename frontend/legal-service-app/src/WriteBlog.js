@@ -216,13 +216,14 @@ const BlogPage = ({match}) => {
                                             method: "POST",
                                             data: formData
                                         }).then(() => {
-                                            toast.success("Submitted successfully");
+                                            toast.success("Submitted successfully, you'll be redirected to edit");
                                         }).catch(() => {
-                                            toast.error("An error has occurred Uploading blog cover");
-                                            History.replace(`${History.location.pathname}/${id}`);
+                                            toast.error("An error has occurred Uploading blog cover, you'll be redirected to edit");
                                         });
+                                        History.replace(`${History.location.pathname}/${id}`);
                                     } else {
-                                        toast.success("Submitted successfully");
+                                        toast.success("Submitted successfully, you'll be redirected to edit");
+                                        History.replace(`${History.location.pathname}/${id}`);
                                     }
                                 }).catch(() => {
                                     toast.error("An error has occurred");

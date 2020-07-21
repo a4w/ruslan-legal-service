@@ -53,7 +53,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
 
 `,
     ];
-    
+
     const loaderStackEdit = new Stackedit();
 
     const stackedit = new Stackedit();
@@ -61,13 +61,13 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
         loaderStackEdit.openFile({
             name: "blog post",
             content: {
-                text: blog? blog.body: md_initial[0]
+                text: blog ? blog.body : md_initial[0]
             }
         }, true);
 
         loaderStackEdit.on("fileChange", (file) => {
-            if(md_preview.current)
-                md_preview.current.innerHTML =  file.content.html;
+            if (md_preview.current)
+                md_preview.current.innerHTML = file.content.html;
         });
 
     }, []);
@@ -108,7 +108,7 @@ This is **bold**,  _italic_ and ~~strikethrough text~~.
                 <textarea
                     className="form-control"
                     style={{height: "800px"}}
-                    value={blog? blog.body: md_initial[0]}
+                    value={blog ? blog.body : md_initial[0]}
                     ref={md_content}
                     style={{visibility: "hidden"}}
                 ></textarea>
@@ -160,17 +160,17 @@ const BlogPage = ({match, setIsEditting}) => {
         if (match.params.blogId) {
             setIsEditting(true);
             request({
-                url: `/blogs/${match.params.blogId}`,
+                url: `/blogs/my/${match.params.blogId}`,
                 method: 'GET'
             }).then(response => {
                 setBlog(response.blog);
                 setTitle(response.blog.title);
                 selectedTags(response.blog.tag.id);
-                setCoverData({...coverData, cover:response.blog.cover_photo_link})
+                setCoverData({...coverData, cover: response.blog.cover_photo_link})
             }).catch(error => {
                 console.error("Error occurred loading blog post");
             });
-        }else{
+        } else {
             setIsEditting(false);
         }
         request({
@@ -201,7 +201,7 @@ const BlogPage = ({match, setIsEditting}) => {
                             if (result) {
                                 setLoading(true);
                                 request({
-                                    url: blog?  `/blogs/edit/${blog.id}`:"/blogs/add",
+                                    url: blog ? `/blogs/edit/${blog.id}` : "/blogs/add",
                                     method: "POST",
                                     data: {
                                         title: title,
@@ -230,16 +230,16 @@ const BlogPage = ({match, setIsEditting}) => {
                                     }
                                 }).catch(() => {
                                     toast.error("An error has occurred");
-                                }).finally(()=>{
+                                }).finally(() => {
                                     setLoading(false);
                                 });
                             }
                         }
                     });
                 }
-                if(errors.tags)
+                if (errors.tags)
                     toast.error(errors.tags[0]);
-                if(errors.title)
+                if (errors.title)
                     toast.error(errors.title[0]);
             }
         );
@@ -312,17 +312,17 @@ const BlogPage = ({match, setIsEditting}) => {
                         <WriteBlog
                             md_content={md_content}
                             md_preview={md_preview}
-                            onContentChange={(new_content)=>{setContent(new_content)}}
+                            onContentChange={(new_content) => {setContent(new_content)}}
                             blog={blog}
                         />
                     )
                 ) : (
-                    <WriteBlog
-                        md_content={md_content}
-                        md_preview={md_preview}
-                        onContentChange={(new_content)=>{setContent(new_content)}}
-                    />
-                )}
+                        <WriteBlog
+                            md_content={md_content}
+                            md_preview={md_preview}
+                            onContentChange={(new_content) => {setContent(new_content)}}
+                        />
+                    )}
             </div>
             <SpinnerButton
                 className="btn btn-primary"

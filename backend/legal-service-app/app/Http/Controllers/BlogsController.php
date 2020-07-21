@@ -106,8 +106,10 @@ class BlogsController extends Controller
 
     public function getMyBlog(Blog $blog)
     {
-        if ($blog->lawyer == Auth::user()->lawyer) {
+        if ($blog->lawyer->is(Auth::user()->lawyer)) {
             return RespondJSON::success(['blog' => $blog]);
+        } else {
+            return RespondJSON::notFound();
         }
     }
 

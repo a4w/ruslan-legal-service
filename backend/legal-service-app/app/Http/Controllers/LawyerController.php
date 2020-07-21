@@ -56,7 +56,7 @@ class LawyerController extends Controller
         $dat_table = DB::table('lawyers as lawyer_data')->where('lawyer_data.schedule', '<>', null)
             ->selectRaw('`lawyer_data`.`id` AS `lawyer_id`')
             ->selectRaw('COUNT(`ratings`.`id`) AS `ratings_count`')
-            ->selectRaw('AVG(IFNULL(`ratings`.`rating`,0)) AS `ratings_average`')
+            ->selectRaw('AVG(`ratings`.`rating`) AS `ratings_average`')
             ->join('appointments', function (JoinClause $join) {
                 $join->on('lawyer_data.id', '=', 'appointments.lawyer_id');
             })
@@ -68,7 +68,10 @@ class LawyerController extends Controller
             ->toSql();
 
         $lawyers = Lawyer::fullyRegistered()
-            ->join(DB::raw('(' . $dat_table . ') `lawyer_data`'), function (JoinClause $join) {
+            ->addSelect(DB::raw('*'))
+            ->addSelect(DB::raw('IFNULL(ratings_count, 0) AS ratings_count'))
+            ->addSelect(DB::raw('IFNULL(ratings_average, 0) AS ratings_average'))
+            ->leftJoin(DB::raw('(' . $dat_table . ') `lawyer_data`'), function (JoinClause $join) {
                 $join->on('lawyer_data.lawyer_id', '=', 'lawyers.id');
             })
             ->whereHas('account', function ($query) use ($location) {

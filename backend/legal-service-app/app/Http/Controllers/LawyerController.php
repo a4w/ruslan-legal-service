@@ -317,9 +317,9 @@ class LawyerController extends Controller
                 // Add timezone offset
                 $time_obj = new Carbon($slot['time'], $timezone);
                 $time_utc = (new Carbon($time_obj))->tz('UTC');
-                if ($time_utc->day < $time_obj->day) {
+                if ($time_utc->format("Y-m-d") < $time_obj->format("Y-m-d")) {
                     $day = $week_reducer('-', $day);
-                } else if ($time_utc->day > $time_obj->day) {
+                } else if ($time_utc->format("Y-m-d") > $time_obj->format("Y-m-d")) {
                     $day = $week_reducer('+', $day);
                 }
                 $time = $time_utc->format('H:i');

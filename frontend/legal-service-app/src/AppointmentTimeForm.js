@@ -57,10 +57,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                     const utc_time = moment.utc(date + " " + slot.time);
                     console.log(appointment_date);
                     if (utc_time.format(Config.momentsjs_default_date_format) < appointment_date.format(Config.momentsjs_default_date_format)) {
-                        console.log("OFF PLUS");
                         day_idx++;
                     } else if (utc_time.format(Config.momentsjs_default_date_format) > appointment_date.format(Config.momentsjs_default_date_format)) {
-                        console.log("OFF MINUS");
                         day_idx--;
                     }
                     if (day_idx >= 0 && day_idx < days.length) {

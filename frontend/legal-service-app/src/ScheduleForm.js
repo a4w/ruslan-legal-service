@@ -13,6 +13,7 @@ import useValidation from "./useValidation";
 import {scheduleSettingValidation} from "./Validations";
 import useRequests from "./useRequests";
 import SpinnerButton from "./SpinnerButton";
+import Config from "./Config";
 
 const ScheduleForm = ({}) => {
     const {request} = useRequests();
@@ -103,9 +104,9 @@ const ScheduleForm = ({}) => {
                     const time_obj = moment.utc(slot.time, "HH:mm").local();
                     const time_utc = moment.utc(slot.time, "HH:mm");
                     console.log(time_obj.format('D'), time_utc.format('D'));
-                    if (time_utc.format('D') < time_obj.format('D')) {
+                    if (time_utc.format(Config.momentsjs_default_date_format) < time_obj.format(Config.momentsjs_default_date_format)) {
                         day = weekReducer('+', day);
-                    } else if (time_utc.day() > time_obj.day()) {
+                    } else if (time_utc.day(Config.momentsjs_default_date_format) > time_obj.format(Config.momentsjs_default_date_format)) {
                         day = weekReducer('-', day);
                     }
                     console.log(time_obj);

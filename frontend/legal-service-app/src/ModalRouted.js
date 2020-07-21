@@ -69,7 +69,7 @@ const Modal = (props) => {
                     border: "1px solid rgba(0,0,0,.2)",
                     borderRadius: ".3rem",
                     outline: "0",
-                    width: props.width ? props.width : "90%",
+                    //width: props.width ? props.width : "90%",
                     margin: "auto",
                     maxHeight: "100%",
                     overflow: "auto",

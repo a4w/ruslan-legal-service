@@ -6,9 +6,7 @@ use App\Mail\MessageReceived as MailMessageReceived;
 use App\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MessageReceived extends Notification implements ShouldQueue
@@ -38,20 +36,20 @@ class MessageReceived extends Notification implements ShouldQueue
         return (new MailMessageReceived($this->message))->delay(now()->addMinutes(5));
     }
 
-    public function doSend($event)
+    public function willCancelSending($event)
     {
         if ($event->channel === "database") {
-            return true;
+            return false;
         }
         // Check if is already read
         $notifiable = $event->notifiable;
         $notifications = $notifiable->unreadNotifications;
         $notifications->map(function ($notification) {
             if ($notification->id === $this->id) {
-                return true;
+                return false;
             }
         });
-        return false;
+        return true;
     }
 
 

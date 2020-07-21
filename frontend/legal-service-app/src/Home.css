@@ -11,6 +11,10 @@
     background: #fafafa;
 }
 
+.highlight-result{
+    background: #fafafa;
+}
+
 .inline-search-result:last-of-type{
     border-bottom: 0px solid #fff;
 }

@@ -3197,6 +3197,7 @@ html.menu-opened body {
     padding-bottom: 0;
 }
 .service-list ul {
+    display: grid;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -3205,6 +3206,7 @@ html.menu-opened body {
     margin: 6px 0;
     padding-left: 25px;
     position: relative;
+    width: auto;
 }
 .service-list ul li::before {
     color: #ccc;

@@ -147,7 +147,7 @@ const Post = ({blog, lawyer}) => {
                                         alt="Post Author"
                                         style={{maxHeight: '40px'}}
                                     />
-                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                    <span>&nbsp;{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>

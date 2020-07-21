@@ -311,12 +311,12 @@ class LawyerController extends Controller
         $timezone = $request->input('schedule.settings.timezone');
         for ($i = 0; $i < count($days); ++$i) {
             $slots = $days[$i]['slots'];
-            $day = $i;
             for ($j = 0; $j < count($slots); ++$j) {
                 $slot = $slots[$j];
                 // Add timezone offset
                 $time_obj = new Carbon($slot['time'], $timezone);
                 $time_utc = (new Carbon($time_obj))->tz('UTC');
+                $day = $i;
                 if ($time_utc->format("Y-m-d") < $time_obj->format("Y-m-d")) {
                     $day = $week_reducer('-', $day);
                 } else if ($time_utc->format("Y-m-d") > $time_obj->format("Y-m-d")) {

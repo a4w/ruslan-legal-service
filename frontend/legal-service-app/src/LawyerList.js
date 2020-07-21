@@ -34,6 +34,7 @@ function LawyerList(props) {
     const {request} = useRequests();
 
     const getList = (params, keep = false) => {
+        loading.setLoadingOverlayText("Loading...");
         loading.setIsLoadingOverlayShown(true);
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));

@@ -425,28 +425,28 @@ const AvgCalendar = ({lawyer}) => {
                             <td colSpan="2">Morning</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[0] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Afternoon</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[1] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Evening</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[2] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
                             <td colSpan="2">Night</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[3] * avgSlotLength) / (6 * 60);
-                                return (<td key={i} style={{backgroundColor: 'rgba(0, 255, 0, ' + brightness + ')'}}></td>);
+                                return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                     </tbody>

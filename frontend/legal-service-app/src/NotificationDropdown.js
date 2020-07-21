@@ -170,7 +170,7 @@ const Notification = ({data: {type, notification_data}}) => {
             return (
                 <p className="noti-details">
                     <span className="noti-title">
-                        {`${notification_data.client_name} has booked assesion with you at ${date.toLocaleString()} for ${notification_data.price}!`}
+                        {`${notification_data.client_name} has booked assesion with you at ${date.toLocaleString()}`}
                     </span>
                 </p>
             );

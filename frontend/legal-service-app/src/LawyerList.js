@@ -331,6 +331,23 @@ const PopUp = ({lawyer}) => {
                     >
                         <h2>{`${account.name} ${account.surname}`}</h2>
                     </div>
+
+                    <div
+                        className="profile-det-info"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        <span><strong>{lawyer.lawyer_type.type}</strong></span>
+                    </div>
+                    <div
+                        className="profile-det-info"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        <span>{account.city}</span>
+                    </div>
                     <div
                         className="justify-content-center"
                         style={{

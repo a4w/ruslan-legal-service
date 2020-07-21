@@ -27,6 +27,10 @@ const VideoComponent = ({appointment_id}) => {
     };
     const handleDisconnection = () => {
         if (room !== null) {
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.stop();
+                publication.unpublish();
+            });
             room.disconnect();
         }
     };

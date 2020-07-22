@@ -2017,6 +2017,8 @@ html.menu-opened body {
 .footer .footer-menu ul li {
     margin-bottom: 10px;
     position: relative;
+    display: inline-flex;
+    width: 220px;
 }
 .footer .footer-menu ul li:last-child {
     margin-bottom: 0;

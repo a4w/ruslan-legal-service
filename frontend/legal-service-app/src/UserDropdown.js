@@ -81,7 +81,7 @@ const UserDropdown = () => {
                         <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
-                {isClient &&
+                {isClient !== null &&
                 <Link
                     className="dropdown-item"
                     to={isClient ? "/client-dashboard" : "/dashboard"}
@@ -104,7 +104,7 @@ const UserDropdown = () => {
                 >
                     Agenda
                 </Link>
-                {isClient && 
+                {isClient !== null && 
                 <Link
                     className="dropdown-item"
                     to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}

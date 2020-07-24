@@ -169,7 +169,7 @@ const VideoComponent = ({appointment_id}) => {
             });
         });
     }, []);
-    const notify = ()=>{
+    const notify = () => {
         toast.info("A new message has arrived");
     }
     return (
@@ -178,17 +178,18 @@ const VideoComponent = ({appointment_id}) => {
                 <div class="col">
                     <div className="stream" id="incomingMedia">
                         <div className="controls">
-                            <div className={"buttons " + (showChat ? 'd-none' : '')}>
-                                <button class="btn btn-info" onClick={handleChatToggle}><BsChatSquareQuote /></button>
-                                <button class="btn btn-danger" onClick={handleDisconnection}><FaPhoneSlash /></button>
-                                <button class="btn btn-primary" onClick={handleSoundControl}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
+                            <div className={"buttons " + (showChat ? 'd-none' : 'd-flex') + " d-lg-flex"}>
+                                <span className="call-count-down"> 00:00:00 </span>
+                                <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
+                                <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>
+                                <button class="btn btn-primary" onClick={handleSoundControl} title={isMuted ? "Unmute" : "Mute"}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
                             </div>
                         </div>
                         <div className="outgoing" id="outgoingVideo"> </div>
                     </div>
                 </div>
-                <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none')}>
-                    <button onClick={handleChatToggle} className="btn btn-primary btn-block"><FaChevronLeft /></button>
+                <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none') + " d-lg-block"}>
+                    <button onClick={handleChatToggle} className="btn btn-primary btn-block d-lg-none"><FaChevronLeft /></button>
                     <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />
                 </div>
             </div>

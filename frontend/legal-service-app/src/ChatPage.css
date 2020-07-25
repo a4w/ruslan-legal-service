@@ -4229,8 +4229,6 @@ html.menu-opened body {
     z-index: 4;
 }
 .chat-window .chat-scroll {
-	min-height: 300px;
-    max-height: calc(100vh - 224px);
     overflow-y: auto;
 }
 .chat-cont-left .chat-users-list {
@@ -7375,6 +7373,12 @@ html.menu-opened body {
 	.fc-header-toolbar .fc-right {
 		margin-bottom: 10px;
 	}
+}
+
+.chat-scroll{
+    max-height: calc(100% - 72px - 67px);
+    position: absolute;
+    width: 100%;
 }
 
 @media only screen and (max-width:768px) {

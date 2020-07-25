@@ -153,7 +153,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     };
     return (
         <>
-            <div className="row no-gutters">
+            <div className="row no-gutters h-100">
                 {(list_chats && chats.length) || showContent ?
                     <>
                         {list_chats &&
@@ -180,10 +180,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                             </div>}
                         <div className="col">
                             <div
-                                className="chat-cont-right"
+                                className="chat-cont-right d-flex flex-column h-100"
                                 style={{maxWidth: '100%'}}
                             >
-                                <div className="chat-header">
+                                <div className="chat-header" style={{flex: '0 1 auto'}}>
                                     <div className="media">
                                         {list_chats && <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
                                             <i className="fas fa-chevron-left"></i>
@@ -207,14 +207,16 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <MessagesList
-                                    messages={messages}
-                                    user_id={myId}
-                                    notify={notify}
-                                    showToast={!list_chats}
-                                    last_message={messages.length > 0? messages[messages.length - 1] : null}
-                                />
-                                <div className="chat-footer">
+                                <div style={{flex: '1 1 auto'}}>
+                                    <MessagesList
+                                        messages={messages}
+                                        user_id={myId}
+                                        notify={notify}
+                                        showToast={!list_chats}
+                                        last_message={messages.length > 0 ? messages[messages.length - 1] : null}
+                                    />
+                                </div>
+                                <div className="chat-footer" style={{flex: '0 1 auto'}}>
                                     <div className="input-group">
                                         <div className="input-group-prepend">
                                             <div className="btn-file btn">

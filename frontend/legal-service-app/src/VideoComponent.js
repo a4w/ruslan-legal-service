@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react"
 import "./assets/css/VideoComponent.css"
-import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone, FaChevronLeft} from "react-icons/fa"
+import {FaPhoneSlash, FaMicrophoneSlash, FaMicrophone, FaChevronLeft, FaConnectdevelop, FaPlug} from "react-icons/fa"
 import {BsChatSquareQuote} from "react-icons/bs"
 import {connect, createLocalTracks} from "twilio-video"
 import {toast} from "react-toastify"
 import ResponsiveChatPage from "./ResponsiveChatPage"
 import useRequests from "./useRequests"
+import Countdown, {zeroPad} from "react-countdown";
+import LoadingOverlay from "react-loading-overlay"
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -16,6 +18,9 @@ const VideoComponent = ({appointment_id}) => {
     const [room, setRoom] = useState(null);
     const [localTracks, setLocalTracks] = useState(null);
     const [chatId, setChatId] = useState(null);
+    const [appointmentEnd, setAppointmentEnd] = useState(new Date());
+    const [isConnected, setIsConnected] = useState(false);
+    const [connectedParticipantsCount, setConnectedParticipantsCount] = useState(1);
 
     const {request} = useRequests();
 
@@ -32,6 +37,7 @@ const VideoComponent = ({appointment_id}) => {
                 publication.unpublish();
             });
             room.disconnect();
+            setIsConnected(false);
         }
     };
 
@@ -50,7 +56,7 @@ const VideoComponent = ({appointment_id}) => {
         }
     }, [room, isMuted]);
 
-    useEffect(() => {
+    const connectToRoom = () => {
         request({
             url: `/appointment/${appointment_id}/get-room-access-token`,
             method: "GET"
@@ -59,9 +65,14 @@ const VideoComponent = ({appointment_id}) => {
             setRoomSID(response.room_sid);
             setAccessToken(response.access_token);
             setChatId(response.chat_id);
+            setAppointmentEnd(new Date(response.appointment_end));
         }).catch((error) => {
             toast.warn("It's not the appointment time, you will not be connected");
         });
+    }
+
+    useEffect(() => {
+        connectToRoom();
     }, []);
 
     useEffect(() => {
@@ -71,6 +82,7 @@ const VideoComponent = ({appointment_id}) => {
         connect(accessToken, {sid: roomSID, tracks: localTracks}).then(room => {
             console.log(`Successfully joined a Room: ${room}`);
             setRoom(room);
+            setIsConnected(true);
         }, error => {
             console.error(`Unable to connect to Room: ${error.message}`);
             console.log(error);
@@ -79,8 +91,6 @@ const VideoComponent = ({appointment_id}) => {
 
         return () => {
             handleDisconnection();
-            toast.info("You are now disconnected from the room");
-            // Redirect
         };
     }, [roomSID, accessToken, localTracks]);
 
@@ -101,6 +111,7 @@ const VideoComponent = ({appointment_id}) => {
                 elem.className = 'incomingVideo';
                 document.getElementById('incomingMedia').appendChild(elem);
             }
+            setConnectedParticipantsCount(connectedParticipantsCount + 1);
         };
 
         // Handle participants already in room
@@ -143,6 +154,7 @@ const VideoComponent = ({appointment_id}) => {
             [...document.getElementsByClassName('incomingAudio')].map((el) => {el.remove()});
             [...document.getElementsByClassName('incomingVideo')].map((el) => {el.remove()});
             toast.info("Participant disconnected from the room");
+            setConnectedParticipantsCount(connectedParticipantsCount - 1);
         });
 
         room.on('disconnected', room => {
@@ -152,6 +164,8 @@ const VideoComponent = ({appointment_id}) => {
                 attachedElements.forEach(element => element.remove());
             });
         });
+
+        console.log("ROOM LENGTH", room.participants);
 
     }, [room]);
 
@@ -174,12 +188,38 @@ const VideoComponent = ({appointment_id}) => {
     }
     return (
         <>
-            <div class="row no-gutters">
+            <div class="row no-gutters" style={{height: '75vh'}}>
                 <div class="col">
                     <div className="stream" id="incomingMedia">
+                        <LoadingOverlay
+                            active={(!isConnected) || (isConnected && connectedParticipantsCount <= 1)}
+                            spinner={room === null || (isConnected && connectedParticipantsCount <= 1)}
+                            text={isConnected ? "Please wait while the other party connects to the room" : room === null ? "Connecting to room" : "You are disconnected"}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    position: 'relative',
+                                    zIndex: '2',
+                                }),
+                                wrapper: (base) => ({
+                                    ...base,
+                                    height: '100%'
+                                })
+                            }}
+                        >
+                        </LoadingOverlay>
                         <div className="controls">
                             <div className={"buttons " + (showChat ? 'd-none' : 'd-flex') + " d-lg-flex"}>
-                                <span className="call-count-down"> 00:00:00 </span>
+                                <Countdown
+                                    date={appointmentEnd}
+                                    renderer={(props) => {
+                                        return (<span className="call-count-down"> {zeroPad(props.hours)}:{zeroPad(props.minutes)}:{zeroPad(props.seconds)} </span>);
+                                    }}
+                                />
+                                {!isConnected && room !== null && <button class="btn btn-dark" title="Join room" onClick={() => {
+                                    setRoom(null);
+                                    connectToRoom();
+                                }}><FaPlug /></button>}
                                 <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
                                 <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>
                                 <button class="btn btn-primary" onClick={handleSoundControl} title={isMuted ? "Unmute" : "Mute"}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>

@@ -7017,10 +7017,12 @@ html.menu-opened body {
         text-align: center;
     }
     .lawyer-info-right {
-        margin-left: 0;
+        /* margin-left: 0; */
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
+        margin: auto;
+        width: 100%;
     }
     .lawyer-info-left {
         -ms-flex-direction: column;
@@ -7558,4 +7560,31 @@ min-width: 100%;
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
   border-right:10px solid #f0f0f0;
+}
+
+.rounded-card-image{
+    width: 170px;
+    height: 170px;
+    border-radius: 50%!important;
+}
+.lawyer-home-card{
+    width: 170px!important;
+    height: 170px;
+    border-radius: 50%!important;
+}
+.circle-blog-card{
+    width: 210px!important;
+    height: 210px!important;
+    border-radius: 50%!important;
+}
+.round-profile-card{
+    width: 150px!important;
+    height: 150px!important;
+    border-radius: 50%!important;
+}
+@media only screen and (max-width: 767.98px) {
+    .circle-blog-card{
+        width: 170px!important;
+        height: 170px!important;
+    }
 }

@@ -47,7 +47,7 @@ const Blog = ({blog, editable}) => {
                         }}
                     >
                         <BlogImg
-                            className="img-fluid"
+                            className="img-fluid circle-blog-card"
                             src={blog.cover_photo_link}
                             alt="Post Image"
                         />

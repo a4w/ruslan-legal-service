@@ -274,7 +274,7 @@ const ScheduleForm = ({}) => {
 
     return (
         <>
-            <Modal show={isSideShown} conatainer={schedule_container} onHide={() => {setIsSideShown(false)}} >
+            <Modal show={isSideShown} conatainer={schedule_container} onHide={() => {}} >
                 <Modal.Header closeButton>
                     <Modal.Title>Add Slot</Modal.Title>
                 </Modal.Header>

@@ -14,6 +14,7 @@ import {scheduleSettingValidation} from "./Validations";
 import useRequests from "./useRequests";
 import SpinnerButton from "./SpinnerButton";
 import Config from "./Config";
+import Modal from 'react-bootstrap/Modal';
 
 const ScheduleForm = ({}) => {
     const {request} = useRequests();
@@ -273,8 +274,13 @@ const ScheduleForm = ({}) => {
 
     return (
         <>
-            <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
-                <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button>
+            <Modal show={isSideShown} conatainer={schedule_container} onHide={() => {setIsSideShown(false)}} >
+            <Modal.Header closeButton>
+                <Modal.Title>Add Slot</Modal.Title>
+            </Modal.Header>
+            {/* <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}> */}
+                {/* <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button> */}
+                <Modal.Body>
                 <div className="p-3">
                     <h4 className="text-center">Add appointment</h4>
                     <div className="form-group">
@@ -359,7 +365,12 @@ const ScheduleForm = ({}) => {
                         }
                     </div>}
                 </div>
-            </Collapse>
+            {/* </Collapse> */}
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-dark" onClick={() => {setIsSideShown(false)}}>Close</button>
+                </Modal.Footer>
+            </Modal>
             <div className="row no-gutters">
                 <div className="col">
                     <div className="row form-row">
@@ -498,3 +509,4 @@ function FocusWrapper({children, close}) {
         </div>
     );
 }
+

@@ -177,7 +177,7 @@ const ListItem = ({appointment}) => {
             <td className="text-center">
                 <Status appStatus={appointment.status} />
             </td>
-            <td className="text-center">{appointment.price}</td>
+            <td className="text-center">{appointment.price + appointment.currency_symbol}</td>
             <td className="text-right">
                 <div className="table-action">
                     {appointment.can_be_started &&

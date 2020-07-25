@@ -79,9 +79,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         console.log("Loading messages");
         if (selectedChat !== null && (force || !isFetching)) {
             let since = null;
+            let _lastMessage = null;
             if (messages.length > 0 && !force) {
-                const lastMessage = messages[messages.length - 1];
-                since = lastMessage.created_at;
+                _lastMessage = messages[messages.length - 1];
+                since = _lastMessage.created_at;
             }
             console.log("Clear");
             setIsFetching(true);
@@ -93,6 +94,16 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).then((response) => {
                 if (response.messages.length > 0) {
                     setMessages([...messages, ...response.messages]);
+                    if (response.messages.length > 0) {
+                        const _newLastMessage = response.messages[response.messages.length - 1];
+                        if (
+                            _lastMessage &&
+                            !list_chats &&
+                            _lastMessage.content !== _newLastMessage.content &&
+                            myId !== _newLastMessage.sender_id
+                        )
+                            notify();
+                    }
                 }
             }).catch((error) => {
                 console.log(error);
@@ -216,8 +227,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         last_message={messages.length > 0 ? messages[messages.length - 1] : null}
                                     />
                                 </div>
-                                <div className="chat-footer" style={{flex: '0 1 auto'}}>
-                                    <div className="input-group">
+                                <div className="chat-footer" style={{flex: '0 1 auto'}}>                                    <div className="input-group">
                                         <div className="input-group-prepend">
                                             <div className="btn-file btn">
                                                 <FaPaperclip />

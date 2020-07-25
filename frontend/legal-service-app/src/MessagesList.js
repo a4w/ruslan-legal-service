@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from "react"
 import Message from "./Message"
 
-const MessagesList = ({messages, user_id, notify, showToast, last_message}) => {
-    const [length, setLength] = useState(messages? messages.length:0);
+const MessagesList = ({messages, user_id}) => {
     useEffect(() => {
         var element = document.getElementById("messages_container");
         element.scrollTop = element.scrollHeight;
-        setLength(messages.length)
     }, [messages]);
     useEffect(() => {
         var element = document.getElementById("messages_container");
@@ -19,9 +17,6 @@ const MessagesList = ({messages, user_id, notify, showToast, last_message}) => {
                     <ul className="list-unstyled">
                         {messages.map((message, i) => {
                             if (message.message_type === 'TEXT') {
-                                if(showToast && last_message && user_id !== message.sender_id && i === length && last_message.content === message.content){
-                                    // notify();
-                                }
                                 return (<Message isOutgoing={user_id === message.sender_id} content={message.content} timestamp={message.created_at} />);
                             } else if (message.message_type === 'FILE') {
                                 return (<Message type="file" link={message.link} isOutgoing={user_id === message.sender_id} content={message.content} timestamp={message.created_at} />);

@@ -2017,6 +2017,8 @@ html.menu-opened body {
 .footer .footer-menu ul li {
     margin-bottom: 10px;
     position: relative;
+    display: inline-flex;
+    width: 220px;
 }
 .footer .footer-menu ul li:last-child {
     margin-bottom: 0;
@@ -3487,7 +3489,7 @@ html.menu-opened body {
 .day-slot div span {
     display: block;
     font-size: 18px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .day-slot div span.slot-date {
     display: block;
@@ -5925,11 +5927,12 @@ html.menu-opened body {
     border-bottom: none;
 }
 .post-thumb {
-    border-radius: 4px;
+    /* border-radius: 4px; */
     width: 90px;
-    height: 60px;
+    height: 90px;
     float: left;
     overflow: hidden;
+    border-radius: 100%;
 }
 .post-thumb a img {
     border-radius: 4px;
@@ -6176,6 +6179,7 @@ html.menu-opened body {
 }
 .grid-blog .blog-image {
     margin-bottom: 20px;
+    border-radius: 100%;
 }
 .blog.grid-blog {
     padding: 20px;
@@ -6192,7 +6196,7 @@ html.menu-opened body {
 }
 .grid-blog .entry-meta li:last-child {
     flex: 0 0 100px;
-    max-width: 100px;
+    /* max-width: 100px; */
 }
 .grid-blog .post-author {
     width: 189px;

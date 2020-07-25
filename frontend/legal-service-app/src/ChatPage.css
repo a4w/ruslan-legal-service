@@ -7386,3 +7386,6 @@ html.menu-opened body {
         position: absolute;
     }
 }
+.chat-users-list{
+    min-height: calc(500px + 67px);
+}

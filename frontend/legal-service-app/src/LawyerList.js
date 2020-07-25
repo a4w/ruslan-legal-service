@@ -448,7 +448,7 @@ const AvgCalendar = ({lawyer}) => {
                         <tr>
                             <th colSpan="2"></th>
                             {days.map((day) => (
-                                <th key={day}>{day.substr(0, 3).toUpperCase()}</th>
+                                <th key={day} style={{textTransform: "capitalize"}}>{day.substr(0, 3)}</th>
                             ))}
                         </tr>
                     </thead>

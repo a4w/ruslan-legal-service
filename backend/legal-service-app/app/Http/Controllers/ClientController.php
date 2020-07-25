@@ -19,9 +19,9 @@ class ClientController extends Controller
         // Detect filters
         $upcoming = $request->get('upcoming', "false") === "true";
         if ($upcoming) {
-            $appointments = $client->appointments()->where('status', 'UPCOMING')->get();
+            $appointments = $client->appointments()->where('status', 'UPCOMING')->orderBy('appointment_time', 'asc')->get();
         } else {
-            $appointments = $client->appointments;
+            $appointments = $client->appointments()->orderBy('appointment_time', 'asc')->get();
         }
         return RespondJSON::success(['appointments' => $appointments]);
     }

@@ -77,10 +77,11 @@ const UserDropdown = () => {
                         />
                     </div>
                     <div className="user-text">
-                        <h6>{`${user.name} ${user.surname}`}</h6>
+                        <h6>{user.name? `${user.name} ${user.surname}`: "loading..."}</h6>
                         <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
+                {isClient !== null &&
                 <Link
                     className="dropdown-item"
                     to={isClient ? "/client-dashboard" : "/dashboard"}
@@ -88,6 +89,7 @@ const UserDropdown = () => {
                 >
                     Dashboard
                 </Link>
+                }
                 <Link
                     className="dropdown-item"
                     to="/chat"
@@ -102,6 +104,7 @@ const UserDropdown = () => {
                 >
                     Agenda
                 </Link>
+                {isClient !== null && 
                 <Link
                     className="dropdown-item"
                     to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}
@@ -109,6 +112,7 @@ const UserDropdown = () => {
                 >
                     Profile Settings
                 </Link>
+                }
                 <button
                     className="dropdown-item"
                     onClick={() => {

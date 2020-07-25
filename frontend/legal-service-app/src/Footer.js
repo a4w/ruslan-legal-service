@@ -62,7 +62,7 @@ const Footer = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-6 col-md-12">
                             <div className="footer-widget footer-menu">
                                 <h2 className="footer-title">Practice Areas</h2>
                                 <ul>

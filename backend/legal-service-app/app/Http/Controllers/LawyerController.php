@@ -443,9 +443,9 @@ class LawyerController extends Controller
         // Detect filters
         $upcoming = $request->get('upcoming', "false") === "true";
         if ($upcoming) {
-            $appointments = $lawyer->appointments()->where('status', 'UPCOMING')->get();
+            $appointments = $lawyer->appointments()->where('status', 'UPCOMING')->orderBy('appointment_time', 'asc')->get();
         } else {
-            $appointments = $lawyer->appointments;
+            $appointments = $lawyer->appointments()->orderBy('appointment_time', 'asc')->get();
         }
         return RespondJSON::success(['appointments' => $appointments]);
     }

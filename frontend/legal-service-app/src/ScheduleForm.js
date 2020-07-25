@@ -32,13 +32,13 @@ const ScheduleForm = ({}) => {
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
-        {name: "Sunday", slots: []},
         {name: "Monday", slots: []},
         {name: "Tuesday", slots: []},
         {name: "Wednesday", slots: []},
         {name: "Thursday", slots: []},
         {name: "Friday", slots: []},
         {name: "Saturday", slots: []},
+        {name: "Sunday", slots: []},
     ]);
 
 
@@ -253,13 +253,13 @@ const ScheduleForm = ({}) => {
     ];
 
     const weekDayOptions = [
-        {label: 'Sunday', value: 0},
         {label: 'Monday', value: 1},
         {label: 'Tuesday', value: 2},
         {label: 'Wednesday', value: 3},
         {label: 'Thursday', value: 4},
         {label: 'Friday', value: 5},
         {label: 'Saturday', value: 6},
+        {label: 'Sunday', value: 0},
     ];
 
     useEffect(() => {

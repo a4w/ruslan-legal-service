@@ -7562,3 +7562,8 @@ min-width: 100%;
   border-bottom: 10px solid transparent;
   border-right:10px solid #f0f0f0;
 }
+
+.react-dropdown-select-dropdown{
+    width: 100% !important;
+    top: 50px !important;
+}

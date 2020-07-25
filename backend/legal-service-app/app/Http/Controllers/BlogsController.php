@@ -104,6 +104,22 @@ class BlogsController extends Controller
         return RespondJSON::success(['blog' => $blog]);
     }
 
+    public function getMyBlog(Blog $blog)
+    {
+        if ($blog->lawyer->is(Auth::user()->lawyer)) {
+            return RespondJSON::success(['blog' => $blog]);
+        } else {
+            return RespondJSON::notFound();
+        }
+    }
+
+    public function getPersonalLawyerBlogs()
+    {
+        $lawyer = Auth::user()->lawyer;
+        $blogs = $lawyer->blogs;
+        return RespondJSON::success(['blogs' => $blogs]);
+    }
+
     public function latestBlogs($number)
     {
         $number = (int) $number;

@@ -2889,7 +2889,8 @@ html.menu-opened body {
 }
 .lawyer-info-right {
     margin-left: auto;
-    width: 300px;
+    min-width: 30%;
+    width: 30%;
 }
 .law-img {
     -ms-flex: 0 0 150px;
@@ -2978,6 +2979,8 @@ html.menu-opened body {
     display: inline-block;
     font-size: 12px;
     padding: 3px 10px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
 .session-services a {
     border: 1px solid #ccc;
@@ -2985,12 +2988,13 @@ html.menu-opened body {
     display: inline-block;
     font-size: 12px;
     padding: 3px 10px;
+    margin-top: 5px;
 }
 .session-services span + span {
-    margin-left: 5px;
+    margin-right: 10px;
 }
 .session-services span + a {
-    margin-left: 5px;
+    margin-right: 5px;
 }
 .session-infos {
     margin-bottom: 15px;

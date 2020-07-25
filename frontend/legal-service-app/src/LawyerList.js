@@ -124,7 +124,7 @@ function LawyerList(props) {
                 title="Available Lawyers list | Lawbe"
                 description="A list of the best lawyers from all across the country, book them now!"
             />
-            <StickyBox style={{zIndex: 6}}>
+            <StickyBox offsetTop={85} style={{zIndex: 6}}>
                 <LawyerListHeader
                     params={params}
                     OnChangeHandler={SortHandler}
@@ -142,7 +142,7 @@ function LawyerList(props) {
                     <div className="col-12">
                         <div className="content">
                             <div className="row justify-content-center align-content-center">
-                                <div className="col-sm-12 col-md-12 col-lg-6">
+                                <div className="col-sm-12 col-md-12 col-lg-8">
                                     {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
                                     <div className="load-more text-center">
                                         <a
@@ -154,7 +154,7 @@ function LawyerList(props) {
                                         </a>
                                     </div>
                                 </div>
-                                <div className="col-sm-0 col-md-0 col-lg-5">
+                                <div className="col-sm-0 col-md-0 col-lg-4">
                                     <StickyBox offsetTop={80} offsetBottom={20}>
                                         <PopUp lawyer={lawyerPopUp} />
                                     </StickyBox>
@@ -448,20 +448,20 @@ const AvgCalendar = ({lawyer}) => {
                         <tr>
                             <th colSpan="2"></th>
                             {days.map((day) => (
-                                <th key={day} style={{textTransform: "capitalize"}}>{day.substr(0, 3)}</th>
+                                <th key={day} style={{fontSize: '12px', textAlign: 'center', padding: '2px', whiteSpace: 'nowrap'}}>{day.substr(0, 3)}</th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colSpan="2">Morning</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Morning</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[0] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2">Afternoon</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Afternoon</td>
                             {availability.map((a, i) => {
                                 const brightness = (a[1] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);

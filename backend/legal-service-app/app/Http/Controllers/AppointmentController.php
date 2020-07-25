@@ -154,7 +154,8 @@ class AppointmentController extends Controller
             $chat->participants()->attach($appointment->client->account);
         }
         // render token to string
-        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid, 'chat_id' => $chat->id]);
+        $appointment_end = (new Carbon($appointment->appointment_time))->addMinutes($appointment->duration);
+        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid, 'chat_id' => $chat->id, 'appointment_end' => $appointment_end]);
     }
 
     public function cancelAppointment(Appointment $appointment)

@@ -4246,7 +4246,6 @@ html.menu-opened body {
 .chat-scroll {
     /*min-height: 300px;
     max-height: calc(100vh - 224px);*/
-    height: 400px;
     overflow-y: auto;
 }
 .chat-cont-left .chat-users-list {

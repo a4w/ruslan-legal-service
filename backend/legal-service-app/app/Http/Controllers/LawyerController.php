@@ -445,7 +445,7 @@ class LawyerController extends Controller
         if ($upcoming) {
             $appointments = $lawyer->appointments()->where('status', 'UPCOMING')->orderBy('appointment_time', 'asc')->get();
         } else {
-            $appointments = $lawyer->appointments()->orderBy('appointment_time', 'asc')->get();
+            $appointments = $lawyer->appointments()->orderBy('created_at', 'desc')->get();
         }
         return RespondJSON::success(['appointments' => $appointments]);
     }

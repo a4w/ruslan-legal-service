@@ -21,7 +21,7 @@ class ClientController extends Controller
         if ($upcoming) {
             $appointments = $client->appointments()->where('status', 'UPCOMING')->orderBy('appointment_time', 'asc')->get();
         } else {
-            $appointments = $client->appointments()->orderBy('appointment_time', 'asc')->get();
+            $appointments = $client->appointments()->orderBy('created_at', 'desc')->get();
         }
         return RespondJSON::success(['appointments' => $appointments]);
     }

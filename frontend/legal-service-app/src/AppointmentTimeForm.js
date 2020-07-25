@@ -156,7 +156,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                 <span style={{
                                                     fontSize: '14px',
                                                     margin: '0px 10px 0px 10px'
-                                                }}>{day.name.toUpperCase()}</span>
+                                                }}>{day.name}</span>
                                                 <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
                                             </div>
                                         );

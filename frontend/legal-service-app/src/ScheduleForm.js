@@ -275,100 +275,100 @@ const ScheduleForm = ({}) => {
     return (
         <>
             <Modal show={isSideShown} conatainer={schedule_container} onHide={() => {setIsSideShown(false)}} >
-            <Modal.Header closeButton>
-                <Modal.Title>Add Slot</Modal.Title>
-            </Modal.Header>
-            {/* <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}> */}
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Slot</Modal.Title>
+                </Modal.Header>
+                {/* <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}> */}
                 {/* <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button> */}
                 <Modal.Body>
-                <div className="p-3">
-                    <h4 className="text-center">Add appointment</h4>
-                    <div className="form-group">
-                        <ErrorMessageSelect
-                            multi={false}
-                            name="weekday"
-                            className="floating"
-                            value={slotProperties.weekday}
-                            placeholder="Weekday"
-                            options={weekDayOptions}
-                            OnChangeHandler={handleSelection}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
-                            <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
-                        </button>
-                        {isTimeSelectorShown && <div className="timepicker-container">
-                            <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
-                                <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
-
-                            </FocusWrapper>
+                    <div className="p-3">
+                        <h4 className="text-center"> Global appointment settings </h4>
+                        <div className="form-group">
+                            <ErrorMessageInput
+                                type={"text"}
+                                name="price"
+                                value={globalSettings.price}
+                                OnChangeHandler={handleSettingsChange}
+                                placeholder={"Price per hour"}
+                                errors={errors.price}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <ButtonGroup>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
+                            </ButtonGroup>
+                        </div>
+                        {globalSettings.discount_type !== 0 && <div className="form-group">
+                            <ErrorMessageInput
+                                disabled={globalSettings.discount_type === 0}
+                                type={"text"}
+                                name="discount_amount"
+                                value={globalSettings.discount_amount}
+                                OnChangeHandler={handleSettingsChange}
+                                placeholder={"Discount"}
+                                errors={errors.discount_amount}
+                            />
                         </div>}
-                    </div>
-                    <div className="form-group">
-                        <ErrorMessageSelect
-                            multi={false}
-                            name="length"
-                            className="floating"
-                            value={slotProperties.length}
-                            placeholder="Length (in minutes)"
-                            options={slotOptions}
-                            OnChangeHandler={handleSelection}
-                        />
-                    </div>
-                    <button onClick={handleButtonClick} className="btn btn-block btn-primary">
-                        <FaArrowCircleRight />&nbsp;Add appointment
+                        {globalSettings.discount_type !== 0 && <div className="form-group">
+                            <DatePicker
+                                className="form-control"
+                                placeholderText="Available on"
+                                onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
+                                selected={globalSettings.discount_end}
+                                showTimeSelect
+                                dateFormat={"Y-MM-dd HH:mm:ss"}
+                            />
+                            {errors["discount_end"] && errors["discount_end"].length > 0 &&
+                                <label className="text-danger ml-2 font-weight-light text-xs">
+                                    {errors["discount_end"][0]}
+                                </label>
+                            }
+                        </div>}
+                        <hr />
+                        <h4 className="text-center">Add appointment</h4>
+                        <div className="form-group">
+                            <ErrorMessageSelect
+                                multi={false}
+                                name="weekday"
+                                className="floating"
+                                value={slotProperties.weekday}
+                                placeholder="Weekday"
+                                options={weekDayOptions}
+                                OnChangeHandler={handleSelection}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
+                                <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
                             </button>
-                    <hr />
-                    <h4 className="text-center"> Global appointment settings </h4>
-                    <div className="form-group">
-                        <ErrorMessageInput
-                            type={"text"}
-                            name="price"
-                            value={globalSettings.price}
-                            OnChangeHandler={handleSettingsChange}
-                            placeholder={"Price per hour"}
-                            errors={errors.price}
-                        />
+                            {isTimeSelectorShown && <div className="timepicker-container">
+                                <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
+                                    <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
+
+                                </FocusWrapper>
+                            </div>}
+                        </div>
+                        <div className="form-group">
+                            <ErrorMessageSelect
+                                multi={false}
+                                name="length"
+                                className="floating"
+                                value={slotProperties.length}
+                                placeholder="Length (in minutes)"
+                                options={slotOptions}
+                                OnChangeHandler={handleSelection}
+                            />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <ButtonGroup>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
-                        </ButtonGroup>
-                    </div>
-                    {globalSettings.discount_type !== 0 && <div className="form-group">
-                        <ErrorMessageInput
-                            disabled={globalSettings.discount_type === 0}
-                            type={"text"}
-                            name="discount_amount"
-                            value={globalSettings.discount_amount}
-                            OnChangeHandler={handleSettingsChange}
-                            placeholder={"Discount"}
-                            errors={errors.discount_amount}
-                        />
-                    </div>}
-                    {globalSettings.discount_type !== 0 && <div className="form-group">
-                        <DatePicker
-                            className="form-control"
-                            placeholderText="Available on"
-                            onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
-                            selected={globalSettings.discount_end}
-                            showTimeSelect
-                            dateFormat={"Y-MM-dd HH:mm:ss"}
-                        />
-                        {errors["discount_end"] && errors["discount_end"].length > 0 &&
-                            <label className="text-danger ml-2 font-weight-light text-xs">
-                                {errors["discount_end"][0]}
-                            </label>
-                        }
-                    </div>}
-                </div>
-            {/* </Collapse> */}
+                    {/* </Collapse> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-dark" onClick={() => {setIsSideShown(false)}}>Close</button>
+                    <button onClick={() => {handleButtonClick(); setIsSideShown(false)}} className="btn btn-primary">
+                        <FaArrowCircleRight />&nbsp;Add appointment
+                    </button>
                 </Modal.Footer>
             </Modal>
             <div className="row no-gutters">
@@ -504,7 +504,7 @@ function FocusWrapper({children, close}) {
     }, []);
 
     return (
-        <div ref={container} style={{display: "inline-block"}}>
+        <div ref={container} className="fme" style={{display: "inline-block"}}>
             {children}
         </div>
     );

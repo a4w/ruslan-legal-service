@@ -7469,9 +7469,6 @@ min-width: 100%;
     width: 100% !important;
 }
 .timepicker-container > div{
-    position: absolute !important;
-    z-index: 50 !important;
-    width: 100% !important;
 }
 .slot-info-popover-body{
     display: block;

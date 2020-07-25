@@ -8,6 +8,7 @@ import ResponsiveChatPage from "./ResponsiveChatPage"
 import useRequests from "./useRequests"
 import Countdown, {zeroPad} from "react-countdown";
 import LoadingOverlay from "react-loading-overlay"
+import bootbox from "bootbox"
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -31,14 +32,22 @@ const VideoComponent = ({appointment_id}) => {
         setShowChat(!showChat);
     };
     const handleDisconnection = () => {
-        if (room !== null) {
-            room.localParticipant.videoTracks.forEach(publication => {
-                publication.track.stop();
-                publication.unpublish();
-            });
-            room.disconnect();
-            setIsConnected(false);
-        }
+        bootbox.confirm({
+            title: 'Confirm',
+            message: 'Are you sure you would like to disconnect from the room?',
+            callback: (result) => {
+                if (result) {
+                    if (room !== null) {
+                        room.localParticipant.videoTracks.forEach(publication => {
+                            publication.track.stop();
+                            publication.unpublish();
+                        });
+                        room.disconnect();
+                        setIsConnected(false);
+                    }
+                }
+            }
+        });
     };
 
     useEffect(() => {

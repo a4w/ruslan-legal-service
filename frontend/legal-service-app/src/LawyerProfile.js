@@ -84,7 +84,7 @@ const ProfileCard = ({lawyer}) => {
                         <div className="law-img" style={{maxHeight: "250px"}}>
                             <Img
                                 src={account.profile_picture}
-                                className="img-fluid"
+                                className="img-fluid round-profile-card"
                                 alt="Lawyer Profile"
                             />
                         </div>

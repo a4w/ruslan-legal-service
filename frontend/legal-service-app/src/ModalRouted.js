@@ -69,7 +69,7 @@ const Modal = (props) => {
                     border: "1px solid rgba(0,0,0,.2)",
                     borderRadius: ".3rem",
                     outline: "0",
-                    maxWidth:"90%",
+                    maxWidth: "90%",
                     margin: "auto",
                     maxHeight: "90%",
                     overflow: "auto",
@@ -99,3 +99,4 @@ const Modal = (props) => {
 };
 
 export default Modal;
+export {ModalPortal};

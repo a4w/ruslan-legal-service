@@ -7,6 +7,7 @@ import {
 import "./CheckoutForm.css"
 import {toast} from "react-toastify";
 import History from "./History";
+import {FaCreditCard} from "react-icons/fa";
 
 const CheckoutForm = ({client_secret}) => {
     const [succeeded, setSucceeded] = useState(false);
@@ -72,9 +73,9 @@ const CheckoutForm = ({client_secret}) => {
                 <span id="button-text">
                     {processing ? (
                         <div className="spinner" id="spinner"></div>
-                    ) : (
-                            "Pay"
-                        )}
+                    ) :
+                        " Pay"
+                    }
                 </span>
             </button>
             {/* Show any error that happens when processing the payment */}

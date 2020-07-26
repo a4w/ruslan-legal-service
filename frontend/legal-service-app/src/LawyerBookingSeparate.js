@@ -7,11 +7,12 @@ import {LoadingOverlayContext, AuthContext} from "./App";
 import {useHistory, useLocation} from "react-router";
 import {Breadcrumb, BreadcrumbItem} from "reactstrap";
 import AppointmentTimeForm from "./AppointmentTimeForm";
-import {FaCheckDouble} from "react-icons/fa";
+import {FaCheckDouble, FaTimes} from "react-icons/fa";
 import CheckoutForm from "./CheckoutForm";
 import {Elements} from "@stripe/react-stripe-js"
 import {loadStripe} from "@stripe/stripe-js"
 import env from "./env"
+import {Link} from "react-router-dom";
 
 
 
@@ -23,18 +24,18 @@ const PAY_STEP = 2;
 // Load stripe
 const stripe = loadStripe(env.stripe_api_key);
 
-function LawyerBookingSeparate({lawyer_id}) {
+function LawyerBookingSeparate({lawyer_id, back}) {
     // Used deps and contexts
     const {request} = useRequests();
     const loader = useContext(LoadingOverlayContext);
-    const auth = useContext(AuthContext);
+    const [auth,] = useContext(AuthContext);
     const history = useHistory();
     const location = useLocation();
 
     // Check if logged in
     useEffect(() => {
         if (!auth.isLoggedIn) {
-            history.push(`${location.pathname}/login`);
+            history.push(`${back}/login`);
         }
     }, []);
 
@@ -79,6 +80,9 @@ function LawyerBookingSeparate({lawyer_id}) {
                             {lawyer !== null && <div className="booking-container-popup">
                                 <div className="row">
                                     <div className="col-12">
+                                        <Link to={back} className="btn btn-link float-right">
+                                            <FaTimes />
+                                        </Link>
                                         <img src="/avatar.svg" className="lawyer-thumb" />
                                         <span className="lawyer-name">{lawyer.account.full_name}</span>
                                         <div className="lawyer-rating">

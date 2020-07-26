@@ -14,7 +14,7 @@ const BookLawyerModal = ({match}) => {
         </Modal>
     );
 */
-    return (<LawyerBookingSeparate lawyer_id={match.params.LawyerId} />);
+    return (<LawyerBookingSeparate back={match.params[0]} lawyer_id={match.params.LawyerId} />);
 }
 
 export default BookLawyerModal;

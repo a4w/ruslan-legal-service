@@ -78,14 +78,14 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     {lawyer.ratings_count} Feedback
                                 </li>
                                 {lawyer.account.city &&
-                                lawyer.account.country ? (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
-                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
+                                    lawyer.account.country ? (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
+                                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
                                         -
                                         </li>
                                     )}
@@ -114,7 +114,6 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 className="apt-btn"
                                 to={{
                                     pathname: `list/book-lawyer/${lawyer.id}`,
-                                    state: {lawyer_id: "1"},
                                 }}
                             >
                                 Book Appointment

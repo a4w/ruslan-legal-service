@@ -450,6 +450,19 @@ class LawyerController extends Controller
         return RespondJSON::success(['appointments' => $appointments]);
     }
 
+    public function fetchLawyerDoneAppointments()
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->isClient()) {
+            return RespondJSON::forbidden();
+        }
+        $lawyer = $user->lawyer;
+        // Detect filters
+        $appointments = $lawyer->appointments()->where('status', 'DONE')->orderBy('appointment_time', 'asc')->get();
+        return RespondJSON::success(['appointments' => $appointments, 'total' => $appointments->sum('price'), 'currency_symbol' => $lawyer->currency_symbol]);
+    }
+
     public function getStripeConnectionLink()
     {
         /** @var Account */

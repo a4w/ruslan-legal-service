@@ -54,6 +54,22 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <div className="session-details">
                                 <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
                             </div>
+
+                            <div className="session-services">
+                                {lawyer.accreditations &&
+                                    <>
+                                        {lawyer.accreditations.map((accreditation, i) => {
+                                            if (i < 2) {
+                                                return (
+                                                    <>
+                                                        <AcImg style={{maxWidth: '100px'}} accreditation={accreditation} />
+                                                    </>
+                                                );
+                                            }
+                                        })}
+                                    </>
+                                }
+                            </div>
                             <div className="session-services">
                                 {lawyer.practice_areas &&
                                     <>
@@ -68,6 +84,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     </>
                                 }
                             </div>
+
                         </div>
                     </div>
                     <div className="lawyer-info-right">
@@ -201,5 +218,17 @@ const LawyerCountDownRenderer = ({
     }
 };
 
+const AcImg = (props) => {
+    const ImgStyle = {maxHeight: '100%', maxWidth: '100%', ...props.style};
+    const accreditation = props.accreditation;
+    return (
+        <img
+            {...props}
+            alt={accreditation.accreditation}
+            src={`/ac_${accreditation.id}`}
+            style={ImgStyle}
+        />
+    );
+}
 export default LawyerCardList;
 export {Discount};

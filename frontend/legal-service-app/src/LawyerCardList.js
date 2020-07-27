@@ -24,7 +24,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <Img className="" src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">
+                            <h4 className="lawyer-name text-left">
                                 <strong>
                                     {lawyer.account.name +
                                         " " +

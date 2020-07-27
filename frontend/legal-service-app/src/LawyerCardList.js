@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import StarRatings from "react-star-ratings";
 import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Img, {AcImg} from "./Img";
 import Config from "./Config";
+import {AuthContext} from "./App";
+import SpinnerButton from "./SpinnerButton";
+import useRequests from "./useRequests";
+import {toast} from "react-toastify";
+import {FaCommentAlt} from "react-icons/fa";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
     if (lawyers)
@@ -14,6 +19,20 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
     else return <LawyerCard />;
 };
 const LawyerCard = ({lawyer, setPopUp}) => {
+    const [auth,] = useContext(AuthContext);
+    const {request} = useRequests();
+
+    const startChat = (lawyer_id) => {
+        const myID = auth.accountId;
+        const url = `/chat/${myID}/${lawyer_id}`;
+        request({url: url, method: "POST"})
+            .then(() => {
+                History.push(`/chat/${lawyer_id}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            })
+    };
     return (
         <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
             <div className="card-body">
@@ -62,7 +81,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                             if (i < 2) {
                                                 return (
                                                     <>
-                                                        <AcImg style={{maxWidth: '100px'}} accreditation={accreditation} />
+                                                        <AcImg style={{maxHeight: '50px', marginRight: '5px'}} accreditation={accreditation} />
                                                     </>
                                                 );
                                             }
@@ -114,8 +133,18 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     isPercent={lawyer.is_percent_discount}
                                     currency={lawyer.currency_symbol}
                                 />
+                                <li>
+
+                                    <button
+                                        className="btn btn-primary btn-xs btn-block"
+                                        onClick={() => {startChat(lawyer.id)}}
+                                    >
+                                        <FaCommentAlt />&nbsp;Message lawyer
+                            </button>
+                                </li>
                             </ul>
                         </div>
+
                         <div className="session-booking">
                             <Link
                                 className="view-pro-btn"
@@ -126,6 +155,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             >
                                 View Profile
                             </Link>
+
 
                             <Link
                                 className="apt-btn"

@@ -4,6 +4,7 @@ import ClientDashboardStatus from "./ClientDashboardStatus";
 import ProfileSettings from "./ProfileSettings";
 import { Switch, Route, Redirect } from "react-router-dom";
 import UserCalendar from "./UserCalendar";
+import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const ClientDashboardTabs = () => {
     return (
@@ -17,9 +18,15 @@ const ClientDashboardTabs = () => {
             <Route path="/client-dashboard/calendar">
                 <UserCalendar />
             </Route>
-            <Route path="/client-dashboard/messages">
-                <Redirect to="/chat" />
-            </Route>
+            <Route
+                path="/client-dashboard/chat"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/client-dashboard/chat"
+                    />
+                )}
+            />
             <Route path="/client-dashboard/settings">
                 <ProfileSettings />
             </Route>

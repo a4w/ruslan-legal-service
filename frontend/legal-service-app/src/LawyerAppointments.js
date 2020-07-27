@@ -88,6 +88,7 @@ const AppointmentCard = ({appointment}) => {
                         style={imgStyle}
                         src={account.profile_picture}
                         alt="User"
+                        className="round-profile-card"
                     />
                 </a>
                 <div className="profile-det-info">

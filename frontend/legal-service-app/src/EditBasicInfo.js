@@ -93,6 +93,8 @@ const EditBasicInfo = () => {
                                     src={user.profile_picture_url}
                                     alt="User"
                                     overwrite={false}
+                                    className="round-profile-card"
+                                    // style={{borderRadius: "100%"}}
                                 />
                             </div>
                             <div className="upload-img">

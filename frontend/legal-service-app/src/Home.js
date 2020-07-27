@@ -341,7 +341,7 @@ var settings = {
         {
             breakpoint: 600,
             settings: {
-                slidesToShow: 2,
+                slidesToShow: 1,
                 slidesToScroll: 1,
                 initialSlide: 2,
             },
@@ -450,13 +450,11 @@ const LawyerCard = ({account, lawyer}) => {
         <div className="profile-widget">
             <div className="lawyer-img" style={{maxWidth: '100%'}}>
                 <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                    <div style={{height: '170px'}}>
-                        <Img
-                            className="img-fluid"
-                            src={account.profile_picture}
-                            alt="User Image"
-                        />
-                    </div>
+                    <Img
+                        className="img-fluid lawyer-home-card"
+                        src={account.profile_picture}
+                        alt="User Image"
+                    />
                 </Link>
             </div>
             <div className="pro-content">
@@ -574,7 +572,7 @@ const BlogCard = ({blog}) => {
                 <div className="" style={{maxWidth: '100%', height: '150px'}}>
                     <Link to={`/blog/${id}`}>
                         <BlogImg
-                            className="img-fluid"
+                            className="img-fluid circle-blog-card"
                             src={blog.cover_photo_link}
                             alt="Post Image"
                         />

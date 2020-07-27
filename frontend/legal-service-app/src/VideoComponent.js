@@ -191,6 +191,12 @@ const VideoComponent = ({appointment_id}) => {
                 localMediaContainer.appendChild(track.attach());
             });
         });
+        return () => {
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.stop();
+                publication.unpublish();
+            });
+        }
     }, []);
     const notify = () => {
         toast.info("A new message has arrived");

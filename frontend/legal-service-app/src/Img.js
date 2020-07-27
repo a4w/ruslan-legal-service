@@ -1,6 +1,8 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
 
-const Img = ({src, className, alt, style, overwrite = true}) => {
+const Clone = ({src, className, alt, style, overwrite = true}) => {
     const OnError = (e) => {
         e.target.src = "/undraw_male_avatar.svg";
         e.target.onError = null;

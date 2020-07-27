@@ -3,7 +3,7 @@ import StarRatings from "react-star-ratings";
 import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
-import Img from "./Img";
+import Img, {AcImg} from "./Img";
 import Config from "./Config";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
@@ -218,17 +218,5 @@ const LawyerCountDownRenderer = ({
     }
 };
 
-const AcImg = (props) => {
-    const ImgStyle = {maxHeight: '100%', maxWidth: '100%', ...props.style};
-    const accreditation = props.accreditation;
-    return (
-        <img
-            {...props}
-            alt={accreditation.accreditation}
-            src={`/ac_${accreditation.id}`}
-            style={ImgStyle}
-        />
-    );
-}
 export default LawyerCardList;
 export {Discount};

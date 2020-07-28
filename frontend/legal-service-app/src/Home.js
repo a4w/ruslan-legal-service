@@ -137,6 +137,7 @@ const Home = () => {
                                     <div className="row form-row">
                                         <div className="col-12 col-md-5 p-1">
                                             <Select
+                                                create
                                                 className="search-form-control"
                                                 placeholder="Select Location"
                                                 values={[location]}

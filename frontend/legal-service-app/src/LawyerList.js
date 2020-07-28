@@ -22,6 +22,7 @@ function LawyerList(props) {
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(3);
     const [lawyers, setLawyers] = useState(null);
+    const [otherLawyers, setOtherLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
     const [filter, setFilter] = useState({date: new Date()});
     const [params, setParams] = useState({
@@ -39,8 +40,7 @@ function LawyerList(props) {
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
         request({
-            url: "/lawyer/all?" + queryString.stringify(params),
-
+            url: "/lawyer/all?" + (params !== null ? queryString.stringify(params) : ''),
             method: "GET",
         })
             .then((data) => {
@@ -53,12 +53,39 @@ function LawyerList(props) {
                 console.log(_lawyers);
                 if (keep) setLawyers([...lawyers, ..._lawyers]);
                 else setLawyers(_lawyers);
+                if (_lawyers.length === 0) {
+                    getOtherLawyers();
+                }
             })
             .catch((_errors) => {})
             .finally(() => {
                 loading.setIsLoadingOverlayShown(false);
             })
     };
+
+    const getOtherLawyers = () => {
+
+        loading.setLoadingOverlayText("Loading...");
+        loading.setIsLoadingOverlayShown(true);
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+        })
+            .then((data) => {
+                let _lawyers = new Array();
+                if (!Array.isArray(data.lawyers)) {
+                    Object.keys(data.lawyers).map((key, index) => {
+                        _lawyers.push(data.lawyers[key]);
+                    });
+                } else _lawyers = data.lawyers;
+                console.log(_lawyers);
+                setOtherLawyers(_lawyers);
+            })
+            .catch((_errors) => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            })
+    }
 
     const SortHandler = ([{value}]) => {
         setSortBy(value);
@@ -144,6 +171,10 @@ function LawyerList(props) {
                             <div className="row justify-content-center align-content-center">
                                 <div className="col-sm-12 col-md-12 col-lg-8">
                                     {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
+                                    {lawyers && lawyers.length === 0 && <>
+                                        <h3>No lawyers matched your criteria. Check out those lawyers</h3>
+                                        {otherLawyers && <LawyerCardList lawyers={otherLawyers} setPopUp={setPopUp} />}
+                                    </>}
                                     <div className="load-more text-center">
                                         <a
                                             className="btn btn-primary btn-sm"

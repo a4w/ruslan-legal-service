@@ -3,7 +3,7 @@ import Select from "react-dropdown-select";
 import History from "./History";
 import * as $ from "jquery"
 import Slider from "react-slick";
-import Img from "./Img";
+import RoundImg from "./RoundImg";
 import BlogImg from "./BlogImg";
 import {Discount} from "./LawyerCardList";
 import StarRatings from "react-star-ratings";
@@ -284,20 +284,20 @@ const SearchLawyerByName = () => {
                         {(results.length) ?
                             results.map((lawyer, i) => {
                                 return (
-                                    <>
-                                        <div className={"inline-search-result " + (i === selectedIdx ? 'highlight-result' : '')}>
-                                            <Link to={`/profile/${lawyer.id}`}>
-                                                <Img
-                                                    alt={lawyer.full_name}
-                                                    className="rounded-circle"
-                                                    src={lawyer.account.profile_picture}
-                                                    style={imgStyle}
-                                                />
+                                    <div className={"inline-search-result " + (i === selectedIdx ? 'highlight-result' : '')}>
+                                        <Link to={`/profile/${lawyer.id}`} className="d-flex">
+                                            <RoundImg
+                                                alt={lawyer.full_name}
+                                                className="rounded-circle"
+                                                src={lawyer.account.profile_picture}
+                                                diameter={50}
+                                            />
+                                            <div className="ml-3 mt-1" style={{display:"grid"}}>
                                                 <b>{lawyer.account.full_name}</b>
-                                                <span className="text-muted text-sm ml-3">{lawyer.lawyer_type.type}</span>
-                                            </Link>
-                                        </div>
-                                    </>
+                                                <span className="text-muted text-sm">{lawyer.lawyer_type.type}</span>
+                                            </div>
+                                        </Link>
+                                    </div>
                                 );
                             })
                             : (
@@ -449,11 +449,11 @@ const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
             <div className="lawyer-img" style={{maxWidth: '100%'}}>
-                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
-                    <Img
-                        className="img-fluid lawyer-home-card"
+                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}} style={{justifyContent: "center", display: "flex"}}>
+                    <RoundImg
                         src={account.profile_picture}
                         alt="User Image"
+                        diameter={170}
                     />
                 </Link>
             </div>
@@ -569,12 +569,12 @@ const BlogCard = ({blog}) => {
     return (
         <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
-                <div className="" style={{maxWidth: '100%', height: '150px'}}>
+                <div className="blog-image">
                     <Link to={`/blog/${id}`}>
-                        <BlogImg
-                            className="img-fluid circle-blog-card"
+                        <RoundImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            diameter={210}
                         />
                     </Link>
                 </div>
@@ -583,10 +583,10 @@ const BlogCard = ({blog}) => {
                         <li>
                             <div className="post-author">
                                 <Link to={`/profile/${lawyer.id}`}>
-                                    <Img
+                                    <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{maxWidth: '40px', height: '40px'}}
+                                        diameter={40}
                                     />
                                     <span>{`${account.name} ${account.surname}`}</span>
                                 </Link>

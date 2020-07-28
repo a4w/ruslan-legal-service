@@ -3,7 +3,7 @@ import StarRatings from "react-star-ratings";
 import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
-import Img from "./Img";
+import RoundImg from "./RoundImg";
 import Config from "./Config";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
@@ -19,8 +19,8 @@ const LawyerCard = ({lawyer, setPopUp}) => {
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="law-img" style={{maxHeight: "250px"}}>
-                            <Img className="rounded-card-image" src={lawyer.account.profile_picture} />
+                        <div className="law-img">
+                            <RoundImg diameter={150} alt={lawyer.full_name} src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
                             <h4 className="lawyer-name">

@@ -16,6 +16,7 @@ import {LoadingOverlayContext} from "./App"
 import LoadingOverlay from "react-loading-overlay";
 import Img from "./Img";
 import StarRatings from "react-star-ratings";
+import RoundImg from "./RoundImg";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
@@ -315,12 +316,10 @@ const PopUp = ({lawyer}) => {
                     <div className="profile-info-widget justify-content-center">
                         <Link
                             to={`profile/${lawyer.id}`}
-                            className="booking-lawyer-img"
                         >
-                            <Img
+                            <RoundImg
                                 src={account.profile_picture}
-                                className="img-fluid"
-                                style={imgStyle}
+                                diameter={100}
                             />
                         </Link>
                     </div>

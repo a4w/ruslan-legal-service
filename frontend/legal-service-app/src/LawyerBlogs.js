@@ -80,6 +80,6 @@ const Blogs = ({setIsEditting})=>{
             })
             .catch((err) => {});
     }, []);
-    return blogs && <BlogList blogs={blogs} editable={true} />
+    return blogs && <BlogList blogs={blogs} editable={true} col={4} />
 }
 export default LawyerBlogs;

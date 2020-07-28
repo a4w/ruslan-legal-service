@@ -13,7 +13,7 @@ import SpinnerButton from "./SpinnerButton";
 import useValidation from "./useValidation";
 import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
-import {AuthContext, NotificationContext} from "./App";
+import {AuthContext, NotificationContext, LoadingOverlayContext} from "./App";
 
 const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url = "/chat"}) => {
     const inputRef = useRef(null);
@@ -25,10 +25,14 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     const [myId, setMyId] = useState(null);
     const [errors, , runValidation] = useValidation(ChatMessageValidation);
 
+    const loader = useContext(LoadingOverlayContext);
+
     const {request} = useRequests();
     // Load chats from server
     const [chats, setChats] = useState([]);
     useEffect(() => {
+        loader.setLoadingOverlayText("Loading...");
+        loader.setIsLoadingOverlayShown(true);
         request({
             url: '/chat/all',
             method: 'GET'
@@ -59,6 +63,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }
         }).catch((error) => {
             console.log(error);
+        }).finally(() => {
+            loader.setIsLoadingOverlayShown(false);
         });
     }, [initialSelectedChat]);
 
@@ -73,6 +79,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
         console.log("Updating selected chat");
         console.log(selectedChat);
         setMessages([]);
+        loader.setLoadingOverlayText("Loading...");
+        loader.setIsLoadingOverlayShown(true);
         loadMessages(true);
         // Set notifications to ignore messages from this chat
         setNotificationsState({
@@ -128,6 +136,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 console.log(error);
             }).finally(() => {
                 setIsFetching(false);
+                loader.setIsLoadingOverlayShown(false);
             });
         }
     };

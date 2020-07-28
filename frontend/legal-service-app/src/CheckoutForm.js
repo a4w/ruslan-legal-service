@@ -58,7 +58,7 @@ const CheckoutForm = ({client_secret}) => {
             setProcessing(false);
             setSucceeded(true);
             // Continue
-            toast.success("Thank you, the appointment is successfully reserved")
+            toast.success("Thank you, the appointment is successfully reserved and will be shown on your dashboard shortly", {duration: 10000})
             History.push("/client-dashboard");
         }
     };

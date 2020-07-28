@@ -6,6 +6,7 @@ import {FaSpinner} from "react-icons/fa";
 import {toast} from "react-toastify";
 import useRequests from "./useRequests";
 import Img from "./Img";
+import RoundImg from "./RoundImg";
 
 const EditBasicInfo = () => {
     const initUser = {
@@ -89,11 +90,10 @@ const EditBasicInfo = () => {
                     <div className="form-group">
                         <div className="change-avatar">
                             <div className="profile-img">
-                                <Img
+                                <RoundImg
                                     src={user.profile_picture_url}
                                     alt="User"
-                                    overwrite={false}
-                                    className="round-profile-card"
+                                    diameter={100}
                                     // style={{borderRadius: "100%"}}
                                 />
                             </div>

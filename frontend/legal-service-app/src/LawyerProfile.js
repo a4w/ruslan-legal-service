@@ -22,6 +22,7 @@ import {AuthContext} from "./App"
 import {toast} from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
 import {FaCommentAlt} from "react-icons/fa";
+import RoundImg from "./RoundImg";
 import PageHead from "./PageHead";
 
 const LawyerProfile = ({match}) => {
@@ -90,10 +91,10 @@ const ProfileCard = ({lawyer}) => {
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
                         <div className="law-img" style={{maxHeight: "250px"}}>
-                            <Img
+                            <RoundImg
                                 src={account.profile_picture}
-                                className="img-fluid round-profile-card"
                                 alt="Lawyer Profile"
+                                diameter={150}
                             />
                         </div>
                         <div className="lawyer-info-cont">

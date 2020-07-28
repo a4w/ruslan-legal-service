@@ -172,7 +172,8 @@ class AppointmentController extends Controller
         $appointment->status = 'CANCELLED';
         $appointment->save();
         Refund::create([
-            'payment_intent' => $appointment->payment_intent_id
+            'payment_intent' => $appointment->payment_intent_id,
+            'amount' => $appointment->price * 100
         ]);
         $appointment->client->account->notify(new AppointmentCancelled($appointment));
         $appointment->lawyer->account->notify(new AppointmentCancelled($appointment));

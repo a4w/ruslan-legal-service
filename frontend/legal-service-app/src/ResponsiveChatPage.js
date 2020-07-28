@@ -13,9 +13,9 @@ import SpinnerButton from "./SpinnerButton";
 import useValidation from "./useValidation";
 import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
-import {AuthContext} from "./App";
+import {AuthContext, NotificationContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url="/chat"}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url = "/chat"}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -68,11 +68,30 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     }, 3000);
 
     // Load chat messages on chat change
+    const {notificationsState, setNotificationsState} = useContext(NotificationContext);
     useEffect(() => {
         console.log("Updating selected chat");
         console.log(selectedChat);
         setMessages([]);
         loadMessages(true);
+        // Set notifications to ignore messages from this chat
+        setNotificationsState({
+            ...notificationsState,
+            shouldNotNotify: (notification) => {
+                if (notification.type === "INCOMING_MESSAGE" && notification.notification_data.chat_id === chats[selectedChat].id) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        return () => {
+            setNotificationsState({
+                ...notificationsState,
+                shouldNotNotify: () => {
+                    return false;
+                }
+            });
+        }
     }, [selectedChat, chats]);
 
     const loadMessages = (force = false) => {
@@ -228,42 +247,42 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                     />
                                 </div>
                                 <div className="chat-footer" style={{flex: '0 1 auto'}}>                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <div className="btn-file btn">
-                                                <FaPaperclip />
-                                                <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
-                                            </div>
-                                        </div>
-                                        <input
-                                            value={file === null ? message : file.name}
-                                            disabled={file !== null || isSending}
-                                            onChange={(e) => {
-                                                setMessage(e.target.value);
-                                                runValidation(e.target.value);
-                                            }}
-                                            ref={inputRef}
-                                            type="text"
-                                            className="input-msg-send form-control"
-                                            placeholder="Type something"
-                                            autofocus
-                                            onKeyPress={event => {
-                                                if (event.key === 'Enter') {
-                                                    handleMessageSend(event);
-                                                }
-                                            }}
-
-                                        />
-                                        <div className="input-group-append">
-                                            <SpinnerButton
-                                                type="button"
-                                                className="btn msg-send-btn"
-                                                onClick={handleMessageSend}
-                                                loading={isSending}
-                                            >
-                                                <i className="fab fa-telegram-plane"></i>
-                                            </SpinnerButton>
+                                    <div className="input-group-prepend">
+                                        <div className="btn-file btn">
+                                            <FaPaperclip />
+                                            <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
                                         </div>
                                     </div>
+                                    <input
+                                        value={file === null ? message : file.name}
+                                        disabled={file !== null || isSending}
+                                        onChange={(e) => {
+                                            setMessage(e.target.value);
+                                            runValidation(e.target.value);
+                                        }}
+                                        ref={inputRef}
+                                        type="text"
+                                        className="input-msg-send form-control"
+                                        placeholder="Type something"
+                                        autofocus
+                                        onKeyPress={event => {
+                                            if (event.key === 'Enter') {
+                                                handleMessageSend(event);
+                                            }
+                                        }}
+
+                                    />
+                                    <div className="input-group-append">
+                                        <SpinnerButton
+                                            type="button"
+                                            className="btn msg-send-btn"
+                                            onClick={handleMessageSend}
+                                            loading={isSending}
+                                        >
+                                            <i className="fab fa-telegram-plane"></i>
+                                        </SpinnerButton>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </div>

@@ -222,6 +222,10 @@ const VideoComponent = ({appointment_id}) => {
                                 <Countdown
                                     date={appointmentEnd}
                                     renderer={(props) => {
+                                        // Notice if only 5 minutes left
+                                        if (props.hours === 0 && props.minutes === 5 && props.seconds === 0) {
+                                            toast.info("This room will end automatically in 5 minutes.");
+                                        }
                                         return (<span className="call-count-down"> {zeroPad(props.hours)}:{zeroPad(props.minutes)}:{zeroPad(props.seconds)} </span>);
                                     }}
                                 />

@@ -55,7 +55,7 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab replace={false} to="/client-dashboard/messages">
+                                <NavTab replace={false} to="/client-dashboard/chat">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
                                 </NavTab>

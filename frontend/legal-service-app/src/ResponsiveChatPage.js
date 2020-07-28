@@ -15,7 +15,7 @@ import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
 import {AuthContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url="/chat"}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -183,7 +183,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                     <ChatUserList
                                         chats={chats}
                                         onChatSelection={(index) => {
-                                            History.replace(`/chat/${chats[index].id}`);
+                                            History.replace(`${url}/${chats[index].id}`);
                                             setSelectedChat(index);
                                         }}
                                     />

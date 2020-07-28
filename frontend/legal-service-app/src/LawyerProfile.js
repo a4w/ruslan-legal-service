@@ -22,6 +22,7 @@ import {AuthContext} from "./App"
 import {toast} from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
 import {FaCommentAlt} from "react-icons/fa";
+import PageHead from "./PageHead";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -41,14 +42,21 @@ const LawyerProfile = ({match}) => {
         <Router history={History}>
             <div className="content">
                 {lawyer && (
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <ProfileCard lawyer={lawyer} match={match} />
-                                <Details lawyer={lawyer} match={match} />
+                    <>
+                        <PageHead
+                            title={lawyer.account.full_name + " | Lawbe.co.uk"}
+                            description={"Book an appointment with " + lawyer.account.full_name + " now!. Lawbe.co.uk"}
+                            image={lawyer.account.profile_picture}
+                        />
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12">
+                                    <ProfileCard lawyer={lawyer} match={match} />
+                                    <Details lawyer={lawyer} match={match} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </Router>

@@ -24,6 +24,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     const [isFetching, setIsFetching] = useState(false);
     const [myId, setMyId] = useState(null);
     const [errors, , runValidation] = useValidation(ChatMessageValidation);
+    const collapseToggle = useRef(null);
 
     const loader = useContext(LoadingOverlayContext);
 
@@ -103,7 +104,6 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     }, [selectedChat, chats]);
 
     const loadMessages = (force = false) => {
-        console.log("Loading messages");
         if (selectedChat !== null && (force || !isFetching)) {
             let since = null;
             let _lastMessage = null;
@@ -213,6 +213,9 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         onChatSelection={(index) => {
                                             History.replace(`${url}/${chats[index].id}`);
                                             setSelectedChat(index);
+                                            if (window.getComputedStyle(collapseToggle.current).display !== "none") {
+                                                collapseToggle.current.click();
+                                            }
                                         }}
                                     />
                                 </div>
@@ -224,7 +227,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                             >
                                 <div className="chat-header" style={{flex: '0 1 auto'}}>
                                     <div className="media">
-                                        {list_chats && <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
+                                        {list_chats && <button ref={collapseToggle} className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
                                             <i className="fas fa-chevron-left"></i>
                                         </button>}
                                         <div className="media-img-wrap">
@@ -246,7 +249,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{flex: '1 1 auto'}}>
+                                <div style={{flex: '1 1 auto', minHeight: '500px'}}>
                                     <MessagesList
                                         messages={messages}
                                         user_id={myId}

@@ -198,10 +198,10 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                         {list_chats &&
                             <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">
                                 <div
-                                    className={"chat-cont-left"}
-                                    style={{maxWidth: '100%'}}
+                                    className={"chat-cont-left h-100 d-flex"}
+                                    style={{maxWidth: '100%', flexFlow: 'column'}}
                                 >
-                                    <div className="chat-header">
+                                    <div className="chat-header" style={{flex: '0 1 auto'}}>
                                         <span>Chats</span>
                                         <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
                                             <i className="fas fa-times"></i>

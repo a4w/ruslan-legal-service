@@ -7,6 +7,7 @@ import {
 import "./CheckoutForm.css"
 import {toast} from "react-toastify";
 import History from "./History";
+import {FaCreditCard, FaLock} from "react-icons/fa";
 
 const CheckoutForm = ({client_secret}) => {
     const [succeeded, setSucceeded] = useState(false);
@@ -64,6 +65,7 @@ const CheckoutForm = ({client_secret}) => {
     };
     return (
         <form id="payment-form" style={{margin: 'auto'}} onSubmit={handleSubmit}>
+            <span className="text-xs d-block text-center mb-5"><FaLock className="text-success" />&nbsp;It's safe to pay on Lawbe. Are transactions are protected by SSL protection</span>
             <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
             <button
                 disabled={processing || disabled || succeeded}
@@ -72,9 +74,9 @@ const CheckoutForm = ({client_secret}) => {
                 <span id="button-text">
                     {processing ? (
                         <div className="spinner" id="spinner"></div>
-                    ) : (
-                            "Pay"
-                        )}
+                    ) :
+                        " Pay"
+                    }
                 </span>
             </button>
             {/* Show any error that happens when processing the payment */}

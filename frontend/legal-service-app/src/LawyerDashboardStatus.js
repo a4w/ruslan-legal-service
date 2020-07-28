@@ -177,7 +177,7 @@ const ListItem = ({appointment}) => {
             <td className="text-center">
                 <Status appStatus={appointment.status} />
             </td>
-            <td className="text-center">{appointment.price + appointment.currency_symbol}</td>
+            <td className="text-center">{appointment.currency_symbol} {appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
                     {appointment.can_be_started &&
@@ -300,6 +300,47 @@ const AllAppointments = () => {
         </AppointmentsTable>
     );
 };
+
+const DoneAppointments = () => {
+    const [all, setAll] = useState(null);
+    const [total, setTotal] = useState({currency_symbol: '', total: 0});
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: "/lawyer/done-appointments",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+                setTotal({
+                    total: data.total,
+                    currency_symbol: data.currency_symbol
+                });
+            })
+            .catch(() => {});
+    }, []);
+    return (
+        <>
+        <AppointmentsTable>
+            {all && all.length ? (
+                all.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>You don't have any appointments yet</NoContentRow>
+            )}
+            <tr>
+                <td colSpan="4">
+                    <div className="d-block text-right text-lg font-weight-bold">
+                        {total.currency_symbol}{total.total}
+                    </div>
+                </td>
+            </tr>
+        </AppointmentsTable>
+        </>
+    );
+};
 const AppointmentsListTabs = () => {
     const path = "/dashboard/status";
     // const path = History.location.pathname;
@@ -312,6 +353,9 @@ const AppointmentsListTabs = () => {
                 <li className="nav-item">
                     <NavTab className="nav-link" to={`${path}/all`}>All</NavTab>
                 </li>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/done`}>Done</NavTab>
+                </li>
             </ul>
 
             <div className="tab-content">
@@ -321,6 +365,9 @@ const AppointmentsListTabs = () => {
                     </Route>
                     <Route path={`${path}/all`}>
                         <AllAppointments />
+                    </Route>
+                    <Route path={`${path}/done`}>
+                        <DoneAppointments />
                     </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />

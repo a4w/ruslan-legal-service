@@ -96,7 +96,7 @@ const Appointment = ({
             </td>
             <td>{moment(created_at).format("Do MMMM YYYY")}</td>
             <td>{`${duration} minutes`}</td>
-            <td>{price + currency_symbol}</td>
+            <td>{currency_symbol} {price}</td>
             <td>
                 <Status appStatus={status} />
             </td>

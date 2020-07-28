@@ -60,6 +60,15 @@ const LawyerBooking = ({LawyerId}) => {
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
+                    <nav aria-label="breadcrumb d-block">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active">Select slots</li>
+                            <li class="breadcrumb-item">Review</li>
+                            <li class="breadcrumb-item" aria-current="page">Checkout</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div className="row no-gutters">
                     {lawyer && <LawyerCardRounded lawyer={lawyer} />}
                     <div className={isTimeSelected ? "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" : "col-12"} style={{minHeight: '400px'}}>
                         {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}

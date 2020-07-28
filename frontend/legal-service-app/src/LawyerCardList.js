@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import StarRatings from "react-star-ratings";
 import Countdown, {zeroPad} from "react-countdown";
 import History from "./History";
 import {Link} from "react-router-dom";
-import Img from "./Img";
+import Img, {AcImg} from "./Img";
 import Config from "./Config";
+import {AuthContext} from "./App";
+import SpinnerButton from "./SpinnerButton";
+import useRequests from "./useRequests";
+import {toast} from "react-toastify";
+import {FaCommentAlt} from "react-icons/fa";
 
 const LawyerCardList = ({lawyers, setPopUp}) => {
     if (lawyers)
@@ -14,6 +19,20 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
     else return <LawyerCard />;
 };
 const LawyerCard = ({lawyer, setPopUp}) => {
+    const [auth,] = useContext(AuthContext);
+    const {request} = useRequests();
+
+    const startChat = (lawyer_id) => {
+        const myID = auth.accountId;
+        const url = `/chat/${myID}/${lawyer_id}`;
+        request({url: url, method: "POST"})
+            .then(() => {
+                History.push(`/chat/${lawyer_id}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            })
+    };
     return (
         <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
             <div className="card-body">
@@ -23,7 +42,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <Img className="rounded-card-image" src={lawyer.account.profile_picture} />
                         </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">
+                            <h4 className="lawyer-name text-left">
                                 <strong>
                                     {lawyer.account.name +
                                         " " +
@@ -53,6 +72,22 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                             <div className="session-details">
                                 <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
                             </div>
+
+                            <div className="session-services">
+                                {lawyer.accreditations &&
+                                    <>
+                                        {lawyer.accreditations.map((accreditation, i) => {
+                                            if (i < 2) {
+                                                return (
+                                                    <>
+                                                        <AcImg style={{maxHeight: '50px', marginRight: '5px'}} accreditation={accreditation} />
+                                                    </>
+                                                );
+                                            }
+                                        })}
+                                    </>
+                                }
+                            </div>
                             <div className="session-services">
                                 {lawyer.practice_areas &&
                                     <>
@@ -67,6 +102,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     </>
                                 }
                             </div>
+
                         </div>
                     </div>
                     <div className="lawyer-info-right">
@@ -77,14 +113,14 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     {lawyer.ratings_count} Feedback
                                 </li>
                                 {lawyer.account.city &&
-                                lawyer.account.country ? (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
-                                        {`${lawyer.account.city}, ${lawyer.account.country}`}
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <i className="fas fa-map-marker-alt"></i>{" "}
+                                    lawyer.account.country ? (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
+                                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
                                         -
                                         </li>
                                     )}
@@ -96,8 +132,18 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     isPercent={lawyer.is_percent_discount}
                                     currency={lawyer.currency_symbol}
                                 />
+                                <li>
+
+                                    <button
+                                        className="btn btn-primary btn-xs btn-block"
+                                        onClick={() => {startChat(lawyer.id)}}
+                                    >
+                                        <FaCommentAlt />&nbsp;Message lawyer
+                            </button>
+                                </li>
                             </ul>
                         </div>
+
                         <div className="session-booking">
                             <Link
                                 className="view-pro-btn"
@@ -109,11 +155,11 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 View Profile
                             </Link>
 
+
                             <Link
                                 className="apt-btn"
                                 to={{
                                     pathname: `list/book-lawyer/${lawyer.id}`,
-                                    state: {lawyer_id: "1"},
                                 }}
                             >
                                 Book Appointment

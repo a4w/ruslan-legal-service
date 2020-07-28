@@ -3,7 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
-import {FaSearch, FaArrowLeft, FaChevronLeft} from "react-icons/fa";
+import {FaSearch, FaArrowLeft, FaChevronLeft, FaCalendarPlus} from "react-icons/fa";
 import {MdClear} from "react-icons/md";
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import StickyBox from "react-sticky-box";
@@ -372,6 +372,17 @@ const PopUp = ({lawyer}) => {
                         </div>
                     </div>
                 </div>
+
+                <div className="m-2">
+                    <Link
+                        className="btn btn-primary btn-block"
+                        to={{
+                            pathname: `list/book-lawyer/${lawyer.id}`,
+                        }}
+                    >
+                        <FaCalendarPlus />&nbsp;Book Appointment
+                    </Link>
+                </div>
             </div>
         )
     );
@@ -454,28 +465,28 @@ const AvgCalendar = ({lawyer}) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Morning</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Morning<br /><small className="text-muted">00:00 - 06:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[0] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Afternoon</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Afternoon<br /><small className="text-muted">06:00 - 12:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[1] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2">Evening</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Evening<br /><small className="text-muted">12:00 - 18:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[2] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2">Night</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Night<br /><small className="text-muted">18:00 - 00:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[3] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);

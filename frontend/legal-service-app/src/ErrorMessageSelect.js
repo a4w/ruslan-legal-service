@@ -35,14 +35,14 @@ const ErrorMessageSelect = ({
         }
     }
     return (
-        <div className={style? "":"form-group"}>
+        <div className={style ? "" : "form-group"}>
             <Select
                 searchable={searchable}
                 multi={multi}
                 name={name}
                 className="floating"
                 values={selectedObjects}
-                style={style? null:selectStyle}
+                style={style ? null : selectStyle}
                 placeholder={placeholder}
                 options={options}
                 onChange={(values) => {

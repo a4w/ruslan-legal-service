@@ -2889,7 +2889,8 @@ html.menu-opened body {
 }
 .lawyer-info-right {
     margin-left: auto;
-    width: 300px;
+    min-width: 30%;
+    width: 30%;
 }
 .law-img {
     -ms-flex: 0 0 150px;
@@ -2978,6 +2979,8 @@ html.menu-opened body {
     display: inline-block;
     font-size: 12px;
     padding: 3px 10px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
 .session-services a {
     border: 1px solid #ccc;
@@ -2985,12 +2988,13 @@ html.menu-opened body {
     display: inline-block;
     font-size: 12px;
     padding: 3px 10px;
+    margin-top: 5px;
 }
 .session-services span + span {
-    margin-left: 5px;
+    margin-right: 10px;
 }
 .session-services span + a {
-    margin-left: 5px;
+    margin-right: 5px;
 }
 .session-infos {
     margin-bottom: 15px;
@@ -4242,7 +4246,6 @@ html.menu-opened body {
 .chat-scroll {
     /*min-height: 300px;
     max-height: calc(100vh - 224px);*/
-    height: 400px;
     overflow-y: auto;
 }
 .chat-cont-left .chat-users-list {
@@ -7471,9 +7474,6 @@ min-width: 100%;
     width: 100% !important;
 }
 .timepicker-container > div{
-    position: absolute !important;
-    z-index: 50 !important;
-    width: 100% !important;
 }
 .slot-info-popover-body{
     display: block;
@@ -7565,6 +7565,10 @@ min-width: 100%;
   border-right:10px solid #f0f0f0;
 }
 
+.react-dropdown-select-dropdown{
+    width: 100% !important;
+    top: 50px !important;
+}
 .rounded-card-image{
     width: 170px;
     height: 170px;

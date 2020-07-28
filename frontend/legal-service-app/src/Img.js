@@ -16,4 +16,18 @@ const Img = ({src, className, alt, style, overwrite = true}) => {
         />
     );
 }
+
+const AcImg = (props) => {
+    const ImgStyle = {maxHeight: '100%', maxWidth: '100%', ...props.style};
+    const accreditation = props.accreditation;
+    return (
+        <img
+            {...props}
+            alt={accreditation.accreditation}
+            src={`/ac_${accreditation.id}`}
+            style={ImgStyle}
+        />
+    );
+}
 export default Img;
+export {AcImg};

@@ -5,7 +5,7 @@ import moment from "moment";
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
 import useRequests from "./useRequests"
-import {AuthContext} from "./App";
+import {AuthContext, NotificationContext} from "./App";
 import NoContent from "./NoContent";
 import {Link} from "react-router-dom";
 import Config from "./Config";
@@ -23,12 +23,6 @@ const NotificationDropdown = () => {
             document.removeEventListener("mousedown", handleClickOutside);
     }, [ref]);
 
-    const audio = new Audio("bell.mp3");
-    useEffect(() => {
-        if (newNotification > 0) {
-            audio.play();
-        }
-    }, [newNotification]);
 
     const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
@@ -47,6 +41,20 @@ const NotificationDropdown = () => {
             .catch((err) => {
                 toast.error("An Error Occured");
             });
+    }
+
+    const {notificationsState} = useContext(NotificationContext);
+    const audio = new Audio("/bell.mp3");
+    const handleNotificationJustIn = (notification) => {
+        console.log("Handling new notification");
+        console.log(notification);
+        console.log(notificationsState.shouldNotNotify);
+        console.log(notificationsState.shouldNotNotify(notification));
+        if (typeof notificationsState.shouldNotNotify === "function" && notificationsState.shouldNotNotify(notification)) {
+            // TODO: Mark as read
+            return;
+        }
+        audio.play();
     }
     return (
         <li
@@ -76,7 +84,7 @@ const NotificationDropdown = () => {
                     <span className="notification-title">Notifications</span>
                 </div>
                 <div className="noti-content" style={{display: ""}}>
-                    <Notifications setNew={setNew} />
+                    <Notifications setNew={setNew} handleNotificationJustIn={handleNotificationJustIn} />
                 </div>
                 <div className="topnav-dropdown-footer">
                     <a href="#" className="clear-noti" onClick={MarkAllRead}>
@@ -88,7 +96,7 @@ const NotificationDropdown = () => {
     );
 };
 
-const Notifications = ({setNew}) => {
+const Notifications = ({setNew, handleNotificationJustIn}) => {
     const [notifications, setNotifications] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const {request} = useRequests();
@@ -104,6 +112,12 @@ const Notifications = ({setNew}) => {
             .then((data) => {
                 setNotifications([...data.notifications]);
                 setNew(data.notifications.length);
+                if (data.notifications.length > notifications.length) {
+                    // Notify
+                    for (let i = 0; i < data.notifications.length - notifications.length; ++i) {
+                        handleNotificationJustIn(data.notifications[i].data);
+                    }
+                }
             })
             .catch((err) => {})
             .finally(() => {
@@ -122,7 +136,7 @@ const Notifications = ({setNew}) => {
     }
     useInterval(() => {
         getNotifications();
-    }, 5000);
+    }, 15000);
     return (
         <ul className="notification-list">
             {notifications && notifications.length ? (

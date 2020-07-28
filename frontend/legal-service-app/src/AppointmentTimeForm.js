@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useMemo, useContext} from "react";
 import moment from "moment";
-import {FaCheck} from "react-icons/fa";
+import {FaCheck, FaClock} from "react-icons/fa";
 import Config from "./Config";
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import {toast} from "react-toastify";
@@ -223,9 +223,20 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                         })}
                         <div className="col-1"></div>
                     </div>
+
+                    <div className="row form-row">
+                        <div className="col-12">
+                            <span className="text-muted p-2 d-block" style={{
+                                backgroundColor: 'rgba(0,0,0,0.05)',
+                                borderRadius: '5px',
+                                textAlign: 'center',
+                                marginTop: '15px'
+                            }}><FaClock />&nbsp;All times are shown in your local timezone <strong>(UTC{moment().format('Z')})</strong></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="row">
+            <div className="row no-gutters">
                 <div className="col-12">
                     <div className="submit-section proceed-btn text-right">
                         <button

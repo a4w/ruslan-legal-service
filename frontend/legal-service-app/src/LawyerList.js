@@ -155,7 +155,7 @@ function LawyerList(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-0 col-md-0 col-lg-4">
-                                    <StickyBox offsetTop={80} offsetBottom={20}>
+                                    <StickyBox offsetTop={190} offsetBottom={20}>
                                         <PopUp lawyer={lawyerPopUp} />
                                     </StickyBox>
                                 </div>

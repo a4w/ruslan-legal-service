@@ -83,11 +83,12 @@ const AppointmentCard = ({appointment}) => {
     return (
         <div className="appointment-list">
             <div className="profile-info-widget">
-                <a href="//" className="booking-lawyer-img">
+                <a href="#" className="booking-lawyer-img">
                     <Img
                         style={imgStyle}
                         src={account.profile_picture}
                         alt="User"
+                        className="round-profile-card"
                     />
                 </a>
                 <div className="profile-det-info">
@@ -102,6 +103,10 @@ const AppointmentCard = ({appointment}) => {
                         <span className="detail">
                             <i className="far fa-clock"></i>{" "}
                             {appointment.duration}
+                        </span>
+                        <span className="detail">
+                            <i className="fa fa-credit-card"></i>{" "}
+                            {appointment.price + appointment.currency_symbol}
                         </span>
                         {(account.cite || account.country) && <span className="detail">
                             <i className="fas fa-map-marker-alt"></i>{" "}

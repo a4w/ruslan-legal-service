@@ -4,14 +4,15 @@ import Img from "./Img";
 import BlogImg from "./BlogImg";
 import moment from "moment";
 import NoContent from "./NoContent";
+import RoundImg from "./RoundImg";
 
-const BlogList = ({blogs, editable}) => {
+const BlogList = ({blogs, editable, col}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
                 {blogs.length ? (
                     blogs.map((blog) => (
-                        <Blog key={blog.id} blog={blog} editable={editable} />
+                        <Blog key={blog.id} blog={blog} editable={editable} col={col} />
                     ))
                 ) : (
                     <NoContent>There ara no published blogs</NoContent>
@@ -22,22 +23,29 @@ const BlogList = ({blogs, editable}) => {
 };
 
 const ButtonStyle = {
+    // position: "absolute",
+    // left: "50%",
+    // transform: "translate(-50%, -50%)",
+    // msTransform: "translate(-50%, -50%)",
+    // padding: "12px 24px",
+    // border: "none",
+    // cursor: "pointer",
+    // borderRadius: "5px",
+    // height: "80px",
     position: "absolute",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    msTransform: "translate(-50%, -50%)",
     padding: "12px 24px",
-    border: "none",
+    border: "medium none",
     cursor: "pointer",
     borderRadius: "5px",
-    height: "80px",
+    right: "0",
+    bottom: "0"
 };
 
-const Blog = ({blog, editable}) => {
+const Blog = ({blog, editable, col=6}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-        <div className="col-md-6 col-sm-12">
+        <div className={`col-md-${col} col-sm-12`}>
             <div className="blog grid-blog">
                 <div className="blog-image">
                     <Link
@@ -46,10 +54,10 @@ const Blog = ({blog, editable}) => {
                             state: { blog: blog, lawyer: lawyer },
                         }}
                     >
-                        <BlogImg
-                            className="img-fluid"
+                        <RoundImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            diameter={210}
                         />
                     </Link>
                     {editable && 
@@ -72,13 +80,10 @@ const Blog = ({blog, editable}) => {
                                         state: { lawyer: lawyer },
                                     }}
                                 >
-                                    <Img
+                                    <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{
-                                            width: "30px",
-                                            height: "30px",
-                                        }}
+                                        diameter={40}
                                     />
                                     <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>

@@ -15,13 +15,15 @@ import History from "./History";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import BlogList from "./BlogList";
-import Img from "./Img";
+import Img, {AcImg} from "./Img";
 import LawyerBooking from "./LawyerBooking";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App"
 import {toast} from "react-toastify";
 import SpinnerButton from "./SpinnerButton";
 import {FaCommentAlt} from "react-icons/fa";
+import RoundImg from "./RoundImg";
+import PageHead from "./PageHead";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -41,14 +43,21 @@ const LawyerProfile = ({match}) => {
         <Router history={History}>
             <div className="content">
                 {lawyer && (
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <ProfileCard lawyer={lawyer} match={match} />
-                                <Details lawyer={lawyer} match={match} />
+                    <>
+                        <PageHead
+                            title={lawyer.account.full_name + " | Lawbe.co.uk"}
+                            description={"Book an appointment with " + lawyer.account.full_name + " now!. Lawbe.co.uk"}
+                            image={lawyer.account.profile_picture}
+                        />
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12">
+                                    <ProfileCard lawyer={lawyer} match={match} />
+                                    <Details lawyer={lawyer} match={match} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </Router>
@@ -67,7 +76,7 @@ const ProfileCard = ({lawyer}) => {
         const url = `/chat/${myID}/${lawyer.id}`;
         request({url: url, method: "POST"})
             .then(() => {
-                History.push(`/chat/${lawyer.id - 1}`);
+                History.push(`/chat/${lawyer.id}`);
             })
             .catch(() => {
                 toast.error("An error occured");
@@ -82,10 +91,10 @@ const ProfileCard = ({lawyer}) => {
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
                         <div className="law-img" style={{maxHeight: "250px"}}>
-                            <Img
+                            <RoundImg
                                 src={account.profile_picture}
-                                className="img-fluid"
                                 alt="Lawyer Profile"
+                                diameter={150}
                             />
                         </div>
                         <div className="lawyer-info-cont">
@@ -252,6 +261,25 @@ const Overview = ({lawyer}) => {
     return (
         <div className="col-md-12 col-lg-9">
             <PracticeAreas lawyer={lawyer} />
+
+            <div className="widget about-widget">
+                <h4 className="widget-title">Accreditations</h4>
+                <div className="session-services mb-0">
+                    <p>
+                        {lawyer.accreditations &&
+                            <>
+                                {lawyer.accreditations.map((accreditation, i) => {
+                                    return (
+                                        <>
+                                            <AcImg style={{maxHeight: '75px', marginRight: '10px'}} accreditation={accreditation} />
+                                        </>
+                                    );
+                                })}
+                            </>
+                        }
+                    </p>
+                </div>
+            </div>
             <Bio bio={biography} />
             <Education
                 course={course}

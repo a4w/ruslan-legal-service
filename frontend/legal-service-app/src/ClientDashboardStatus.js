@@ -34,6 +34,7 @@ const Appointment = ({
     duration,
     is_cancellable,
     can_be_started,
+    currency_symbol
 }) => {
     const {request} = useRequests();
     const [lawyer, setLawyer] = useState(null);
@@ -95,7 +96,7 @@ const Appointment = ({
             </td>
             <td>{moment(created_at).format("Do MMMM YYYY")}</td>
             <td>{`${duration} minutes`}</td>
-            <td>{price}</td>
+            <td>{currency_symbol} {price}</td>
             <td>
                 <Status appStatus={status} />
             </td>

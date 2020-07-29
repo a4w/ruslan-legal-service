@@ -9,6 +9,7 @@ import moment from "moment";
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
 import {LoadingOverlayContext} from "./App";
+import RoundImg from "./RoundImg";
 
 const Blogs = (props) => {
     const {request} = useRequests();
@@ -138,10 +139,10 @@ const LatestBlogCard = ({blog}) => {
     return (
         <>
             <div className="post-thumb">
-                <BlogImg
-                    className="img-fluid"
+                <RoundImg
                     src={blog.cover_photo_link}
                     alt=""
+                    diameter={80}
                 />
             </div>
             <div className="post-info">

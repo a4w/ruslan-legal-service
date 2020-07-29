@@ -3,7 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 import LawyerCardList from "./LawyerCardList";
 import Select from "react-dropdown-select";
 import DatePicker from "react-datepicker";
-import {FaSearch, FaArrowLeft, FaChevronLeft} from "react-icons/fa";
+import {FaSearch, FaArrowLeft, FaChevronLeft, FaCalendarPlus} from "react-icons/fa";
 import {MdClear} from "react-icons/md";
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import StickyBox from "react-sticky-box";
@@ -16,12 +16,14 @@ import {LoadingOverlayContext} from "./App"
 import LoadingOverlay from "react-loading-overlay";
 import Img from "./Img";
 import StarRatings from "react-star-ratings";
+import RoundImg from "./RoundImg";
 
 function LawyerList(props) {
     const [sortBy, setSortBy] = useState(null);
     const [offset, setOffset] = useState(0);
     const [length, setLength] = useState(3);
     const [lawyers, setLawyers] = useState(null);
+    const [otherLawyers, setOtherLawyers] = useState(null);
     const [lawyerPopUp, setPopUp] = useState(null);
     const [filter, setFilter] = useState({date: new Date()});
     const [params, setParams] = useState({
@@ -39,8 +41,7 @@ function LawyerList(props) {
         console.log("params : ", params);
         console.log("qs: ", queryString.stringify(params));
         request({
-            url: "/lawyer/all?" + queryString.stringify(params),
-
+            url: "/lawyer/all?" + (params !== null ? queryString.stringify(params) : ''),
             method: "GET",
         })
             .then((data) => {
@@ -53,12 +54,39 @@ function LawyerList(props) {
                 console.log(_lawyers);
                 if (keep) setLawyers([...lawyers, ..._lawyers]);
                 else setLawyers(_lawyers);
+                if (_lawyers.length === 0) {
+                    getOtherLawyers();
+                }
             })
             .catch((_errors) => {})
             .finally(() => {
                 loading.setIsLoadingOverlayShown(false);
             })
     };
+
+    const getOtherLawyers = () => {
+
+        loading.setLoadingOverlayText("Loading...");
+        loading.setIsLoadingOverlayShown(true);
+        request({
+            url: "/lawyer/all",
+            method: "GET",
+        })
+            .then((data) => {
+                let _lawyers = new Array();
+                if (!Array.isArray(data.lawyers)) {
+                    Object.keys(data.lawyers).map((key, index) => {
+                        _lawyers.push(data.lawyers[key]);
+                    });
+                } else _lawyers = data.lawyers;
+                console.log(_lawyers);
+                setOtherLawyers(_lawyers);
+            })
+            .catch((_errors) => {})
+            .finally(() => {
+                loading.setIsLoadingOverlayShown(false);
+            })
+    }
 
     const SortHandler = ([{value}]) => {
         setSortBy(value);
@@ -144,6 +172,10 @@ function LawyerList(props) {
                             <div className="row justify-content-center align-content-center">
                                 <div className="col-sm-12 col-md-12 col-lg-8">
                                     {lawyers && <LawyerCardList lawyers={lawyers} setPopUp={setPopUp} />}
+                                    {lawyers && lawyers.length === 0 && <>
+                                        <h3>No lawyers matched your criteria. Check out those lawyers</h3>
+                                        {otherLawyers && <LawyerCardList lawyers={otherLawyers} setPopUp={setPopUp} />}
+                                    </>}
                                     <div className="load-more text-center">
                                         <a
                                             className="btn btn-primary btn-sm"
@@ -155,7 +187,7 @@ function LawyerList(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-0 col-md-0 col-lg-4">
-                                    <StickyBox offsetTop={80} offsetBottom={20}>
+                                    <StickyBox offsetTop={190} offsetBottom={20}>
                                         <PopUp lawyer={lawyerPopUp} />
                                     </StickyBox>
                                 </div>
@@ -315,12 +347,10 @@ const PopUp = ({lawyer}) => {
                     <div className="profile-info-widget justify-content-center">
                         <Link
                             to={`profile/${lawyer.id}`}
-                            className="booking-lawyer-img"
                         >
-                            <Img
+                            <RoundImg
                                 src={account.profile_picture}
-                                className="img-fluid"
-                                style={imgStyle}
+                                diameter={100}
                             />
                         </Link>
                     </div>
@@ -371,6 +401,17 @@ const PopUp = ({lawyer}) => {
                             <AvgCalendar lawyer={lawyer} />
                         </div>
                     </div>
+                </div>
+
+                <div className="m-2">
+                    <Link
+                        className="btn btn-primary btn-block"
+                        to={{
+                            pathname: `list/book-lawyer/${lawyer.id}`,
+                        }}
+                    >
+                        <FaCalendarPlus />&nbsp;Book Appointment
+                    </Link>
                 </div>
             </div>
         )
@@ -454,28 +495,28 @@ const AvgCalendar = ({lawyer}) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Morning</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Morning<br /><small className="text-muted">00:00 - 06:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[0] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2" style={{whiteSpace: 'nowrap'}}>Afternoon</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Afternoon<br /><small className="text-muted">06:00 - 12:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[1] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2">Evening</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Evening<br /><small className="text-muted">12:00 - 18:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[2] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);
                             })}
                         </tr>
                         <tr>
-                            <td colSpan="2">Night</td>
+                            <td colSpan="2" style={{whiteSpace: 'nowrap', fontSize: '12px'}}>Night<br /><small className="text-muted">18:00 - 00:00</small></td>
                             {availability.map((a, i) => {
                                 const brightness = (a[3] * avgSlotLength) / (6 * 60);
                                 return (<td key={i} style={{backgroundColor: 'rgba(9, 229, 171, ' + brightness + ')'}}></td>);

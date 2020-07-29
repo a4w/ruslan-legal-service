@@ -23,7 +23,7 @@ const ClientDashboardSidebar = () => {
                         <Img src={account.profile_picture} alt="User Image" />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{`${account.name} ${account.surname}`}</h3>
+                        <h3>{account.name? `${account.name} ${account.surname}`:"loading..."}</h3>
                         <div className="client-details">
                             <h5>
                                 <i className="fas fa-phone"></i> {account.phone}
@@ -55,7 +55,7 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab replace={false} to="/client-dashboard/messages">
+                                <NavTab replace={false} to="/client-dashboard/chat">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
                                 </NavTab>

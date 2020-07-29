@@ -11,6 +11,7 @@ import {Route, Switch, Redirect} from "react-router-dom";
 import ScheduleForm from "./ScheduleForm";
 import UserCalendar from "./UserCalendar";
 import LawyerBlogs from "./LawyerBlogs";
+import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -36,9 +37,15 @@ const LawyerDashboardTabs = () => {
             <Route path="/dashboard/blogs">
                 <LawyerBlogs />
             </Route>
-            <Route exact path="/dashboard/messages">
-                <Redirect to="/chat" />
-            </Route>
+            <Route
+                path="/dashboard/chat"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/dashboard/chat"
+                    />
+                )}
+            />
             <Route path="/dashboard/settings">
                 <EditPersonal />
             </Route>

@@ -13,9 +13,9 @@ import SpinnerButton from "./SpinnerButton";
 import useValidation from "./useValidation";
 import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
-import {AuthContext} from "./App";
+import {AuthContext, NotificationContext, LoadingOverlayContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url = "/chat"}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -24,11 +24,16 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     const [isFetching, setIsFetching] = useState(false);
     const [myId, setMyId] = useState(null);
     const [errors, , runValidation] = useValidation(ChatMessageValidation);
+    const collapseToggle = useRef(null);
+
+    const loader = useContext(LoadingOverlayContext);
 
     const {request} = useRequests();
     // Load chats from server
     const [chats, setChats] = useState([]);
     useEffect(() => {
+        loader.setLoadingOverlayText("Loading...");
+        loader.setIsLoadingOverlayShown(true);
         request({
             url: '/chat/all',
             method: 'GET'
@@ -59,6 +64,8 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }
         }).catch((error) => {
             console.log(error);
+        }).finally(() => {
+            loader.setIsLoadingOverlayShown(false);
         });
     }, [initialSelectedChat]);
 
@@ -68,20 +75,41 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     }, 3000);
 
     // Load chat messages on chat change
+    const {notificationsState, setNotificationsState} = useContext(NotificationContext);
     useEffect(() => {
         console.log("Updating selected chat");
         console.log(selectedChat);
         setMessages([]);
+        loader.setLoadingOverlayText("Loading...");
+        loader.setIsLoadingOverlayShown(true);
         loadMessages(true);
+        // Set notifications to ignore messages from this chat
+        setNotificationsState({
+            ...notificationsState,
+            shouldNotNotify: (notification) => {
+                if (notification.type === "INCOMING_MESSAGE" && notification.notification_data.chat_id === chats[selectedChat].id) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        return () => {
+            setNotificationsState({
+                ...notificationsState,
+                shouldNotNotify: () => {
+                    return false;
+                }
+            });
+        }
     }, [selectedChat, chats]);
 
     const loadMessages = (force = false) => {
-        console.log("Loading messages");
         if (selectedChat !== null && (force || !isFetching)) {
             let since = null;
+            let _lastMessage = null;
             if (messages.length > 0 && !force) {
-                const lastMessage = messages[messages.length - 1];
-                since = lastMessage.created_at;
+                _lastMessage = messages[messages.length - 1];
+                since = _lastMessage.created_at;
             }
             console.log("Clear");
             setIsFetching(true);
@@ -93,11 +121,22 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
             }).then((response) => {
                 if (response.messages.length > 0) {
                     setMessages([...messages, ...response.messages]);
+                    if (response.messages.length > 0) {
+                        const _newLastMessage = response.messages[response.messages.length - 1];
+                        if (
+                            _lastMessage &&
+                            !list_chats &&
+                            _lastMessage.content !== _newLastMessage.content &&
+                            myId !== _newLastMessage.sender_id
+                        )
+                            notify();
+                    }
                 }
             }).catch((error) => {
                 console.log(error);
             }).finally(() => {
                 setIsFetching(false);
+                loader.setIsLoadingOverlayShown(false);
             });
         }
     };
@@ -153,16 +192,16 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
     };
     return (
         <>
-            <div className="row no-gutters">
+            <div className="row no-gutters h-100">
                 {(list_chats && chats.length) || showContent ?
                     <>
                         {list_chats &&
                             <div className="col-12 col-md-4 col-lg-3 collapse show h-100 chat-left-menu" id="chat_list">
                                 <div
-                                    className={"chat-cont-left"}
-                                    style={{maxWidth: '100%'}}
+                                    className={"chat-cont-left h-100 d-flex"}
+                                    style={{maxWidth: '100%', flexFlow: 'column'}}
                                 >
-                                    <div className="chat-header">
+                                    <div className="chat-header" style={{flex: '0 1 auto'}}>
                                         <span>Chats</span>
                                         <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
                                             <i className="fas fa-times"></i>
@@ -172,20 +211,23 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                     <ChatUserList
                                         chats={chats}
                                         onChatSelection={(index) => {
-                                            History.replace(`/chat/${chats[index].id}`);
+                                            History.replace(`${url}/${chats[index].id}`);
                                             setSelectedChat(index);
+                                            if (window.getComputedStyle(collapseToggle.current).display !== "none") {
+                                                collapseToggle.current.click();
+                                            }
                                         }}
                                     />
                                 </div>
                             </div>}
                         <div className="col">
                             <div
-                                className="chat-cont-right"
+                                className="chat-cont-right d-flex flex-column h-100"
                                 style={{maxWidth: '100%'}}
                             >
-                                <div className="chat-header">
+                                <div className="chat-header" style={{flex: '0 1 auto'}}>
                                     <div className="media">
-                                        {list_chats && <button className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
+                                        {list_chats && <button ref={collapseToggle} className="btn btn-link d-block d-md-none" data-toggle="collapse" data-target="#chat_list" role="button">
                                             <i className="fas fa-chevron-left"></i>
                                         </button>}
                                         <div className="media-img-wrap">
@@ -207,51 +249,52 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <MessagesList
-                                    messages={messages}
-                                    user_id={myId}
-                                    notify={notify}
-                                    showToast={!list_chats}
-                                    last_message={messages.length > 0? messages[messages.length - 1] : null}
-                                />
-                                <div className="chat-footer">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <div className="btn-file btn">
-                                                <FaPaperclip />
-                                                <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
-                                            </div>
-                                        </div>
-                                        <input
-                                            value={file === null ? message : file.name}
-                                            disabled={file !== null || isSending}
-                                            onChange={(e) => {
-                                                setMessage(e.target.value);
-                                                runValidation(e.target.value);
-                                            }}
-                                            ref={inputRef}
-                                            type="text"
-                                            className="input-msg-send form-control"
-                                            placeholder="Type something"
-                                            autofocus
-                                            onKeyPress={event => {
-                                                if (event.key === 'Enter') {
-                                                    handleMessageSend(event);
-                                                }
-                                            }}
-
-                                        />
-                                        <div className="input-group-append">
-                                            <SpinnerButton
-                                                type="button"
-                                                className="btn msg-send-btn"
-                                                onClick={handleMessageSend}
-                                                loading={isSending}
-                                            >
-                                                <i className="fab fa-telegram-plane"></i>
-                                            </SpinnerButton>
+                                <div style={{flex: '1 1 auto', minHeight: '500px'}}>
+                                    <MessagesList
+                                        messages={messages}
+                                        user_id={myId}
+                                        notify={notify}
+                                        showToast={!list_chats}
+                                        last_message={messages.length > 0 ? messages[messages.length - 1] : null}
+                                    />
+                                </div>
+                                <div className="chat-footer" style={{flex: '0 1 auto'}}>                                    <div className="input-group">
+                                    <div className="input-group-prepend">
+                                        <div className="btn-file btn">
+                                            <FaPaperclip />
+                                            <input type="file" onChange={({target}) => {setFile(target.files[0])}} />
                                         </div>
                                     </div>
+                                    <input
+                                        value={file === null ? message : file.name}
+                                        disabled={file !== null || isSending}
+                                        onChange={(e) => {
+                                            setMessage(e.target.value);
+                                            runValidation(e.target.value);
+                                        }}
+                                        ref={inputRef}
+                                        type="text"
+                                        className="input-msg-send form-control"
+                                        placeholder="Type something"
+                                        autofocus
+                                        onKeyPress={event => {
+                                            if (event.key === 'Enter') {
+                                                handleMessageSend(event);
+                                            }
+                                        }}
+
+                                    />
+                                    <div className="input-group-append">
+                                        <SpinnerButton
+                                            type="button"
+                                            className="btn msg-send-btn"
+                                            onClick={handleMessageSend}
+                                            loading={isSending}
+                                        >
+                                            <i className="fab fa-telegram-plane"></i>
+                                        </SpinnerButton>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </div>

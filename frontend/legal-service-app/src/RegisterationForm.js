@@ -175,7 +175,7 @@ const RegisterationWrapper = (props) => {
     return (
         <div className="account-content">
             <div className="row align-items-center justify-content-center">
-                <div className="col-md-7 col-lg-6 login-left">
+                <div className="col-lg-5 login-left">
                     <img
                         src={
                             props.isClient
@@ -186,7 +186,7 @@ const RegisterationWrapper = (props) => {
                         alt="Register"
                     />
                 </div>
-                <div className="col-md-12 col-lg-5 login-right">
+                <div className="col-md-12 col-lg-7 login-right">
                     {props.children}
                 </div>
             </div>

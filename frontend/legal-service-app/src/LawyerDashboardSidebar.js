@@ -36,7 +36,7 @@ const LawyerDashboardSidebar = () => {
                         <Img src={account.profile_picture} alt="Lawyer's Photo" overwrite={false} />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{`${account.full_name}`}</h3>
+                        <h3>{account.full_name? `${account.full_name}` : "loading..."}</h3>
 
                         <div className="client-details">
                             <h5 className="mb-0">{lawyer.lawyer_type ? lawyer.lawyer_type.type : ""}</h5>
@@ -93,7 +93,7 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab replace={false} exact to="/dashboard/messages">
+                                <NavTab replace={false} exact to="/dashboard/chat">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
                                 </NavTab>

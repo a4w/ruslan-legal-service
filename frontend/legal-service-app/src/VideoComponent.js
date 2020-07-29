@@ -213,12 +213,14 @@ const VideoComponent = ({appointment_id}) => {
                             styles={{
                                 overlay: (base) => ({
                                     ...base,
-                                    position: 'relative',
+                                    position: 'absolute',
+                                    width: '100%',
                                     zIndex: '2',
                                 }),
                                 wrapper: (base) => ({
                                     ...base,
-                                    height: '100%'
+                                    height: '100%',
+                                    width: '100%'
                                 })
                             }}
                         >

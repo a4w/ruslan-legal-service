@@ -212,7 +212,7 @@ const Details = ({lawyer, match}) => {
                             <AppointmentTimeForm lawyer_id={lawyer.id} allow_booking={false} />
                         </Route>
                         <Route path={`${path}/blogs`}>
-                            {blogs && <BlogList blogs={blogs} />}
+                            {blogs && <BlogList blogs={blogs} col={4} />}
                         </Route>
                     </Switch>
                 </div>

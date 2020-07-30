@@ -7594,3 +7594,8 @@ min-width: 100%;
         height: 170px!important;
     }
 }
+.lawyer-bio{
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}

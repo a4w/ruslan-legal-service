@@ -38,10 +38,7 @@ const VideoComponent = ({appointment_id}) => {
             callback: (result) => {
                 if (result) {
                     if (room !== null) {
-                        room.localParticipant.videoTracks.forEach(publication => {
-                            publication.track.stop();
-                            publication.unpublish();
-                        });
+                        unpublishLocalTracks();
                         room.disconnect();
                         setIsConnected(false);
                     }
@@ -173,14 +170,11 @@ const VideoComponent = ({appointment_id}) => {
                 attachedElements.forEach(element => element.remove());
             });
         });
-
-        console.log("ROOM LENGTH", room.participants);
-
     }, [room]);
 
     // Start reading camera
-    useEffect(() => {
-        navigator.mediaDevices.enumerateDevices().then(devices => {
+    const publishLocalTracks = async () => {
+        await navigator.mediaDevices.enumerateDevices().then(devices => {
             const videoInput = devices.find(device => device.kind === 'videoinput');
             const audioInput = devices.find(device => device.kind === 'audioinput');
             return createLocalTracks({audio: {deviceId: audioInput.deviceId}, video: {deviceId: videoInput.deviceId}});
@@ -191,12 +185,17 @@ const VideoComponent = ({appointment_id}) => {
                 localMediaContainer.appendChild(track.attach());
             });
         });
-        return () => {
-            room.localParticipant.videoTracks.forEach(publication => {
-                publication.track.stop();
-                publication.unpublish();
-            });
-        }
+    }
+
+    const unpublishLocalTracks = () => {
+        room.localParticipant.videoTracks.forEach(publication => {
+            publication.track.stop();
+            publication.unpublish();
+        });
+    }
+    useEffect(() => {
+        publishLocalTracks();
+        return unpublishLocalTracks;
     }, []);
     const notify = () => {
         toast.info("A new message has arrived");
@@ -239,7 +238,9 @@ const VideoComponent = ({appointment_id}) => {
                                 />
                                 {!isConnected && room !== null && <button class="btn btn-dark" title="Join room" onClick={() => {
                                     setRoom(null);
-                                    connectToRoom();
+                                    publishLocalTracks().then(() => {
+                                        connectToRoom();
+                                    });
                                 }}><FaPlug /></button>}
                                 <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
                                 <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>

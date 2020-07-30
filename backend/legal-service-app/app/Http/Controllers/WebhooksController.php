@@ -33,6 +33,10 @@ class WebhooksController extends Controller
             Log::info('Wrong webhook total');
             return;
         }
+        // Check if already updated
+        if ($appointment->status === 'UPCOMING') {
+            return;
+        }
         // Now all is good, update appointment status
         foreach ($appointments as $appointment) {
             $appointment->status = 'UPCOMING';

@@ -31,20 +31,20 @@ const VideoComponent = ({appointment_id}) => {
     const handleChatToggle = () => {
         setShowChat(!showChat);
     };
+    const disconnectRoom = () => {
+        if (room !== null) {
+            unpublishLocalTracks();
+            room.disconnect();
+            setIsConnected(false);
+        }
+    }
     const handleDisconnection = () => {
         bootbox.confirm({
             title: 'Confirm',
             message: 'Are you sure you would like to disconnect from the room?',
             callback: (result) => {
                 if (result) {
-                    if (room !== null) {
-                        room.localParticipant.videoTracks.forEach(publication => {
-                            publication.track.stop();
-                            publication.unpublish();
-                        });
-                        room.disconnect();
-                        setIsConnected(false);
-                    }
+                    disconnectRoom();
                 }
             }
         });
@@ -99,7 +99,7 @@ const VideoComponent = ({appointment_id}) => {
         });
 
         return () => {
-            handleDisconnection();
+            disconnectRoom();
         };
     }, [roomSID, accessToken, localTracks]);
 
@@ -173,14 +173,11 @@ const VideoComponent = ({appointment_id}) => {
                 attachedElements.forEach(element => element.remove());
             });
         });
-
-        console.log("ROOM LENGTH", room.participants);
-
     }, [room]);
 
     // Start reading camera
-    useEffect(() => {
-        navigator.mediaDevices.enumerateDevices().then(devices => {
+    const publishLocalTracks = async () => {
+        await navigator.mediaDevices.enumerateDevices().then(devices => {
             const videoInput = devices.find(device => device.kind === 'videoinput');
             const audioInput = devices.find(device => device.kind === 'audioinput');
             return createLocalTracks({audio: {deviceId: audioInput.deviceId}, video: {deviceId: videoInput.deviceId}});
@@ -191,12 +188,19 @@ const VideoComponent = ({appointment_id}) => {
                 localMediaContainer.appendChild(track.attach());
             });
         });
-        return () => {
+    }
+
+    const unpublishLocalTracks = () => {
+        if (room !== null) {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.stop();
                 publication.unpublish();
             });
         }
+    }
+    useEffect(() => {
+        publishLocalTracks();
+        return unpublishLocalTracks;
     }, []);
     const notify = () => {
         toast.info("A new message has arrived");
@@ -218,7 +222,9 @@ const VideoComponent = ({appointment_id}) => {
                                 }),
                                 wrapper: (base) => ({
                                     ...base,
-                                    height: '100%'
+                                    height: '100%',
+                                    width: '100%',
+                                    position: 'absolute'
                                 })
                             }}
                         >
@@ -237,7 +243,9 @@ const VideoComponent = ({appointment_id}) => {
                                 />
                                 {!isConnected && room !== null && <button class="btn btn-dark" title="Join room" onClick={() => {
                                     setRoom(null);
-                                    connectToRoom();
+                                    publishLocalTracks().then(() => {
+                                        connectToRoom();
+                                    });
                                 }}><FaPlug /></button>}
                                 <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
                                 <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>
@@ -249,7 +257,7 @@ const VideoComponent = ({appointment_id}) => {
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none') + " d-lg-block"}>
                     <button onClick={handleChatToggle} className="btn btn-primary btn-block d-lg-none"><FaChevronLeft /></button>
-                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />
+                    {chatId !== null && <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />}
                 </div>
             </div>
         </>

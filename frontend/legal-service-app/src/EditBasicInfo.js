@@ -28,7 +28,7 @@ const EditBasicInfo = () => {
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
+            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture, profile_picture: null});
         }).catch((error) => {});
     }, []);
 
@@ -62,7 +62,7 @@ const EditBasicInfo = () => {
                         method: 'POST',
                         data: formData
                     }).then((response) => {
-                    }).catch((error) => { });
+                    }).catch((error) => {});
                 }
             }
         });
@@ -71,10 +71,10 @@ const EditBasicInfo = () => {
     const showSelectedPicture = (e) => {
         const input = e.target;
         if (input.files && input.files[0]) {
-            console.log(e.target.files[0].size/(1024**2));
+            console.log(e.target.files[0].size / (1024 ** 2));
             const reader = new FileReader();
             reader.onload = (e) => {
-                const next = { ...user, profile_picture_url: e.target.result, profile_picture: input.files[0] };
+                const next = {...user, profile_picture_url: e.target.result, profile_picture: input.files[0]};
                 setUser(next);
                 runValidation(next, e.target.name);
             };
@@ -94,7 +94,7 @@ const EditBasicInfo = () => {
                                     src={user.profile_picture_url}
                                     alt="User"
                                     diameter={100}
-                                    // style={{borderRadius: "100%"}}
+                                // style={{borderRadius: "100%"}}
                                 />
                             </div>
                             <div className="upload-img">
@@ -114,7 +114,7 @@ const EditBasicInfo = () => {
                     {errors.profile && errors.profile.length > 0 && (
                         <label className="text-danger ml-2 font-weight-light text-xs">
                             {errors.profile[0]}
-                        </label> 
+                        </label>
                     )}
                 </div>
                 <div className="col-12 col-md-6">
@@ -141,7 +141,7 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-sm-12 col-lg-10 col-md-9">
+                <div className="col-12 col-md-9">
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Telephone Number"}
@@ -153,18 +153,20 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="submit-section">
-                    <button
-                        type="submit"
-                        disabled={isSaving}
-                        className={
-                            "btn btn-primary submit-btn" +
-                            (isSaving ? "cursor-not-allowed" : "")
-                        }
-                    >
-                        {isSaving && <FaSpinner className="icon-spin" />}
-                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
-                    </button>
+                <div className="col-12 col-md-3">
+                    <div className="submit-section w-100">
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className={
+                                "btn btn-primary submit-btn btn-block float-right" +
+                                (isSaving ? "cursor-not-allowed" : "")
+                            }
+                        >
+                            {isSaving && <FaSpinner className="icon-spin" />}
+                            <span>&nbsp;{isSaving ? "" : "Update profile"}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>

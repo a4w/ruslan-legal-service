@@ -105,7 +105,10 @@ export const editBasicInfoValidation = (data, field) => {
             enforce(parseInt(phone)).isNumeric();
         });
         test("profile", `Image size exceeds 2MB`, () => {
-            enforce(data.profile_picture.size/(1024**2) <= 2).isTruthy();
+            console.log(data.profile_picture);
+            if (data.profile_picture !== null) {
+                enforce(data.profile_picture.size / (1024 ** 2) <= 2).isTruthy();
+            }
         });
     });
 };
@@ -184,7 +187,7 @@ export const blogTitleValidations = (data, field) => {
     });
 };
 
-export const ChatMessageValidation = (data, field=null) => {
+export const ChatMessageValidation = (data, field = null) => {
     return validate("ResponsiveChatPage", () => {
         test("message", "Message is too long", () => {
             enforce(data.message.toString().length <= 949).isTruthy();

@@ -98,7 +98,7 @@ const ProfileCard = ({lawyer}) => {
                             />
                         </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">
+                            <h4 className="text-left lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
                             <p className="lawyer-department">
@@ -209,7 +209,7 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <LawyerBooking LawyerId={lawyer.id} />
+                            <AppointmentTimeForm lawyer_id={lawyer.id} allow_booking={false} />
                         </Route>
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}

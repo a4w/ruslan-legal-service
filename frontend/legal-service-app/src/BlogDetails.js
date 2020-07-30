@@ -120,7 +120,9 @@ const Post = ({blog, lawyer}) => {
             }
         }, true);
         loaderStackEdit.on("fileChange", (file) => {
-            md_preview.current.innerHTML = file.content.html;
+            if (md_preview.current) {
+                md_preview.current.innerHTML = file.content.html;
+            }
         });
     }, []);
     return (

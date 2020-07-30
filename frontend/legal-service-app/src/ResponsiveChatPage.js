@@ -15,7 +15,7 @@ import {ChatMessageValidation} from "./Validations";
 import {Link} from "react-router-dom";
 import {AuthContext, NotificationContext, LoadingOverlayContext} from "./App";
 
-const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url = "/chat"}) => {
+const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, match = null, showContent = false, notify, url = "/chat", minHeight = 'unset'}) => {
     const inputRef = useRef(null);
     const [selectedChat, setSelectedChat] = useState(null);
     const [message, setMessage] = useState("");
@@ -120,7 +120,11 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                 method: 'GET'
             }).then((response) => {
                 if (response.messages.length > 0) {
-                    setMessages([...messages, ...response.messages]);
+                    if (force) {
+                        setMessages(response.messages);
+                    } else {
+                        setMessages([...messages, ...response.messages]);
+                    }
                     if (response.messages.length > 0) {
                         const _newLastMessage = response.messages[response.messages.length - 1];
                         if (
@@ -249,7 +253,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{flex: '1 1 auto', minHeight: '500px'}}>
+                                <div style={{flex: '1 1 auto', minHeight: minHeight}}>
                                     <MessagesList
                                         messages={messages}
                                         user_id={myId}

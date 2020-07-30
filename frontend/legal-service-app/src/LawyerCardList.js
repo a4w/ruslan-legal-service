@@ -134,13 +134,17 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     currency={lawyer.currency_symbol}
                                 />
                                 <li>
-
-                                    <button
-                                        className="btn btn-primary btn-xs btn-block"
-                                        onClick={() => {startChat(lawyer.account.id)}}
-                                    >
-                                        <FaCommentAlt />&nbsp;Message lawyer
-                            </button>
+                                    {auth.isLoggedIn && auth.accountType === "CLIENT" &&
+                                        <button
+                                            className="btn btn-primary btn-xs btn-block"
+                                            onClick={() => {
+                                                startChat(lawyer.account.id);
+                                            }}
+                                        >
+                                            <FaCommentAlt />
+                                            &nbsp;Message lawyer
+                                        </button>
+                                    }
                                 </li>
                             </ul>
                         </div>

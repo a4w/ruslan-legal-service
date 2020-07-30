@@ -137,7 +137,7 @@ const LawyerCard = ({lawyer, setPopUp}) => {
 
                                     <button
                                         className="btn btn-primary btn-xs btn-block"
-                                        onClick={() => {startChat(lawyer.id)}}
+                                        onClick={() => {startChat(lawyer.account.id)}}
                                     >
                                         <FaCommentAlt />&nbsp;Message lawyer
                             </button>

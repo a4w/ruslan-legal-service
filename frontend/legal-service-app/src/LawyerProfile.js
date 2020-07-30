@@ -98,7 +98,7 @@ const ProfileCard = ({lawyer}) => {
                             />
                         </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">
+                            <h4 className="text-left lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
                             <p className="lawyer-department">

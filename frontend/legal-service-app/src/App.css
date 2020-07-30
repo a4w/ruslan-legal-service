@@ -75,7 +75,7 @@
 .cursor-ew-resize {cursor: ew-resize;}
 .cursor-grab {cursor: -webkit-grab; cursor: grab;}
 .cursor-grabbing {cursor: -webkit-grabbing; cursor: grabbing;}
-.cursor-help {cursor: help;}
+.cursor-help {cursor: help !important;}
 .cursor-move {cursor: move;}
 .cursor-n-resize {cursor: n-resize;}
 .cursor-ne-resize {cursor: ne-resize;}

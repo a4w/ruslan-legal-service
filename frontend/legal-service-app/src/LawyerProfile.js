@@ -209,7 +209,7 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <LawyerBooking LawyerId={lawyer.id} />
+                            <AppointmentTimeForm lawyer_id={lawyer.id} allow_booking={false} />
                         </Route>
                         <Route path={`${path}/blogs`}>
                             {blogs && <BlogList blogs={blogs} />}

@@ -63,6 +63,22 @@ const Blogs = (props) => {
                 title="Top blogs written by the best lawyers"
                 description="Understand your legal advice now. Enjoy reading a list of the blogs written by the best lawyers from all across the country."
             />
+
+            <div class="breadcrumb-bar">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-md-12 col-12">
+                            <nav aria-label="breadcrumb" class="page-breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                    <li class="breadcrumb-item active">Blog</li>
+                                </ol>
+                            </nav>
+                            <h2 class="breadcrumb-title">Blog List</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="content">
                 <div className="container">
                     <div className="row">

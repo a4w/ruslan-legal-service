@@ -141,7 +141,7 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-sm-12 col-lg-10 col-md-9">
+                <div className="col-12 col-md-9">
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Telephone Number"}
@@ -153,18 +153,20 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="submit-section">
-                    <button
-                        type="submit"
-                        disabled={isSaving}
-                        className={
-                            "btn btn-primary submit-btn" +
-                            (isSaving ? "cursor-not-allowed" : "")
-                        }
-                    >
-                        {isSaving && <FaSpinner className="icon-spin" />}
-                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
-                    </button>
+                <div className="col-12 col-md-3">
+                    <div className="submit-section w-100">
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className={
+                                "btn btn-primary submit-btn btn-block float-right" +
+                                (isSaving ? "cursor-not-allowed" : "")
+                            }
+                        >
+                            {isSaving && <FaSpinner className="icon-spin" />}
+                            <span>&nbsp;{isSaving ? "" : "Update profile"}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>

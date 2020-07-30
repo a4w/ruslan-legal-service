@@ -43,19 +43,6 @@ const NotificationDropdown = () => {
             });
     }
 
-    const {notificationsState} = useContext(NotificationContext);
-    const audio = new Audio("/bell.mp3");
-    const handleNotificationJustIn = (notification) => {
-        console.log("Handling new notification");
-        console.log(notification);
-        console.log(notificationsState.shouldNotNotify);
-        console.log(notificationsState.shouldNotNotify(notification));
-        if (typeof notificationsState.shouldNotNotify === "function" && notificationsState.shouldNotNotify(notification)) {
-            // TODO: Mark as read
-            return;
-        }
-        audio.play();
-    }
     return (
         <li
             className={`nav-item dropdown noti-dropdown ${
@@ -84,7 +71,7 @@ const NotificationDropdown = () => {
                     <span className="notification-title">Notifications</span>
                 </div>
                 <div className="noti-content" style={{display: ""}}>
-                    <Notifications setNew={setNew} handleNotificationJustIn={handleNotificationJustIn} />
+                    <Notifications setNew={setNew} />
                 </div>
                 <div className="topnav-dropdown-footer">
                     <a href="#" className="clear-noti" onClick={MarkAllRead}>
@@ -96,11 +83,24 @@ const NotificationDropdown = () => {
     );
 };
 
-const Notifications = ({setNew, handleNotificationJustIn}) => {
+const Notifications = ({setNew}) => {
     const [notifications, setNotifications] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const {request} = useRequests();
     const [auth,] = useContext(AuthContext);
+
+
+    const {notificationsState} = useContext(NotificationContext);
+    const audio = new Audio("/bell.mp3");
+    const handleNotificationJustIn = (notification) => {
+        if (typeof notificationsState.shouldNotNotify === "function" && notificationsState.shouldNotNotify(notification)) {
+            MarkAsRead(notification.id);
+            return;
+        }
+        audio.play();
+    }
+
+
     const getNotifications = () => {
         if (!auth.isLoggedIn) {
             return;

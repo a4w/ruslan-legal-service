@@ -31,17 +31,20 @@ const VideoComponent = ({appointment_id}) => {
     const handleChatToggle = () => {
         setShowChat(!showChat);
     };
+    const disconnectRoom = () => {
+        if (room !== null) {
+            unpublishLocalTracks();
+            room.disconnect();
+            setIsConnected(false);
+        }
+    }
     const handleDisconnection = () => {
         bootbox.confirm({
             title: 'Confirm',
             message: 'Are you sure you would like to disconnect from the room?',
             callback: (result) => {
                 if (result) {
-                    if (room !== null) {
-                        unpublishLocalTracks();
-                        room.disconnect();
-                        setIsConnected(false);
-                    }
+                    disconnectRoom();
                 }
             }
         });
@@ -96,7 +99,7 @@ const VideoComponent = ({appointment_id}) => {
         });
 
         return () => {
-            handleDisconnection();
+            disconnectRoom();
         };
     }, [roomSID, accessToken, localTracks]);
 
@@ -252,7 +255,7 @@ const VideoComponent = ({appointment_id}) => {
                 </div>
                 <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none') + " d-lg-block"}>
                     <button onClick={handleChatToggle} className="btn btn-primary btn-block d-lg-none"><FaChevronLeft /></button>
-                    <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />
+                    {chatId !== null && <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />}
                 </div>
             </div>
         </>

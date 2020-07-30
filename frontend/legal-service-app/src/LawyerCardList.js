@@ -71,7 +71,9 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 </span>
                             </div>
                             <div className="session-details">
-                                <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
+                                <div className="lawyer-bio">
+                                    {lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}
+                                </div>
                             </div>
 
                             <div className="session-services">

@@ -71,7 +71,9 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                 </span>
                             </div>
                             <div className="session-details">
-                                <div>{lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}</div>
+                                <div className="lawyer-bio">
+                                    {lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}
+                                </div>
                             </div>
 
                             <div className="session-services">
@@ -134,13 +136,17 @@ const LawyerCard = ({lawyer, setPopUp}) => {
                                     currency={lawyer.currency_symbol}
                                 />
                                 <li>
-
-                                    <button
-                                        className="btn btn-primary btn-xs btn-block"
-                                        onClick={() => {startChat(lawyer.id)}}
-                                    >
-                                        <FaCommentAlt />&nbsp;Message lawyer
-                            </button>
+                                    {auth.isLoggedIn && auth.accountType === "CLIENT" &&
+                                        <button
+                                            className="btn btn-primary btn-xs btn-block"
+                                            onClick={() => {
+                                                startChat(lawyer.account.id);
+                                            }}
+                                        >
+                                            <FaCommentAlt />
+                                            &nbsp;Message lawyer
+                                        </button>
+                                    }
                                 </li>
                             </ul>
                         </div>

@@ -13,6 +13,7 @@ import Config from "./Config";
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [newNotification, setNew] = useState(0);
+    const [markAllAsReadToggle, setMarkAllAsReadToggle] = useState(false);
 
     const {request} = useRequests();
 
@@ -36,6 +37,7 @@ const NotificationDropdown = () => {
     const MarkAllRead = () => {
         request({url: "/account/mark-read-notifications", method: "GET"})
             .then((res) => {
+                setMarkAllAsReadToggle(!markAllAsReadToggle);
                 toast.success("Marked all as read successfully!");
             })
             .catch((err) => {
@@ -43,19 +45,6 @@ const NotificationDropdown = () => {
             });
     }
 
-    const {notificationsState} = useContext(NotificationContext);
-    const audio = new Audio("/bell.mp3");
-    const handleNotificationJustIn = (notification) => {
-        console.log("Handling new notification");
-        console.log(notification);
-        console.log(notificationsState.shouldNotNotify);
-        console.log(notificationsState.shouldNotNotify(notification));
-        if (typeof notificationsState.shouldNotNotify === "function" && notificationsState.shouldNotNotify(notification)) {
-            // TODO: Mark as read
-            return;
-        }
-        audio.play();
-    }
     return (
         <li
             className={`nav-item dropdown noti-dropdown ${
@@ -84,7 +73,7 @@ const NotificationDropdown = () => {
                     <span className="notification-title">Notifications</span>
                 </div>
                 <div className="noti-content" style={{display: ""}}>
-                    <Notifications setNew={setNew} handleNotificationJustIn={handleNotificationJustIn} />
+                    <Notifications setNew={setNew} markAllAsReadToggle={markAllAsReadToggle} />
                 </div>
                 <div className="topnav-dropdown-footer">
                     <a href="#" className="clear-noti" onClick={MarkAllRead}>
@@ -96,11 +85,28 @@ const NotificationDropdown = () => {
     );
 };
 
-const Notifications = ({setNew, handleNotificationJustIn}) => {
+const Notifications = ({setNew, markAllAsReadToggle}) => {
     const [notifications, setNotifications] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const {request} = useRequests();
     const [auth,] = useContext(AuthContext);
+
+
+    const {notificationsState} = useContext(NotificationContext);
+    const audio = new Audio("/bell.mp3");
+    const handleNotificationJustIn = (notification) => {
+        if (typeof notificationsState.shouldNotNotify === "function" && notificationsState.shouldNotNotify(notification)) {
+            MarkAsRead(notification.id);
+            return;
+        }
+        audio.play();
+    }
+
+    useEffect(() => {
+        getNotifications();
+    }, [markAllAsReadToggle]);
+
+
     const getNotifications = () => {
         if (!auth.isLoggedIn) {
             return;

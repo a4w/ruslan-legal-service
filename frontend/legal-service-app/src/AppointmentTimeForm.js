@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import {LoadingOverlayContext} from "./App"
 import useRequests from "./useRequests";
 
-const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
+const AppointmentTimeForm = ({lawyer_id, handleSelection, allow_booking = true}) => {
 
 
     const calculateDiscountedPrice = (price) => {
@@ -208,8 +208,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                     key={slot.id}
                                                     data-day={i}
                                                     data-slot={j}
-                                                    className="timing"
-                                                    onClick={handleSlotClick}
+                                                    className={"timing " + (allow_booking ? '' : 'cursor-help')}
+                                                    onClick={(e) => (allow_booking ? handleSlotClick(e) : false)}
                                                 >
                                                     <span>
                                                         {slot.time} ➡ {slot.to}
@@ -236,7 +236,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                     </div>
                 </div>
             </div>
-            <div className="row no-gutters">
+            {allow_booking && <div className="row no-gutters">
                 <div className="col-12">
                     <div className="submit-section proceed-btn text-right">
                         <button
@@ -248,7 +248,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div>}
         </>
     );
 };

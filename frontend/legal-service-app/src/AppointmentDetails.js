@@ -4,6 +4,7 @@ import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 import Img from "./Img";
 import {Link} from "react-router-dom";
+import RoundImg from "./RoundImg";
 
 const AppointmentDetails = ({match}) => {
     const [appointment, setAppointment] = useState(null);
@@ -60,23 +61,25 @@ const Details = ({appointment}) => {
             <div className="row">
                 <div className="col-12 col-md-6" style={{borderRight: '1px solid #ddd'}}>
                     <h6>Lawyer</h6>
-                    <Img
-                        className="avatar-img rounded-circle"
-                        src={lawyer.account.profile_picture}
-                        alt="User"
-                        style={{maxWidth: '100px'}}
-                    />
+                    <div className="d-flex justify-content-center">
+                        <RoundImg
+                            src={lawyer.account.profile_picture}
+                            alt="User"
+                            diameter={100}
+                        />
+                    </div>
                     <Link to={`/profile/${lawyer.id}`}><span className="d-block text-center text-lg font-weight-bold">{lawyer.account.full_name}</span></Link>
                     <span class="d-block text-center text-muted">{lawyer.account.email}</span>
                 </div>
                 <div className="col-12 col-md-6">
                     <h6>Client</h6>
-                    <Img
-                        className="avatar-img rounded-circle"
-                        src={client.account.profile_picture}
-                        alt="User"
-                        style={{maxWidth: '100px'}}
-                    />
+                    <div className="d-flex justify-content-center">
+                        <RoundImg
+                            src={client.account.profile_picture}
+                            alt="User"
+                            diameter={100}
+                        />
+                    </div>
                     <span className="d-block text-center text-lg font-weight-bold">{client.account.full_name}</span>
                     <span class="d-block text-center text-muted">{client.account.email}</span>
                 </div>

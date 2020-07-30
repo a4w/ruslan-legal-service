@@ -119,17 +119,17 @@ const EditAddress = () => {
                         />
                     </div>
                 </div>
-                <div className="submit-section">
+                <div className="submit-section w-100">
                     <button
                         type="submit"
                         disabled={isSaving}
                         className={
-                            "btn btn-primary submit-btn" +
+                            "btn btn-primary submit-btn float-right" +
                             (isSaving ? "cursor-not-allowed" : "")
                         }
                     >
                         {isSaving && <FaSpinner className="icon-spin" />}
-                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
+                        <span>&nbsp;{isSaving ? "" : "Update Address"}</span>
                     </button>
                 </div>
             </div>

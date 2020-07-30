@@ -13,6 +13,7 @@ import Config from "./Config";
 const NotificationDropdown = () => {
     const [notificationToggle, setNotificationToggle] = useState(false);
     const [newNotification, setNew] = useState(0);
+    const [markAllAsReadToggle, setMarkAllAsReadToggle] = useState(false);
 
     const {request} = useRequests();
 
@@ -36,6 +37,7 @@ const NotificationDropdown = () => {
     const MarkAllRead = () => {
         request({url: "/account/mark-read-notifications", method: "GET"})
             .then((res) => {
+                setMarkAllAsReadToggle(!markAllAsReadToggle);
                 toast.success("Marked all as read successfully!");
             })
             .catch((err) => {
@@ -71,7 +73,7 @@ const NotificationDropdown = () => {
                     <span className="notification-title">Notifications</span>
                 </div>
                 <div className="noti-content" style={{display: ""}}>
-                    <Notifications setNew={setNew} />
+                    <Notifications setNew={setNew} markAllAsReadToggle={markAllAsReadToggle} />
                 </div>
                 <div className="topnav-dropdown-footer">
                     <a href="#" className="clear-noti" onClick={MarkAllRead}>
@@ -83,7 +85,7 @@ const NotificationDropdown = () => {
     );
 };
 
-const Notifications = ({setNew}) => {
+const Notifications = ({setNew, markAllAsReadToggle}) => {
     const [notifications, setNotifications] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
     const {request} = useRequests();
@@ -99,6 +101,10 @@ const Notifications = ({setNew}) => {
         }
         audio.play();
     }
+
+    useEffect(() => {
+        getNotifications();
+    }, [markAllAsReadToggle]);
 
 
     const getNotifications = () => {

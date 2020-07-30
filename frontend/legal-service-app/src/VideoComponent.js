@@ -191,10 +191,12 @@ const VideoComponent = ({appointment_id}) => {
     }
 
     const unpublishLocalTracks = () => {
-        room.localParticipant.videoTracks.forEach(publication => {
-            publication.track.stop();
-            publication.unpublish();
-        });
+        if (room !== null) {
+            room.localParticipant.videoTracks.forEach(publication => {
+                publication.track.stop();
+                publication.unpublish();
+            });
+        }
     }
     useEffect(() => {
         publishLocalTracks();

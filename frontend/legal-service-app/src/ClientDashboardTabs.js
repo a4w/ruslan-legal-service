@@ -2,7 +2,7 @@ import React from "react";
 import EditPassword from "./EditPassword";
 import ClientDashboardStatus from "./ClientDashboardStatus";
 import ProfileSettings from "./ProfileSettings";
-import { Switch, Route, Redirect } from "react-router-dom";
+import {Switch, Route, Redirect} from "react-router-dom";
 import UserCalendar from "./UserCalendar";
 import ResponsiveChatPage from "./ResponsiveChatPage";
 
@@ -24,6 +24,7 @@ const ClientDashboardTabs = () => {
                     <ResponsiveChatPage
                         {...props}
                         url="/client-dashboard/chat"
+                        minHeight="500px"
                     />
                 )}
             />

@@ -43,6 +43,7 @@ const LawyerDashboardTabs = () => {
                     <ResponsiveChatPage
                         {...props}
                         url="/dashboard/chat"
+                        minHeight="500px"
                     />
                 )}
             />

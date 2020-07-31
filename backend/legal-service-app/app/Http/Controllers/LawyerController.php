@@ -489,7 +489,8 @@ class LawyerController extends Controller
             $link = "https://connect.stripe.com/express/oauth/authorize?client_id={$client_id}&state={$token}&suggested_capabilities[]=transfers&stripe_user[email]={$user->email}&stripe_user[first_name]={$user->name}&stripe_user[last_name]={$user->surname}";
         }
         return RespondJSON::success([
-            'connection_link' => $link
+            'connection_link' => $link,
+            'is_connected' => $lawyer->stripe_connected_account_id !== null
         ]);
     }
 

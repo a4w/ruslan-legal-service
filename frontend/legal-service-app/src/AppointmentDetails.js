@@ -110,7 +110,7 @@ const Details = ({appointment}) => {
                     <b>Created at:</b>&nbsp; {new Date(appointment.created_at).toLocaleString()}
                 </div>
                 <div className="col-6 col-md-4 text-center">
-                    <b>Payment status:</b>&nbsp;<span className={"badge " + "badge-" + (appointment.status === "UPCOMING" ? "success" : appointment.status === "ON_HOLD" ? "warning" : "danger")}>{appointment.status === "UPCOMING" ? "PAYED" : appointment.status === "ON_HOLD" ? "PENDING" : "REFUNDED"}</span>
+                    <b>Payment status:</b>&nbsp;<span className={"badge " + "badge-" + ((appointment.status === "DONE" || appointment.status === "UPCOMING") ? "success" : appointment.status === "ON_HOLD" ? "warning" : "danger")}>{(appointment.status === "DONE" || appointment.status === "UPCOMING") ? "PAYED" : appointment.status === "ON_HOLD" ? "PENDING" : "REFUNDED"}</span>
                 </div>
             </div>
         </>

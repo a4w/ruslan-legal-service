@@ -5934,7 +5934,7 @@ html.menu-opened body {
     height: 90px;
     float: left;
     overflow: hidden;
-    border-radius: 100%;
+    border-radius: 0;
 }
 .post-thumb a img {
     border-radius: 4px;
@@ -6158,11 +6158,11 @@ html.menu-opened body {
     display: inline-block;
     margin-bottom: 10px;
 }
-.post-author img {
+/* .post-author img {
     border-radius: 100%;
     width: inherit;
     margin-right: 5px;
-}
+} */
 
 /*-----------------
     40. Blog Grid

@@ -46,6 +46,7 @@ const Details = ({appointment}) => {
     const lawyer = appointment.lawyer;
     const client = appointment.client;
     const appointment_time = new Date(appointment.appointment_time);
+    const [auth,] = useContext(AuthContext);
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
         month: "long",
@@ -90,7 +91,7 @@ const Details = ({appointment}) => {
                     <span className="d-block text-center text-xl mt-2">{day} at {time}</span>
                     <span className="d-block text-center text-md mb-3">For <b>{appointment.duration}</b> minutes</span>
                     <span
-                        className={`btn bg-${
+                        className={`text-uppercase btn bg-${
                             appointment.status === "DONE"
                                 ? "success"
                                 : "danger"
@@ -109,9 +110,16 @@ const Details = ({appointment}) => {
                 <div className="col-6 col-md-4 text-center">
                     <b>Created at:</b>&nbsp; {new Date(appointment.created_at).toLocaleString()}
                 </div>
-                <div className="col-6 col-md-4 text-center">
-                    <b>Payment status:</b>&nbsp;<span className={"badge " + "badge-" + (appointment.status === "UPCOMING" ? "success" : appointment.status === "ON_HOLD" ? "warning" : "danger")}>{appointment.status === "UPCOMING" ? "PAYED" : appointment.status === "ON_HOLD" ? "PENDING" : "REFUNDED"}</span>
-                </div>
+                {auth.accountType === "CLIENT" && <>
+                    <div className="col-6 col-md-4 text-center">
+                        <b>Payment status:</b>&nbsp;<span className={"badge " + "badge-" + ((appointment.status === "DONE" || appointment.status === "UPCOMING") ? "success" : appointment.status === "ON_HOLD" ? "warning" : "danger")}>{(appointment.status === "DONE" || appointment.status === "UPCOMING") ? "PAYED" : appointment.status === "ON_HOLD" ? "PENDING" : "REFUNDED"}</span>
+                    </div>
+                </>}
+                {auth.accountType === "LAWYER" && <>
+                    <div className="col-6 col-md-4 text-center">
+                        <b>Payment status:</b>&nbsp;<span className={"badge " + "badge-" + (appointment.status === "DONE" ? "success" : (appointment.status === "ON_HOLD" || appointment.status === "UPCOMING") ? "warning" : "danger")}>{appointment.status === "DONE" ? "PAYED" : (appointment.status === "ON_HOLD" || appointment.status === "UPCOMING") ? "PENDING" : "REFUNDED"}</span>
+                    </div>
+                </>}
             </div>
         </>
     );

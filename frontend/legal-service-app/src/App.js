@@ -144,8 +144,6 @@ function App() {
                                     <Route path="/forgot-password">
                                         <ForgotPassword />
                                     </Route>
-                                    <PrivateRoute path="/chat/:chatId" component={ResponsiveChatPage} />
-                                    <PrivateRoute path="/chat" component={ResponsiveChatPage} />
                                     <Route path="/video/:AppointmentId" render={(props) => {
                                         return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
                                     }}>

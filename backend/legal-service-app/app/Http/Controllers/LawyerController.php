@@ -81,7 +81,9 @@ class LawyerController extends Controller
                 return $query->where('city', $location);
             })
             ->when($practice_areas, function ($query, $areas) {
-                return $query->whereIn('lawyers.id', $areas);
+                return $query->whereHas('practice_areas', function ($query) use ($areas) {
+                    $query->whereIn('id', $areas);
+                });
             })
             ->orderBy($sort[0], $sort[1])
             ->limit($length)

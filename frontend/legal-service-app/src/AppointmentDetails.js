@@ -91,7 +91,7 @@ const Details = ({appointment}) => {
                     <span className="d-block text-center text-xl mt-2">{day} at {time}</span>
                     <span className="d-block text-center text-md mb-3">For <b>{appointment.duration}</b> minutes</span>
                     <span
-                        className={`btn bg-${
+                        className={`text-uppercase btn bg-${
                             appointment.status === "DONE"
                                 ? "success"
                                 : "danger"

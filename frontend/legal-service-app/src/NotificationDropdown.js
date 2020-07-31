@@ -172,10 +172,11 @@ const Notifications = ({setNew, markAllAsReadToggle}) => {
 };
 
 const Notification = ({data: {type, notification_data}}) => {
+    const [auth,] = useContext(AuthContext);
     switch (type) {
         case "INCOMING_MESSAGE":
             return (
-                <Link to={`/chat/${notification_data.chat_id}`}>
+                <Link to={`/${auth.accountType === "CLIENT"? "client-dashboard":"dashboard"}/chat/${notification_data.chat_id}`}>
                     <p className="noti-details">
                         <span className="noti-title">
                             {`${notification_data.sender_name} Sent you a message!`}
@@ -190,7 +191,9 @@ const Notification = ({data: {type, notification_data}}) => {
             return (
                 <p className="noti-details">
                     <span className="noti-title">
-                        {`${notification_data.client_name} has booked assesion with you at ${date.toLocaleString()}`}
+                        {`${
+                            notification_data.client_name
+                        } has booked assesion with you at ${date.toLocaleString()}`}
                     </span>
                 </p>
             );

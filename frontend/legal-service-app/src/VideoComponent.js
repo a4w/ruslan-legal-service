@@ -202,7 +202,7 @@ const VideoComponent = ({appointment_id}) => {
     useEffect(() => {
         publishLocalTracks();
         return unpublishLocalTracks;
-    }, [room]);
+    }, []);
     const notify = () => {
         toast.info("A new message has arrived");
     }

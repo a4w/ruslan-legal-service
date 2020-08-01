@@ -9,7 +9,7 @@ import PageHead from "./PageHead";
 import useRequests from "./useRequests";
 import env from "./env";
 import RoundImg from "./RoundImg";
-
+import moment from "moment";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -139,7 +139,7 @@ const Post = ({blog, lawyer}) => {
                 <div className="post-left">
                     <ul>
                         <li>
-                            <div className="post-author">
+                            <div className="post-author-2">
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
@@ -157,7 +157,7 @@ const Post = ({blog, lawyer}) => {
                         </li>
                         <li>
                             <i className="far fa-calendar"></i>
-                            {new Date(blog.created_at).toLocaleTimeString()}
+                            {moment(new Date(blog.publish_date)).format("Do of MMMM, hh:mm a")}
                         </li>
                         <li>
                             <i className="fa fa-tags"></i> {blog.tag.area}

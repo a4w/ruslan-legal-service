@@ -63,6 +63,7 @@ const UserDropdown = () => {
                     />
                 </span>
             </a>
+            {auth.accountType !== null &&
             <div
                 className={`dropdown-menu dropdown-menu-right ${
                     menuToggle ? "show" : ""
@@ -81,7 +82,6 @@ const UserDropdown = () => {
                         <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
-                {isClient !== null &&
                 <Link
                     className="dropdown-item"
                     to={isClient ? "/client-dashboard" : "/dashboard"}
@@ -89,10 +89,9 @@ const UserDropdown = () => {
                 >
                     Dashboard
                 </Link>
-                }
                 <Link
                     className="dropdown-item"
-                    to="/chat"
+                    to={`/${auth.accountType === "CLIENT"? "client-dashboard":"dashboard"}/chat`}
                     onClick={handleButtonClick}
                 >
                     Messages
@@ -104,7 +103,6 @@ const UserDropdown = () => {
                 >
                     Agenda
                 </Link>
-                {isClient !== null && 
                 <Link
                     className="dropdown-item"
                     to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}
@@ -112,7 +110,6 @@ const UserDropdown = () => {
                 >
                     Profile Settings
                 </Link>
-                }
                 <button
                     className="dropdown-item"
                     onClick={() => {
@@ -123,6 +120,7 @@ const UserDropdown = () => {
                     Logout
                 </button>
             </div>
+            }
         </li>
     );
 };

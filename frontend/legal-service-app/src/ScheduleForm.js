@@ -16,6 +16,27 @@ import SpinnerButton from "./SpinnerButton";
 import Config from "./Config";
 import Modal from 'react-bootstrap/Modal';
 
+
+function useDoubleTap(callback) {
+    const delta = 500;
+    const [timer, setTimer] = useState(null);
+
+    const tap = (e) => {
+        if (timer === null) {
+            setTimer(window.setTimeout(() => {
+                setTimer(null);
+                window.clearTimeout(timer);
+            }, delta));
+        } else {
+            window.clearTimeout(timer);
+            setTimer(null);
+            callback(e);
+        }
+    }
+
+    return tap;
+}
+
 const ScheduleForm = ({}) => {
     const {request} = useRequests();
 
@@ -64,15 +85,12 @@ const ScheduleForm = ({}) => {
     // On load
     useEffect(() => {
         // Calculate number of days to show
-        console.log(schedule_container.current.offsetWidth);
         const nDays = Math.min(7, Math.max(1, (0.6 * schedule_container.current.offsetWidth) / 100));
-        console.log(nDays);
         setNumberOfDaysShown(nDays);
         request({
             url: 'lawyer/schedule',
             method: 'GET'
         }).then(response => {
-            console.log(response);
             //const nextSchedule = response.schedule.map((day, i) => {
             //    return {
             //        ...schedule[i],
@@ -103,14 +121,12 @@ const ScheduleForm = ({}) => {
                     const slot = slots[j];
                     const time_obj = moment.utc(slot.time, "HH:mm").local();
                     const time_utc = moment.utc(slot.time, "HH:mm");
-                    console.log(time_obj.format('D'), time_utc.format('D'));
                     let day = i;
                     if (time_utc.format(Config.momentsjs_default_date_format) < time_obj.format(Config.momentsjs_default_date_format)) {
                         day = weekReducer('+', day);
                     } else if (time_utc.day(Config.momentsjs_default_date_format) > time_obj.format(Config.momentsjs_default_date_format)) {
                         day = weekReducer('-', day);
                     }
-                    console.log(time_obj);
                     nextSchedule[day].slots.push({
                         ...slot,
                         time: time_obj,
@@ -175,10 +191,6 @@ const ScheduleForm = ({}) => {
         setSchedule(nextSchedule);
     };
 
-    useEffect(() => {
-        console.log(errors);
-    }, [errors]);
-
     const handleTimeSelection = (time) => {
         const clock = ("0" + time.hour).slice(-2) + ":" + time.minute;
         setSlotProperties({...slotProperties, time: moment(clock, "HH:mm")});
@@ -188,6 +200,7 @@ const ScheduleForm = ({}) => {
         setIsTimeSelectionShown(!isTimeSelectorShown);
     };
 
+
     const handleDeleteSlot = (event) => {
         const button = event.currentTarget;
         const dayIdx = button.dataset.day;
@@ -196,6 +209,8 @@ const ScheduleForm = ({}) => {
         nextSchedule[dayIdx].slots.splice(slotIdx, 1);
         setSchedule(nextSchedule);
     }
+
+    const doubleTapDeleteSlot = useDoubleTap(handleDeleteSlot);
 
     const handleSaveClick = () => {
         runValidation(globalSettings).then((hasErrors) => {
@@ -253,13 +268,13 @@ const ScheduleForm = ({}) => {
     ];
 
     const weekDayOptions = [
-        {label: 'Monday', value: 1},
-        {label: 'Tuesday', value: 2},
-        {label: 'Wednesday', value: 3},
-        {label: 'Thursday', value: 4},
-        {label: 'Friday', value: 5},
-        {label: 'Saturday', value: 6},
-        {label: 'Sunday', value: 0},
+        {label: 'Monday', value: 0},
+        {label: 'Tuesday', value: 1},
+        {label: 'Wednesday', value: 2},
+        {label: 'Thursday', value: 3},
+        {label: 'Friday', value: 4},
+        {label: 'Saturday', value: 5},
+        {label: 'Sunday', value: 6},
     ];
 
     useEffect(() => {
@@ -399,7 +414,6 @@ const ScheduleForm = ({}) => {
                                                 </button>
                                             </div>
                                             {visibleSchedule.map((day, i) => {
-                                                console.log("DAY: ", i);
                                                 return (
                                                     <div className="col" key={i}>
                                                         <span>{day.name}</span>
@@ -450,7 +464,7 @@ const ScheduleForm = ({}) => {
                                                             data-day={i}
                                                             data-slot={j}
                                                             className="timing btn-block"
-                                                            onDoubleClick={handleDeleteSlot}
+                                                            onClick={doubleTapDeleteSlot}
                                                         >
                                                             <span>
                                                                 {slot.time.format("HH:mm")} - {slot.end_time.format("HH:mm")}

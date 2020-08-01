@@ -73,19 +73,20 @@ const Blog = ({blog, editable, col=6}) => {
                 <div className="blog-content">
                     <ul className="entry-meta meta-item">
                         <li>
-                            <div className="post-author">
+                            <div>
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
                                         state: { lawyer: lawyer },
                                     }}
+                                    style={{display: "flex", alignItems: "center"}}
                                 >
                                     <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
                                         diameter={40}
                                     />
-                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                    <span className="ml-3">{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>

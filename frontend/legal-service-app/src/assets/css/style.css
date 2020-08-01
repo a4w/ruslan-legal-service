@@ -5898,6 +5898,10 @@ html.menu-opened body {
     display: flex;
     align-items: center;
 }
+.post-author-2 a {
+    display: flex;
+    align-items: center;
+}
 .video {
     position: relative;
     padding-bottom: 56%;
@@ -7064,6 +7068,7 @@ html.menu-opened body {
     }
     .lawyer-widget .lawyer-name {
         font-size: 18px;
+        display: inline;
     }
     .exp-title, .booking-total ul li span, .booking-total ul li .total-cost {
         font-size: 14px;
@@ -7347,7 +7352,7 @@ html.menu-opened body {
         height: 120px;
     }
     .speicality-img img {
-        width: 50px;
+        width: initial!important;
     }
     .session-booking a.view-pro-btn {
         width: 100%;
@@ -7598,4 +7603,11 @@ min-width: 100%;
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-break: break-all;
+}
+.client-pp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    margin-top: 0px;
 }

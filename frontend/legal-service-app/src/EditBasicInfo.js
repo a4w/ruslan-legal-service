@@ -89,7 +89,7 @@ const EditBasicInfo = () => {
                 <div className="col-12 col-md-12">
                     <div className="form-group">
                         <div className="change-avatar">
-                            <div className="profile-img">
+                            <div className="mr-3">
                                 <RoundImg
                                     src={user.profile_picture_url}
                                     alt="User"

@@ -118,12 +118,12 @@ const ProfileCard = ({lawyer}) => {
                                     ({lawyer.ratings.length})
                                 </span>
                             </div>
-                            <div className="session-services">
+                            {/* <div className="session-services">
                                 {lawyer.accreditations &&
                                     lawyer.accreditations.map((acc) => (
                                         <span key={acc.id}>{acc.accreditation}</span>
                                     ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="lawyer-info-right">

@@ -6,6 +6,7 @@ import Img from "./Img";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
 import NoContent from "./NoContent";
+import RoundImg from "./RoundImg";
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();
@@ -83,14 +84,13 @@ const AppointmentCard = ({appointment}) => {
     return (
         <div className="appointment-list">
             <div className="profile-info-widget">
-                <a href="#" className="booking-lawyer-img">
-                    <Img
-                        style={imgStyle}
+                <div className="mr-3">
+                    <RoundImg
                         src={account.profile_picture}
+                        diameter={155}
                         alt="User"
-                        className="round-profile-card"
                     />
-                </a>
+                </div>
                 <div className="profile-det-info">
                     <h3>
                         <a href="//">{account.name + " " + account.surname}</a>
@@ -106,7 +106,7 @@ const AppointmentCard = ({appointment}) => {
                         </span>
                         <span className="detail">
                             <i className="fa fa-credit-card"></i>{" "}
-                            {appointment.price + appointment.currency_symbol}
+                            {appointment.currency_symbol + appointment.price}
                         </span>
                         {(account.cite || account.country) && <span className="detail">
                             <i className="fas fa-map-marker-alt"></i>{" "}

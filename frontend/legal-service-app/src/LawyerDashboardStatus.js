@@ -333,7 +333,7 @@ const DoneAppointments = () => {
             <tr>
                 <td colSpan="4">
                     <div className="d-block text-right text-lg font-weight-bold">
-                        {total.currency_symbol}{total.total}
+                        Total: {total.currency_symbol}{total.total}
                     </div>
                 </td>
             </tr>

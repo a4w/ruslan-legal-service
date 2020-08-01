@@ -8,6 +8,7 @@ import {Twitter, Facebook, Linkedin, Google} from 'react-social-sharing'
 import PageHead from "./PageHead";
 import useRequests from "./useRequests";
 import env from "./env";
+import RoundImg from "./RoundImg";
 
 
 const BlogDetails = ({match}) => {
@@ -65,11 +66,10 @@ const AboutAuthor = ({lawyer}) => {
                                     state: {lawyer: lawyer},
                                 }}
                             >
-                                <Img
-                                    style={{width: "60px", height: "60px"}}
-                                    className="img-fluid rounded-circle"
+                                <RoundImg
                                     alt="Author"
                                     src={account.profile_picture}
+                                    diameter={60}
                                 />
                             </Link>
                         </div>
@@ -146,10 +146,10 @@ const Post = ({blog, lawyer}) => {
                                         state: {lawyer: lawyer},
                                     }}
                                 >
-                                    <Img
+                                    <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{maxHeight: '40px'}}
+                                        diameter={40}
                                     />
                                     <span>&nbsp;{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>

@@ -85,6 +85,7 @@ const VideoComponent = ({appointment_id}) => {
     }, []);
 
     useEffect(() => {
+        console.log("Connect call", roomSID, accessToken, localTracks);
         if (roomSID === null || accessToken === null || localTracks === null) {
             return;
         }
@@ -199,9 +200,6 @@ const VideoComponent = ({appointment_id}) => {
         }
     }
     useEffect(() => {
-        if (room === null) {
-            return;
-        }
         publishLocalTracks();
         return unpublishLocalTracks;
     }, [room]);

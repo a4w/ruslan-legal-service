@@ -162,6 +162,7 @@ const Home = () => {
                                                 placeholder="Select Area of Practice"
                                                 value={practiceAreas}
                                                 searchable
+                                                closeOnSelect
                                                 options={practiceAreaOptions}
                                                 onChange={(obj) => setPracticeAreas(obj)}
                                                 style={{minHeight: "46px", backgroundColor: '#fff'}}

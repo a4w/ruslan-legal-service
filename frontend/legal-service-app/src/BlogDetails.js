@@ -56,10 +56,10 @@ const AboutAuthor = ({lawyer}) => {
             <div className="card-header">
                 <h4 className="card-title">About Author</h4>
             </div>
-            <div className="card-body">
-                <div className="about-author">
+            <div className="card-body" style={{display: "flex"}}>
+                <div className="about-author" style={{display: "flex"}}>
                     <div className="about-author-img">
-                        <div className="author-img-wrap">
+                        <div className="author-img-wrap" style={{display: "flex", justifyContent: "center"}}>
                             <Link
                                 to={{
                                     pathname: `/profile/${lawyer.id}`,
@@ -85,6 +85,29 @@ const AboutAuthor = ({lawyer}) => {
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
                         </Link>
                         <p className="mb-0">{lawyer.biography}</p>
+                    </div>
+                </div>
+                <div className="lawyer-info-right">
+                    <div className="session-booking">
+                        <Link
+                            className="view-pro-btn"
+                            to={{
+                                pathname: `/profile/${lawyer.id}`,
+                                state: {lawyer: lawyer},
+                            }}
+                        >
+                            View Profile
+                        </Link>
+
+
+                        <Link
+                            className="apt-btn"
+                            to={{
+                                pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
+                            }}
+                        >
+                            Book Appointment
+                        </Link>
                     </div>
                 </div>
             </div>

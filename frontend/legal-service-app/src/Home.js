@@ -573,10 +573,14 @@ const BlogCard = ({blog}) => {
             <div className="blog grid-blog">
                 <div className="blog-image">
                     <Link to={`/blog/${id}`}>
-                        <RoundImg
+                        <BlogImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
-                            diameter={210}
+                            className="img-fluid"
+                            containerStyle={{
+                                height: "210px",
+                                maxHeight: "210px",
+                            }}
                         />
                     </Link>
                 </div>

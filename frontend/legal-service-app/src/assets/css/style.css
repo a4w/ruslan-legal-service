@@ -5779,12 +5779,16 @@ html.menu-opened body {
 .blog-image,
 .blog-image > a,
 .blog-image img {
-    position: relative;
+    /* position: relative;
     width: 100%;
     height: auto;
     justify-content: center;
-    /* align-content: center; */
-    display: flex;
+    align-content: center;
+    display: flex; */
+    display: block;
+	position: relative;
+	width: 100%;
+	height: auto;
 }
 .blog-image img {
     -webkit-transform: translateZ(0);
@@ -6203,7 +6207,7 @@ html.menu-opened body {
 .grid-blog .entry-meta li:last-child {
     flex: 0 0 100px;
     display: block ruby;
-    /* max-width: 100px; */
+    width: 100%;
 }
 .grid-blog .post-author {
     width: 189px;

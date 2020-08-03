@@ -19,7 +19,7 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
         ));
     else return <LawyerCard />;
 };
-const LawyerCard = ({lawyer, setPopUp}) => {
+const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
     const [auth,] = useContext(AuthContext);
     const {request} = useRequests();
 

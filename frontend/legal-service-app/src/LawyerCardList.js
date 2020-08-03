@@ -35,7 +35,7 @@ const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
             })
     };
     return (
-        <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
+        <div className="card ml-3" onMouseOverCapture={() => setPopUp(lawyer)}>
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">

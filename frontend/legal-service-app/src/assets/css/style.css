@@ -2876,6 +2876,7 @@ html.menu-opened body {
     height: 46px;
     font-weight:500;
     font-size:16px;
+    /* width: 10%; */
 }
 .lawyer-widget {
     display: -webkit-box;
@@ -7597,10 +7598,41 @@ min-width: 100%;
     width: 150px!important;
     height: 150px!important;
 }
+.calendar-filter-widget{
+    width: 40%;
+}
 @media only screen and (max-width: 767.98px) {
     .circle-blog-card{
         width: 170px!important;
         height: 170px!important;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .sort-title{
+        display: none;
+    }
+    .btn-search{
+        display: none;
+    }
+    .btn-search-2 .btn{
+        background-color: #0de0fe;
+        border: 1px solid #0de0fe;
+        color: #fff;
+        height: 46px;
+        font-weight:500;
+        font-size:16px;
+        /* width: 10%; */
+    }
+    .btn-search-2{
+        width: 50%;
+    }
+    .calendar-filter-widget{
+        width: -webkit-fill-available;
+    }
+    .display-xs-flex{
+        display: flex!important;
     }
 }
 .lawyer-bio{

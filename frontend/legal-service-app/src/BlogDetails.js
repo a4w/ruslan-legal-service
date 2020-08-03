@@ -10,13 +10,16 @@ import useRequests from "./useRequests";
 import env from "./env";
 import RoundImg from "./RoundImg";
 import moment from "moment";
+import LoadingOverlay from "react-loading-overlay";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
     const [blog, setBlog] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const {request} = useRequests();
     console.log(match);
     useEffect(() => {
+        setIsLoading(true);
         request({
             url: `/blogs/${match.params.blogId}`,
             method: 'GET'
@@ -25,10 +28,12 @@ const BlogDetails = ({match}) => {
             setBlog(response.blog);
         }).catch(error => {
             console.error("Error occurred loading blog post");
+        }).finally(()=>{
+            setIsLoading(false);
         });
-    }, []);
+    }, [match.params.blogId]);
     return (
-        <>
+        <LoadingOverlay active={isLoading} spinner text={"Loading"}>
             <PageHead
                 title={blog !== null && blog.title}
                 description={blog !== null && blog.body.substr(0, 128)}
@@ -36,7 +41,6 @@ const BlogDetails = ({match}) => {
             <div className="container">
                 <div className="row">
                     <div className="col-12">
-
                         <div className="blog-view">
                             {blog && <Post blog={blog} lawyer={lawyer} />}
                             <ShareSection id={match.params.blogId} />
@@ -44,9 +48,8 @@ const BlogDetails = ({match}) => {
                         </div>
                     </div>
                 </div>
-
             </div>
-        </>
+        </LoadingOverlay>
     );
 };
 const AboutAuthor = ({lawyer}) => {
@@ -84,7 +87,7 @@ const AboutAuthor = ({lawyer}) => {
                         >
                             {`${lawyer.account.name} ${lawyer.account.surname}`}
                         </Link>
-                        <p className="mb-0">{lawyer.biography}</p>
+                        <p className="lawyer-bio mb-0">{lawyer.biography}</p>
                     </div>
                 </div>
                 <div className="lawyer-info-right">

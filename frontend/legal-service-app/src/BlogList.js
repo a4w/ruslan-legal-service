@@ -50,7 +50,7 @@ const Blog = ({blog, editable, col=6}) => {
                 <div className="blog-image">
                     <Link
                         to={{
-                            pathname: `/blog/${id}`,
+                            pathname: `/blogs/blog/${id}`,
                             state: { blog: blog, lawyer: lawyer },
                         }}
                     >
@@ -76,7 +76,7 @@ const Blog = ({blog, editable, col=6}) => {
                 </div>
                 <div className="blog-content">
                     <h3 className="blog-title">
-                        <Link to={`/blog/${id}`}>{blog.title}</Link>
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
                     </h3>
                     <ul className="entry-meta meta-item">
                         <li>

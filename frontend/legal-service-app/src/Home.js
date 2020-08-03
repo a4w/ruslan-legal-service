@@ -575,7 +575,7 @@ const BlogCard = ({blog}) => {
         <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
-                    <Link to={`/blog/${id}`}>
+                    <Link to={`/blogs/blog/${id}`}>
                         <BlogImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
@@ -607,7 +607,7 @@ const BlogCard = ({blog}) => {
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blog/${id}`}>{blog.title}</Link>
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
                     </h3>
                     <ul className="tags mt-2">
                         <li>

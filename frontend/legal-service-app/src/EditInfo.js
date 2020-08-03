@@ -57,6 +57,12 @@ const EditInfo = () => {
                     method: 'POST',
                     data: user
                 }).then((response) => {
+                    return request({
+                        url: 'account/update-address',
+                        method: 'POST',
+                        data: user
+                    })
+                }).then((response) => {
                     setSaving(false);
                     toast.success("Profile updated successfully!");
                 }).catch((error) => {

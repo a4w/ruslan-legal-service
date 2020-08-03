@@ -48,6 +48,10 @@ const Blogs = (props) => {
                                     <Redirect replace to="blogs/all" />
                                 </Route>
                                 <Route
+                                    path="/blogs/blog/:blogId"
+                                    component={BlogDetails}
+                                />
+                                <Route
                                     path="/blogs"
                                     render={(props) => (
                                         <BlogGrid
@@ -57,10 +61,6 @@ const Blogs = (props) => {
                                             setIsLoading={setIsLoading}
                                         />
                                     )}
-                                />
-                                <Route
-                                    path="/blogs/blog/:blogId"
-                                    component={BlogDetails}
                                 />
                             </Switch>
                         </div>

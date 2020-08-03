@@ -11,6 +11,9 @@ import env from "./env";
 import RoundImg from "./RoundImg";
 import moment from "moment";
 import LoadingOverlay from "react-loading-overlay";
+import Slider from "react-slick";
+import { BlogCard } from "./Home";
+import { Blog } from "./BlogList";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -43,8 +46,9 @@ const BlogDetails = ({match}) => {
                     <div className="col-12">
                         <div className="blog-view">
                             {blog && <Post blog={blog} lawyer={lawyer} />}
-                            <ShareSection id={match.params.blogId} />
+                            {blog && <ShareSection id={match.params.blogId} />}
                             {lawyer && <AboutAuthor lawyer={lawyer} />}
+                            {lawyer && <OtherBlogs lawyer={lawyer} />}
                         </div>
                     </div>
                 </div>
@@ -192,6 +196,68 @@ const Post = ({blog, lawyer}) => {
                 </div>
             </div>
             <div className="blog-content" ref={md_preview}></div>
+        </div>
+    );
+};
+var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                infinite: false,
+                dots: true,
+            },
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                initialSlide: 2,
+            },
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+            },
+        },
+    ],
+};
+const OtherBlogs = ({lawyer}) => {
+    const [blogs, setBlogs] = useState(null);
+    const { request } = useRequests();
+    useEffect(() => {
+        request({ url: `/blogs/lawyer/${lawyer.id}`, method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    }, []);
+    return (
+        <div className="card author-widget clearfix">
+            <div className="card-header">
+                <h4 className="card-title">Other blogs by this author</h4>
+            </div>
+            <div className="card-body">
+            <div className="lawyer-slider slider">
+
+                <Slider {...settings}>
+                    {blogs &&
+                        blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
+                </Slider>
+                </div>
+            </div>
         </div>
     );
 };

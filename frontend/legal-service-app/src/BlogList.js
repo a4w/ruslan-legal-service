@@ -116,3 +116,4 @@ const Blog = ({blog, editable, col=6}) => {
 };
 
 export default BlogList;
+export {Blog};

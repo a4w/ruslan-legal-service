@@ -556,7 +556,9 @@ const LatestBlogs = () => {
                 </div>
                 <div className="row blog-grid-row">
                     {blogs.map((blog, i) => (
-                        <BlogCard key={i} blog={blog} />
+                        <div className="col-md-6 col-lg-3 col-sm-12">
+                            <BlogCard key={i} blog={blog} />
+                        </div>
                     ))}
                 </div>
                 <div className="view-all text-center">
@@ -572,7 +574,6 @@ const BlogCard = ({blog}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-        <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
                     <Link to={`/blogs/blog/${id}`}>
@@ -618,6 +619,6 @@ const BlogCard = ({blog}) => {
                     </ul>
                 </div>
             </div>
-        </div>
     );
 }
+export {BlogCard};

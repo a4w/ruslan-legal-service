@@ -18,7 +18,8 @@ import SpinnerButton from "./SpinnerButton";
 import {FaQuestionCircle, FaRegQuestionCircle} from "react-icons/fa";
 
 const Home = () => {
-    const [location, setLocation] = useState({value: null, label: "Select location"});
+    const [location, setLocation] = useState(null);
+    const [placeholder, setPlaceholder] = useState("Select location");
     const [practiceAreas, setPracticeAreas] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
     const [isLocationBased, setIsLocationBased] = useState(false);
@@ -45,6 +46,7 @@ const Home = () => {
         {value: "paris", label: "Paris"},
         {value: "rome", label: "Rome"},
         {value: "uk", label: "UK"},
+        {value: "cairo", label: "Cairo"},
     ];
 
     useEffect(() => {
@@ -138,9 +140,10 @@ const Home = () => {
                                         <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 create
+                                                onCreateNew={()=> setPlaceholder("")}
                                                 className="search-form-control"
-                                                placeholder="Select Location"
-                                                values={[location]}
+                                                placeholder={placeholder}
+                                                values={location? [location]:[]}
                                                 searchable
                                                 options={locationOptions}
                                                 onChange={([obj]) => {

@@ -255,4 +255,4 @@ const LawyerCountDownRenderer = ({
 };
 
 export default LawyerCardList;
-export {Discount};
+export {Discount, LawyerCard};

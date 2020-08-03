@@ -27,8 +27,8 @@ const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
         const myID = auth.accountId;
         const url = `/chat/${myID}/${lawyer_id}`;
         request({url: url, method: "POST"})
-            .then(() => {
-                History.push(`/chat/${lawyer_id}`);
+            .then((response) => {
+                History.push(`/client-dashboard/chat/${response.chat_id}`);
             })
             .catch(() => {
                 toast.error("An error occured");

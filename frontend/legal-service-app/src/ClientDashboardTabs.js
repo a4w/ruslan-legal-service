@@ -19,6 +19,16 @@ const ClientDashboardTabs = () => {
                 <UserCalendar />
             </Route>
             <Route
+                path="/client-dashboard/chat/:chatId"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/client-dashboard/chat"
+                        minHeight="500px"
+                    />
+                )}
+            />
+            <Route
                 path="/client-dashboard/chat"
                 render={(props) => (
                     <ResponsiveChatPage

@@ -38,6 +38,16 @@ const LawyerDashboardTabs = () => {
                 <LawyerBlogs />
             </Route>
             <Route
+                path="/dashboard/chat/:chatId"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/dashboard/chat"
+                        minHeight="500px"
+                    />
+                )}
+            />
+            <Route
                 path="/dashboard/chat"
                 render={(props) => (
                     <ResponsiveChatPage

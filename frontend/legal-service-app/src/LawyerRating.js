@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import Img from "./Img";
 import {Link} from "react-router-dom";
 import useRequests from "./useRequests";
+import History from "./History";
 
 const LawyerRating = ({appId, lawyerId}) => {
     const [rating, setRating] = useState(0);
@@ -33,6 +34,7 @@ const LawyerRating = ({appId, lawyerId}) => {
         })
             .then((data) => {
                 toast.success("Thank You!");
+                History.goBack();
             })
             .catch((e) => {
                 toast.error("An error occured");

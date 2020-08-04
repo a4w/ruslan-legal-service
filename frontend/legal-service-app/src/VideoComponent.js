@@ -191,6 +191,10 @@ const VideoComponent = ({appointment_id}) => {
     }
 
     const unpublishLocalTracks = () => {
+        const localMediaContainer = document.getElementById('outgoingVideo');
+        while (localMediaContainer.hasChildNodes()) {
+            localMediaContainer.removeChild(list.firstChild);
+        }
         if (room !== null) {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.stop();

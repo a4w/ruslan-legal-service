@@ -2,6 +2,7 @@ import React from "react";
 import FileDownload from "js-file-download"
 import {FaDownload} from "react-icons/fa"
 import useRequests from "./useRequests";
+import moment from "moment";
 
 const Message = ({isOutgoing, content, timestamp, type = "text", link = null}) => {
     const {request} = useRequests();
@@ -27,7 +28,7 @@ const Message = ({isOutgoing, content, timestamp, type = "text", link = null}) =
                                 <ul className="chat-msg-info">
                                     <li>
                                         <div className="chat-time">
-                                            <span>{timestamp}</span>
+                                            <span>{moment(new Date(timestamp)).format("h:m a D/M/Y")}</span>
                                         </div>
                                     </li>
                                 </ul>

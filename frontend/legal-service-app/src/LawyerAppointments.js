@@ -84,7 +84,7 @@ const AppointmentCard = ({appointment}) => {
     return (
         <div className="appointment-list">
             <div className="profile-info-widget">
-                <div className="mr-3">
+                <div className="client-pp">
                     <RoundImg
                         src={account.profile_picture}
                         diameter={155}

@@ -2876,6 +2876,7 @@ html.menu-opened body {
     height: 46px;
     font-weight:500;
     font-size:16px;
+    /* width: 10%; */
 }
 .lawyer-widget {
     display: -webkit-box;
@@ -5779,12 +5780,16 @@ html.menu-opened body {
 .blog-image,
 .blog-image > a,
 .blog-image img {
-    position: relative;
+    /* position: relative;
     width: 100%;
     height: auto;
     justify-content: center;
-    /* align-content: center; */
-    display: flex;
+    align-content: center;
+    display: flex; */
+    display: block;
+	position: relative;
+	width: 100%;
+	height: auto;
 }
 .blog-image img {
     -webkit-transform: translateZ(0);
@@ -5895,6 +5900,10 @@ html.menu-opened body {
     margin-right: 0;
 }
 .post-author a {
+    display: flex;
+    align-items: center;
+}
+.post-author-2 a {
     display: flex;
     align-items: center;
 }
@@ -6199,7 +6208,7 @@ html.menu-opened body {
 .grid-blog .entry-meta li:last-child {
     flex: 0 0 100px;
     display: block ruby;
-    /* max-width: 100px; */
+    width: 100%;
 }
 .grid-blog .post-author {
     width: 189px;
@@ -7064,6 +7073,7 @@ html.menu-opened body {
     }
     .lawyer-widget .lawyer-name {
         font-size: 18px;
+        display: inline;
     }
     .exp-title, .booking-total ul li span, .booking-total ul li .total-cost {
         font-size: 14px;
@@ -7347,7 +7357,7 @@ html.menu-opened body {
         height: 120px;
     }
     .speicality-img img {
-        width: 50px;
+        width: initial!important;
     }
     .session-booking a.view-pro-btn {
         width: 100%;
@@ -7588,14 +7598,52 @@ min-width: 100%;
     width: 150px!important;
     height: 150px!important;
 }
+.calendar-filter-widget{
+    width: 40%;
+}
 @media only screen and (max-width: 767.98px) {
     .circle-blog-card{
         width: 170px!important;
         height: 170px!important;
     }
 }
+
+
+@media only screen and (max-width: 500px) {
+    .sort-title{
+        display: none;
+    }
+    .btn-search{
+        display: none;
+    }
+    .btn-search-2 .btn{
+        background-color: #0de0fe;
+        border: 1px solid #0de0fe;
+        color: #fff;
+        height: 46px;
+        font-weight:500;
+        font-size:16px;
+        /* width: 10%; */
+    }
+    .btn-search-2{
+        width: 50%;
+    }
+    .calendar-filter-widget{
+        width: -webkit-fill-available;
+    }
+    .display-xs-flex{
+        display: flex!important;
+    }
+}
 .lawyer-bio{
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-break: break-all;
+}
+.client-pp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    margin-top: 0px;
 }

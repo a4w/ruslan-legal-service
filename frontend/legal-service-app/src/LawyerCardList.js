@@ -19,7 +19,7 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
         ));
     else return <LawyerCard />;
 };
-const LawyerCard = ({lawyer, setPopUp}) => {
+const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
     const [auth,] = useContext(AuthContext);
     const {request} = useRequests();
 
@@ -27,15 +27,15 @@ const LawyerCard = ({lawyer, setPopUp}) => {
         const myID = auth.accountId;
         const url = `/chat/${myID}/${lawyer_id}`;
         request({url: url, method: "POST"})
-            .then(() => {
-                History.push(`/chat/${lawyer_id}`);
+            .then((response) => {
+                History.push(`/client-dashboard/chat/${response.chat_id}`);
             })
             .catch(() => {
                 toast.error("An error occured");
             })
     };
     return (
-        <div className="card ml-3" onMouseEnter={() => setPopUp(lawyer)}>
+        <div className="card ml-3" onMouseOverCapture={() => setPopUp(lawyer)}>
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
@@ -255,4 +255,4 @@ const LawyerCountDownRenderer = ({
 };
 
 export default LawyerCardList;
-export {Discount};
+export {Discount, LawyerCard};

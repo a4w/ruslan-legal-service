@@ -18,7 +18,8 @@ import SpinnerButton from "./SpinnerButton";
 import {FaQuestionCircle, FaRegQuestionCircle} from "react-icons/fa";
 
 const Home = () => {
-    const [location, setLocation] = useState({value: null, label: "Select location"});
+    const [location, setLocation] = useState(null);
+    const [placeholder, setPlaceholder] = useState("Select location");
     const [practiceAreas, setPracticeAreas] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
     const [isLocationBased, setIsLocationBased] = useState(false);
@@ -45,6 +46,7 @@ const Home = () => {
         {value: "paris", label: "Paris"},
         {value: "rome", label: "Rome"},
         {value: "uk", label: "UK"},
+        {value: "cairo", label: "Cairo"},
     ];
 
     useEffect(() => {
@@ -138,9 +140,10 @@ const Home = () => {
                                         <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 create
+                                                onCreateNew={()=> setPlaceholder("")}
                                                 className="search-form-control"
-                                                placeholder="Select Location"
-                                                values={[location]}
+                                                placeholder={placeholder}
+                                                values={location? [location]:[]}
                                                 searchable
                                                 options={locationOptions}
                                                 onChange={([obj]) => {
@@ -162,6 +165,7 @@ const Home = () => {
                                                 placeholder="Select Area of Practice"
                                                 value={practiceAreas}
                                                 searchable
+                                                closeOnSelect
                                                 options={practiceAreaOptions}
                                                 onChange={(obj) => setPracticeAreas(obj)}
                                                 style={{minHeight: "46px", backgroundColor: '#fff'}}
@@ -552,7 +556,9 @@ const LatestBlogs = () => {
                 </div>
                 <div className="row blog-grid-row">
                     {blogs.map((blog, i) => (
-                        <BlogCard key={i} blog={blog} />
+                        <div className="col-md-6 col-lg-3 col-sm-12">
+                            <BlogCard key={i} blog={blog} />
+                        </div>
                     ))}
                 </div>
                 <div className="view-all text-center">
@@ -568,14 +574,17 @@ const BlogCard = ({blog}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-        <div className="col-md-6 col-lg-3 col-sm-12">
             <div className="blog grid-blog">
                 <div className="blog-image">
-                    <Link to={`/blog/${id}`}>
-                        <RoundImg
+                    <Link to={`/blogs/blog/${id}`}>
+                        <BlogImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
-                            diameter={210}
+                            className="img-fluid"
+                            containerStyle={{
+                                height: "210px",
+                                maxHeight: "210px",
+                            }}
                         />
                     </Link>
                 </div>
@@ -599,7 +608,7 @@ const BlogCard = ({blog}) => {
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blog/${id}`}>{blog.title}</Link>
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
                     </h3>
                     <ul className="tags mt-2">
                         <li>
@@ -610,6 +619,6 @@ const BlogCard = ({blog}) => {
                     </ul>
                 </div>
             </div>
-        </div>
     );
 }
+export {BlogCard};

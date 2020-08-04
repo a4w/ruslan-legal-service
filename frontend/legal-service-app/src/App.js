@@ -129,7 +129,7 @@ function App() {
                                     <Route path="/blogs">
                                         <Route path="/blogs" component={Blogs} />
                                     </Route>
-                                    <Route path="/blog/:blogId" component={BlogDetails} />
+                                    {/* <Route path="/blog/:blogId" component={BlogDetails} /> */}
                                     <Route
                                         exact
                                         path="/reset/:Token"

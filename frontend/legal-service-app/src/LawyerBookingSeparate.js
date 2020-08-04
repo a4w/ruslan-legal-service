@@ -151,7 +151,7 @@ function CheckoutStepTwo({heldAppointmentsData, lawyer, handleConfirm}) {
     return (
         <>
             <div className="row">
-                <div className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                <div className="col-12">
                     <small className="d-block text-center">Your selection will be held for 15 minutes</small>
                     <div className="review-container">
                         <table className="table">

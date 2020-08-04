@@ -91,7 +91,7 @@ const Home = () => {
                     position: 'relative',
                     width: '100vw'
                 }}>
-                    <video autoPlay muted loop style={{
+                    <video className="d-none d-md-block" autoPlay muted loop style={{
                         position: 'absolute',
                         bottom: 0,
                         right: 0,
@@ -100,7 +100,7 @@ const Home = () => {
                     }}>
                         <source src="video.mp4" type="video/mp4" />
                     </video>
-                    <div style={{
+                    <div className="d-none d-md-block" style={{
                         position: 'absolute',
                         bottom: 0,
                         right: 0,
@@ -109,6 +109,18 @@ const Home = () => {
                         minHeight: '10px',
                         zIndex: -1000,
                         backgroundColor: 'rgba(9,125,225,0.2)'
+                    }}>
+
+                    </div>
+                    <div className="d-block d-md-none" style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        top: 0,
+                        minWidth: '100vw',
+                        minHeight: '10px',
+                        zIndex: -1000,
+                        backgroundColor: 'rgba(9,125,225,0.9)'
                     }}>
 
                     </div>
@@ -140,10 +152,10 @@ const Home = () => {
                                         <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 create
-                                                onCreateNew={()=> setPlaceholder("")}
+                                                onCreateNew={() => setPlaceholder("")}
                                                 className="search-form-control"
                                                 placeholder={placeholder}
-                                                values={location? [location]:[]}
+                                                values={location ? [location] : []}
                                                 searchable
                                                 options={locationOptions}
                                                 onChange={([obj]) => {
@@ -297,7 +309,7 @@ const SearchLawyerByName = () => {
                                                 src={lawyer.account.profile_picture}
                                                 diameter={50}
                                             />
-                                            <div className="ml-3 mt-1" style={{display:"grid"}}>
+                                            <div className="ml-3 mt-1" style={{display: "grid"}}>
                                                 <b>{lawyer.account.full_name}</b>
                                                 <span className="text-muted text-sm">{lawyer.lawyer_type.type}</span>
                                             </div>
@@ -574,51 +586,51 @@ const BlogCard = ({blog}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-            <div className="blog grid-blog">
-                <div className="blog-image">
-                    <Link to={`/blogs/blog/${id}`}>
-                        <BlogImg
-                            src={blog.cover_photo_link}
-                            alt="Post Image"
-                            className="img-fluid"
-                            containerStyle={{
-                                height: "210px",
-                                maxHeight: "210px",
-                            }}
-                        />
-                    </Link>
-                </div>
-                <div className="blog-content">
-                    <ul className="entry-meta meta-item">
-                        <li>
-                            <div className="post-author">
-                                <Link to={`/profile/${lawyer.id}`}>
-                                    <RoundImg
-                                        src={account.profile_picture}
-                                        alt="Post Author"
-                                        diameter={40}
-                                    />
-                                    <span>{`${account.name} ${account.surname}`}</span>
-                                </Link>
-                            </div>
-                        </li>
-                        <li>
-                            <i className="far fa-clock"></i>{" "}
-                            {moment(blog.puplished_at).format("D MMMM YYYY")}
-                        </li>
-                    </ul>
-                    <h3 className="blog-title">
-                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
-                    </h3>
-                    <ul className="tags mt-2">
-                        <li>
-                            <a href="#" className="tag">
-                                {blog.tag.area}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+        <div className="blog grid-blog">
+            <div className="blog-image">
+                <Link to={`/blogs/blog/${id}`}>
+                    <BlogImg
+                        src={blog.cover_photo_link}
+                        alt="Post Image"
+                        className="img-fluid"
+                        containerStyle={{
+                            height: "210px",
+                            maxHeight: "210px",
+                        }}
+                    />
+                </Link>
             </div>
+            <div className="blog-content">
+                <ul className="entry-meta meta-item">
+                    <li>
+                        <div className="post-author">
+                            <Link to={`/profile/${lawyer.id}`}>
+                                <RoundImg
+                                    src={account.profile_picture}
+                                    alt="Post Author"
+                                    diameter={40}
+                                />
+                                <span>{`${account.name} ${account.surname}`}</span>
+                            </Link>
+                        </div>
+                    </li>
+                    <li>
+                        <i className="far fa-clock"></i>{" "}
+                        {moment(blog.puplished_at).format("D MMMM YYYY")}
+                    </li>
+                </ul>
+                <h3 className="blog-title">
+                    <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
+                </h3>
+                <ul className="tags mt-2">
+                    <li>
+                        <a href="#" className="tag">
+                            {blog.tag.area}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     );
 }
 export {BlogCard};

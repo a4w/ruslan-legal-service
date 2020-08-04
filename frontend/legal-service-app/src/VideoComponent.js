@@ -204,7 +204,7 @@ const VideoComponent = ({appointment_id}) => {
         }
         publishLocalTracks();
         return unpublishLocalTracks;
-    }, [room]);
+    }, []);
     const notify = () => {
         toast.info("A new message has arrived");
     }
@@ -220,7 +220,7 @@ const VideoComponent = ({appointment_id}) => {
                             styles={{
                                 overlay: (base) => ({
                                     ...base,
-                                    position: 'relative',
+                                    position: 'absolute',
                                     zIndex: '2',
                                 }),
                                 wrapper: (base) => ({

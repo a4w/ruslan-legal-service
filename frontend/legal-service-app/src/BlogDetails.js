@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
@@ -12,8 +12,9 @@ import RoundImg from "./RoundImg";
 import moment from "moment";
 import LoadingOverlay from "react-loading-overlay";
 import Slider from "react-slick";
-import { BlogCard } from "./Home";
-import { Blog } from "./BlogList";
+import {BlogCard} from "./Home";
+import {Blog} from "./BlogList";
+import {LoadingOverlayContext} from "./App";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
@@ -31,7 +32,7 @@ const BlogDetails = ({match}) => {
             setBlog(response.blog);
         }).catch(error => {
             console.error("Error occurred loading blog post");
-        }).finally(()=>{
+        }).finally(() => {
             setIsLoading(false);
         });
     }, [match.params.blogId]);
@@ -81,40 +82,45 @@ const AboutAuthor = ({lawyer}) => {
                             </Link>
                         </div>
                     </div>
-                    <div className="author-details">
-                        <Link
-                            className="blog-author-name"
-                            to={{
-                                pathname: `/profile/${lawyer.id}`,
-                                state: {lawyer: lawyer},
-                            }}
-                        >
-                            {`${lawyer.account.name} ${lawyer.account.surname}`}
-                        </Link>
-                        <p className="lawyer-bio mb-0">{lawyer.biography}</p>
-                    </div>
-                </div>
-                <div className="lawyer-info-right">
-                    <div className="session-booking">
-                        <Link
-                            className="view-pro-btn"
-                            to={{
-                                pathname: `/profile/${lawyer.id}`,
-                                state: {lawyer: lawyer},
-                            }}
-                        >
-                            View Profile
+                    <div className="row">
+                        <div className="col-12 col-lg-6">
+                            <div className="author-details">
+                                <Link
+                                    className="blog-author-name"
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: {lawyer: lawyer},
+                                    }}
+                                >
+                                    {`${lawyer.account.name} ${lawyer.account.surname}`}
+                                </Link>
+                                <p className="lawyer-bio mb-0">{lawyer.biography}</p>
+                            </div>
+                        </div>
+                        <div className="col-12 col-lg-6">
+                            <div className="session-booking p-3">
+                                <Link
+                                    className="view-pro-btn"
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: {lawyer: lawyer},
+                                    }}
+                                >
+                                    View Profile
                         </Link>
 
 
-                        <Link
-                            className="apt-btn"
-                            to={{
-                                pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
-                            }}
-                        >
-                            Book Appointment
+                                <Link
+                                    className="apt-btn"
+                                    to={{
+                                        pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
+                                    }}
+                                >
+                                    Book Appointment
                         </Link>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,6 +147,7 @@ const Post = ({blog, lawyer}) => {
     const {account} = {...lawyer};
     const loaderStackEdit = new Stackedit();
     const md_preview = useRef(null);
+    const loader = useContext(LoadingOverlayContext);
 
     useEffect(() => {
         loaderStackEdit.openFile({
@@ -151,6 +158,7 @@ const Post = ({blog, lawyer}) => {
         }, true);
         loaderStackEdit.on("fileChange", (file) => {
             if (md_preview.current) {
+                loader.setIsLoadingOverlayShown(false);
                 md_preview.current.innerHTML = file.content.html;
             }
         });
@@ -235,9 +243,9 @@ var settings = {
 };
 const OtherBlogs = ({lawyer}) => {
     const [blogs, setBlogs] = useState(null);
-    const { request } = useRequests();
+    const {request} = useRequests();
     useEffect(() => {
-        request({ url: `/blogs/lawyer/${lawyer.id}`, method: "GET" })
+        request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -250,12 +258,12 @@ const OtherBlogs = ({lawyer}) => {
                 <h4 className="card-title">Other blogs by this author</h4>
             </div>
             <div className="card-body">
-            <div className="lawyer-slider slider">
+                <div className="lawyer-slider slider">
 
-                <Slider {...settings}>
-                    {blogs &&
-                        blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
-                </Slider>
+                    <Slider {...settings}>
+                        {blogs &&
+                            blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
+                    </Slider>
                 </div>
             </div>
         </div>

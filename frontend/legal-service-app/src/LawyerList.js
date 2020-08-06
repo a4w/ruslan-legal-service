@@ -264,31 +264,32 @@ const LawyerListHeader = ({
         {value: "price", label: "Price"},
         {value: "popular", label: "Popular"},
     ];
+    const selectStyle = {
+        borderColor: "#dcdcdc",
+        backgroundColor: "#ffffff",
+        color: "#333",
+        minHeight: "45px",
+        borderRadius: ".25rem",
+    };
     return (
         <div className="breadcrumb-bar">
             <div className="container-fluid">
-                <div className="row align-items-center">
+                <div className="row align-items-center" style={{ flexWrap: "inherit" }} >
                     <form className="card-body form-row p-2">
-                        <div
-                            className="filter-widget mb-0"
-                            style={{width: "40%"}}
-                        >
+                        <div className="filter-widget calendar-filter-widget mb-0 ">
                             <div className="cal-icon">
                                 <DatePicker
                                     className="form-control mb-0"
                                     selected={filter.date}
                                     onChange={(date) =>
-                                        setFilter({...filter, date: date})
+                                        setFilter({ ...filter, date: date })
                                     }
                                     minDate={new Date()}
                                     placeholderText="Available on"
                                 />
                             </div>
                         </div>
-                        <div
-                            className="btn-search align-left ml-2"
-                            style={{Width: "10%"}}
-                        >
+                        <div className="btn-search align-left ml-2">
                             <button
                                 type="button"
                                 className="btn btn-block font-weight-bold"
@@ -297,10 +298,7 @@ const LawyerListHeader = ({
                                 <FaSearch />
                             </button>
                         </div>
-                        <div
-                            className="btn-search align-left ml-2"
-                            style={{Width: "10%"}}
-                        >
+                        <div className="btn-search align-left ml-2">
                             <button
                                 type="button"
                                 className="btn btn-block font-weight-bold"
@@ -314,12 +312,32 @@ const LawyerListHeader = ({
                         <span className="sort-title">Sort by</span>
                         <span className="sortby-fliter">
                             <Select
-                                className="select-form-control"
+                                style={selectStyle}
                                 value={selectedValue}
                                 options={options}
                                 onChange={OnChangeHandler}
                             />
                         </span>
+                    </div>
+                </div>
+                <div className="row align-items-center d-none display-xs-flex" style={{ flexWrap: "inherit" }} >
+                    <div className="btn-search-2 mr-2">
+                        <button
+                            type="button"
+                            className="btn btn-block font-weight-bold"
+                            onClick={filterHandler}
+                        >
+                            <FaSearch />
+                        </button>
+                    </div>
+                    <div className="btn-search-2">
+                        <button
+                            type="button"
+                            className="btn btn-block font-weight-bold"
+                            onClick={filterClear}
+                        >
+                            <AiOutlineCloseCircle />
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
-import {Discount} from "./LawyerCardList";
+import {Discount, LawyerCard} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
 import {
     Link,
@@ -52,7 +52,7 @@ const LawyerProfile = ({match}) => {
                         <div className="container">
                             <div className="row">
                                 <div className="col-12">
-                                    <ProfileCard lawyer={lawyer} match={match} />
+                                    <LawyerCard lawyer={lawyer} match={match} />
                                     <Details lawyer={lawyer} match={match} />
                                 </div>
                             </div>
@@ -118,12 +118,12 @@ const ProfileCard = ({lawyer}) => {
                                     ({lawyer.ratings.length})
                                 </span>
                             </div>
-                            <div className="session-services">
+                            {/* <div className="session-services">
                                 {lawyer.accreditations &&
                                     lawyer.accreditations.map((acc) => (
                                         <span key={acc.id}>{acc.accreditation}</span>
                                     ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="lawyer-info-right">

@@ -1,17 +1,22 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Nav from "react-bootstrap/Nav";
 import {NavTab} from "react-router-tabs";
 import Img from "./Img";
 import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App";
 
 const ClientDashboardSidebar = () => {
     const [account, setAccount] = useState({});
     const {request, Logout} = useRequests();
+    const loader = useContext(LoadingOverlayContext);
     useEffect(() => {
+        loader.setLoadingOverlayText("Loading...");
+
+        loader.setIsLoadingOverlayShown(true);
         request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
                 setAccount(data.profile_data);
-                console.log(data);
+                loader.setIsLoadingOverlayShown(false);
             })
             .catch((err) => {});
     }, []);
@@ -23,7 +28,7 @@ const ClientDashboardSidebar = () => {
                         <Img src={account.profile_picture} alt="User Image" />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{account.name? `${account.name} ${account.surname}`:"loading..."}</h3>
+                        <h3>{account.name ? `${account.name} ${account.surname}` : "loading..."}</h3>
                         <div className="client-details">
                             <h5>
                                 <i className="fas fa-phone"></i> {account.phone}

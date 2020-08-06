@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import History from "./History";
 import {Link} from "react-router-dom";
 import Stackedit from "stackedit-js";
@@ -9,14 +9,21 @@ import PageHead from "./PageHead";
 import useRequests from "./useRequests";
 import env from "./env";
 import RoundImg from "./RoundImg";
-
+import moment from "moment";
+import LoadingOverlay from "react-loading-overlay";
+import Slider from "react-slick";
+import {BlogCard} from "./Home";
+import {Blog} from "./BlogList";
+import {LoadingOverlayContext} from "./App";
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
     const [blog, setBlog] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const {request} = useRequests();
     console.log(match);
     useEffect(() => {
+        setIsLoading(true);
         request({
             url: `/blogs/${match.params.blogId}`,
             method: 'GET'
@@ -25,10 +32,12 @@ const BlogDetails = ({match}) => {
             setBlog(response.blog);
         }).catch(error => {
             console.error("Error occurred loading blog post");
+        }).finally(() => {
+            setIsLoading(false);
         });
-    }, []);
+    }, [match.params.blogId]);
     return (
-        <>
+        <LoadingOverlay active={isLoading} spinner text={"Loading"}>
             <PageHead
                 title={blog !== null && blog.title}
                 description={blog !== null && blog.body.substr(0, 128)}
@@ -36,17 +45,16 @@ const BlogDetails = ({match}) => {
             <div className="container">
                 <div className="row">
                     <div className="col-12">
-
                         <div className="blog-view">
                             {blog && <Post blog={blog} lawyer={lawyer} />}
-                            <ShareSection id={match.params.blogId} />
+                            {blog && <ShareSection id={match.params.blogId} />}
                             {lawyer && <AboutAuthor lawyer={lawyer} />}
+                            {lawyer && <OtherBlogs lawyer={lawyer} />}
                         </div>
                     </div>
                 </div>
-
             </div>
-        </>
+        </LoadingOverlay>
     );
 };
 const AboutAuthor = ({lawyer}) => {
@@ -56,10 +64,10 @@ const AboutAuthor = ({lawyer}) => {
             <div className="card-header">
                 <h4 className="card-title">About Author</h4>
             </div>
-            <div className="card-body">
-                <div className="about-author">
+            <div className="card-body" style={{display: "flex"}}>
+                <div className="about-author" style={{display: "flex"}}>
                     <div className="about-author-img">
-                        <div className="author-img-wrap">
+                        <div className="author-img-wrap" style={{display: "flex", justifyContent: "center"}}>
                             <Link
                                 to={{
                                     pathname: `/profile/${lawyer.id}`,
@@ -74,17 +82,45 @@ const AboutAuthor = ({lawyer}) => {
                             </Link>
                         </div>
                     </div>
-                    <div className="author-details">
-                        <Link
-                            className="blog-author-name"
-                            to={{
-                                pathname: `/profile/${lawyer.id}`,
-                                state: {lawyer: lawyer},
-                            }}
-                        >
-                            {`${lawyer.account.name} ${lawyer.account.surname}`}
+                    <div className="row">
+                        <div className="col-12 col-lg-6">
+                            <div className="author-details">
+                                <Link
+                                    className="blog-author-name"
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: {lawyer: lawyer},
+                                    }}
+                                >
+                                    {`${lawyer.account.name} ${lawyer.account.surname}`}
+                                </Link>
+                                <p className="lawyer-bio mb-0">{lawyer.biography}</p>
+                            </div>
+                        </div>
+                        <div className="col-12 col-lg-6">
+                            <div className="session-booking p-3">
+                                <Link
+                                    className="view-pro-btn"
+                                    to={{
+                                        pathname: `/profile/${lawyer.id}`,
+                                        state: {lawyer: lawyer},
+                                    }}
+                                >
+                                    View Profile
                         </Link>
-                        <p className="mb-0">{lawyer.biography}</p>
+
+
+                                <Link
+                                    className="apt-btn"
+                                    to={{
+                                        pathname: `${History.location.pathname}/book-lawyer/${lawyer.id}`,
+                                    }}
+                                >
+                                    Book Appointment
+                        </Link>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -111,6 +147,7 @@ const Post = ({blog, lawyer}) => {
     const {account} = {...lawyer};
     const loaderStackEdit = new Stackedit();
     const md_preview = useRef(null);
+    const loader = useContext(LoadingOverlayContext);
 
     useEffect(() => {
         loaderStackEdit.openFile({
@@ -121,6 +158,7 @@ const Post = ({blog, lawyer}) => {
         }, true);
         loaderStackEdit.on("fileChange", (file) => {
             if (md_preview.current) {
+                loader.setIsLoadingOverlayShown(false);
                 md_preview.current.innerHTML = file.content.html;
             }
         });
@@ -139,7 +177,7 @@ const Post = ({blog, lawyer}) => {
                 <div className="post-left">
                     <ul>
                         <li>
-                            <div className="post-author">
+                            <div className="post-author-2">
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
@@ -157,7 +195,7 @@ const Post = ({blog, lawyer}) => {
                         </li>
                         <li>
                             <i className="far fa-calendar"></i>
-                            {new Date(blog.created_at).toLocaleTimeString()}
+                            {moment(new Date(blog.publish_date)).format("Do of MMMM, hh:mm a")}
                         </li>
                         <li>
                             <i className="fa fa-tags"></i> {blog.tag.area}
@@ -166,6 +204,68 @@ const Post = ({blog, lawyer}) => {
                 </div>
             </div>
             <div className="blog-content" ref={md_preview}></div>
+        </div>
+    );
+};
+var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                infinite: false,
+                dots: true,
+            },
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                initialSlide: 2,
+            },
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+            },
+        },
+    ],
+};
+const OtherBlogs = ({lawyer}) => {
+    const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
+    useEffect(() => {
+        request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {});
+    }, []);
+    return (
+        <div className="card author-widget clearfix">
+            <div className="card-header">
+                <h4 className="card-title">Other blogs by this author</h4>
+            </div>
+            <div className="card-body">
+                <div className="lawyer-slider slider">
+
+                    <Slider {...settings}>
+                        {blogs &&
+                            blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
+                    </Slider>
+                </div>
+            </div>
         </div>
     );
 };

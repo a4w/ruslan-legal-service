@@ -1,5 +1,6 @@
 import React from "react";
 import EditBasicInfo from "./EditBasicInfo";
+import EditInfo from "./EditInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
 import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
@@ -62,11 +63,12 @@ const EditPersonal = () => {
                         </Route>
                         <Route path="/dashboard/settings/basic-info">
                             <div>
-                                <EditBasicInfo />
+                                {/* <EditBasicInfo /> */}
+                                <EditInfo />
                                 <hr></hr>
                                 <EditEmail />
-                                <hr></hr>
-                                <EditAddress />{" "}
+                                {/* <hr></hr>
+                                <EditAddress />{" "} */}
                             </div>
                         </Route>
                         <Route path="/dashboard/settings/lawyer-info">

@@ -3,6 +3,7 @@ import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
 import EditBasicInfo from "./EditBasicInfo";
 import PageHead from "./PageHead";
+import EditInfo from "./EditInfo";
 
 const ProfileSettings = () => {
     return (
@@ -12,11 +13,12 @@ const ProfileSettings = () => {
                 description={"Edit your profile | Lawbe.co.uk"}
             />
             <div className="card-body">
-                <EditBasicInfo />
+                {/* <EditBasicInfo /> */}
+                <EditInfo />
                 <hr></hr>
                 <EditEmail />
-                <hr></hr>
-                <EditAddress />
+                {/* <hr></hr>
+                <EditAddress /> */}
             </div>
         </div>
     );

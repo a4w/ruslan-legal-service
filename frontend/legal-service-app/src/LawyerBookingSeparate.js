@@ -13,6 +13,8 @@ import {Elements} from "@stripe/react-stripe-js"
 import {loadStripe} from "@stripe/stripe-js"
 import env from "./env"
 import {Link} from "react-router-dom";
+import Img from "./Img";
+import RoundImg from "./RoundImg";
 
 
 
@@ -83,7 +85,9 @@ function LawyerBookingSeparate({lawyer_id, back}) {
                                         <Link to={back} className="btn btn-link float-right">
                                             <FaTimes />
                                         </Link>
-                                        <img src="/avatar.svg" className="lawyer-thumb" />
+                                        <div className="lawyer-thumb">
+                                            <RoundImg src={lawyer.account.profile_picture} diameter={150} />
+                                        </div>
                                         <span className="lawyer-name">{lawyer.account.full_name}</span>
                                         <div className="lawyer-rating">
                                             <StarRatings
@@ -147,7 +151,7 @@ function CheckoutStepTwo({heldAppointmentsData, lawyer, handleConfirm}) {
     return (
         <>
             <div className="row">
-                <div className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                <div className="col-12">
                     <small className="d-block text-center">Your selection will be held for 15 minutes</small>
                     <div className="review-container">
                         <table className="table">

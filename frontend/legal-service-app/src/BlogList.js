@@ -50,14 +50,18 @@ const Blog = ({blog, editable, col=6}) => {
                 <div className="blog-image">
                     <Link
                         to={{
-                            pathname: `/blog/${id}`,
+                            pathname: `/blogs/blog/${id}`,
                             state: { blog: blog, lawyer: lawyer },
                         }}
                     >
-                        <RoundImg
+                        <BlogImg
                             src={blog.cover_photo_link}
                             alt="Post Image"
-                            diameter={210}
+                            className="img-fluid"
+                            containerStyle={{
+                                height: "210px",
+                                maxHeight: "210px",
+                            }}
                         />
                     </Link>
                     {editable && 
@@ -71,6 +75,9 @@ const Blog = ({blog, editable, col=6}) => {
                     }
                 </div>
                 <div className="blog-content">
+                    <h3 className="blog-title">
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
+                    </h3>
                     <ul className="entry-meta meta-item">
                         <li>
                             <div>
@@ -84,7 +91,7 @@ const Blog = ({blog, editable, col=6}) => {
                                     <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        diameter={40}
+                                        diameter={28}
                                     />
                                     <span className="ml-3">{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
@@ -92,12 +99,9 @@ const Blog = ({blog, editable, col=6}) => {
                         </li>
                         <li>
                             <i className="far fa-clock"></i>{" "}
-                            {moment(blog.publish_date).format("Do of MMMM, hh:mm a")}
+                            {moment(blog.publish_date).format("Do of MMM YYYY")}
                         </li>
                     </ul>
-                    <h3 className="blog-title">
-                        <Link to={`/blog/${id}`}>{blog.title}</Link>
-                    </h3>
                     <ul className="tags mt-2">
                         <li>
                             <a href="#" className="tag">
@@ -112,3 +116,4 @@ const Blog = ({blog, editable, col=6}) => {
 };
 
 export default BlogList;
+export {Blog};

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import BlogList from "./BlogList";
 import StickyBox from "react-sticky-box";
-import {Router, Switch, Route, withRouter, Link} from "react-router-dom";
+import {Router, Switch, Route, withRouter, Link, Redirect} from "react-router-dom";
 import History from "./History";
 import queryString from "query-string"
 import BlogImg from "./BlogImg";
@@ -10,53 +10,13 @@ import PageHead from "./PageHead";
 import useRequests from "./useRequests";
 import {LoadingOverlayContext} from "./App";
 import RoundImg from "./RoundImg";
+import BlogDetails from "./BlogDetails";
+import LoadingOverlay from "react-loading-overlay";
 
 const Blogs = (props) => {
     const {request} = useRequests();
     const [blogs, setBlogs] = useState(null);
-    const loading = useContext(LoadingOverlayContext);
-    const OnSubmitHandler = (e) => {
-        e.preventDefault();
-        loading.setIsLoadingOverlayShown(true);
-        const search = e.target[0].value;
-        const term = queryString.stringify({term: search});
-        if (search !== "") {
-            request({url: `/blogs/search?${term}`, method: "GET"})
-                .then((data) => {
-                    console.log(data);
-                    setBlogs(data.blogs);
-                })
-                .catch(() => {})
-                .finally(() => {
-                    loading.setIsLoadingOverlayShown(false);
-                });
-        }
-    };
-    const TagFilterHandler = (id) => {
-        loading.setIsLoadingOverlayShown(true);
-        const term = queryString.stringify({tag: id});
-        request({url: `/blogs/all?${term}`, method: "GET"})
-            .then((data) => {
-                console.log(data);
-                setBlogs(data.blogs);
-            })
-            .catch(() => {})
-            .finally(() => {
-                loading.setIsLoadingOverlayShown(false);
-            });
-    };
-    useEffect(() => {
-        loading.setIsLoadingOverlayShown(true);
-        request({url: "/blogs/all", method: "GET"})
-            .then((data) => {
-                console.log(data);
-                setBlogs(data.blogs);
-            })
-            .catch(() => {})
-            .finally(() => {
-                loading.setIsLoadingOverlayShown(false);
-            });
-    }, []);
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <Router history={History}>
             <PageHead
@@ -83,14 +43,33 @@ const Blogs = (props) => {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8 col-md-12">
-                            {blogs && <BlogList blogs={blogs} />}
+                            <Switch history={History}>
+                                <Route exact path="/blogs">
+                                    <Redirect replace to="blogs/all" />
+                                </Route>
+                                <Route
+                                    path="/blogs/blog/:blogId"
+                                    component={BlogDetails}
+                                />
+                                <Route
+                                    path="/blogs"
+                                    render={(props) => (
+                                        <BlogGrid
+                                            {...props}
+                                            blogs={blogs}
+                                            isLoading={isLoading}
+                                            setIsLoading={setIsLoading}
+                                        />
+                                    )}
+                                />
+                            </Switch>
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
                             <StickyBox offsetTop={20} offsetBottom={20}>
-                                <Search OnSubmitHandler={OnSubmitHandler} />
+                                <Search />
                                 <LatestBlogs />
                                 {/* <Catagories /> */}
-                                <TagsList TagFilterHandler={TagFilterHandler} />
+                                <TagsList />
                             </StickyBox>
                         </div>
                     </div>
@@ -99,12 +78,41 @@ const Blogs = (props) => {
         </Router>
     );
 };
-
-const Search = ({OnSubmitHandler}) => {
+const BlogGrid = (props) => {
+    const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
+    console.log(History);
+    useEffect(() => {
+        props.setIsLoading(true);
+        const url = History.location.pathname + History.location.search;
+        request({ url: url, method: "GET" })
+            .then((data) => {
+                console.log(data);
+                setBlogs(data.blogs);
+            })
+            .catch(() => {})
+            .finally(() => {
+                props.setIsLoading(false);
+            });
+    }, [History.location]);
+    return (
+        <LoadingOverlay active={props.isLoading} spinner text={"Loading"}>
+            {blogs && <BlogList {...props} blogs={blogs} />}
+        </LoadingOverlay>
+    );
+};
+const Search = () => {
     const [searchInput, setSearchInput] = useState("");
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
     };
+    const OnSubmitHandler = (e)=>{
+        e.preventDefault();
+        History.push({
+            pathname: "/blogs/search",
+            search: queryString.stringify({ term: searchInput }),
+        });
+    }
     return (
         <div className="card search-widget">
             <div className="card-body">
@@ -163,7 +171,7 @@ const LatestBlogCard = ({blog}) => {
             </div>
             <div className="post-info">
                 <h4>
-                    <Link to={`/blog/${blog.id}`}>{blog.title}</Link>
+                    <Link to={`/blogs/blog/${blog.id}`}>{blog.title}</Link>
                 </h4>
                 <p>{moment(blog.publish_date).format("Do of MMMM, hh:mm a")}</p>
             </div>
@@ -203,7 +211,7 @@ const Catagories = ({cats}) => {
     );
 };
 
-const TagsList = ({TagFilterHandler}) => {
+const TagsList = () => {
     const [tags, setTags] = useState();
     const {request} = useRequests();
     useEffect(() => {
@@ -222,13 +230,22 @@ const TagsList = ({TagFilterHandler}) => {
             </div>
             <div className="card-body">
                 <ul className="tags">
-                    {tags && tags.map((tag) => (
-                        <li key={tag.id} onClick={() => TagFilterHandler(tag.id)}>
-                            <a href="#" className="tag">
-                                {tag.area}
-                            </a>
-                        </li>
-                    ))}
+                    {tags &&
+                        tags.map((tag) => (
+                            <li key={tag.id}>
+                                <Link
+                                    to={{
+                                        pathname: "/blogs/all",
+                                        search: queryString.stringify({
+                                            tag: tag.id,
+                                        }),
+                                    }}
+                                    className="tag"
+                                >
+                                    {tag.area}
+                                </Link>
+                            </li>
+                        ))}
                 </ul>
             </div>
         </div>

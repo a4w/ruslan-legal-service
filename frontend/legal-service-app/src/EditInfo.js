@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {editBasicInfoValidation} from "./Validations";
+import {editInfoValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {FaSpinner} from "react-icons/fa";
@@ -8,27 +8,36 @@ import useRequests from "./useRequests";
 import Img from "./Img";
 import RoundImg from "./RoundImg";
 
-const EditBasicInfo = () => {
+const EditInfo = () => {
     const initUser = {
         name: "",
         surname: "",
         email: "",
         phone: "",
+        address: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        country: "",
         profile_picture_url: "",
         profile_picture: null,
     };
     const [user, setUser] = useState(initUser);
     const [isSaving, setSaving] = useState(false);
-    const [errors, , runValidation] = useValidation(editBasicInfoValidation);
+    const [errors, , runValidation] = useValidation(editInfoValidation);
     const {request} = useRequests();
-
+    
     useEffect(() => {
         // Load profile data
         request({
             url: 'account/personal-info',
             method: 'GET'
         }).then((response) => {
-            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture, profile_picture: null});
+            setUser({
+                ...response.profile_data,
+                profile_picture_url: response.profile_data.profile_picture,
+                profile_picture: null,
+            });
         }).catch((error) => {});
     }, []);
 
@@ -47,6 +56,12 @@ const EditBasicInfo = () => {
                     url: 'account/personal-info',
                     method: 'POST',
                     data: user
+                }).then((response) => {
+                    return request({
+                        url: 'account/update-address',
+                        method: 'POST',
+                        data: user
+                    })
                 }).then((response) => {
                     setSaving(false);
                     toast.success("Profile updated successfully!");
@@ -117,7 +132,7 @@ const EditBasicInfo = () => {
                         </label>
                     )}
                 </div>
-                <div className="col-12 col-md-6">
+                <div className="col-12 col-md-4">
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"First Name"}
@@ -129,7 +144,7 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-12 col-md-6">
+                <div className="col-12 col-md-4">
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Last Name"}
@@ -141,7 +156,7 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-12 col-md-9">
+                <div className="col-12 col-md-4">
                     <div className="form-group">
                         <ErrorMessageInput
                             placeholder={"Telephone Number"}
@@ -153,7 +168,67 @@ const EditBasicInfo = () => {
                         />
                     </div>
                 </div>
-                <div className="col-12 col-md-3">
+                <div className="col-12">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"Address"}
+                            name={"address"}
+                            value={user.address}
+                            type={"text"}
+                            errors={errors.address}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"City"}
+                            name={"city"}
+                            value={user.city}
+                            type={"text"}
+                            errors={errors.city}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"State"}
+                            name={"state"}
+                            value={user.state}
+                            type={"text"}
+                            errors={errors.state}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"Zip Code"}
+                            name={"zip_code"}
+                            value={user.zip_code}
+                            type={"text"}
+                            errors={errors.zip_code}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <ErrorMessageInput
+                            placeholder={"Country"}
+                            name={"country"}
+                            value={user.country}
+                            type={"text"}
+                            errors={errors.country}
+                            OnChangeHandler={OnChangeHandler}
+                        />
+                    </div>
+                </div>
+                <div className="col-12">
                     <div className="submit-section w-100">
                         <button
                             type="submit"
@@ -173,4 +248,4 @@ const EditBasicInfo = () => {
     );
 };
 
-export default EditBasicInfo;
+export default EditInfo;

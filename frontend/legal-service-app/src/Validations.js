@@ -194,3 +194,23 @@ export const ChatMessageValidation = (data, field = null) => {
         });
     });
 };
+export const editInfoValidation = (data, field) => {
+    return validate("editInfo", () => {
+        vest.only(field);
+        ["name", "surname", "phone"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+        const phone = data.phone.toString();
+        test("phone", `${phone} is not a valid phone number`, () => {
+            enforce(parseInt(phone)).isNumeric();
+        });
+        test("profile", `Image size exceeds 2MB`, () => {
+            console.log(data.profile_picture);
+            if (data.profile_picture !== null) {
+                enforce(data.profile_picture.size / (1024 ** 2) <= 2).isTruthy();
+            }
+        });
+    });
+};

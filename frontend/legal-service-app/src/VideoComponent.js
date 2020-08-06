@@ -9,6 +9,7 @@ import useRequests from "./useRequests"
 import Countdown, {zeroPad} from "react-countdown";
 import LoadingOverlay from "react-loading-overlay"
 import bootbox from "bootbox"
+import StickyBox from "react-sticky-box";
 
 
 const VideoComponent = ({appointment_id}) => {
@@ -191,6 +192,10 @@ const VideoComponent = ({appointment_id}) => {
     }
 
     const unpublishLocalTracks = () => {
+        const localMediaContainer = document.getElementById('outgoingVideo');
+        while (localMediaContainer.hasChildNodes()) {
+            localMediaContainer.removeChild(localMediaContainer.firstChild);
+        }
         if (room !== null) {
             room.localParticipant.videoTracks.forEach(publication => {
                 publication.track.stop();
@@ -204,65 +209,67 @@ const VideoComponent = ({appointment_id}) => {
         }
         publishLocalTracks();
         return unpublishLocalTracks;
-    }, [room]);
+    }, []);
     const notify = () => {
         toast.info("A new message has arrived");
     }
     return (
         <>
-            <div class="row no-gutters" style={{height: '75vh'}}>
-                <div class="col">
-                    <div className="stream" id="incomingMedia">
-                        <LoadingOverlay
-                            active={(!isConnected) || (isConnected && connectedParticipantsCount <= 1)}
-                            spinner={room === null || (isConnected && connectedParticipantsCount <= 1)}
-                            text={isConnected ? "Please wait while the other party connects to the room" : room === null ? "Connecting to room" : "You are disconnected"}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    position: 'relative',
-                                    zIndex: '2',
-                                }),
-                                wrapper: (base) => ({
-                                    ...base,
-                                    height: '100%',
-                                    width: '100%',
-                                    position: 'absolute'
-                                })
-                            }}
-                        >
-                        </LoadingOverlay>
-                        <div className="controls">
-                            <div className={"buttons " + (showChat ? 'd-none' : 'd-flex') + " d-lg-flex"}>
-                                <Countdown
-                                    date={appointmentEnd}
-                                    renderer={(props) => {
-                                        // Notice if only 5 minutes left
-                                        if (props.hours === 0 && props.minutes === 5 && props.seconds === 0) {
-                                            toast.info("This room will end automatically in 5 minutes.");
-                                        }
-                                        return (<span className="call-count-down"> {zeroPad(props.hours)}:{zeroPad(props.minutes)}:{zeroPad(props.seconds)} </span>);
-                                    }}
-                                />
-                                {!isConnected && room !== null && <button class="btn btn-dark" title="Join room" onClick={() => {
-                                    setRoom(null);
-                                    publishLocalTracks().then(() => {
-                                        connectToRoom();
-                                    });
-                                }}><FaPlug /></button>}
-                                <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
-                                <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>
-                                <button class="btn btn-primary" onClick={handleSoundControl} title={isMuted ? "Unmute" : "Mute"}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
+            <StickyBox style={{zIndex: '10'}}>
+                <div class="row no-gutters" style={{height: '75vh'}}>
+                    <div class="col">
+                        <div className="stream" id="incomingMedia">
+                            <LoadingOverlay
+                                active={(!isConnected) || (isConnected && connectedParticipantsCount <= 1)}
+                                spinner={room === null || (isConnected && connectedParticipantsCount <= 1)}
+                                text={isConnected ? "Please wait while the other party connects to the room" : room === null ? "Connecting to room" : "You are disconnected"}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        position: 'absolute',
+                                        zIndex: '2',
+                                    }),
+                                    wrapper: (base) => ({
+                                        ...base,
+                                        height: '100%',
+                                        width: '100%',
+                                        position: 'absolute'
+                                    })
+                                }}
+                            >
+                            </LoadingOverlay>
+                            <div className="controls">
+                                <div className={"buttons " + (showChat ? 'd-none' : 'd-flex') + " d-lg-flex"}>
+                                    <Countdown
+                                        date={appointmentEnd}
+                                        renderer={(props) => {
+                                            // Notice if only 5 minutes left
+                                            if (props.hours === 0 && props.minutes === 5 && props.seconds === 0) {
+                                                toast.info("This room will end automatically in 5 minutes.");
+                                            }
+                                            return (<span className="call-count-down"> {zeroPad(props.hours)}:{zeroPad(props.minutes)}:{zeroPad(props.seconds)} </span>);
+                                        }}
+                                    />
+                                    {!isConnected && room !== null && <button class="btn btn-dark" title="Join room" onClick={() => {
+                                        setRoom(null);
+                                        publishLocalTracks().then(() => {
+                                            connectToRoom();
+                                        });
+                                    }}><FaPlug /></button>}
+                                    <button class="btn btn-info d-lg-none" onClick={handleChatToggle} title="Chat"><BsChatSquareQuote /></button>
+                                    <button class="btn btn-danger" onClick={handleDisconnection} title="Hangup"><FaPhoneSlash /></button>
+                                    <button class="btn btn-primary" onClick={handleSoundControl} title={isMuted ? "Unmute" : "Mute"}>{isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}</button>
+                                </div>
                             </div>
+                            <div className="outgoing" id="outgoingVideo"> </div>
                         </div>
-                        <div className="outgoing" id="outgoingVideo"> </div>
+                    </div>
+                    <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none') + " d-lg-block"}>
+                        <button onClick={handleChatToggle} className="btn btn-primary btn-block d-lg-none"><FaChevronLeft /></button>
+                        {chatId !== null && <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />}
                     </div>
                 </div>
-                <div className={"col-12 col-md-6 col-lg-4 " + (showChat ? 'd-block' : 'd-none') + " d-lg-block"}>
-                    <button onClick={handleChatToggle} className="btn btn-primary btn-block d-lg-none"><FaChevronLeft /></button>
-                    {chatId !== null && <ResponsiveChatPage list_chats={false} initialSelectedChat={chatId} showContent={true} notify={notify} />}
-                </div>
-            </div>
+            </StickyBox>
         </>
     );
 };

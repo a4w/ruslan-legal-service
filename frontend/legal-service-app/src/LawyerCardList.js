@@ -19,7 +19,7 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
         ));
     else return <LawyerCard />;
 };
-const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
+const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
     const [auth,] = useContext(AuthContext);
     const {request} = useRequests();
 
@@ -70,11 +70,6 @@ const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
                                     ({lawyer.ratings_count})
                                 </span>
                             </div>
-                            <div className="session-details">
-                                <div className="lawyer-bio">
-                                    {lawyer.biography.substr(0, 100) + (lawyer.biography.length > 100 ? "..." : "")}
-                                </div>
-                            </div>
 
                             <div className="session-services">
                                 {lawyer.accreditations &&
@@ -111,10 +106,6 @@ const LawyerCard = ({lawyer, setPopUp = ()=>{}}) => {
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
-                                <li>
-                                    <i className="far fa-comment"></i>{" "}
-                                    {lawyer.ratings_count} Feedback
-                                </li>
                                 {lawyer.account.city &&
                                     lawyer.account.country ? (
                                         <li>
@@ -219,17 +210,6 @@ const LawyerCountDownRenderer = ({
         return (
             <>
                 <li>
-
-                    <span className="text-md text-success" style={{}}>
-                        <i className="fa fa-check-circle" aria-hidden="true"></i>
-                        <strong>
-                            {isPercent ?
-                                `${discountValue}% discount` :
-                                `${currency}${discountValue} discount`}
-                        </strong>
-                    </span>
-                </li>
-                <li>
                     <i className="far fa-money-bill-alt"></i>
                     <label className="text-lg text-success">
                         <span style={{fontWeight: 'bold'}}>{currency}{discount}</span>
@@ -237,6 +217,12 @@ const LawyerCountDownRenderer = ({
                         <strike className="text-lg text-danger">
                             {`${currency} ${cost}`}
                         </strike>
+                        &nbsp;
+                        <strong className="text-xs">
+                            ({isPercent ?
+                                `-${discountValue}%` :
+                                `-${currency}${discountValue}`})
+                        </strong>
                     </label>
                 </li>
                 <li>

@@ -37,7 +37,7 @@ function LawyerBookingSeparate({lawyer_id, back}) {
     // Check if logged in
     useEffect(() => {
         if (!auth.isLoggedIn) {
-            history.push(`${back}/login`);
+            history.replace(`${back}/login`);
         }
     }, []);
 

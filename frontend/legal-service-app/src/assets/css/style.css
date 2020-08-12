@@ -3567,7 +3567,6 @@ html.menu-opened body {
 }
 .timing.selected::before {
     color: #fff;
-    content: "\f00c";
     font-family: "Font Awesome 5 Free";
     font-size: 12px;
     font-weight: 900;

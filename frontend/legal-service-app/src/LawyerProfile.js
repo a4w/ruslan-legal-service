@@ -252,6 +252,7 @@ const Overview = ({lawyer}) => {
         institution,
         regulator,
         years_licenced,
+        languages
     } = {...lawyer};
 
     const specializations = [
@@ -286,6 +287,7 @@ const Overview = ({lawyer}) => {
                 institution={institution}
                 graduation_year={graduation_year}
             />
+            <Languages languages={languages} />
             <Specializations specializations={specializations} />
         </div>
     );
@@ -346,8 +348,20 @@ const Specializations = ({specializations}) => {
         <div className="service-list">
             <h4>More</h4>
             <ul className="clearfix">
-                {specializations.map((specialization) => (
+                {specializations && specializations.map((specialization) => (
                     <li key={specialization}>{specialization}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+const Languages = ({languages}) => {
+    return (
+        <div className="service-list">
+            <h4>Languages</h4>
+            <ul className="clearfix">
+                {languages && languages.map((language) => (
+                    <li key={language.id}>{language.language}</li>
                 ))}
             </ul>
         </div>

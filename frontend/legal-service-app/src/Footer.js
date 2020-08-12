@@ -67,7 +67,7 @@ const Footer = () => {
                                 <h2 className="footer-title">Practice Areas</h2>
                                 <ul>
                                     {practiceAreas.map((area, i) => (
-                                        <li key={i}>
+                                        <li key={i} style={{width: '50%', minWidth: '220px'}}>
                                             <Link
                                                 to={{
                                                     pathname: "/list",
@@ -81,42 +81,6 @@ const Footer = () => {
                                 </ul>
                             </div>
                         </div>
-                        {/* <div className="col-lg-3 col-md-6">
-                            <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Lawyers</h2>
-                                <ul>
-                                    <li>
-                                        <Link to="/dashboard/appointments">
-                                            Appointments
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/dashboard/messages">
-                                            Chat
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/login`}
-                                        >
-                                            Lawyer Login
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/register`}
-                                        >
-                                            Lawyer Register
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/dashboard">
-                                            Lawyer Dashboard
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> */}
 
                         <div className="col-lg-3 col-md-6">
                             <div className="footer-widget footer-contact">
@@ -128,10 +92,6 @@ const Footer = () => {
                                         </span>
                                         <p>Company location</p>
                                     </div>
-                                    <p>
-                                        <i className="fas fa-phone-alt"></i>
-                                        Contact number
-                                    </p>
                                     <p className="mb-0">
                                         <i className="fas fa-envelope"></i>
                                         contact email

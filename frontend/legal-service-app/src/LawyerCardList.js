@@ -22,6 +22,7 @@ const LawyerCardList = ({lawyers, setPopUp}) => {
 const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
     const [auth,] = useContext(AuthContext);
     const {request} = useRequests();
+    const languages = lawyer.languages;
 
     const startChat = (lawyer_id) => {
         const myID = auth.accountId;
@@ -53,28 +54,19 @@ const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
                             <p className="lawyer-education">
                                 licenced in: {lawyer.years_licenced}. {lawyer.institution}
                             </p>
-                            <p class="lawyer-speciality">
-                                {lawyer.languages && (
-                                    <>
-                                        {lawyer.languages.map(
-                                            (language, i) => {
-                                                if (i < 2)
-                                                    return (language.language + " ");
-                                            }
-                                        )}
-                                        {lawyer.languages.length > 2 && (
-                                            <Link
-                                                to={{
-                                                    pathname: `/profile/${lawyer.id}`,
-                                                    state: { lawyer: lawyer },
-                                                }}
-                                            >
-                                                {`+${lawyer.languages.length - 2} more`}
-                                            </Link>
-                                        )}
-                                    </>
-                                )}
-                            </p>
+                            {
+                                languages &&
+                                languages.length && (
+                                    <p class="lawyer-speciality">
+                                        Spoken languages:
+                                        {languages.length === 1
+                                            ? languages[0]
+                                            : languages.length === 2
+                                            ? languages[0] + " and " + languages[1]
+                                            : `${languages[0]}, ${languages[1]} and ${languages.length - 2} more`}
+                                    </p>
+                                )
+                            }
                             <p className="lawyer-department">
                                 <strong>{lawyer.lawyer_type.type}</strong>
                             </p>

@@ -21,6 +21,7 @@ const LawyerCompleteRegisteration = ({}) => {
         practiceAreas: [],
         accreditations: [],
         bio: "",
+        languages: [],
     };
     const {request} = useRequests();
 
@@ -29,6 +30,7 @@ const LawyerCompleteRegisteration = ({}) => {
     const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
     const [accreditationOptions, setAccreditationOptions] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+    const [languageOptions, setLanguageOptions] = useState([]);
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -79,6 +81,19 @@ const LawyerCompleteRegisteration = ({}) => {
                 };
             });
             setAccreditationOptions(accreditations);
+            return request({
+                url: 'lawyer/languages',
+                method: 'GET'
+            });
+        }).then((response) => {
+            const languages = response.languages.map((language, i) => {
+                return {
+                    label: language.language,
+                    value: languages.id,
+                    name: 'languages'
+                };
+            });
+            setLanguageOptions(language);
             return request({
                 url: 'lawyer/me',
                 method: 'GET'
@@ -293,6 +308,20 @@ const LawyerCompleteRegisteration = ({}) => {
                         value={lawyer.accreditations}
                         placeholder="Select accreditations"
                         options={accreditationOptions}
+                        OnChangeHandler={MultiselectHandler}
+                    />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="col-12">
+                    <ErrorMessageSelect
+                        multi={true}
+                        errors={errors.languages}
+                        name="languages"
+                        className="floating"
+                        value={lawyer.languages}
+                        placeholder="Select languages you speak"
+                        options={languageOptions}
                         OnChangeHandler={MultiselectHandler}
                     />
                 </div>

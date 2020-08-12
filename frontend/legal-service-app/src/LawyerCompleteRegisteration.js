@@ -93,7 +93,7 @@ const LawyerCompleteRegisteration = ({}) => {
                     name: 'languages'
                 };
             });
-            setLanguageOptions(language);
+            setLanguageOptions(languages);
             return request({
                 url: 'lawyer/me',
                 method: 'GET'

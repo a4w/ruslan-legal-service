@@ -53,6 +53,28 @@ const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
                             <p className="lawyer-education">
                                 licenced in: {lawyer.years_licenced}. {lawyer.institution}
                             </p>
+                            <p class="lawyer-speciality">
+                                {lawyer.languages && (
+                                    <>
+                                        {lawyer.languages.map(
+                                            (language, i) => {
+                                                if (i < 2)
+                                                    return (language.language + " ");
+                                            }
+                                        )}
+                                        {lawyer.languages.length > 2 && (
+                                            <Link
+                                                to={{
+                                                    pathname: `/profile/${lawyer.id}`,
+                                                    state: { lawyer: lawyer },
+                                                }}
+                                            >
+                                                {`+${lawyer.languages.length - 2} more`}
+                                            </Link>
+                                        )}
+                                    </>
+                                )}
+                            </p>
                             <p className="lawyer-department">
                                 <strong>{lawyer.lawyer_type.type}</strong>
                             </p>

@@ -37,7 +37,7 @@ function LawyerBookingSeparate({lawyer_id, back}) {
     // Check if logged in
     useEffect(() => {
         if (!auth.isLoggedIn) {
-            history.push(`${back}/login`);
+            history.replace(`${back}/login`);
         }
     }, []);
 
@@ -79,7 +79,7 @@ function LawyerBookingSeparate({lawyer_id, back}) {
                 <div className="container-fluid">
                     <div className="row no-gutters">
                         <div className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-                            {lawyer !== null && <div className="booking-container-popup">
+                            {lawyer !== null && <div className="booking-container-popup mt-5">
                                 <div className="row">
                                     <div className="col-12">
                                         <Link to={back} className="btn btn-link float-right">

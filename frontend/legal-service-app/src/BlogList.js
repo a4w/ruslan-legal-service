@@ -15,8 +15,8 @@ const BlogList = ({blogs, editable, col}) => {
                         <Blog key={blog.id} blog={blog} editable={editable} col={col} />
                     ))
                 ) : (
-                    <NoContent>There ara no published blogs</NoContent>
-                )}
+                        <NoContent>There ara no published blogs</NoContent>
+                    )}
             </div>
         );
     else return <Blog />;
@@ -41,7 +41,7 @@ const ButtonStyle = {
     bottom: "0"
 };
 
-const Blog = ({blog, editable, col=6}) => {
+const Blog = ({blog, editable, col = 6}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
@@ -51,7 +51,7 @@ const Blog = ({blog, editable, col=6}) => {
                     <Link
                         to={{
                             pathname: `/blogs/blog/${id}`,
-                            state: { blog: blog, lawyer: lawyer },
+                            state: {blog: blog, lawyer: lawyer},
                         }}
                     >
                         <BlogImg
@@ -64,7 +64,7 @@ const Blog = ({blog, editable, col=6}) => {
                             }}
                         />
                     </Link>
-                    {editable && 
+                    {editable &&
                         <Link
                             to={`/dashboard/blogs/edit-blog/${id}`}
                             className="btn btn-primary"
@@ -75,16 +75,13 @@ const Blog = ({blog, editable, col=6}) => {
                     }
                 </div>
                 <div className="blog-content">
-                    <h3 className="blog-title">
-                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
-                    </h3>
-                    <ul className="entry-meta meta-item">
+                    <ul className="entry-meta meta-item" style={{display: 'flex'}}>
                         <li>
                             <div>
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
-                                        state: { lawyer: lawyer },
+                                        state: {lawyer: lawyer},
                                     }}
                                     style={{display: "flex", alignItems: "center"}}
                                 >
@@ -97,11 +94,14 @@ const Blog = ({blog, editable, col=6}) => {
                                 </Link>
                             </div>
                         </li>
-                        <li>
+                        <li style={{display: 'inline', maxWidth: 'unset', width: 'unset', flex: '0 0 auto'}}>
                             <i className="far fa-clock"></i>{" "}
                             {moment(blog.publish_date).format("Do of MMM YYYY")}
                         </li>
                     </ul>
+                    <h3 className="blog-title">
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
+                    </h3>
                     <ul className="tags mt-2">
                         <li>
                             <a href="#" className="tag">

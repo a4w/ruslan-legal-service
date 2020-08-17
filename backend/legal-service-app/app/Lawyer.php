@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lawyer extends Model
 {
-    protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year'];
+    protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year', 'languages'];
     protected $with = ['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'];
     protected $hidden = [
         'schedule',
@@ -18,7 +18,8 @@ class Lawyer extends Model
     protected $casts = [
         'schedule' => 'json',
         'is_percent_discount' => 'bool',
-        'discount_end' => 'datetime'
+        'discount_end' => 'datetime',
+        'languages' => 'json'
     ];
 
     public $timestamps = false;

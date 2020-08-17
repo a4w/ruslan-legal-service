@@ -286,6 +286,15 @@ const Overview = ({lawyer}) => {
                 institution={institution}
                 graduation_year={graduation_year}
             />
+
+            <div className="service-list">
+                <h4>Languages</h4>
+                <ul className="clearfix">
+                    {lawyer.languages.map((language) => (
+                        <li key={language}>{language}</li>
+                    ))}
+                </ul>
+            </div>
             <Specializations specializations={specializations} />
         </div>
     );

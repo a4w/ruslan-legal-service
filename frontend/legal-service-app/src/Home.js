@@ -70,7 +70,7 @@ const Home = () => {
             return area.value;
         });
         const queryString = areas.join(',');
-        const sLocation = location.value === null ? '' : location.value;
+        const sLocation = location === null ? '' : location.value === null ? '' : location.value;
         History.push({
             pathname: '/list',
             search: (sLocation !== '' || queryString !== '') ? `?location=${sLocation}&practice_areas=${queryString}` : '',
@@ -155,7 +155,7 @@ const Home = () => {
                                                 backspaceDelete={true}
                                                 handleKeyDownFn={(e) => {
                                                     if (e.event.keyCode === 8) {
-                                                        setLocation(null);
+                                                        setLocation({value: null});
                                                     }
                                                 }}
                                                 onCreateNew={() => setPlaceholder("")}

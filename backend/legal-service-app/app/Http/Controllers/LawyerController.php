@@ -400,8 +400,9 @@ class LawyerController extends Controller
             'practice_areas.*' => ['required', 'numeric', 'exists:practice_areas,id'],
             'accreditations' => ['required', 'array', 'min:1'],
             'accreditations.*' => ['required', 'numeric', 'exists:accreditations,id'],
+            'languages' => ['array'],
         ]);
-        $lawyer->update($request->only(['biography', 'years_licenced', 'institution', 'course', 'graduation_year']));
+        $lawyer->update($request->only(['biography', 'years_licenced', 'institution', 'course', 'graduation_year', 'languages']));
         // Lawyer type
         if ($request->get('lawyer_type_id') === 0) {
             $type = LawyerType::create([

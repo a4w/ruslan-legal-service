@@ -152,6 +152,12 @@ const Home = () => {
                                         <div className="col-12 col-md-5 p-1">
                                             <Select
                                                 create
+                                                backspaceDelete={true}
+                                                handleKeyDownFn={(e) => {
+                                                    if (e.event.keyCode === 8) {
+                                                        setLocation(null);
+                                                    }
+                                                }}
                                                 onCreateNew={() => setPlaceholder("")}
                                                 className="search-form-control"
                                                 placeholder={placeholder}

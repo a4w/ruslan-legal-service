@@ -152,17 +152,15 @@ function LawyerList(props) {
                 title="Available Lawyers list | Lawbe"
                 description="A list of the best lawyers from all across the country, book them now!"
             />
-            <StickyBox offsetTop={85} style={{zIndex: 6}}>
-                <LawyerListHeader
-                    params={params}
-                    OnChangeHandler={SortHandler}
-                    selectedValue={sortBy}
-                    filter={filter}
-                    setFilter={setFilter}
-                    filterHandler={filterHandler}
-                    filterClear={filterClear}
-                />
-            </StickyBox>
+            <LawyerListHeader
+                params={params}
+                OnChangeHandler={SortHandler}
+                selectedValue={sortBy}
+                filter={filter}
+                setFilter={setFilter}
+                filterHandler={filterHandler}
+                filterClear={filterClear}
+            />
 
             <div className="container-fluid">
 
@@ -187,7 +185,7 @@ function LawyerList(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-0 col-md-0 col-lg-4">
-                                    <StickyBox offsetTop={190} offsetBottom={20}>
+                                    <StickyBox style={{height: '300px'}} offsetTop={85} offsetBottom={20}>
                                         <PopUp lawyer={lawyerPopUp} />
                                     </StickyBox>
                                 </div>
@@ -274,7 +272,7 @@ const LawyerListHeader = ({
     return (
         <div className="breadcrumb-bar">
             <div className="container-fluid">
-                <div className="row align-items-center" style={{ flexWrap: "inherit" }} >
+                <div className="row align-items-center" style={{flexWrap: "inherit"}} >
                     <form className="card-body form-row p-2">
                         <div className="filter-widget calendar-filter-widget mb-0 ">
                             <div className="cal-icon">
@@ -282,7 +280,7 @@ const LawyerListHeader = ({
                                     className="form-control mb-0"
                                     selected={filter.date}
                                     onChange={(date) =>
-                                        setFilter({ ...filter, date: date })
+                                        setFilter({...filter, date: date})
                                     }
                                     minDate={new Date()}
                                     placeholderText="Available on"
@@ -320,7 +318,7 @@ const LawyerListHeader = ({
                         </span>
                     </div>
                 </div>
-                <div className="row align-items-center d-none display-xs-flex" style={{ flexWrap: "inherit" }} >
+                <div className="row align-items-center d-none display-xs-flex" style={{flexWrap: "inherit"}} >
                     <div className="btn-search-2 mr-2">
                         <button
                             type="button"
@@ -361,7 +359,7 @@ const PopUp = ({lawyer}) => {
                 }}>
 
                 </div>
-                <div style={{width: "100%", marginBottom: "3%", marginTop: "3%"}}>
+                <div style={{width: "100%"}}>
                     <div className="profile-info-widget justify-content-center">
                         <Link
                             to={`profile/${lawyer.id}`}

@@ -5,7 +5,7 @@ import useValidation from "./useValidation";
 import {LawyerInfoValidations} from "./Validations";
 import {toast} from "react-toastify"
 import useRequests from "./useRequests";
-import { Alert } from "react-bootstrap";
+import {Alert} from "react-bootstrap";
 import History from "./History";
 import SpinnerButton from "./SpinnerButton";
 
@@ -20,6 +20,7 @@ const LawyerCompleteRegisteration = ({}) => {
         course: "",
         practiceAreas: [],
         accreditations: [],
+        languages: [],
         bio: "",
     };
     const {request} = useRequests();
@@ -94,11 +95,12 @@ const LawyerCompleteRegisteration = ({}) => {
                 course: "",
                 practiceAreas: [],
                 accreditations: [],
+                languages: [],
                 bio: "",
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type = data.lawyer_type_id? data.lawyer_type_id:0;
+            nextLawyer.type = data.lawyer_type_id ? data.lawyer_type_id : 0;
             // hotty code from a hot person
             if (data.lawyer_type_id > 2) {
                 nextLawyer.type = 0;
@@ -109,6 +111,7 @@ const LawyerCompleteRegisteration = ({}) => {
             nextLawyer.education = data.institution;
             nextLawyer.graduation_year = data.graduation_year;
             nextLawyer.course = data.course;
+            nextLawyer.languages = data.languages;
             nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
                 return area.id;
             });
@@ -139,6 +142,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 course: lawyer.course,
                 practice_areas: lawyer.practiceAreas,
                 accreditations: lawyer.accreditations,
+                languages: lawyer.languages,
                 biography: lawyer.bio,
             };
             request({
@@ -156,7 +160,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 }
                 console.log(_errors);
                 addError(fields, _errors);
-            }).finally(()=>{
+            }).finally(() => {
                 setLoading(false)
             });
         });
@@ -185,7 +189,7 @@ const LawyerCompleteRegisteration = ({}) => {
 
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
-            {show && 
+            {show &&
                 <Alert variant="danger" onClose={() => setShow(false)} dismissible>
                     <Alert.Heading>Warning!</Alert.Heading>
                     <p>
@@ -298,15 +302,29 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
             </div>
             <div className="form-row">
-                <div className="col-lg-12 col-md-12 col-sm-12">
+                <div className="col-lg-6 col-md-6 col-sm-12">
                     <Label value={lawyer.bio} label="Bio..">
                         <textarea
                             className="form-control"
                             name="bio"
-                            style={{ minHeight: "100px" }}
+                            style={{minHeight: "100px"}}
                             form="regForm"
                             value={lawyer.bio}
                             onChange={OnChangeHandler}
+                        ></textarea>
+                    </Label>
+                </div>
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <Label value={lawyer.languages} label="Languages (one per line)">
+                        <textarea
+                            className="form-control"
+                            name="bio"
+                            style={{minHeight: "100px"}}
+                            form="regForm"
+                            value={lawyer.languages.join('\n')}
+                            onChange={(e) => {
+                                setLawyer({...lawyer, languages: e.target.value.split('\n')})
+                            }}
                         ></textarea>
                     </Label>
                 </div>

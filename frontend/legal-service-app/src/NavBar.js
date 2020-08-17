@@ -106,18 +106,6 @@ const NavBar = () => {
                         </ul>
                     </div>
                     <ul className="nav header-navbar-rht">
-                        <li className="nav-item contact-item">
-                            <div className="header-contact-img">
-                                <i className="far fa-building-o"></i>
-                            </div>
-                            <div className="header-contact-detail">
-                                <p className="contact-header">Contact</p>
-                                <p className="contact-info-header">
-                                    {" "}
-                                Contact number
-                            </p>
-                            </div>
-                        </li>
                         <li className="nav-item singup" style={{display: auth.isLoggedIn ? "none" : ""}}>
                             <Link
                                 className="nav-link header-login"

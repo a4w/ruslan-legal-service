@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter, Redirect} from "react-router-dom";
+import {Route, Router, Switch, BrowserRouter, Redirect, useLocation} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/js/bootstrap.bundle"
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -40,6 +40,15 @@ import PostRegistration from "./PostRegistration"
 export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
 export const NotificationContext = React.createContext(null);
+
+function ScrollToTop() {
+    const {pathname} = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
 
 function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
@@ -95,6 +104,7 @@ function App() {
                         >
                         </LoadingOverlay>
                         <BrowserRouter>
+                            <ScrollToTop />
                             <ToastContainer />
                             <Router history={history}>
                                 {/* <NavBar /> */}

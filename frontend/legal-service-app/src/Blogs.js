@@ -65,7 +65,7 @@ const Blogs = (props) => {
                             </Switch>
                         </div>
                         <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                            <StickyBox offsetTop={20} offsetBottom={20}>
+                            <StickyBox offsetTop={85} offsetBottom={20}>
                                 <Search />
                                 <LatestBlogs />
                                 {/* <Catagories /> */}
@@ -85,7 +85,7 @@ const BlogGrid = (props) => {
     useEffect(() => {
         props.setIsLoading(true);
         const url = History.location.pathname + History.location.search;
-        request({ url: url, method: "GET" })
+        request({url: url, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
@@ -106,11 +106,11 @@ const Search = () => {
     const OnChangeHandler = ({target: {value}}) => {
         setSearchInput(value);
     };
-    const OnSubmitHandler = (e)=>{
+    const OnSubmitHandler = (e) => {
         e.preventDefault();
         History.push({
             pathname: "/blogs/search",
-            search: queryString.stringify({ term: searchInput }),
+            search: queryString.stringify({term: searchInput}),
         });
     }
     return (

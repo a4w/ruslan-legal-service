@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import { Link, Route, Router, Switch, Redirect } from "react-router-dom";
+import {Link, Route, Router, Switch, Redirect} from "react-router-dom";
 import History from "./History";
 import {NavTab} from "react-router-tabs";
 import Img from "./Img";
+import moment from "moment";
+import {toast} from "react-toastify";
+import useRequests from "./useRequests";
+import bootbox from "bootbox"
+import {NoContentRow} from "./LawyerDashboardStatus";
+import Status from "./Status";
 
 const ClientDashboardStatus = () => {
-    const appointments = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+    const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
     return (
         <div className="row">
             <div className="col-12">
@@ -18,69 +24,114 @@ const ClientDashboardStatus = () => {
     );
 };
 
-const Appointment = ({ done }) => {
-    const [cancel, setCancel] = useState(false);
-    const [status, setStatus] = useState("badge badge-pill bg-warning-light");
-    const [date, setDate] = useState(null);
+const Appointment = ({
+    id,
+    lawyer_id,
+    appointment_time,
+    created_at,
+    status,
+    price,
+    duration,
+    is_cancellable,
+    can_be_started,
+    currency_symbol
+}) => {
+    const {request} = useRequests();
+    const [lawyer, setLawyer] = useState(null);
     useEffect(() => {
-        if (done) setStatus("badge badge-pill bg-success-light");
+        request({url: `lawyer/${lawyer_id}`, method: "GET"})
+            .then((data) => {
+                setLawyer(data.lawyer);
+                console.log(data.lawyer);
+            })
+            .catch((e) => {});
     }, []);
-    const OnReject = (e) => {
+    const Cancel = (e) => {
         e.preventDefault();
-        setDate(new Date());
-        setCancel(true);
-        // The API cancel Rquest will be sent here
+        bootbox.confirm({
+            title: 'This will cancel the appointment',
+            message: 'Are you sure you would like to cancel ?',
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: `/appointment/${id}/cancel`,
+                        method: 'POST'
+                    }).then(response => {
+                        toast.success("Appointment is cancelled");
+                        window.location.reload();
+                    }).catch(error => {
+                        toast.error("Appointment couldn't be cancelled");
+                    });
+                } else {}
+            }
+        });
     };
     return (
         <tr>
             <td>
-                <h2 className="table-avatar">
-                    <a
-                        href="lawyer-profile.html"
-                        className="avatar avatar-sm mr-2"
-                    >
-                        <Img
-                            className="avatar-img rounded-circle"
-                            alt="User Image"
-                        />
-                    </a>
-                    <a href="lawyer-profile.html">
-                        Lawyer's Name <span>Type</span>
-                    </a>
-                </h2>
+                {lawyer && (
+                    <h2 className="table-avatar">
+                        <Link
+                            to={`/profile/${lawyer_id}`}
+                            className="avatar avatar-sm mr-2"
+                        >
+                            <Img
+                                src={lawyer.account.profile_picture}
+                                className="avatar-img rounded-circle"
+                                alt="User Image"
+                            />
+                        </Link>
+                        <Link to={`/profile/${lawyer_id}`}>
+                            {`${lawyer.account.name} ${lawyer.account.surname}`}
+                            <span>{lawyer.lawyer_type.type}</span>
+                        </Link>
+                    </h2>
+                )}
             </td>
             <td>
-                Appt Date <span className="d-block text-info">Time</span>
-            </td>
-            <td>Booking Date</td>
-            <td>Price</td>
-            <td>
-                <span
-                    className={
-                        cancel ? "badge badge-pill bg-danger-light" : status
-                    }
-                >
-                    {cancel ? "Cancelled" : done ? "Done" : "Upcoming"}
+                {moment(appointment_time).format("Do MMMM YYYY")}{" "}
+                <span className="d-block text-info">
+                    {moment(appointment_time).format("hh:mm a")}
                 </span>
+            </td>
+            <td>{moment(created_at).format("Do MMMM YYYY")}</td>
+            <td>{`${duration} minutes`}</td>
+            <td>{currency_symbol} {price}</td>
+            <td>
+                <Status appStatus={status} />
             </td>
             <td className="text-right">
                 <div className="table-action">
-                    {!done && cancel === false ? (
+                    {can_be_started &&
+                        <>
+                            <Link
+                                className="btn btn-sm bg-success-light m-1"
+                                to={`/video/${id}`}
+                            >
+                                <i className="fas fa-user"></i> Join
+                        </Link>
+                        </>
+                    }
+                    {is_cancellable && (
                         <a
                             href="//"
                             className="btn btn-sm bg-danger-light"
-                            onClick={OnReject}
+                            onClick={Cancel}
                         >
                             <i className="fas fa-times"></i> Cancel
                         </a>
-                    ) : (
+                    )}
+                    {status === "DONE" && (
                         <Link
-                            to={`${History.location.pathname}/rate-lawyer/`}
+                            to={`${History.location.pathname}/rate-lawyer/${id}/${lawyer_id}`}
                             className="btn btn-sm bg-primary-light m-1"
                         >
                             <i className="fas fa-star"></i> Rate
                         </Link>
                     )}
+                    <Link to={`${History.location.pathname}/details/${id}`} className="btn btn-sm bg-info-light">
+                        <i className="far fa-eye"></i> View
+                    </Link>
                 </div>
             </td>
         </tr>
@@ -92,18 +143,22 @@ const AppointmentsTable = (props) => {
             <div className="card card-table mb-0">
                 <div className="card-body">
                     <div className="table-responsive">
-                        <table className="table table-hover table-center mb-0">
-                            <thead>
+                        <table
+                            className="table table-hover table-center mb-0"
+                            style={{backgroundColor: "white", display: "block"}}
+                        >
+                            <tbody style={{width: "100%", display: "table"}}>
                                 <tr>
                                     <th>Lawyer</th>
                                     <th>Appt Date</th>
                                     <th>Booking Date</th>
+                                    <th>duration</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>{props.children}</tbody>
+                                {props.children}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -111,25 +166,61 @@ const AppointmentsTable = (props) => {
         </div>
     );
 };
-const UpcomingAppointments = ({ appointments }) => {
+const UpcomingAppointments = () => {
+    const [upcoming, setUpcoming] = useState([]);
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=true",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setUpcoming(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} />
-            ))}
+            {upcoming.length ? (
+                upcoming.map((appointment) => (
+                    <Appointment key={appointment.id} {...appointment} />
+                ))
+            ) : (
+                    <NoContentRow>No upcoming appointments yet</NoContentRow>
+                )}
         </AppointmentsTable>
     );
 };
-const PreviousAppointments = ({ appointments }) => {
+const AllAppointments = () => {
+    const [all, setAll] = useState([]);
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: "/client/appointments?upcoming=false",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+            })
+            .catch(() => {});
+    }, []);
     return (
         <AppointmentsTable>
-            {appointments.map((appointment) => (
-                <Appointment key={appointment.id} done={true} />
-            ))}
+            {all.length ? (
+                all.map((appointment) => (
+                    <Appointment key={appointment.id} {...appointment} />
+                ))
+            ) : (
+                    <NoContentRow>
+                        You have no appointments, book a lawyer now!
+                    </NoContentRow>
+                )}
         </AppointmentsTable>
     );
 };
-const AppointmentsListTabs = ({ appointments }) => {
+const AppointmentsListTabs = ({appointments}) => {
     const path = "/client-dashboard/status";
     // const path = History.location.pathname;
     return (
@@ -139,7 +230,7 @@ const AppointmentsListTabs = ({ appointments }) => {
                     <Nav className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{ width: "100%" }}
+                            style={{width: "100%"}}
                         >
                             <li className="nav-item">
                                 <NavTab to={`${path}/upcoming`}>
@@ -147,12 +238,9 @@ const AppointmentsListTabs = ({ appointments }) => {
                                 </NavTab>
                             </li>
                             <li className="nav-item">
-                                <NavTab to={`${path}/previous`}>
-                                    Previous
+                                <NavTab to={`${path}/all`}>
+                                    All
                                 </NavTab>
-                            </li>
-                            <li className="nav-item">
-                                <NavTab to={`${path}/billing`}>Billing</NavTab>
                             </li>
                         </ul>
                     </Nav>
@@ -163,11 +251,8 @@ const AppointmentsListTabs = ({ appointments }) => {
                         <Route path={`${path}/upcoming`}>
                             <UpcomingAppointments appointments={appointments} />
                         </Route>
-                        <Route path={`${path}/previous`}>
-                            <PreviousAppointments appointments={appointments} />
-                        </Route>
-                        <Route path={`${path}/billing`}>
-                            <Billings billings={appointments} />
+                        <Route path={`${path}/all`}>
+                            <AllAppointments appointments={appointments} />
                         </Route>
                     </Switch>
                 </Router>
@@ -175,7 +260,7 @@ const AppointmentsListTabs = ({ appointments }) => {
         </div>
     );
 };
-const Billings = ({ billings }) => {
+const Billings = ({billings}) => {
     return (
         <BillingTable>
             {billings.map((bill) => (

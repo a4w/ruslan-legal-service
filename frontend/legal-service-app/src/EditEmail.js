@@ -3,13 +3,14 @@ import {editEmailValidations} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {FaSpinner} from "react-icons/fa";
-import {request} from "./Axios";
 import {toast} from 'react-toastify';
+import useRequests from "./useRequests";
 
 const EditEmail = ({email}) => {
     const [user, setUser] = useState({email: email ? email : ""});
     const [isSaving, setSaving] = useState(false);
     const [errors, addError, runValidation] = useValidation(editEmailValidations);
+    const {request} = useRequests();
 
     useEffect(() => {
         // Load profile data
@@ -56,7 +57,7 @@ const EditEmail = ({email}) => {
     return (
         <form onSubmit={OnSubmitHandler}>
             <div className="row form-row">
-                <div className="col-sm-12 col-lg-10 col-md-9">
+                <div className="col-12 col-md-9">
                     <ErrorMessageInput
                         placeholder={"Email"}
                         name={"email"}
@@ -66,18 +67,21 @@ const EditEmail = ({email}) => {
                         OnChangeHandler={OnChangeHandler}
                     />
                 </div>
-                <div className="submit-section">
-                    <button
-                        type="submit"
-                        disabled={isSaving}
-                        className={
-                            "btn btn-primary submit-btn" +
-                            (isSaving ? "cursor-not-allowed" : "")
-                        }
-                    >
-                        {isSaving && <FaSpinner className="icon-spin" />}
-                        <span>&nbsp;{isSaving ? "" : "Save Changes"}</span>
-                    </button>
+                <div className="col-12 col-md-3">
+                    <div className="submit-section w-100">
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className={
+                                "btn btn-primary btn-block submit-btn float-right" +
+                                (isSaving ? "cursor-not-allowed" : "")
+                            }
+                        >
+                            {isSaving && <FaSpinner className="icon-spin" />}
+                            <span>&nbsp;{isSaving ? "" : "Update email"}</span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </form>

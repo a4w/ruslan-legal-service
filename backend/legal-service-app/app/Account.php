@@ -43,6 +43,8 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['full_name'];
+
     public function client()
     {
         return $this->hasOne(Client::class, 'user_id');
@@ -63,7 +65,8 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
             "iat" => now()->unix(),
             "exp" => now()->addHours(8)->unix(),
             "sub" => $this->getKey(),
-            "rea" => 'EMAIL_VERIFY'
+            "rea" => 'EMAIL_VERIFY',
+            "email" => $this->unverified_email
         );
         $token = JWT::encode($payload, $key);
         $verify_url = route('verify.email', ['token' => $token]);
@@ -108,9 +111,10 @@ class Account extends Authenticatable implements MustVerifyEmail, JWTSubject
      */
     public function markEmailAsVerified()
     {
+        $this->email = $this->unverified_email;
+        $this->save();
         return $this->forceFill([
             'email_verified_at' => $this->freshTimestamp(),
-            'email' => $this->unverified_email,
             'unverified_email' => null
         ])->save();
     }

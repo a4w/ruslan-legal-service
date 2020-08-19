@@ -1,5 +1,6 @@
 import React from "react";
 import EditBasicInfo from "./EditBasicInfo";
+import EditInfo from "./EditInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
 import EditEmail from "./EditEmail";
 import EditAddress from "./EditAddress";
@@ -7,12 +8,18 @@ import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
 import {NavTab} from "react-router-tabs";
 import "./Tabs.css";
 import history from "./History";
+import LawyerPaymentSettings from "./LawyerPaymentSettings"
+import PageHead from "./PageHead";
 
 const EditPersonal = () => {
     const path = "/dashboard/settings";
     // const path = history.location.pathname;
     return (
         <Router history={history}>
+            <PageHead
+                title={"Edit profile | Lawbe.co.uk"}
+                description={"Edit your profile | Lawbe.co.uk"}
+            />
             <div className="card">
                 <div className="card-body pt-0">
                     <div className="user-tabs mb-4">
@@ -36,6 +43,14 @@ const EditPersonal = () => {
                                     Lawyer
                                 </NavTab>
                             </li>
+                            <li>
+                                <NavTab
+                                    exact
+                                    to="/dashboard/settings/payment-settings"
+                                >
+                                    Payment settings
+                                </NavTab>
+                            </li>
                         </ul>
                     </div>
 
@@ -48,15 +63,19 @@ const EditPersonal = () => {
                         </Route>
                         <Route path="/dashboard/settings/basic-info">
                             <div>
-                                <EditBasicInfo />
+                                {/* <EditBasicInfo /> */}
+                                <EditInfo />
                                 <hr></hr>
                                 <EditEmail />
-                                <hr></hr>
-                                <EditAddress />{" "}
+                                {/* <hr></hr>
+                                <EditAddress />{" "} */}
                             </div>
                         </Route>
                         <Route path="/dashboard/settings/lawyer-info">
                             <EditLawyerInfo />
+                        </Route>
+                        <Route path="/dashboard/settings/payment-settings">
+                            <LawyerPaymentSettings />
                         </Route>
                     </Switch>
                 </div>

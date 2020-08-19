@@ -16,7 +16,7 @@ class WebhooksController extends Controller
         $currency = $request->input('data.object.currency');
         $status = $request->input('data.object.status');
         $type = $request->input('type');
-        if ($type !== 'payment_intent.succeeded' || $currency !== 'gbp' || $status !== 'succeeded') {
+        if ($type !== 'payment_intent.succeeded' || $currency !== config('app.currency') || $status !== 'succeeded') {
             Log::info('Wrong webhook message');
             return;
         }
@@ -31,6 +31,10 @@ class WebhooksController extends Controller
         $total = (int) $total;
         if ($amount != $total) {
             Log::info('Wrong webhook total');
+            return;
+        }
+        // Check if already updated
+        if ($appointment->status === 'UPCOMING') {
             return;
         }
         // Now all is good, update appointment status

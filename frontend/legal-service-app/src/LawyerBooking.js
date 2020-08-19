@@ -1,31 +1,58 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
 import LawyerCardList from "./LawyerCardList";
 import AppointmentTimeForm from "./AppointmentTimeForm";
-import {request} from "./Axios";
 import {Elements} from "@stripe/react-stripe-js"
 import {loadStripe} from "@stripe/stripe-js"
-import Config from "./Config";
 import CheckoutForm from "./CheckoutForm";
+import useRequests from "./useRequests";
+import env from "./env"
+import Config from "./Config";
+import moment from "moment";
+import {LoadingOverlayContext, AuthContext} from "./App";
+import {useHistory, useLocation} from "react-router";
+import Img from "./Img";
+import {Link} from "react-router-dom";
 
-const stripe = loadStripe(Config.stripe_api_key);
+const stripe = loadStripe(env.stripe_api_key);
 
 const LawyerBooking = ({LawyerId}) => {
     const [lawyer, setLawyer] = useState(null);
     const [isTimeSelected, setIsTimeSelected] = useState(false);
     const [clientSecret, setClientSecret] = useState(null);
+    const [orderData, setOrderData] = useState({total_price: 0, currency_symbol: Config.default_currency_symbol});
+    const [selectedAppointments, setSelectedAppointments] = useState([]);
+    const {request} = useRequests();
+    const loader = useContext(LoadingOverlayContext);
+    const [auth,] = useContext(AuthContext);
+    const history = useHistory();
+    const location = useLocation();
     useEffect(() => {
+        console.log(auth);
+        if (!auth.isLoggedIn) {
+            history.push(`${location.pathname}/login`);
+        }
+    }, [])
+    useEffect(() => {
+        loader.setIsLoadingOverlayShown(true);
         request({url: `/lawyer/${LawyerId}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
             })
-            .catch((err) => {});
+            .catch((err) => {})
+            .finally(() => {
+                loader.setIsLoadingOverlayShown(false);
+            })
 
     }, []);
 
-    const handleTimeSelection = ({client_secret}) => {
+    const handleTimeSelection = ({client_secret, total_price, currency_symbol, appointments}) => {
         setClientSecret(client_secret);
-        console.log(client_secret);
+        setOrderData({
+            total_price,
+            currency_symbol,
+        })
+        setSelectedAppointments(appointments);
         setIsTimeSelected(true);
     };
 
@@ -33,12 +60,42 @@ const LawyerBooking = ({LawyerId}) => {
         <div className="content">
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12" style={{minHeight: '400px'}}>
+                    <nav aria-label="breadcrumb d-block">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active">Select slots</li>
+                            <li class="breadcrumb-item">Review</li>
+                            <li class="breadcrumb-item" aria-current="page">Checkout</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div className="row no-gutters">
+                    {lawyer && <LawyerCardRounded lawyer={lawyer} />}
+                    <div className={isTimeSelected ? "col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" : "col-12"} style={{minHeight: '400px'}}>
                         {!isTimeSelected && <AppointmentTimeForm lawyer_id={LawyerId} handleSelection={handleTimeSelection} />}
                         {isTimeSelected &&
-                            <Elements stripe={stripe}>
-                                <CheckoutForm client_secret={clientSecret} />
-                            </Elements>
+                            <>
+                                <h1 className="text-center">Checkout</h1>
+                                <div className="m-2">
+                                    <ol>
+                                        {selectedAppointments.map((appointment) => {
+                                            return (
+                                                <>
+                                                    <li>
+                                                        <div className="d-block text-center">
+                                                            <span><b>{new Date(appointment.appointment_time).toLocaleString()}</b> for <b>{appointment.duration} minutes</b></span>
+                                                            <span>&nbsp;:&nbsp;<b>{orderData.currency_symbol} {appointment.price}</b></span>
+                                                        </div>
+                                                    </li>
+                                                </>
+                                            );
+                                        })}
+                                    </ol>
+                                </div>
+                                <h4 className="text-center">Total: {orderData.currency_symbol} {orderData.total_price}</h4>
+                                <Elements stripe={stripe}>
+                                    <CheckoutForm client_secret={clientSecret} />
+                                </Elements>
+                            </>
                         }
                     </div>
                 </div>
@@ -66,6 +123,56 @@ const TodayIs = () => {
         </div>
     );
 };
+
+const LawyerCardRounded = ({lawyer}) => {
+    const {account} = {...lawyer};
+    const imgStyle = {
+        borderRadius: "120px",
+        height: "120px",
+        width: "120px",
+        objectFit: "cover",
+    };
+    return (
+        <div style={{width: "100%", marginBottom: "3%"}}>
+            <div className="profile-info-widget justify-content-center">
+                <Link
+                    to={`profile/${lawyer.id}`}
+                    className="booking-lawyer-img"
+                >
+                    <Img
+                        src={account.profile_picture}
+                        className="img-fluid"
+                        style={imgStyle}
+                    />
+                </Link>
+            </div>
+            <div
+                className="profile-det-info mt-4"
+                style={{
+                    textAlign: "center",
+                }}
+            >
+                <h2>{`${account.name} ${account.surname}`}</h2>
+            </div>
+            <div
+                className="justify-content-center"
+                style={{
+                    display: "flex",
+                }}
+            >
+                <StarRatings
+                    rating={lawyer.ratings_average}
+                    starRatedColor="gold"
+                    starDimension="20px"
+                    starSpacing="0px"
+                    numberOfStars={5}
+                    name="rating"
+                />
+            </div>
+        </div>
+    );
+};
+
 const LawyerCard = ({lawyer}) => {
     return (lawyer &&
         <div className="card">

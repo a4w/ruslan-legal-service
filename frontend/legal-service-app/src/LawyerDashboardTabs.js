@@ -8,8 +8,10 @@ import LawyerClients from "./LawyerClients";
 import LawyerDashboardStatus from "./LawyerDashboardStatus";
 import LawyerReviews from "./LawyerReviews";
 import {Route, Switch, Redirect} from "react-router-dom";
-import History from "./History";
 import ScheduleForm from "./ScheduleForm";
+import UserCalendar from "./UserCalendar";
+import LawyerBlogs from "./LawyerBlogs";
+import ResponsiveChatPage from "./ResponsiveChatPage";
 
 const LawyerDashboardTabs = () => {
     return (
@@ -23,21 +25,38 @@ const LawyerDashboardTabs = () => {
             <Route exact path="/dashboard/appointments">
                 <LawyerAppointments />
             </Route>
-            <Route exact path="/dashboard/clients">
-                <LawyerClients />
-            </Route>
             <Route exact path="/dashboard/schedule">
                 <ScheduleForm />
             </Route>
-            <Route exact path="/dashboard/invoices">
-                <LawyerInvoice />
+            <Route path="/dashboard/calendar">
+                <UserCalendar />
             </Route>
             <Route exact path="/dashboard/reviews">
                 <LawyerReviews />
             </Route>
-            <Route exact path="/dashboard/messages">
-                <Redirect to="/chat" />
+            <Route path="/dashboard/blogs">
+                <LawyerBlogs />
             </Route>
+            <Route
+                path="/dashboard/chat/:chatId"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/dashboard/chat"
+                        minHeight="500px"
+                    />
+                )}
+            />
+            <Route
+                path="/dashboard/chat"
+                render={(props) => (
+                    <ResponsiveChatPage
+                        {...props}
+                        url="/dashboard/chat"
+                        minHeight="500px"
+                    />
+                )}
+            />
             <Route path="/dashboard/settings">
                 <EditPersonal />
             </Route>
@@ -45,7 +64,7 @@ const LawyerDashboardTabs = () => {
                 <EditPassword />
             </Route>
             <Route exact path="/dashboard/logout">
-                <Redirect replace to="/" />
+                <Redirect to="/" />
             </Route>
         </Switch>
     );

@@ -1,9 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import History from "./History";
+import useRequests from "./useRequests";
 
 const Footer = () => {
+    const [practiceAreas, setPracticeAreas] = useState([]);
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: 'lawyer/practice-areas',
+            method: 'GET'
+        }).then(response => {
+            setPracticeAreas(response.areas);
+        });
+    }, []);
     return (
         <footer className="footer">
             <div className="footer-top">
@@ -14,7 +25,8 @@ const Footer = () => {
                                 <div className="footer-about-content">
                                     <div className="footer-logo">
                                         <p className="menu-logo" to="/">
-                                            <b>Lawbe</b>.co.uk
+                                            <img src="/logo1.png" style={{maxWidth: '100%', height: '100px', marginRight: '5px'}} />
+                                            <img src="/logo3.png" style={{maxWidth: '100%', height: '100px'}} />
                                         </p>
                                     </div>
                                     <p>Describtion</p>
@@ -50,73 +62,22 @@ const Footer = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-3 col-md-6">
+                        <div className="col-lg-6 col-md-12">
                             <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Clients</h2>
+                                <h2 className="footer-title">Practice Areas</h2>
                                 <ul>
-                                    <li>
-                                        <Link to="/list">
-                                            Search for Lawyers
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/login`}
-                                        >
-                                            Client Login
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/register`}
-                                        >
-                                            Client Register
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/book">Booking</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/client-dashboard">
-                                            Client Dashboard
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="footer-widget footer-menu">
-                                <h2 className="footer-title">For Lawyers</h2>
-                                <ul>
-                                    <li>
-                                        <Link to="/dashboard/appointments">
-                                            Appointments
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/dashboard/messages">
-                                            Chat
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/login`}
-                                        >
-                                            Lawyer Login
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to={`${History.location.pathname}/register`}
-                                        >
-                                            Lawyer Register
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/dashboard">
-                                            Lawyer Dashboard
-                                        </Link>
-                                    </li>
+                                    {practiceAreas.map((area, i) => (
+                                        <li key={i} style={{width: '50%', minWidth: '220px'}}>
+                                            <Link
+                                                to={{
+                                                    pathname: "/list",
+                                                    search: `?practice_areas=${area.id}`,
+                                                }}
+                                            >
+                                                {area.area}
+                                            </Link>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
@@ -131,10 +92,6 @@ const Footer = () => {
                                         </span>
                                         <p>Company location</p>
                                     </div>
-                                    <p>
-                                        <i className="fas fa-phone-alt"></i>
-                                        Contact number
-                                    </p>
                                     <p className="mb-0">
                                         <i className="fas fa-envelope"></i>
                                         contact email

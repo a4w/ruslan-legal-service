@@ -2,13 +2,16 @@ import React, {useState, useEffect} from "react";
 import {editEmailValidations} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
+import useRequests from "./useRequests";
 import History from "./History";
+import {FaSpinner} from "react-icons/fa";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [errors, , runValidation] = useValidation(editEmailValidations);
+    const [submitting, setSubmitting] = useState(false);
+    const {request} = useRequests();
 
     const OnChangeHandler = (event) => {
         setEmail(event.target.value);
@@ -18,21 +21,25 @@ const ForgotPassword = () => {
         event.preventDefault();
         runValidation({email: email}).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                setSubmitting(true);
                 console.log("safe");
                 const data = {email};
                 request({url: "/account/reset-password-request", method: "POST", data})
                     .then((data) => {
                         console.log("reset successful");
-                        toast.success("Password reset successfully");
-                        // History.push("/");
+                        toast.success("Password reset successfully, Please check your mail");
+                        History.push("/home");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {})
+                    .finally(()=>{
+                        setSubmitting(false);
+                    });
             }
         });
     };
 
     return (
-        <div className="content" style={{backgroundColor: "#ffffff"}}>
+        <div className="content" style={{ backgroundColor: "#ffffff" }}>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
@@ -68,10 +75,19 @@ const ForgotPassword = () => {
                                             />
                                         </div>
                                         <button
-                                            className="btn btn-primary btn-block btn-lg login-btn"
+                                            className={
+                                                "btn btn-primary btn-block btn-lg login-btn " +
+                                                (submitting
+                                                    ? "cursor-not-allowed"
+                                                    : "")
+                                            }
                                             type="submit"
+                                            disabled={submitting}
                                         >
-                                            Reset Password
+                                            {submitting && (
+                                                <FaSpinner className="icon-spin" />
+                                            )}
+                                            &nbsp;{submitting ? "" : "Reset Password"}
                                         </button>
                                     </form>
                                 </div>

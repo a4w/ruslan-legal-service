@@ -8,6 +8,7 @@ use App\Helpers\AppointmentHelper;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
+use App\Notifications\AppointmentCancelled;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,7 @@ class AppointmentController extends Controller
             }
             // Check 2
             $slot_weekday = AppointmentHelper::dayToIndex($slot_datetime->dayName);
-            $slot_time = $slot['time'];
+            $slot_time = $slot_datetime->format('H:i');
             $slot_length = $slot['length'];
             $is_real_slot = false;
             foreach ($lawyer->schedule[$slot_weekday]['slots'] as $schedule_slot) {
@@ -80,13 +81,13 @@ class AppointmentController extends Controller
         try {
             $paymentIntent = PaymentIntent::create([
                 'amount' => $total_price * 100, // Stripe uses this stupid way to avoid rounding errors
-                'currency' => 'gbp'
+                'currency' => config('app.currency')
             ]);
             foreach ($appointments as $appointment) {
                 $appointment->payment_intent_id = $paymentIntent->id;
                 $appointment->save();
             }
-            return RespondJSON::with(['client_secret' => $paymentIntent->client_secret]);
+            return RespondJSON::success(['client_secret' => $paymentIntent->client_secret, 'total_price' => $total_price, 'appointments' => $appointments, 'currency_symbol' => config('app.currency_symbol')]);
         } catch (Exception $e) {
             return RespondJSON::unknownError();
         }
@@ -153,7 +154,8 @@ class AppointmentController extends Controller
             $chat->participants()->attach($appointment->client->account);
         }
         // render token to string
-        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid, 'chat_id' => $chat->id]);
+        $appointment_end = (new Carbon($appointment->appointment_time))->addMinutes($appointment->duration);
+        return RespondJSON::success(['access_token' => $token->toJWT(), 'room_sid' => $appointment->room_sid, 'chat_id' => $chat->id, 'appointment_end' => $appointment_end]);
     }
 
     public function cancelAppointment(Appointment $appointment)
@@ -170,8 +172,21 @@ class AppointmentController extends Controller
         $appointment->status = 'CANCELLED';
         $appointment->save();
         Refund::create([
-            'payment_intent' => $appointment->payment_intent_id
+            'payment_intent' => $appointment->payment_intent_id,
+            'amount' => $appointment->price * 100
         ]);
+        $appointment->client->account->notify(new AppointmentCancelled($appointment));
+        $appointment->lawyer->account->notify(new AppointmentCancelled($appointment));
         return RespondJSON::success();
+    }
+
+    public function getAppointment(Appointment $appointment)
+    {
+        /** @var Account */
+        $user = Auth::user();
+        if ($user->lawyer != $appointment->lawyer && $user->client != $appointment->client) {
+            return RespondJSON::forbidden();
+        }
+        return RespondJSON::success(['appointment' => $appointment]);
     }
 }

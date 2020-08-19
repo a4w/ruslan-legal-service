@@ -1,16 +1,22 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Nav from "react-bootstrap/Nav";
-import { NavTab } from "react-router-tabs";
-import {request} from "./Axios";
+import {NavTab} from "react-router-tabs";
 import Img from "./Img";
+import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App";
 
 const ClientDashboardSidebar = () => {
     const [account, setAccount] = useState({});
+    const {request, Logout} = useRequests();
+    const loader = useContext(LoadingOverlayContext);
     useEffect(() => {
-        request({ url: "/account/personal-info", method: "GET" })
+        loader.setLoadingOverlayText("Loading...");
+
+        loader.setIsLoadingOverlayShown(true);
+        request({url: "/account/personal-info", method: "GET"})
             .then((data) => {
                 setAccount(data.profile_data);
-                console.log(data);                
+                loader.setIsLoadingOverlayShown(false);
             })
             .catch((err) => {});
     }, []);
@@ -22,14 +28,16 @@ const ClientDashboardSidebar = () => {
                         <Img src={account.profile_picture} alt="User Image" />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{`${account.name} ${account.surname}`}</h3>
+                        <h3>{account.name ? `${account.name} ${account.surname}` : "loading..."}</h3>
                         <div className="client-details">
                             <h5>
                                 <i className="fas fa-phone"></i> {account.phone}
                             </h5>
                             <h5 className="mb-0">
                                 <i className="fas fa-map-marker-alt"></i>{" "}
-                                {`${account.city}, ${account.country}`}
+                                {account.city && account.country
+                                    ? `${account.city}, ${account.country}`
+                                    : "-"}
                             </h5>
                         </div>
                     </div>
@@ -46,10 +54,15 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to="/client-dashboard/messages">
+                                <NavTab exact to="/client-dashboard/calendar">
+                                    <i className="fas fa-calendar"></i>
+                                    <span>Calendar</span>
+                                </NavTab>
+                            </li>
+                            <li>
+                                <NavTab replace={false} to="/client-dashboard/chat">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
-                                    <small className="unread-msg">23</small>
                                 </NavTab>
                             </li>
                             <li>
@@ -65,10 +78,10 @@ const ClientDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab to="/client-dashboard/logout">
+                                <a href="#" onClick={Logout}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </NavTab>
+                                </a>
                             </li>
                         </ul>
                     </div>

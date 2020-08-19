@@ -22,6 +22,10 @@ class AuthController extends Controller
 
     public function login(JSONRequest $request)
     {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:8']
+        ]);
         $credentials = $request->only('email', 'password');
         $credentials['email'] = Str::lower($credentials['email']);
         if (!$token = auth()->attempt($credentials)) {
@@ -83,7 +87,8 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'account_type' => $account->getType(),
-            'user_id' => $account->id
+            'user_id' => $account->id,
+            'account' => $account->isLawyer() ? $account->lawyer : $account->client
         ];
         if ($refresh_token !== null) {
             $response += [
@@ -102,7 +107,7 @@ class AuthController extends Controller
 
         $email = $request->get('email');
         $client = new Google_Client(['client_id' => config('app.google_client_id')]);  // Specify the CLIENT_ID of the app that accesses the backend
-        JWT::$leeway = 60;
+        JWT::$leeway = 120;
         $payload = $client->verifyIdToken($request->get('id_token'));
         if ($payload) {
             // Check if registered
@@ -113,10 +118,10 @@ class AuthController extends Controller
                 $account->email = $request->get('email');
                 $account->save();
                 $account->client()->save(Client::make());
-                return $this->respondWithToken(Auth::login($account));
+                return $this->respondWithToken($account, Auth::login($account));
             } else {
                 // login
-                return $this->respondWithToken(Auth::login($user));
+                return $this->respondWithToken($user, Auth::login($user));
             }
         } else {
             return RespondJSON::unauthorized();

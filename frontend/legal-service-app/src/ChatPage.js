@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react"
 import "./ChatPage.css";
 import {FaCogs, FaPaperclip} from "react-icons/fa";
-import {request} from "./Axios"
 import ChatUserList from "./ChatUserList"
 import MessagesList from "./MessagesList"
 import {toast} from "react-toastify";
 import useInterval from "./useInterval";
+import useRequests from "./useRequests";
 
 const HideChatListStyle = {
     left: "-100%"
@@ -30,6 +30,7 @@ const ChatPage = () => {
         if (window.innerWidth >= 991) setHide(false);
         else setHide(true)
     };
+    const {request} = useRequests();
     useEffect(() => {
         window.addEventListener("resize", Chats);
 

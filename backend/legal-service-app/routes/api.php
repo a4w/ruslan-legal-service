@@ -45,7 +45,14 @@ Route::prefix('lawyer')->group(function () {
     Route::get('practice-areas', 'LawyerController@getPracticeAreas');
     Route::get('accreditations', 'LawyerController@getAccreditations');
     Route::get('appointments', 'LawyerController@fetchLawyerAppointments')->middleware('auth:api');
+    Route::get('done-appointments', 'LawyerController@fetchLawyerDoneAppointments')->middleware('auth:api');
+    Route::get('stripe-connect', 'LawyerController@getStripeConnectionLink')->middleware('auth:api');
+    Route::get('search', 'LawyerController@searchLawyers');
     Route::get('{lawyer}', 'LawyerController@fetchLawyer');
+});
+
+Route::prefix('client')->group(function () {
+    Route::get('appointments', 'ClientController@fetchClientAppointments')->middleware('auth:api');
 });
 
 Route::prefix('chat')->group(function () {
@@ -66,16 +73,20 @@ Route::prefix('appointment')->group(function () {
     Route::post('{lawyer}/select-slots', 'AppointmentController@selectSlots')->middleware('auth:api');
     Route::get('{appointment}/get-room-access-token', 'AppointmentController@getRoomAccessToken')->middleware('auth:api');
     Route::post('{appointment}/cancel', 'AppointmentController@cancelAppointment')->middleware('auth:api');
+    Route::get('{appointment}', 'AppointmentController@getAppointment')->middleware('auth:api');
 });
 
 Route::prefix('blogs')->group(function () {
     Route::get('all', 'BlogsController@getBlogs');
+    Route::get('search', 'BlogsController@searchBlogs');
+    Route::get('mine', 'BlogsController@getPersonalLawyerBlogs')->middleware('auth:api');
     Route::get('{blog}', 'BlogsController@getBlog');
+    Route::get('/my/{blog}', 'BlogsController@getMyBlog')->middleware('auth:api');
     Route::get('/lawyer/{lawyer}', 'BlogsController@getLawyerBlogs');
     Route::post('add', 'BlogsController@addBlogPost')->middleware('auth:api');
+    Route::post('edit/{blog}', 'BlogsController@editBlogPost')->middleware('auth:api');
     Route::post('{blog}/upload-cover', 'BlogsController@uploadCover')->middleware('auth:api');
     Route::get('latest/{number}', 'BlogsController@latestBlogs');
-    Route::post('search', 'BlogsController@searchBlogs');
 });
 
 

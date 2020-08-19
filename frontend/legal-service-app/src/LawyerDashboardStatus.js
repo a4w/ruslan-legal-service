@@ -4,10 +4,13 @@ import Nav from "react-bootstrap/Nav";
 import {Router, Route, Link, Redirect, Switch} from "react-router-dom";
 import history from "./History";
 import {NavTab} from "react-router-tabs";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
 import {FaUser, FaCalendar, FaRegCalendarPlus, FaCalendarCheck} from "react-icons/fa";
 import Img from "./Img";
+import History from "./History";
+import useRequests from "./useRequests";
+import bootbox from "bootbox"
+import Status from "./Status";
 
 const LawyerDashboardStatus = () => {
     return (
@@ -34,6 +37,7 @@ const LawyerStatus = () => {
     const [numberOfDoneAppointments, setNumberOfDoneAppointments] = useState(0);
     const [numberOfUpcomingAppointments, setNumberOfUpcomingAppointments] = useState(0);
     const [nextAppointmentDate, setNextAppointmentDate] = useState(null);
+    const {request} = useRequests();
 
     useEffect(() => {
         request({
@@ -129,28 +133,38 @@ const ListItem = ({appointment}) => {
         hour: "numeric",
         minute: "numeric",
     });
+    const {request} = useRequests();
     const cancelAppointment = (id) => {
-        request({
-            url: `/appointment/${id}/cancel`,
-            method: 'POST'
-        }).then(response => {
-            toast.success("Appointment is cancelled");
-        }).error(error => {
-            toast.error("Appointment couldn't be cancelled");
+        bootbox.confirm({
+            title: 'This will cancel the appointment',
+            message: 'Are you sure you would like to cancel ?',
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: `/appointment/${id}/cancel`,
+                        method: 'POST'
+                    }).then(response => {
+                        toast.success("Appointment is cancelled");
+                        window.location.reload();
+                    }).catch(error => {
+                        toast.error("Appointment couldn't be cancelled");
+                    });
+                } else {}
+            }
         });
     };
     return (
         <tr>
             <td>
                 <h2 className="table-avatar">
-                    <a href="//" className="avatar avatar-sm mr-2">
+                    <a href="#" className="avatar avatar-sm mr-2">
                         <Img
                             className="avatar-img rounded-circle"
                             src={account.profile_picture}
                             alt="User"
                         />
                     </a>
-                    <a href="//">
+                    <a href="#">
                         {account.name + " " + account.surname}
                         <span>{appointment.duration} Minutes</span>
                     </a>
@@ -160,8 +174,10 @@ const ListItem = ({appointment}) => {
                 {day}
                 <span className="d-block text-info">{time}</span>
             </td>
-            <td className="text-center">{appointment.status}</td>
-            <td className="text-center">{appointment.price}</td>
+            <td className="text-center">
+                <Status appStatus={appointment.status} />
+            </td>
+            <td className="text-center">{appointment.currency_symbol} {appointment.price}</td>
             <td className="text-right">
                 <div className="table-action">
                     {appointment.can_be_started &&
@@ -182,6 +198,9 @@ const ListItem = ({appointment}) => {
                             <i className="fas fa-times"></i> Cancel
                         </button>
                     )}
+                    <Link to={`${History.location.pathname}/details/${appointment.id}`} className="btn btn-sm bg-info-light">
+                        <i className="far fa-eye"></i> View
+                    </Link>
                 </div>
             </td>
         </tr>
@@ -195,9 +214,9 @@ const AppointmentsTable = (props) => {
                     <div className="table-responsive">
                         <table
                             className="table table-hover table-center mb-0"
-                            style={{backgroundColor: "white"}}
+                            style={{backgroundColor: "white", display: "block"}}
                         >
-                            <thead>
+                            <tbody style={{width: "100%", display: "table"}}>
                                 <tr>
                                     <th>Client Name</th>
                                     <th>Appt Date</th>
@@ -205,8 +224,8 @@ const AppointmentsTable = (props) => {
                                     <th className="text-center">Paid Amount</th>
                                     <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>{props.children}</tbody>
+                                {props.children}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -216,7 +235,8 @@ const AppointmentsTable = (props) => {
 };
 
 const UpcomingAppointments = () => {
-    const [upcoming, setUpcoming] = useState(null);
+    const [upcoming, setUpcoming] = useState([]);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=true",
@@ -230,14 +250,33 @@ const UpcomingAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {upcoming && upcoming.map((appointment) => (
-                <ListItem key={appointment.id} appointment={appointment} />
-            ))}
+            {upcoming && upcoming.length ? (
+                upcoming.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>no upcoming appointments</NoContentRow>
+            )}
         </AppointmentsTable>
     );
 };
+
+const NoContentRow = (props)=>{
+    return (
+        <tr>
+            <td
+                colSpan="100%"
+                style={{ textAlign: "center", fontSize: "larger" }}
+            >
+                {props.children}
+            </td>
+        </tr>
+    );
+}
+
 const AllAppointments = () => {
     const [all, setAll] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",
@@ -251,10 +290,55 @@ const AllAppointments = () => {
     }, []);
     return (
         <AppointmentsTable>
-            {all && all.map((appointment) => (
-                <ListItem key={appointment.id} appointment={appointment} />
-            ))}
+            {all && all.length ? (
+                all.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>You don't have any appointments yet</NoContentRow>
+            )}
         </AppointmentsTable>
+    );
+};
+
+const DoneAppointments = () => {
+    const [all, setAll] = useState(null);
+    const [total, setTotal] = useState({currency_symbol: '', total: 0});
+    const {request} = useRequests();
+    useEffect(() => {
+        request({
+            url: "/lawyer/done-appointments",
+            method: "GET",
+        })
+            .then((data) => {
+                console.log(data);
+                setAll(data.appointments);
+                setTotal({
+                    total: data.total,
+                    currency_symbol: data.currency_symbol
+                });
+            })
+            .catch(() => {});
+    }, []);
+    return (
+        <>
+        <AppointmentsTable>
+            {all && all.length ? (
+                all.map((appointment) => (
+                    <ListItem key={appointment.id} appointment={appointment} />
+                ))
+            ) : (
+                <NoContentRow>You don't have any appointments yet</NoContentRow>
+            )}
+            <tr>
+                <td colSpan="4">
+                    <div className="d-block text-right text-lg font-weight-bold">
+                        Total: {total.currency_symbol}{total.total}
+                    </div>
+                </td>
+            </tr>
+        </AppointmentsTable>
+        </>
     );
 };
 const AppointmentsListTabs = () => {
@@ -269,22 +353,29 @@ const AppointmentsListTabs = () => {
                 <li className="nav-item">
                     <NavTab className="nav-link" to={`${path}/all`}>All</NavTab>
                 </li>
+                <li className="nav-item">
+                    <NavTab className="nav-link" to={`${path}/done`}>Done</NavTab>
+                </li>
             </ul>
 
-            <Switch>
-                <div className="tab-content">
+            <div className="tab-content">
+                <Switch>
                     <Route path={`${path}/upcoming`}>
                         <UpcomingAppointments />
                     </Route>
                     <Route path={`${path}/all`}>
                         <AllAppointments />
                     </Route>
+                    <Route path={`${path}/done`}>
+                        <DoneAppointments />
+                    </Route>
                     <Route exact path={path}>
                         <Redirect to={`${path}/upcoming`} />
                     </Route>
-                </div>
-            </Switch>
+                </Switch>
+            </div>
         </Router>
     );
 };
 export default LawyerDashboardStatus;
+export {NoContentRow};

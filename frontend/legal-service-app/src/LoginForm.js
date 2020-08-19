@@ -1,23 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {loginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import {request, setAccessToken, setRefreshToken} from "./Axios";
 import {FaSpinner} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
 import History from "./History";
+import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
-function getParent(url) {
-    const reversed = url.split("").reverse().join("")
-    const n = reversed.indexOf("/");
-    const parent = reversed.substr(n + 1);
-    return parent.split("").reverse().join("");
-}
 
-const LoginForm = () => {
+const LoginForm = ({back}) => {
     const initUser = {
         email: "",
         password: "",
@@ -26,6 +21,10 @@ const LoginForm = () => {
     const [user, setUser] = useState(initUser);
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(loginValidation);
+
+    const {request} = useRequests();
+
+    const [auth, setAuth] = useContext(AuthContext);
 
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
@@ -40,24 +39,28 @@ const LoginForm = () => {
                 const url = "/auth/login";
                 request({url: url, method: "POST", data: user})
                     .then((data) => {
-                        console.log("success", data);
-                        if (data.access_token) {
-                            console.log("Setting shit");
-                            setAccessToken(data.access_token);
+                        setAuth({
+                            accessToken: data.access_token,
+                            accountType: data.account_type,
+                            refreshToken: data.refresh_token || null,
+                            isLoggedIn: true,
+                            accountId: data.user_id
+                        });
+                        if (typeof data.account.fully_registered !== "undefined" && !data.account.fully_registered) {
+                            History.push({
+                                pathname: "/dashboard/settings/lawyer-info",
+                                state: {showAlert: true},
+                            });
                         }
-                        if (data.refresh_token)
-                            setRefreshToken(data.refresh_token);
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
                         addError(["password", "email"], {
-                            email: ["Invalid User"],
-                            password: ["Invalid User"],
+                            password: ["Invalid password supplied"],
                         });
                     })
                     .finally(() => {
                         setLoggingIn(false);
-                        window.location.reload();
                     });
             }
         });
@@ -145,11 +148,10 @@ const LoginForm = () => {
                 <div className="text-center dont-have">
                     Don’t have an account?
                     <a
-                        // to={`${getParent(History.location.pathname)}/register`}
-                        href="//"
+                        style={{cursor: "pointer"}}
                         onClick={() =>
                             History.replace(
-                                `${getParent(History.location.pathname)}/register`
+                                `${back}/register`
                             )
                         }
                     >
@@ -165,14 +167,14 @@ const LoginWrapper = (props) => {
     return (
         <div className="account-content">
             <div className="row align-items-center justify-content-center">
-                <div className="col-md-7 col-lg-6 login-left">
+                <div className="col-lg-5 login-left">
                     <img
                         src="/undraw_welcoming_xvuq.svg"
                         className="img-fluid"
                         alt="Register"
                     />
                 </div>
-                <div className="col-md-12 col-lg-5 login-right">
+                <div className="col-md-12 col-lg-7 login-right">
                     {props.children}
                 </div>
             </div>
@@ -180,4 +182,3 @@ const LoginWrapper = (props) => {
     );
 };
 export default LoginForm;
-export {getParent};

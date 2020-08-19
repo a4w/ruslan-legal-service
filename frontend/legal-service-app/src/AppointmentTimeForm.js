@@ -1,12 +1,13 @@
-import React, {useState, useEffect, useMemo} from "react";
+import React, {useState, useEffect, useMemo, useContext} from "react";
 import moment from "moment";
-import {FaCheck} from "react-icons/fa";
+import {FaCheck, FaClock} from "react-icons/fa";
 import Config from "./Config";
-import {request} from "./Axios"
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import {toast} from "react-toastify";
+import {LoadingOverlayContext} from "./App"
+import useRequests from "./useRequests";
 
-const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
+const AppointmentTimeForm = ({lawyer_id, handleSelection, allow_booking = true}) => {
 
 
     const calculateDiscountedPrice = (price) => {
@@ -17,6 +18,10 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         }
         return price;
     };
+
+    const {request} = useRequests();
+
+    const loadingContext = useContext(LoadingOverlayContext);
 
     // Calender start
     const [fromDateTime, setFromDateTime] = useState(moment()); // Default now
@@ -33,11 +38,40 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             method: 'POST',
             data: {
                 days_to_show: days,
-                from: fromDateTime.format(Config.momentsjs_default_datetime_format)
+                from: fromDateTime.utc().format(Config.momentsjs_default_date_format)
             }
         }).then(response => {
             response.discount_type = response.enable_discount ? response.is_percent_discount ? 1 : 2 : 0;
-            setSchedule({...response, days: [...response.schedule.days]});
+            // Convert to local timezone
+            const days = response.schedule.days;
+            const nextDays = days.map((day) => {
+                return {name: day.name, date: day.date, slots: []}
+            });
+            for (let i = 0; i < days.length; ++i) {
+                const date = days[i].date;
+                const slots = days[i].slots;
+                for (let j = 0; j < slots.length; ++j) {
+                    const slot = slots[j];
+                    const appointment_date = moment.utc(date + " " + slot.time).local();
+                    const utc_time = moment.utc(date + " " + slot.time);
+                    let day_idx = i;
+                    console.log(appointment_date);
+                    if (utc_time.format(Config.momentsjs_default_date_format) < appointment_date.format(Config.momentsjs_default_date_format)) {
+                        day_idx++;
+                    } else if (utc_time.format(Config.momentsjs_default_date_format) > appointment_date.format(Config.momentsjs_default_date_format)) {
+                        day_idx--;
+                    }
+                    if (day_idx >= 0 && day_idx < days.length) {
+                        const end_date = moment.utc(date + " " + slot.to).local();
+                        nextDays[day_idx].slots.push({
+                            ...slot,
+                            time: appointment_date.format('HH:mm'),
+                            to: end_date.format("HH:mm")
+                        });
+                    }
+                }
+            }
+            setSchedule({...response, days: nextDays});
 
         }).catch(error => {
             console.log(error);
@@ -60,7 +94,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
         const dayIdx = button.dataset.day;
         const slotIdx = button.dataset.slot;
         const slot = schedule.days[dayIdx].slots[slotIdx];
-        slot.datetime = schedule.days[dayIdx].date + " " + slot.time;
+        slot.datetime = moment(schedule.days[dayIdx].date + " " + slot.time).utc().format("Y-MM-DD HH:mm");
         if (button.classList.contains('selected')) {
             const nextSelectedSlots = selectedSlots.filter(currentSlot => {
                 if (currentSlot == slot) {
@@ -81,6 +115,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             toast.error("At least one slot must be selected");
             return;
         }
+        loadingContext.setIsLoadingOverlayShown(true);
+        loadingContext.setLoadingOverlayText("Please wait while we hold these slots for you");
         request({
             url: `/appointment/${lawyer_id}/select-slots`,
             method: 'POST',
@@ -89,8 +125,14 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
             // Go to checkout with the client secret
             toast.info("You will proceed to checkout, please note that the slots you selected will be held for only 15 minutes");
             const client_secret = response.client_secret;
-            handleSelection({client_secret});
+            const appointments = response.appointments;
+            const total_price = response.total_price;
+            const currency_symbol = response.currency_symbol;
+
+            handleSelection({client_secret, appointments, total_price, currency_symbol});
         }).catch(error => {
+        }).finally(() => {
+            loadingContext.setIsLoadingOverlayShown(false);
         });
     };
 
@@ -111,7 +153,10 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                     {schedule !== null && schedule.days.map((day, i) => {
                                         return (
                                             <div className="col" key={day.date}>
-                                                <span>{day.name}</span>
+                                                <span style={{
+                                                    fontSize: '14px',
+                                                    margin: '0px 10px 0px 10px'
+                                                }}>{day.name}</span>
                                                 <span class="slot-date">{moment(day.date).format('D MMM Y')}</span>
                                             </div>
                                         );
@@ -127,19 +172,23 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                     </div>
                 </div>
 
-                <div className="schedule-cont">
+                <div className="schedule-cont" style={{
+                    overflowY: 'auto',
+                    maxHeight: '350px'
+                }}>
                     <div className="row no-gutters">
                         <div className="col-1"></div>
                         {schedule !== null && schedule.days.map((day, i) => {
                             return (
                                 <div className="col" key={day.date}>
+                                    {day.slots.length === 0 && (<span className="d-block text-center text-muted" style={{fontSize: '10px'}}>No slots</span>)}
                                     {day.slots.map((slot, j) => {
                                         const discountedPrice = calculateDiscountedPrice((slot.length / 60) * schedule.price_per_hour)
                                         return (
                                             <OverlayTrigger
                                                 placement={"bottom"}
                                                 overlay={
-                                                    <Popover size="lg">
+                                                    <Popover size="lg" style={{zIndex: '9999'}}>
                                                         <Popover.Title as="h3" className="text-center">
                                                             {slot.length} minutes
                                                                 </Popover.Title>
@@ -148,9 +197,8 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                             {schedule.discount_type !== 0 &&
                                                                 <>
                                                                     <span className="slot-info-popover-body"><strong>Discount:</strong>&nbsp;{schedule.discount_amount} {schedule.discount_type === 1 ? '%' : 'GBP'}</span>
-                                                                    <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{schedule.discount_end}</span>
+                                                                    <span className="slot-info-popover-body"><strong>Discount end:</strong>&nbsp;{moment(schedule.discount_end).toDate().toLocaleString()}</span>
                                                                 </>}
-                                                            <span className="slot-info-delete-notice text-xs text-info d-block text-center">Double click to delete this slot</span>
                                                         </Popover.Content>
                                                     </Popover>
                                                 }
@@ -160,11 +208,11 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                                                     key={slot.id}
                                                     data-day={i}
                                                     data-slot={j}
-                                                    className="timing btn-block"
-                                                    onClick={handleSlotClick}
+                                                    className={"timing " + (allow_booking ? '' : 'cursor-help')}
+                                                    onClick={(e) => (allow_booking ? handleSlotClick(e) : false)}
                                                 >
                                                     <span>
-                                                        {slot.time} - {slot.to}
+                                                        {slot.time} ➡ {slot.to}
                                                     </span>
                                                 </button>
                                             </OverlayTrigger>
@@ -175,9 +223,20 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                         })}
                         <div className="col-1"></div>
                     </div>
+
+                    <div className="row form-row">
+                        <div className="col-12">
+                            <span className="text-muted p-2 d-block" style={{
+                                backgroundColor: 'rgba(0,0,0,0.05)',
+                                borderRadius: '5px',
+                                textAlign: 'center',
+                                marginTop: '15px'
+                            }}><FaClock />&nbsp;All times are shown in your local timezone <strong>(UTC{moment().format('Z')})</strong></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="row">
+            {allow_booking && <div className="row no-gutters">
                 <div className="col-12">
                     <div className="submit-section proceed-btn text-right">
                         <button
@@ -189,7 +248,7 @@ const AppointmentTimeForm = ({lawyer_id, handleSelection}) => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div>}
         </>
     );
 };

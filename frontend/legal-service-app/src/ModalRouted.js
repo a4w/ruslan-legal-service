@@ -13,7 +13,7 @@ const modalStyle = {
     justifyContent: "center",
     color: "##FFF",
     display: "flex",
-    zIndex: "9999"
+    zIndex: "1000"
 };
 const modalHeaderStyles = {
     display: "flex",
@@ -69,8 +69,10 @@ const Modal = (props) => {
                     border: "1px solid rgba(0,0,0,.2)",
                     borderRadius: ".3rem",
                     outline: "0",
-                    width: "90%",
+                    maxWidth: "90%",
                     margin: "auto",
+                    maxHeight: "90%",
+                    overflow: "auto",
                 }}
                 ref={ref}
             >
@@ -96,4 +98,64 @@ const Modal = (props) => {
     );
 };
 
+const OnTopModal = (props) => {
+    const ref = useRef(null);
+    const [clicked, setClickedOutside] = useState(false);
+
+    const handleClickOutside = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            setClickedOutside(true);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, [ref]);
+
+    const OnClick = () => {
+        if (clicked) History.goBack();
+    };
+    return (
+        <div
+            style={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                pointerEvents: "auto",
+                backgroundColor: "#fff",
+                backgroundClip: "padding-box",
+                border: "1px solid rgba(0,0,0,.2)",
+                borderRadius: ".3rem",
+                outline: "0",
+                margin: "auto",
+                overflow: "auto",
+            }}
+            ref={ref}
+        >
+            <div style={modalHeaderStyles}>
+                <div className="modal-title h4">{props.header}</div>
+                <button
+                    className="close"
+                    onClick={() => {
+                        if (props.back) {
+                            History.push(props.back);
+                        } else {
+                            History.goBack()
+                        }
+                    }}
+                >
+                    <span aria-hidden="true">×</span>
+                    <span className="sr-only">Close</span>
+                </button>
+            </div>
+            <div style={{padding: '20px'}}>
+                {props.children}
+            </div>
+        </div>
+    );
+};
+
 export default Modal;
+export {ModalPortal, OnTopModal};

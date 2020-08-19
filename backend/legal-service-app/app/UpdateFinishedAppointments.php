@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Exception;
+use Twilio\Rest\Client;
+
 class UpdateFinishedAppointments
 {
     public function __invoke()
@@ -15,8 +18,9 @@ class UpdateFinishedAppointments
             if ($time->addMinutes($appointment->duration)->lt(now())) {
                 // Kick all participants
                 try {
-                    $twilio->video->v1->rooms($appointment->room_sid)
-                        ->update("completed");
+                    if ($appointment->room_sid !== null) {
+                        $twilio->video->v1->rooms($appointment->room_sid)->update("completed");
+                    }
                 } catch (\Exception $e) {
                 }
                 // Update appointment to be DONE

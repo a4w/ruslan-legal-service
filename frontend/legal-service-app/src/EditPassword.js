@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { editPasswordValidation } from "./Validations";
+import React, {useState} from "react";
+import {editPasswordValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { request } from "./Axios";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
+import useRequests from "./useRequests";
+import SpinnerButton from "./SpinnerButton";
 
 const EditPassword = () => {
     const initUser = {
@@ -11,12 +12,14 @@ const EditPassword = () => {
         newPassword: "",
         passwordConfirm: "",
     };
+    const {request} = useRequests();
 
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(editPasswordValidation);
+    const [loading, setLoading] = useState(false);
 
-    const OnChangeHandler = ({ target: { name, value } }) => {
-        const nextUser = { ...user, [name]: value };
+    const OnChangeHandler = ({target: {name, value}}) => {
+        const nextUser = {...user, [name]: value};
         setUser(nextUser);
         runValidation(nextUser, name);
     };
@@ -25,6 +28,7 @@ const EditPassword = () => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                setLoading(true);
                 const passwords = {
                     new_password: user.newPassword,
                     old_password: user.oldPassword,
@@ -38,7 +42,10 @@ const EditPassword = () => {
                     .then((data) => {
                         toast.success("Password changed successfuly");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {})
+                    .finally(()=>{
+                        setLoading(false);
+                    });
             }
         });
     };
@@ -78,12 +85,13 @@ const EditPassword = () => {
                         />
                     </div>
                     <div className="submit-section">
-                        <button
+                        <SpinnerButton
                             type="submit"
                             className="btn btn-primary submit-btn"
+                            loading={loading}
                         >
                             Save Changes
-                        </button>
+                        </SpinnerButton>
                     </div>
                 </form>
             </div>

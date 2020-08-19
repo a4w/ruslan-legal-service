@@ -11,9 +11,34 @@ import DatePicker from "react-datepicker";
 import {OverlayTrigger, Popover} from "react-bootstrap"
 import useValidation from "./useValidation";
 import {scheduleSettingValidation} from "./Validations";
-import {request} from "./Axios"
+import useRequests from "./useRequests";
+import SpinnerButton from "./SpinnerButton";
+import Config from "./Config";
+import Modal from 'react-bootstrap/Modal';
+
+
+function useDoubleTap(callback) {
+    const delta = 500;
+    const [timer, setTimer] = useState(null);
+
+    const tap = (e) => {
+        if (timer === null) {
+            setTimer(window.setTimeout(() => {
+                setTimer(null);
+                window.clearTimeout(timer);
+            }, delta));
+        } else {
+            window.clearTimeout(timer);
+            setTimer(null);
+            callback(e);
+        }
+    }
+
+    return tap;
+}
 
 const ScheduleForm = ({}) => {
+    const {request} = useRequests();
 
     const TIME_FORMAT = "HH:mm";
 
@@ -22,18 +47,19 @@ const ScheduleForm = ({}) => {
     const [numberOfDaysShown, setNumberOfDaysShown] = useState(1);
     const [firstIndexShown, setFirstIndexShown] = useState(0);
     const [visibleSchedule, setVisibleSchedule] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const schedule_container = useRef(null);
 
     // Schedule (This will contain the selected slots and their data
     const [schedule, setSchedule] = useState([
-        {name: "Sunday", slots: []},
         {name: "Monday", slots: []},
         {name: "Tuesday", slots: []},
         {name: "Wednesday", slots: []},
         {name: "Thursday", slots: []},
         {name: "Friday", slots: []},
         {name: "Saturday", slots: []},
+        {name: "Sunday", slots: []},
     ]);
 
 
@@ -59,28 +85,56 @@ const ScheduleForm = ({}) => {
     // On load
     useEffect(() => {
         // Calculate number of days to show
-        console.log(schedule_container.current.offsetWidth);
         const nDays = Math.min(7, Math.max(1, (0.6 * schedule_container.current.offsetWidth) / 100));
-        console.log(nDays);
         setNumberOfDaysShown(nDays);
         request({
             url: 'lawyer/schedule',
             method: 'GET'
         }).then(response => {
-            console.log(response);
-            const nextSchedule = response.schedule.map((day) => {
-                return {
-                    ...day,
-                    slots: day.slots.map(slot => {
-                        const time = moment(slot.time, "HH:mm");
-                        return {
-                            ...slot,
-                            time,
-                            end_time: time.clone().add(slot.length, "minutes")
-                        };
-                    })
-                };
-            });
+            //const nextSchedule = response.schedule.map((day, i) => {
+            //    return {
+            //        ...schedule[i],
+            //        ...day,
+            //        slots: day.slots.map(slot => {
+            //            const time = moment(slot.time, "HH:mm");
+            //            return {
+            //                ...slot,
+            //                time,
+            //                end_time: time.clone().add(slot.length, "minutes")
+            //            };
+            //        })
+            //    };
+            //});
+            // Process timezone
+            const nextSchedule = schedule.slice();
+            const weekReducer = (action, day) => {
+                if (action === '+') {
+                    return (day + 1) % 7;
+                } else if (action === '-') {
+                    return (day + 6) % 7;
+                }
+                return day;
+            }
+            for (let i = 0; i < response.schedule.length; ++i) {
+                const slots = response.schedule[i].slots;
+                for (let j = 0; j < slots.length; ++j) {
+                    const slot = slots[j];
+                    const time_obj = moment.utc(slot.time, "HH:mm").local();
+                    const time_utc = moment.utc(slot.time, "HH:mm");
+                    let day = i;
+                    if (time_utc.format(Config.momentsjs_default_date_format) < time_obj.format(Config.momentsjs_default_date_format)) {
+                        day = weekReducer('+', day);
+                    } else if (time_utc.day(Config.momentsjs_default_date_format) > time_obj.format(Config.momentsjs_default_date_format)) {
+                        day = weekReducer('-', day);
+                    }
+                    nextSchedule[day].slots.push({
+                        ...slot,
+                        time: time_obj,
+                        end_time: time_obj.clone().add(slot.length, "minutes")
+                    });
+                }
+            }
+
             setSchedule(nextSchedule);
             const nextGlobalSettings = {
                 price: response.price_per_hour,
@@ -137,10 +191,6 @@ const ScheduleForm = ({}) => {
         setSchedule(nextSchedule);
     };
 
-    useEffect(() => {
-        console.log(errors);
-    }, [errors]);
-
     const handleTimeSelection = (time) => {
         const clock = ("0" + time.hour).slice(-2) + ":" + time.minute;
         setSlotProperties({...slotProperties, time: moment(clock, "HH:mm")});
@@ -149,6 +199,7 @@ const ScheduleForm = ({}) => {
     const toggleTimePicker = () => {
         setIsTimeSelectionShown(!isTimeSelectorShown);
     };
+
 
     const handleDeleteSlot = (event) => {
         const button = event.currentTarget;
@@ -159,40 +210,53 @@ const ScheduleForm = ({}) => {
         setSchedule(nextSchedule);
     }
 
-    const handleSaveClick = () => {
-        const toSend = {
-            schedule: {
-                days: schedule.map((day) => {
-                    let newDay = {
-                        ...day, slots: day.slots.map((slot) => {
-                            let newSlots = {
-                                ...slot,
-                                time: slot.time.format(TIME_FORMAT),
+    const doubleTapDeleteSlot = useDoubleTap(handleDeleteSlot);
 
-                            };
-                            delete newSlots.end_time;
-                            return newSlots;
-                        })
-                    };
-                    return newDay;
-                }),
-                settings: {
-                    price_per_hour: globalSettings.price,
-                    enable_discount: (globalSettings.discount_type !== 0),
-                    is_percent_discount: (globalSettings.discount_type === 1),
-                    discount_amount: globalSettings.discount_amount,
-                    discount_end: globalSettings.discount_end,
-                }
+    const handleSaveClick = () => {
+        runValidation(globalSettings).then((hasErrors) => {
+            if (hasErrors) {
+                setIsSideShown(true);
+                return;
             }
-        };
-        request({
-            url: '/lawyer/update-schedule',
-            method: 'POST',
-            data: toSend
-        }).then((response) => {
-            toast.success("Schedule saved successfully");
-        }).catch((error) => {
-            console.debug(error);
+            setLoading(true);
+
+            const toSend = {
+                schedule: {
+                    days: schedule.map((day) => {
+                        let newDay = {
+                            ...day, slots: day.slots.map((slot) => {
+                                let newSlots = {
+                                    ...slot,
+                                    time: slot.time.format(TIME_FORMAT),
+
+                                };
+                                delete newSlots.end_time;
+                                return newSlots;
+                            })
+                        };
+                        return newDay;
+                    }),
+                    settings: {
+                        price_per_hour: globalSettings.price,
+                        enable_discount: (globalSettings.discount_type !== 0),
+                        is_percent_discount: (globalSettings.discount_type === 1),
+                        discount_amount: globalSettings.discount_amount,
+                        discount_end: globalSettings.discount_end,
+                        timezone: moment().format('Z')
+                    }
+                }
+            };
+            request({
+                url: '/lawyer/update-schedule',
+                method: 'POST',
+                data: toSend
+            }).then((response) => {
+                toast.success("Schedule saved successfully");
+            }).catch((error) => {
+                console.debug(error);
+            }).finally(() => {
+                setLoading(false);
+            });
         });
     };
 
@@ -204,13 +268,13 @@ const ScheduleForm = ({}) => {
     ];
 
     const weekDayOptions = [
-        {label: 'Sunday', value: 0},
-        {label: 'Monday', value: 1},
-        {label: 'Tuesday', value: 2},
-        {label: 'Wednesday', value: 3},
-        {label: 'Thursday', value: 4},
-        {label: 'Friday', value: 5},
-        {label: 'Saturday', value: 6},
+        {label: 'Monday', value: 0},
+        {label: 'Tuesday', value: 1},
+        {label: 'Wednesday', value: 2},
+        {label: 'Thursday', value: 3},
+        {label: 'Friday', value: 4},
+        {label: 'Saturday', value: 5},
+        {label: 'Sunday', value: 6},
     ];
 
     useEffect(() => {
@@ -225,97 +289,112 @@ const ScheduleForm = ({}) => {
 
     return (
         <>
-            <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}>
-                <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button>
-                <div className="p-3">
-                    <h4 className="text-center">Add appointment</h4>
-                    <div className="form-group">
-                        <ErrorMessageSelect
-                            multi={false}
-                            name="weekday"
-                            className="floating"
-                            value={slotProperties.weekday}
-                            placeholder="Weekday"
-                            options={weekDayOptions}
-                            OnChangeHandler={handleSelection}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
-                            <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
-                        </button>
-                        {isTimeSelectorShown && <div className="timepicker-container">
-                            <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
-                                <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
-
-                            </FocusWrapper>
+            <Modal backdrop="static" show={isSideShown} conatainer={schedule_container} onHide={() => {setIsSideShown(false)}} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Slot</Modal.Title>
+                </Modal.Header>
+                {/* <Collapse style={{position: 'absolute', zIndex: 10, backgroundColor: '#FFF'}} isOpen={isSideShown}> */}
+                {/* <button className="btn btn-link float-right" onClick={() => {setIsSideShown(false)}}><FaTimes /></button> */}
+                <Modal.Body>
+                    <div className="p-3">
+                        <h4 className="text-center"> Global appointment settings </h4>
+                        <div className="form-group">
+                            <ErrorMessageInput
+                                type={"text"}
+                                name="price"
+                                value={globalSettings.price}
+                                OnChangeHandler={handleSettingsChange}
+                                placeholder={"Price per hour"}
+                                errors={errors.price}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <ButtonGroup>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
+                                <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
+                            </ButtonGroup>
+                        </div>
+                        {globalSettings.discount_type !== 0 && <div className="form-group">
+                            <ErrorMessageInput
+                                disabled={globalSettings.discount_type === 0}
+                                type={"text"}
+                                name="discount_amount"
+                                value={globalSettings.discount_amount}
+                                OnChangeHandler={handleSettingsChange}
+                                placeholder={"Discount"}
+                                errors={errors.discount_amount}
+                            />
                         </div>}
-                    </div>
-                    <div className="form-group">
-                        <ErrorMessageSelect
-                            multi={false}
-                            name="length"
-                            className="floating"
-                            value={slotProperties.length}
-                            placeholder="Length (in minutes)"
-                            options={slotOptions}
-                            OnChangeHandler={handleSelection}
-                        />
-                    </div>
-                    <button onClick={handleButtonClick} className="btn btn-block btn-primary">
-                        <FaArrowCircleRight />&nbsp;Add appointment
+                        {globalSettings.discount_type !== 0 && <div className="form-group">
+                            <DatePicker
+                                className="form-control"
+                                placeholderText="Available on"
+                                onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
+                                selected={globalSettings.discount_end}
+                                showTimeSelect
+                                dateFormat={"Y-MM-dd HH:mm:ss"}
+                            />
+                            {errors["discount_end"] && errors["discount_end"].length > 0 &&
+                                <label className="text-danger ml-2 font-weight-light text-xs">
+                                    {errors["discount_end"][0]}
+                                </label>
+                            }
+                        </div>}
+                        <hr />
+                        <h4 className="text-center">Add appointment</h4>
+                        <div className="form-group">
+                            <ErrorMessageSelect
+                                multi={false}
+                                name="weekday"
+                                className="floating"
+                                value={slotProperties.weekday}
+                                placeholder="Weekday"
+                                options={weekDayOptions}
+                                OnChangeHandler={handleSelection}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <button className="btn btn-dark btn-block" onClick={toggleTimePicker}>
+                                <FaClock />&nbsp;{slotProperties.time.format(TIME_FORMAT)}
                             </button>
-                    <hr />
-                    <h4 className="text-center"> Global appointment settings </h4>
-                    <div className="form-group">
-                        <ErrorMessageInput
-                            type={"text"}
-                            name="price"
-                            value={globalSettings.price}
-                            OnChangeHandler={handleSettingsChange}
-                            placeholder={"Price per hour"}
-                            errors={errors.price}
-                        />
+                            {isTimeSelectorShown && <div className="timepicker-container">
+                                <FocusWrapper close={() => {setIsTimeSelectionShown(false)}}>
+                                    <TimeKeeper style={{position: 'absolute'}} time={slotProperties.time.format(TIME_FORMAT)} hour24Mode={true} forceCoarseMinutes={true} onChange={handleTimeSelection} />
+
+                                </FocusWrapper>
+                            </div>}
+                        </div>
+                        <div className="form-group">
+                            <ErrorMessageSelect
+                                multi={false}
+                                name="length"
+                                className="floating"
+                                value={slotProperties.length}
+                                placeholder="Length (in minutes)"
+                                options={slotOptions}
+                                OnChangeHandler={handleSelection}
+                            />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <ButtonGroup>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 0})}} active={globalSettings.discount_type === 0}>No discount</Button>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 1})}} active={globalSettings.discount_type === 1}>Percent discount</Button>
-                            <Button className="btn-sm" color="info" onClick={() => {setGlobalSettings({...globalSettings, discount_type: 2})}} active={globalSettings.discount_type === 2}>Fixed discount</Button>
-                        </ButtonGroup>
-                    </div>
-                    {globalSettings.discount_type !== 0 && <div className="form-group">
-                        <ErrorMessageInput
-                            disabled={globalSettings.discount_type === 0}
-                            type={"text"}
-                            name="discount_amount"
-                            value={globalSettings.discount_amount}
-                            OnChangeHandler={handleSettingsChange}
-                            placeholder={"Discount"}
-                            errors={errors.discount_amount}
-                        />
-                    </div>}
-                    {globalSettings.discount_type !== 0 && <div className="form-group">
-                        <DatePicker
-                            className="form-control"
-                            placeholderText="Available on"
-                            onChange={(date) => {setGlobalSettings({...globalSettings, discount_end: date})}}
-                            selected={globalSettings.discount_end}
-                            showTimeSelect
-                            dateFormat={"Y-MM-dd HH:mm:ss"}
-                        />
-                        {errors["discount_end"] && errors["discount_end"].length > 0 &&
-                            <label className="text-danger ml-2 font-weight-light text-xs">
-                                {errors["discount_end"][0]}
-                            </label>
-                        }
-                    </div>}
-                </div>
-            </Collapse>
+                    {/* </Collapse> */}
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-dark" onClick={() => {setIsSideShown(false)}}>Close</button>
+                    <button onClick={() => {handleButtonClick(); setIsSideShown(false)}} className="btn btn-primary">
+                        <FaArrowCircleRight />&nbsp;Add appointment
+                    </button>
+                </Modal.Footer>
+            </Modal>
             <div className="row no-gutters">
                 <div className="col">
                     <div className="row form-row">
                         <div className="col-12">
+                            <span className="text-muted p-2 float-left" style={{
+                                backgroundColor: 'rgba(0,0,0,0.05)',
+                                borderRadius: '5px',
+                                margin: '5px 0px 5px 0px'
+                            }}><FaClock />&nbsp;All times are shown in your local timezone <strong>(UTC{moment().format('Z')})</strong></span>
                             <button className="btn btn-sm btn-info float-right mb-1" onClick={
                                 () => {
                                     setIsSideShown(!isSideShown);
@@ -335,7 +414,6 @@ const ScheduleForm = ({}) => {
                                                 </button>
                                             </div>
                                             {visibleSchedule.map((day, i) => {
-                                                console.log("DAY: ", i);
                                                 return (
                                                     <div className="col" key={i}>
                                                         <span>{day.name}</span>
@@ -386,7 +464,7 @@ const ScheduleForm = ({}) => {
                                                             data-day={i}
                                                             data-slot={j}
                                                             className="timing btn-block"
-                                                            onDoubleClick={handleDeleteSlot}
+                                                            onClick={doubleTapDeleteSlot}
                                                         >
                                                             <span>
                                                                 {slot.time.format("HH:mm")} - {slot.end_time.format("HH:mm")}
@@ -405,9 +483,9 @@ const ScheduleForm = ({}) => {
 
                     <div className="row form-row">
                         <div className="col">
-                            <button className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
+                            <SpinnerButton loading={loading} className="btn btn-success float-right btn-block" onClick={handleSaveClick}>
                                 <FaSave />&nbsp;Save schedule
-                                </button>
+                            </SpinnerButton>
                         </div>
                     </div>
                 </div>
@@ -440,8 +518,9 @@ function FocusWrapper({children, close}) {
     }, []);
 
     return (
-        <div ref={container} style={{display: "inline-block"}}>
+        <div ref={container} className="fme" style={{display: "inline-block"}}>
             {children}
         </div>
     );
 }
+

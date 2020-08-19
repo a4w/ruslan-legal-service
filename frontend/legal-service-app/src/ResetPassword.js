@@ -2,8 +2,10 @@ import React, {useState} from "react";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import {resetPasswordValidation} from "./Validations";
-import {request} from "./Axios";
 import {toast} from "react-toastify";
+import useRequests from "./useRequests";
+import {FaSpinner} from "react-icons/fa";
+import History from "./History";
 
 const ResetPasswordForm = (props) => {
     const {match} = {...props};
@@ -14,6 +16,8 @@ const ResetPasswordForm = (props) => {
 
     const [user, setUser] = useState(initUser);
     const [errors, , runValidation] = useValidation(resetPasswordValidation);
+    const [submitting, setSubmitting] = useState(false);
+    const {request} = useRequests();
 
     const OnChangeHandler = ({target: {name, value}}) => {
         const nextUser = {...user, [name]: value};
@@ -29,14 +33,21 @@ const ResetPasswordForm = (props) => {
         event.preventDefault();
         runValidation(user).then(async (hasErrors, _) => {
             if (!hasErrors) {
+                setSubmitting(true);
                 console.log("safe");
                 request({
                     url: `/account/reset-password/${match.params.Token}`,
                     method: "POST",
                     data: {new_password: user.newPassword},
-                }).then((data) => {
-                    toast.success("Password Reset successfuly");
-                });
+                })
+                    .then((data) => {
+                        toast.success("Password Reset successfuly");
+                        History.replace("/home");
+                    })
+                    .catch((error) => {})
+                    .finally(()=>{
+                        setSubmitting(false);
+                    });
             }
         });
     };
@@ -66,10 +77,16 @@ const ResetPasswordForm = (props) => {
                     </div>
                     <div className="form-row">
                         <button
-                            className="btn btn-primary btn-block btn-lg login-btn "
                             type="submit"
+                            className={
+                                "btn btn-primary btn-block btn-lg login-btn " +
+                                (submitting ? "cursor-not-allowed" : "")
+                            }
+                            type="submit"
+                            disabled={submitting}
                         >
-                            Save
+                            {submitting && <FaSpinner className="icon-spin" />}
+                            &nbsp;{submitting ? "" : "Save"}
                         </button>
                     </div>
                 </form>
@@ -87,7 +104,7 @@ const ResetPassword = (props) => {
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-md-7 col-lg-6 login-left">
                                     <img
-                                        src="./undraw_dev_productivity_umsq.svg"
+                                        src="/undraw_dev_productivity_umsq.svg"
                                         className="img-fluid"
                                         alt="Fogot Password"
                                     />

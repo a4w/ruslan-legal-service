@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
-import {request} from "./Axios";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 import Img from "./Img";
+import useRequests from "./useRequests";
+import bootbox from "bootbox"
+import NoContent from "./NoContent";
+import RoundImg from "./RoundImg";
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();
+    const {request} = useRequests();
     useEffect(() => {
         request({url: "/lawyer/appointments", method: "GET"})
             .then((data) => {
@@ -16,9 +20,16 @@ const LawyerAppointments = () => {
     }, []);
     return (
         <div className="appointments">
-            {appointments && appointments.map((appointment) => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-            ))}
+            {appointments && appointments.length ? (
+                appointments.map((appointment) => (
+                    <AppointmentCard
+                        key={appointment.id}
+                        appointment={appointment}
+                    />
+                ))
+            ) : (
+                <NoContent>There are no appointments yet</NoContent>
+            )}
         </div>
     );
 };
@@ -27,6 +38,7 @@ const AppointmentCard = ({appointment}) => {
     const {client} = {...appointment};
     const {account} = {...client};
     const appointment_time = new Date(appointment.appointment_time);
+    const {request} = useRequests();
     const day = appointment_time.toLocaleString("en-GB", {
         year: "numeric",
         month: "long",
@@ -39,13 +51,22 @@ const AppointmentCard = ({appointment}) => {
     });
     const [date, setDate] = useState(null);
     const cancelAppointment = (id) => {
-        request({
-            url: `/appointment/${id}/cancel`,
-            method: 'POST'
-        }).then(response => {
-            toast.success("Appointment is cancelled");
-        }).error(error => {
-            toast.error("Appointment couldn't be cancelled");
+        bootbox.confirm({
+            title: 'This will cancel the appointment',
+            message: 'Are you sure you would like to cancel ?',
+            callback: (result) => {
+                if (result) {
+                    request({
+                        url: `/appointment/${id}/cancel`,
+                        method: 'POST'
+                    }).then(response => {
+                        toast.success("Appointment is cancelled");
+                        window.location.reload();
+                    }).catch(error => {
+                        toast.error("Appointment couldn't be cancelled");
+                    });
+                } else {}
+            }
         });
     };
     // const show = () => {
@@ -63,13 +84,13 @@ const AppointmentCard = ({appointment}) => {
     return (
         <div className="appointment-list">
             <div className="profile-info-widget">
-                <a href="//" className="booking-lawyer-img">
-                    <Img
-                        style={imgStyle}
+                <div className="client-pp">
+                    <RoundImg
                         src={account.profile_picture}
+                        diameter={155}
                         alt="User"
                     />
-                </a>
+                </div>
                 <div className="profile-det-info">
                     <h3>
                         <a href="//">{account.name + " " + account.surname}</a>
@@ -82,6 +103,10 @@ const AppointmentCard = ({appointment}) => {
                         <span className="detail">
                             <i className="far fa-clock"></i>{" "}
                             {appointment.duration}
+                        </span>
+                        <span className="detail">
+                            <i className="fa fa-credit-card"></i>{" "}
+                            {appointment.currency_symbol + appointment.price}
                         </span>
                         {(account.cite || account.country) && <span className="detail">
                             <i className="fas fa-map-marker-alt"></i>{" "}

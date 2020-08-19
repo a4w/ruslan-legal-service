@@ -1433,7 +1433,7 @@ button.bg-danger:hover {
     display: none;
     float: left;
     height: 100%;
-    min-height: 1px;
+    min-width: 260px;
 }
 [dir='rtl'] .slick-slide {
     float: right;
@@ -1758,6 +1758,11 @@ button.bg-danger:hover {
     border: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }
+.notifications{
+    position: absolute;
+    left: -296px;
+}
+
 .header-navbar-rht .dropdown-toggle::after {
     display: none;
 }
@@ -2012,6 +2017,8 @@ html.menu-opened body {
 .footer .footer-menu ul li {
     margin-bottom: 10px;
     position: relative;
+    display: inline-flex;
+    width: 220px;
 }
 .footer .footer-menu ul li:last-child {
     margin-bottom: 0;
@@ -2458,7 +2465,7 @@ html.menu-opened body {
     display: block;
     margin-left: 0;
     padding: 10px;
-    width: 280px;
+    width: auto;
 }
 .profile-widget {
     background-color: #fff;
@@ -2869,6 +2876,7 @@ html.menu-opened body {
     height: 46px;
     font-weight:500;
     font-size:16px;
+    /* width: 10%; */
 }
 .lawyer-widget {
     display: -webkit-box;
@@ -2882,17 +2890,16 @@ html.menu-opened body {
 }
 .lawyer-info-right {
     margin-left: auto;
-    -ms-flex: 0 0 200px;
-    flex: 0 0 200px;
-    max-width: 200px;
+    min-width: 30%;
+    width: 30%;
 }
-.lawyer-img {
+.law-img {
     -ms-flex: 0 0 150px;
     flex: 0 0 150px;
     margin-right: 20px;
     width: 150px;
 }
-.lawyer-img img {
+.law-img img {
     border-radius: 5px;
 }
 .lawyer-department {
@@ -2973,9 +2980,22 @@ html.menu-opened body {
     display: inline-block;
     font-size: 12px;
     padding: 3px 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+.session-services a {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 12px;
+    padding: 3px 10px;
+    margin-top: 5px;
 }
 .session-services span + span {
-    margin-left: 5px;
+    margin-right: 10px;
+}
+.session-services span + a {
+    margin-right: 5px;
 }
 .session-infos {
     margin-bottom: 15px;
@@ -2990,6 +3010,7 @@ html.menu-opened body {
     display: block;
     line-height: 30px;
     color: #4E4852;
+    border-bottom: 1px dashed #ddd;
 }
 .session-infos ul li i {
     font-size: 15px;
@@ -3062,6 +3083,9 @@ html.menu-opened body {
     background-color: #09e5ab;
     border-color: #09e5ab;
     color: #fff;
+}.msg-btn {
+    width: 100%;
+    font-size: 14px;
 }
 .call-btn:hover, .call-btn:focus {
     background-color: #09e5ab;
@@ -3178,16 +3202,16 @@ html.menu-opened body {
     padding-bottom: 0;
 }
 .service-list ul {
+    display: grid;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 .service-list ul li {
-    float: left;
     margin: 6px 0;
     padding-left: 25px;
     position: relative;
-    width: 33%;
+    width: auto;
 }
 .service-list ul li::before {
     color: #ccc;
@@ -3466,12 +3490,12 @@ html.menu-opened body {
 .day-slot div span {
     display: block;
     font-size: 18px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .day-slot div span.slot-date {
     display: block;
     color: #757575;
-    font-size: 14px;
+    font-size: 12px;
 }
 .day-slot div small.slot-year {
     color: #757575;
@@ -3512,20 +3536,27 @@ html.menu-opened body {
     width: 14.28%;
 }
 .schedule-cont .timing {
-    background-color: #e9e9e9;
-    border: 1px solid #e9e9e9;
+    background-color: #ffffff;
+    border: 1px dashed #ccc;
     border-radius: 3px;
     color: #757575;
     display: block;
-    font-size: 14px;
+    font-size: 11px;
     margin-bottom: 10px;
     padding: 5px 5px;
     text-align: center;
     position: relative;
+    margin: auto;
+    margin-bottom: 5px;
+    font-family: monospace;
+    white-space: nowrap;
 }
 .timing:hover {
-    background-color: #fff;
+    background-color: #09e6ab;
+    color: #ffffff;
+    border: 1px solid #ccc;
 }
+
 .timing:last-child {
     margin-bottom: 0;
 }
@@ -3536,7 +3567,6 @@ html.menu-opened body {
 }
 .timing.selected::before {
     color: #fff;
-    content: "\f00c";
     font-family: "Font Awesome 5 Free";
     font-size: 12px;
     font-weight: 900;
@@ -4216,7 +4246,6 @@ html.menu-opened body {
 .chat-scroll {
     /*min-height: 300px;
     max-height: calc(100vh - 224px);*/
-    height: 400px;
     overflow-y: auto;
 }
 .chat-cont-left .chat-users-list {
@@ -5750,10 +5779,16 @@ html.menu-opened body {
 .blog-image,
 .blog-image > a,
 .blog-image img {
-    display: block;
-    position: relative;
+    /* position: relative;
     width: 100%;
     height: auto;
+    justify-content: center;
+    align-content: center;
+    display: flex; */
+    display: block;
+	position: relative;
+	width: 100%;
+	height: auto;
 }
 .blog-image img {
     -webkit-transform: translateZ(0);
@@ -5867,6 +5902,10 @@ html.menu-opened body {
     display: flex;
     align-items: center;
 }
+.post-author-2 a {
+    display: flex;
+    align-items: center;
+}
 .video {
     position: relative;
     padding-bottom: 56%;
@@ -5898,10 +5937,12 @@ html.menu-opened body {
     border-bottom: none;
 }
 .post-thumb {
-    border-radius: 4px;
-    width: 80px;
+    /* border-radius: 4px; */
+    width: 90px;
+    height: 90px;
     float: left;
     overflow: hidden;
+    border-radius: 0;
 }
 .post-thumb a img {
     border-radius: 4px;
@@ -6125,11 +6166,11 @@ html.menu-opened body {
     display: inline-block;
     margin-bottom: 10px;
 }
-.post-author img {
+/* .post-author img {
     border-radius: 100%;
-    width: 28px;
+    width: inherit;
     margin-right: 5px;
-}
+} */
 
 /*-----------------
     40. Blog Grid
@@ -6148,12 +6189,13 @@ html.menu-opened body {
 }
 .grid-blog .blog-image {
     margin-bottom: 20px;
+    /* border-radius: 100%; */
 }
 .blog.grid-blog {
     padding: 20px;
 }
 .grid-blog .entry-meta {
-    display: flex;
+    display: grid;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -6164,7 +6206,8 @@ html.menu-opened body {
 }
 .grid-blog .entry-meta li:last-child {
     flex: 0 0 100px;
-    max-width: 100px;
+    display: block ruby;
+    width: 100%;
 }
 .grid-blog .post-author {
     width: 189px;
@@ -6988,10 +7031,12 @@ html.menu-opened body {
         text-align: center;
     }
     .lawyer-info-right {
-        margin-left: 0;
+        /* margin-left: 0; */
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
+        margin: auto;
+        width: 100%;
     }
     .lawyer-info-left {
         -ms-flex-direction: column;
@@ -7000,7 +7045,7 @@ html.menu-opened body {
     .session-services {
         display: none;
     }
-    .lawyer-img {
+    .law-img {
         margin: 0 auto 20px;
     }
     .lawyer-action {
@@ -7027,6 +7072,7 @@ html.menu-opened body {
     }
     .lawyer-widget .lawyer-name {
         font-size: 18px;
+        display: inline;
     }
     .exp-title, .booking-total ul li span, .booking-total ul li .total-cost {
         font-size: 14px;
@@ -7043,9 +7089,6 @@ html.menu-opened body {
     .submit-btn-bottom {
         margin-bottom: 20px;
     }
-    .service-list ul li {
-        width: 50%;
-    }
     .grid-blog .blog-title {
         min-height: inherit;
     }
@@ -7054,6 +7097,11 @@ html.menu-opened body {
     }
     .blog-view .blog-title {
         font-size: 22px;
+    }
+    .section-lawyer .profile-widget {
+        box-shadow: 2px 2px 13px rgba(0, 0, 0, 0.1);
+        margin-bottom: 0;
+        min-height: 460px;
     }
 }
 
@@ -7094,8 +7142,19 @@ html.menu-opened body {
     .header-nav {
         padding-left: 15px;
         padding-right: 15px;
+        height: 110px;
     }
     .header-navbar-rht {
+        margin: 0px;
+        display: inline-flex;
+        right: 0%;
+        position: absolute;
+        width: unset;
+    }
+    .header-navbar-rht li {
+        padding: 0px;
+    }
+    .header-navbar-rht li.singup {
         display: none;
     }
     .main-nav li.login-link {
@@ -7112,7 +7171,7 @@ html.menu-opened body {
         z-index: 99;
     }
     .navbar-brand.logo {
-        width: 100%;
+        width: 70%;
         text-align: center;
         margin-right: 0;
     }
@@ -7297,7 +7356,7 @@ html.menu-opened body {
         height: 120px;
     }
     .speicality-img img {
-        width: 50px;
+        width: initial!important;
     }
     .session-booking a.view-pro-btn {
         width: 100%;
@@ -7424,9 +7483,6 @@ min-width: 100%;
     width: 100% !important;
 }
 .timepicker-container > div{
-    position: absolute !important;
-    z-index: 50 !important;
-    width: 100% !important;
 }
 .slot-info-popover-body{
     display: block;
@@ -7453,4 +7509,140 @@ min-width: 100%;
 }
 .separator::after {
     margin-left: .25em;
+}
+.slick-track{
+    display: flex;
+}
+/*-----------------
+	19. Error
+-----------------------*/
+
+.error-page {
+    align-items: center;
+    color: #1f1f1f;
+    display: flex;
+}
+.error-page .main-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    justify-content: center;
+    width: 100%;
+	min-height: unset;
+}
+.error-box {
+    margin: 0 auto;
+    max-width: 480px;
+    padding: 1.875rem 0;
+    text-align: center;
+    width: 100%;
+}
+.error-box h1 {
+    color: #00d0f1;
+    font-size: 10em;
+}
+.error-box p {
+    margin-bottom: 1.875rem;
+}
+.error-box .btn {
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    min-width: 200px;
+    padding: 10px 20px;
+}
+@media only screen and (max-width:430px) {
+    /* .header-navbar-rht li .notifications .dropdown-menu::before{
+        display: none;
+        content: counter;
+	} */
+	.notifications{
+		position: absolute;
+		left: -221px;
+	}
+}
+
+/* .img-fluid{
+    height: -webkit-fill-available;
+} */
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #bbb;
+}
+
+.react-dropdown-select-dropdown{
+    width: 100% !important;
+    top: 50px !important;
+}
+.rounded-card-image{
+    width: 170px;
+    height: 170px;
+    border-radius: 50%!important;
+}
+.lawyer-home-card{
+    width: 170px!important;
+    height: 170px;
+    border-radius: 50%!important;
+}
+.circle-blog-card{
+    width: 210px!important;
+    height: 210px!important;
+    border-radius: 50%!important;
+}
+.round-profile-card img{
+    width: 150px!important;
+    height: 150px!important;
+}
+.calendar-filter-widget{
+    width: 40%;
+}
+@media only screen and (max-width: 767.98px) {
+    .circle-blog-card{
+        width: 170px!important;
+        height: 170px!important;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .sort-title{
+        display: none;
+    }
+    .btn-search{
+        display: none;
+    }
+    .btn-search-2 .btn{
+        background-color: #0de0fe;
+        border: 1px solid #0de0fe;
+        color: #fff;
+        height: 46px;
+        font-weight:500;
+        font-size:16px;
+        /* width: 10%; */
+    }
+    .btn-search-2{
+        width: 50%;
+    }
+    .calendar-filter-widget{
+        width: -webkit-fill-available;
+    }
+    .display-xs-flex{
+        display: flex!important;
+    }
+}
+.lawyer-bio{
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+.client-pp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    margin-top: 0px;
 }

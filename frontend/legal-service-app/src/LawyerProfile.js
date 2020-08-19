@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import StarRatings from "react-star-ratings";
-import {Discount} from "./LawyerCardList";
+import {Discount, LawyerCard} from "./LawyerCardList";
 import LawyerReviews from "./LawyerReviews";
 import {
     Link,
@@ -9,16 +9,25 @@ import {
     Route,
     matchPath,
     Redirect,
+    NavLink,
 } from "react-router-dom";
 import History from "./History";
-import {request} from "./Axios";
 import "./Tabs.css";
 import AppointmentTimeForm from "./AppointmentTimeForm";
 import BlogList from "./BlogList";
-import Img from "./Img";
+import Img, {AcImg} from "./Img";
+import LawyerBooking from "./LawyerBooking";
+import useRequests from "./useRequests";
+import {AuthContext} from "./App"
+import {toast} from "react-toastify";
+import SpinnerButton from "./SpinnerButton";
+import {FaCommentAlt} from "react-icons/fa";
+import RoundImg from "./RoundImg";
+import PageHead from "./PageHead";
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
         request({url: `lawyer/${lawyerID}`, method: "GET"})
@@ -34,10 +43,21 @@ const LawyerProfile = ({match}) => {
         <Router history={History}>
             <div className="content">
                 {lawyer && (
-                    <div className="container">
-                        <ProfileCard lawyer={lawyer} match={match} />
-                        <Details lawyer={lawyer} match={match} />
-                    </div>
+                    <>
+                        <PageHead
+                            title={lawyer.account.full_name + " | Lawbe.co.uk"}
+                            description={"Book an appointment with " + lawyer.account.full_name + " now!. Lawbe.co.uk"}
+                            image={lawyer.account.profile_picture}
+                        />
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12">
+                                    <LawyerCard lawyer={lawyer} match={match} />
+                                    <Details lawyer={lawyer} match={match} />
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 )}
             </div>
         </Router>
@@ -46,29 +66,41 @@ const LawyerProfile = ({match}) => {
 
 const ProfileCard = ({lawyer}) => {
     console.log("shit in card : ", lawyer);
-
+    const account = lawyer.account;
+    const [auth,] = useContext(AuthContext);
+    const {request} = useRequests();
+    const [loading, setLoading] = useState(false);
+    const StartChat = () => {
+        setLoading(true);
+        const myID = auth.accountId;
+        const url = `/chat/${myID}/${lawyer.id}`;
+        request({url: url, method: "POST"})
+            .then(() => {
+                History.push(`/chat/${lawyer.id}`);
+            })
+            .catch(() => {
+                toast.error("An error occured");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
     return (
         <div className="card">
             <div className="card-body">
                 <div className="lawyer-widget">
                     <div className="lawyer-info-left">
-                        <div className="lawyer-img">
-                            <Img
-                                src={lawyer.profile_picture}
-                                className="img-fluid"
+                        <div className="law-img" style={{maxHeight: "250px"}}>
+                            <RoundImg
+                                src={account.profile_picture}
                                 alt="Lawyer Profile"
+                                diameter={150}
                             />
                         </div>
                         <div className="lawyer-info-cont">
-                            <h4 className="lawyer-name">
+                            <h4 className="text-left lawyer-name">
                                 {`${lawyer.account.name} ${lawyer.account.surname}`}
                             </h4>
-                            <p className="lawyer-speciality">
-                                {lawyer.practice_areas &&
-                                    lawyer.practice_areas.map((area) => (
-                                        <h6 key={area.id}>{area.area}</h6>
-                                    ))}
-                            </p>
                             <p className="lawyer-department">
                                 {lawyer.lawyer_type.type}
                             </p>
@@ -86,35 +118,48 @@ const ProfileCard = ({lawyer}) => {
                                     ({lawyer.ratings.length})
                                 </span>
                             </div>
-                            <div className="session-services">
+                            {/* <div className="session-services">
                                 {lawyer.accreditations &&
                                     lawyer.accreditations.map((acc) => (
                                         <span key={acc.id}>{acc.accreditation}</span>
                                     ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="lawyer-info-right">
                         <div className="session-infos">
                             <ul>
                                 <li>
-                                    <i className="far fa-comment"></i> ##
-                                    Feedback
+                                    <i className="far fa-comment"></i>{" "}
+                                    {lawyer.ratings_count} Feedback
                                 </li>
-                                <li>
-                                    <i className="fas fa-map-marker-alt"></i>{" "}
-                                    {`${lawyer.account.city}, ${lawyer.account.country}`}
-                                </li>
+                                {lawyer.account.city &&
+                                    lawyer.account.country ? (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
+                                            {`${lawyer.account.city}, ${lawyer.account.country}`}
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <i className="fas fa-map-marker-alt"></i>{" "}
+                                        -
+                                        </li>
+                                    )}
                                 <Discount
                                     secsTillEnd={new Date(lawyer.discount_end)}
                                     cost={lawyer.price_per_hour}
                                     costAfterDiscount={lawyer.discounted_price_per_hour}
                                     isPercent={lawyer.is_percent_discount}
                                     discount={lawyer.discount}
+                                    currency={lawyer.currency_symbol}
                                 />
                             </ul>
                         </div>
-                        <div className="lawyer-action"></div>
+                        {auth.isLoggedIn && auth.accountType === "CLIENT" && <div className="lawyer-action">
+                            <SpinnerButton className="btn btn-white msg-btn" onClick={StartChat} loading={loading}>
+                                <FaCommentAlt />&nbsp;Chat with this lawyer!
+                            </SpinnerButton>
+                        </div>}
                         <div className="session-booking">
                             <Link
                                 className="apt-btn"
@@ -137,6 +182,7 @@ const Details = ({lawyer, match}) => {
     const path = match.url;
     console.log(match);
     const [blogs, setBlogs] = useState(null);
+    const {request} = useRequests();
     useEffect(() => {
         request({url: `/blogs/lawyer/${lawyer.id}`, method: "GET"})
             .then((data) => {
@@ -149,8 +195,8 @@ const Details = ({lawyer, match}) => {
         <div className="card">
             <div className="card-body pt-0">
                 <NavBar lawyer={lawyer} match={match} />
-                <Switch>
-                    <div className="tab-content pt-0">
+                <div className="tab-content pt-0">
+                    <Switch>
                         <Route exact path={`${path}`}>
                             {" "}
                             <Redirect to={`${path}/overview`} />
@@ -163,13 +209,13 @@ const Details = ({lawyer, match}) => {
                             <LawyerReviews lawyer={lawyer} />
                         </Route>
                         <Route path={`${path}/hours`}>
-                            <AppointmentTimeForm lawyer={lawyer} lawyer_id={match.params.LawyerId} />
+                            <AppointmentTimeForm lawyer_id={lawyer.id} allow_booking={false} />
                         </Route>
                         <Route path={`${path}/blogs`}>
-                            {blogs && <BlogList blogs={blogs} />}
+                            {blogs && <BlogList blogs={blogs} col={4} />}
                         </Route>
-                    </div>
-                </Switch>
+                    </Switch>
+                </div>
             </div>
         </div>
     );
@@ -182,19 +228,19 @@ const NavBar = ({match}) => {
         <nav className="user-tabs mb-4">
             <ul className="nav nav-tabs nav-tabs-bottom nav-justified">
                 <li className="nav-item">
-                    <Link to={`${path}/overview`}>Overview</Link>
+                    <NavLink replace to={`${path}/overview`}>Overview</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/reviews`}>Reviews</Link>
+                    <NavLink replace to={`${path}/reviews`}>Reviews</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/hours`}>Business Hours</Link>
+                    <NavLink replace to={`${path}/hours`}>Business Hours</NavLink>
                 </li>
                 <li className="nav-item">
-                    <Link to={`${path}/blogs`}>Blogs</Link>
+                    <NavLink replace to={`${path}/blogs`}>Blogs</NavLink>
                 </li>
             </ul>
-        </nav>
+        </nav >
     );
 };
 
@@ -209,21 +255,65 @@ const Overview = ({lawyer}) => {
     } = {...lawyer};
 
     const specializations = [
-        `Regulated By: ${regulator.regulator}`,
-        `Years licenced: ${years_licenced}`,
+        `Regulated By: ${regulator ? regulator.regulator : ""}`,
+        `Year licenced: ${years_licenced}`,
     ];
     return (
         <div className="col-md-12 col-lg-9">
+            <PracticeAreas lawyer={lawyer} />
+
+            <div className="widget about-widget">
+                <h4 className="widget-title">Accreditations</h4>
+                <div className="session-services mb-0">
+                    <p>
+                        {lawyer.accreditations &&
+                            <>
+                                {lawyer.accreditations.map((accreditation, i) => {
+                                    return (
+                                        <>
+                                            <AcImg style={{maxHeight: '75px', marginRight: '10px'}} accreditation={accreditation} />
+                                        </>
+                                    );
+                                })}
+                            </>
+                        }
+                    </p>
+                </div>
+            </div>
             <Bio bio={biography} />
             <Education
                 course={course}
                 institution={institution}
                 graduation_year={graduation_year}
             />
+
+            <div className="service-list">
+                <h4>Languages</h4>
+                <ul className="clearfix">
+                    {lawyer.languages.map((language) => (
+                        <li key={language}>{language}</li>
+                    ))}
+                </ul>
+            </div>
             <Specializations specializations={specializations} />
         </div>
     );
 };
+const PracticeAreas = ({lawyer}) => {
+    return (
+        <div className="widget about-widget">
+            <h4 className="widget-title">Practice Areas</h4>
+            <div className="session-services mb-0">
+                <p>
+                    {lawyer.practice_areas &&
+                        lawyer.practice_areas.map((area) => (
+                            <span key={area.id}>{area.area}</span>
+                        ))}
+                </p>
+            </div>
+        </div>
+    );
+}
 const Bio = ({bio}) => {
     return (
         <div className="widget about-widget">

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import Nav from "react-bootstrap/Nav";
 import {NavTab} from "react-router-tabs";
 import StarRatings from "react-star-ratings";
-import {request} from "./Axios";
-import {LogOut} from "./Axios";
 import Img from "./Img";
+import useRequests from "./useRequests";
+import {LoadingOverlayContext} from "./App";
 
 const LawyerDashboardSidebar = () => {
     const init = {
@@ -14,16 +14,21 @@ const LawyerDashboardSidebar = () => {
             phone: "",
             profile_picture: null,
         },
-        lawyer_type: { type: "" },
+        lawyer_type: {type: ""},
         ratings_average: 0,
     };
     const [lawyer, setLawyer] = useState(init);
     const [account, setAccount] = useState(init.account);
+    const {request, Logout} = useRequests();
+    const loader = useContext(LoadingOverlayContext);
     useEffect(() => {
-        request({ url: "/lawyer/me", method: "GET" })
+        loader.setLoadingOverlayText("Loading...");
+        loader.setIsLoadingOverlayShown(true);
+        request({url: "/lawyer/me", method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
                 setAccount(data.lawyer.account);
+                loader.setIsLoadingOverlayShown(false);
             })
             .catch((err) => {});
     }, []);
@@ -32,13 +37,13 @@ const LawyerDashboardSidebar = () => {
             <div className="widget-profile pro-widget-content">
                 <div className="profile-info-widget">
                     <a className="booking-doc-img">
-                        <Img src={account.profile_picture} alt="Lawyer's Photo"/>                        
+                        <Img src={account.profile_picture} alt="Lawyer's Photo" overwrite={false} />
                     </a>
                     <div className="profile-det-info">
-                        <h3>{`${account.name} ${account.surname}`}</h3>
+                        <h3>{account.full_name ? `${account.full_name}` : "loading..."}</h3>
 
                         <div className="client-details">
-                            <h5 className="mb-0">{lawyer.lawyer_type.type}</h5>
+                            <h5 className="mb-0">{lawyer.lawyer_type ? lawyer.lawyer_type.type : ""}</h5>
                             <StarRatings
                                 rating={lawyer.ratings_average}
                                 starRatedColor="gold"
@@ -68,21 +73,15 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/clients">
-                                    <i className="fas fa-user-injured"></i>
-                                    <span>My Clients</span>
-                                </NavTab>
-                            </li>
-                            <li>
                                 <NavTab exact to="/dashboard/schedule">
                                     <i className="fas fa-hourglass-start"></i>
                                     <span>Schedule Timings</span>
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/invoices">
-                                    <i className="fas fa-file-invoice"></i>
-                                    <span>Invoices</span>
+                                <NavTab exact to="/dashboard/calendar">
+                                    <i className="fas fa-calendar"></i>
+                                    <span>Calendar</span>
                                 </NavTab>
                             </li>
                             <li>
@@ -92,10 +91,15 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/messages">
+                                <NavTab exact to="/dashboard/blogs">
+                                    <i className="fas fa-edit"></i>
+                                    <span>Blogs</span>
+                                </NavTab>
+                            </li>
+                            <li>
+                                <NavTab replace={false} exact to="/dashboard/chat">
                                     <i className="fas fa-comments"></i>
                                     <span>Messages</span>
-                                    <small className="unread-msg">23</small>
                                 </NavTab>
                             </li>
                             <li>
@@ -111,10 +115,10 @@ const LawyerDashboardSidebar = () => {
                                 </NavTab>
                             </li>
                             <li>
-                                <NavTab exact to="/dashboard/logout" onClick={LogOut}>
+                                <a href="#" onClick={Logout}>
                                     <i className="fas fa-sign-out-alt"></i>
                                     <span>Logout</span>
-                                </NavTab>
+                                </a>
                             </li>
                         </ul>
                     </div>

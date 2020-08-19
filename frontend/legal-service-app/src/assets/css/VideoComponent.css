@@ -1,16 +1,17 @@
 .stream{
     width: 100%;
-    min-height: 400px;
+    min-height: 200px;
     height: 100%;
-    background-color: #ddd;
+    background-color: #000;
 }
 
 .outgoing{
-    width: 200px;
-    height: 200px;
+    width: 11vw;
+    height: 8.5vw;
     position: absolute;
-    bottom:0;
+    top:0;
     right:0;
+    opacity: 0.7;
 }
 
 .controls{
@@ -37,4 +38,15 @@
 .controls .buttons{
     display:block;
     text-align: center;
+}
+
+.call-count-down{
+    float: left;
+    font-size: 20pt;
+    font-weight: bold;
+    line-height: 50px;
+    text-align: center;
+    margin-right: auto;
+    margin-left: 20px;
+   text-shadow: 2px 2px #09ebab;
 }

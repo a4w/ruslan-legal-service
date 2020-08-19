@@ -1,18 +1,31 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef, useContext} from "react";
 import {Link} from "react-router-dom";
-import { LogOut } from "./Axios";
+import Img from "./Img";
+import useRequests from "./useRequests"
+import {AuthContext} from "./App";
 
 const UserDropdown = () => {
+    const [auth,] = useContext(AuthContext);
+    const [isClient, setIsClient] = useState(auth.accountType);
     const ref = useRef(null);
     const [menuToggle, setMenuToggle] = useState(false);
-    const [user, setUser] = useState({
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
-        profile_picture_url: "/test.jpg",
-        type: "",
-    });
+    const [user, setUser] = useState({});
+
+    const {request, Logout} = useRequests();
+
+
+    useEffect(() => {
+        if (!auth.isLoggedIn) {
+            return;
+        }
+        request({url: "/account/personal-info", method: "GET"})
+            .then((data) => {
+                setUser(data.profile_data);
+                setIsClient(auth.accountType === "CLIENT");
+            })
+            .catch((err) => {});
+    }, []);
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () =>
@@ -24,7 +37,7 @@ const UserDropdown = () => {
             setMenuToggle(false);
         }
     };
-    
+
     const handleButtonClick = () => {
         setMenuToggle(!menuToggle);
     };
@@ -32,73 +45,82 @@ const UserDropdown = () => {
         <li
             className={`nav-item dropdown has-arrow logged-item ${
                 menuToggle ? "show" : ""
-            }`}
+                }`}
             ref={ref}
         >
-            <Link
-                to="#"
+            <a
+                href="#"
                 className="dropdown-toggle nav-link"
                 onClick={handleButtonClick}
             >
                 <span className="user-img">
-                    <img
+                    <Img
                         className="rounded-circle"
-                        src={user.profile_picture_url}
-                        width="31"
+                        src={user.profile_picture}
+                        style={{width: "31"}}
                         alt={user.name}
+                        overwrite={false}
                     />
                 </span>
-            </Link>
+            </a>
+            {auth.accountType !== null &&
             <div
                 className={`dropdown-menu dropdown-menu-right ${
                     menuToggle ? "show" : ""
-                }`}
+                    }`}
             >
                 <div className="user-header">
                     <div className="avatar avatar-sm">
-                        <img
-                            src={user.profile_picture_url}
+                        <Img
+                            src={user.profile_picture}
                             alt="User Image"
                             className="avatar-img rounded-circle"
                         />
                     </div>
                     <div className="user-text">
-                        <h6>{`${user.name} ${user.surname}`}</h6>
-                        <p className="text-muted mb-0">{user.type}</p>
+                        <h6>{user.name? `${user.name} ${user.surname}`: "loading..."}</h6>
+                        <p className="text-muted mb-0">{isClient ? "Client" : "Lawyer"}</p>
                     </div>
                 </div>
                 <Link
                     className="dropdown-item"
-                    to="/dashboard"
+                    to={isClient ? "/client-dashboard" : "/dashboard"}
                     onClick={handleButtonClick}
                 >
                     Dashboard
                 </Link>
                 <Link
                     className="dropdown-item"
-                    to="/chat"
+                    to={`/${auth.accountType === "CLIENT"? "client-dashboard":"dashboard"}/chat`}
                     onClick={handleButtonClick}
                 >
                     Messages
                 </Link>
                 <Link
                     className="dropdown-item"
-                    to="/dashboard/settings/lawyer-info"
+                    to="/calendar"
+                    onClick={handleButtonClick}
+                >
+                    Agenda
+                </Link>
+                <Link
+                    className="dropdown-item"
+                    to={`${isClient ? "/client-dashboard" : "/dashboard"}/settings/basic-info`}
                     onClick={handleButtonClick}
                 >
                     Profile Settings
                 </Link>
-                <Link
+                <button
                     className="dropdown-item"
-                    to="/logout"
                     onClick={() => {
                         handleButtonClick();
-                        LogOut();
+                        Logout();
                     }}
                 >
                     Logout
-                </Link>
+                </button>
             </div>
+            }
         </li>
     );
 };

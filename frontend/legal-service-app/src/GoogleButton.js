@@ -1,11 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 import GoogleLogin from "react-google-login";
-import Config from "./Config";
-import {request, setAccessToken} from "./Axios"
+import env from "./env";
+import useRequests from "./useRequests";
+import {AuthContext} from "./App";
 
 const GoogleButton = ({register}) => {
+    const {request} = useRequests();
+    const [auth, setAuth] = useContext(AuthContext);
     const responseGoogle = (response) => {
-        console.log(response);
+        if (typeof response.tokenObj === "undefined") {
+            return;
+        }
         const data = {
             id_token: response.tokenObj.id_token,
             name: response.profileObj.givenName,
@@ -17,16 +22,19 @@ const GoogleButton = ({register}) => {
             method: 'POST',
             data: data
         }).then(response => {
-            console.log(response);
-            setAccessToken(response.access_token);
-            window.location.reload();
+            setAuth({
+                accessToken: response.access_token,
+                accountType: response.account_type,
+                isLoggedIn: true,
+                accountId: response.account.account.id,
+            });
         }).catch(error => {
             console.log(error);
         });
     };
     return (
         <GoogleLogin
-            clientId={Config.google_client_id}
+            clientId={env.google_client_id}
             render={(renderProps) => (
                 <a
                     href="//"
@@ -40,6 +48,9 @@ const GoogleButton = ({register}) => {
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
+            isSignedIn={false}
+
+
         />
     );
 };

@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import { request } from "./Axios";
-import { registrationValidation } from "./Validations";
+import React, {useState} from "react";
+import {registrationValidation} from "./Validations";
 import useValidation from "./useValidation";
 import ErrorMessageInput from "./ErrorMessageInput";
-import { FaSpinner } from "react-icons/fa";
-import history from "./History";
+import {FaSpinner} from "react-icons/fa";
 import FacebookButton from "./FacebookButton";
 import GoogleButton from "./GoogleButton";
-import { Link } from "react-router-dom";
-import { getParent } from "./LoginForm";
 import History from "./History";
+import useRequests from "./useRequests";
 
-const RegisterationForm = () => {
+const RegisterationForm = ({back}) => {
     const initUser = {
         name: "",
         surname: "",
@@ -20,6 +17,7 @@ const RegisterationForm = () => {
         password: "",
         isClient: true,
     };
+    const {request} = useRequests();
 
     const [user, setUser] = useState(initUser);
     const [isRegistering, setIsRegistering] = useState(false);
@@ -29,13 +27,13 @@ const RegisterationForm = () => {
 
     const OnChangeHandler = (event) => {
         const fieldName = event.target.name;
-        const nextUser = { ...user, [fieldName]: event.target.value };
+        const nextUser = {...user, [fieldName]: event.target.value};
         setUser(nextUser);
         runValidation(nextUser, fieldName);
     };
 
     const UserTypeHandler = () => {
-        setUser({ ...user, isClient: !user.isClient });
+        setUser({...user, isClient: !user.isClient});
     };
     const OnSubmitHandler = (event) => {
         event.preventDefault();
@@ -46,11 +44,13 @@ const RegisterationForm = () => {
 
                 if (user.isClient) url = "/register/client";
                 else url = "/register/lawyer";
-                request({ url: url, method: "POST", data: user })
+                request({url: url, method: "POST", data: user})
                     .then((response) => {
                         console.log("success", response);
+                        History.replace("/post-register");
                     })
-                    .catch((_errors) => {
+                    .catch((errors) => {
+                        const _errors = errors.response.data.errors;
                         const fields = [];
                         for (const field in _errors) {
                             fields.push(field);
@@ -126,11 +126,10 @@ const RegisterationForm = () => {
                 />
                 <div className="text-right">
                     <a
-                        // to={`${getParent(History.location.pathname)}/login`}
-                        href="//"
+                        style={{cursor: "pointer"}}
                         onClick={() =>
                             History.replace(
-                                `${getParent(History.location.pathname)}/login`
+                                `${back}/login`
                             )
                         }
                         className="forgot-link"
@@ -176,7 +175,7 @@ const RegisterationWrapper = (props) => {
     return (
         <div className="account-content">
             <div className="row align-items-center justify-content-center">
-                <div className="col-md-7 col-lg-6 login-left">
+                <div className="col-lg-5 login-left">
                     <img
                         src={
                             props.isClient
@@ -187,7 +186,7 @@ const RegisterationWrapper = (props) => {
                         alt="Register"
                     />
                 </div>
-                <div className="col-md-12 col-lg-5 login-right">
+                <div className="col-md-12 col-lg-7 login-right">
                     {props.children}
                 </div>
             </div>

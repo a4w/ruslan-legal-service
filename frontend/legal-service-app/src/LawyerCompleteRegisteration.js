@@ -3,8 +3,11 @@ import ErrorMessageSelect from "./ErrorMessageSelect";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useValidation from "./useValidation";
 import {LawyerInfoValidations} from "./Validations";
-import {request} from "./Axios"
 import {toast} from "react-toastify"
+import useRequests from "./useRequests";
+import {Alert} from "react-bootstrap";
+import History from "./History";
+import SpinnerButton from "./SpinnerButton";
 
 const LawyerCompleteRegisteration = ({}) => {
     const init = {
@@ -13,29 +16,31 @@ const LawyerCompleteRegisteration = ({}) => {
         regulatedBy: "",
         yearLicensed: "",
         education: "",
-        graduation: "",
+        graduation_year: "",
         course: "",
         practiceAreas: [],
         accreditations: [],
+        languages: [],
         bio: "",
     };
+    const {request} = useRequests();
 
     const [lawyer, setLawyer] = useState(init);
-    const [errors, , validate] = useValidation(LawyerInfoValidations);
+    const [errors, addError, validate] = useValidation(LawyerInfoValidations);
     const [lawyerTypeOptions, setLawyerTypeOptions] = useState([]);
     const [accreditationOptions, setAccreditationOptions] = useState([]);
     const [practiceAreaOptions, setPracticeAreaOptions] = useState([]);
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (History.location.state && History.location.state.showAlert)
+            setShow(true);
         request({
             url: 'lawyer/types',
             method: 'GET'
         }).then((response) => {
-            let types = response.types.filter((_, i) => {
-                if (i < 2) {
-                    return true;
-                }
-            }).map((type, _) => {
+            let types = response.types.map((type, _) => {
                 return {
                     label: type.type,
                     value: type.id,
@@ -86,16 +91,17 @@ const LawyerCompleteRegisteration = ({}) => {
                 regulatedBy: "",
                 yearLicensed: "",
                 education: "",
-                graduation: "",
+                graduation_year: "",
                 course: "",
                 practiceAreas: [],
                 accreditations: [],
+                languages: [],
                 bio: "",
             };
             const data = response.lawyer;
             // Set type
-            nextLawyer.type = data.lawyer_type_id;
-            // Shitty code from a shitty person
+            nextLawyer.type = data.lawyer_type_id ? data.lawyer_type_id : 0;
+            // hotty code from a hot person
             if (data.lawyer_type_id > 2) {
                 nextLawyer.type = 0;
                 nextLawyer.other = data.lawyer_type.type;
@@ -103,8 +109,9 @@ const LawyerCompleteRegisteration = ({}) => {
             nextLawyer.regulatedBy = data.regulator.regulator;
             nextLawyer.yearLicensed = data.years_licenced;
             nextLawyer.education = data.institution;
-            nextLawyer.graduation = data.graduation_year;
+            nextLawyer.graduation_year = data.graduation_year;
             nextLawyer.course = data.course;
+            nextLawyer.languages = data.languages;
             nextLawyer.practiceAreas = data.practice_areas.map((area, i) => {
                 return area.id;
             });
@@ -113,6 +120,7 @@ const LawyerCompleteRegisteration = ({}) => {
             });
             nextLawyer.bio = data.biography;
             setLawyer(nextLawyer);
+            validate(nextLawyer);
         }).catch((error) => {
         });
     }, []);
@@ -122,17 +130,19 @@ const LawyerCompleteRegisteration = ({}) => {
             if (hasErrors) {
                 return;
             }
+            setLoading(true);
             // Assuming validation works otherwise another check is needed here
             const data = {
                 lawyer_type_id: lawyer.type,
                 lawyer_type: lawyer.other,
                 regulator: lawyer.regulatedBy,
-                year_licensed: lawyer.yearLicensed,
+                years_licenced: lawyer.yearLicensed,
                 institution: lawyer.education,
-                graduation: lawyer.graduation,
+                graduation_year: lawyer.graduation_year,
                 course: lawyer.course,
                 practice_areas: lawyer.practiceAreas,
                 accreditations: lawyer.accreditations,
+                languages: lawyer.languages,
                 biography: lawyer.bio,
             };
             request({
@@ -141,7 +151,18 @@ const LawyerCompleteRegisteration = ({}) => {
                 data: data
             }).then((response) => {
                 toast.success("Profile updated successfully");
-            }).catch((error) => {});
+            }).catch((error) => {
+                const _errors = error.response.data.errors;
+                console.log({...error});
+                const fields = [];
+                for (const field in _errors) {
+                    fields.push(field);
+                }
+                console.log(_errors);
+                addError(fields, _errors);
+            }).finally(() => {
+                setLoading(false)
+            });
         });
     };
     const OnChangeHandler = ({target: {value, name}}) => {
@@ -156,6 +177,7 @@ const LawyerCompleteRegisteration = ({}) => {
         const newData = {...lawyer, [name]: value};
         setLawyer(newData);
         validate(newData, name);
+        validate(newData, "other");
     };
     const MultiselectHandler = ({name, values}) => {
         console.log(name, values);
@@ -167,11 +189,20 @@ const LawyerCompleteRegisteration = ({}) => {
 
     return (
         <form onSubmit={OnSubmitHandler} id="regForm">
+            {show &&
+                <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+                    <Alert.Heading>Warning!</Alert.Heading>
+                    <p>
+                        Please fill all your lawyer info and provide a schedule to
+                        be listed
+                    </p>
+                </Alert>
+            }
             <div className="form-row">
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageSelect
                         name="type"
-                        errors={errors.type}
+                        errors={errors.type ? errors.type : errors.lawyer_type}
                         value={lawyer.type}
                         placeholder={"Select type.."}
                         options={lawyerTypeOptions}
@@ -181,7 +212,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-6">
                     <ErrorMessageInput
                         disabled={lawyer.type !== 0}
-                        errors={errors.other}
+                        errors={errors.other ? errors.other : errors.lawyer_type}
                         type={"text"}
                         name="other"
                         placeholder={"Other.."}
@@ -195,6 +226,7 @@ const LawyerCompleteRegisteration = ({}) => {
                     <ErrorMessageInput
                         type={"text"}
                         name="yearLicensed"
+                        errors={errors.years_licenced}
                         value={lawyer.yearLicensed}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Year licensed"}
@@ -203,6 +235,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-9 col-md-9 col-sm-9">
                     <ErrorMessageInput
                         type={"text"}
+                        errors={errors.regulator}
                         name="regulatedBy"
                         value={lawyer.regulatedBy}
                         OnChangeHandler={OnChangeHandler}
@@ -214,6 +247,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-8">
                     <ErrorMessageInput
                         type={"text"}
+                        errors={errors.institution}
                         name="education"
                         value={lawyer.education}
                         OnChangeHandler={OnChangeHandler}
@@ -223,8 +257,9 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-3 col-md-3 col-sm-2">
                     <ErrorMessageInput
                         type={"text"}
-                        name="graduation"
-                        value={lawyer.graduation}
+                        errors={errors.graduation_year}
+                        name="graduation_year"
+                        value={lawyer.graduation_year}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Graduation year"}
                     />
@@ -233,6 +268,7 @@ const LawyerCompleteRegisteration = ({}) => {
                     <ErrorMessageInput
                         type={"text"}
                         name="course"
+                        errors={errors.course}
                         value={lawyer.course}
                         OnChangeHandler={OnChangeHandler}
                         placeholder={"Course Name"}
@@ -255,6 +291,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 <div className="col-lg-6 col-md-6 col-sm-12">
                     <ErrorMessageSelect
                         multi={true}
+                        errors={errors.accreditations}
                         name="accreditations"
                         className="floating"
                         value={lawyer.accreditations}
@@ -265,7 +302,7 @@ const LawyerCompleteRegisteration = ({}) => {
                 </div>
             </div>
             <div className="form-row">
-                <div className="col-lg-12 col-md-12 col-sm-12">
+                <div className="col-lg-6 col-md-6 col-sm-12">
                     <Label value={lawyer.bio} label="Bio..">
                         <textarea
                             className="form-control"
@@ -277,15 +314,30 @@ const LawyerCompleteRegisteration = ({}) => {
                         ></textarea>
                     </Label>
                 </div>
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                    <Label value={lawyer.languages} label="Languages (one per line)">
+                        <textarea
+                            className="form-control"
+                            name="bio"
+                            style={{minHeight: "100px"}}
+                            form="regForm"
+                            value={lawyer.languages.join('\n')}
+                            onChange={(e) => {
+                                setLawyer({...lawyer, languages: e.target.value.split('\n')})
+                            }}
+                        ></textarea>
+                    </Label>
+                </div>
             </div>
             <div className="form-row">
                 <div className="col-lg-12 col-md-12 col-sm-12">
-                    <button
+                    <SpinnerButton
                         className="btn btn-primary btn-block btn-lg login-btn "
                         type="submit"
+                        loading={loading}
                     >
                         &nbsp;Save
-                    </button>
+                    </SpinnerButton>
                 </div>
             </div>
         </form>

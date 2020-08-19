@@ -3,24 +3,39 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Lawyer extends Model
 {
-    protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year'];
+    protected $fillable = ['biography', 'years_licenced', 'institution', 'course', 'graduation_year', 'languages'];
     protected $with = ['account', 'lawyer_type', 'regulator', 'accreditations', 'practice_areas', 'ratings'];
     protected $hidden = [
-        'schedule'
+        'schedule',
+        'stripe_connected_account_id'
     ];
 
     protected $casts = [
         'schedule' => 'json',
         'is_percent_discount' => 'bool',
-        'discount_end' => 'datetime'
+        'discount_end' => 'datetime',
+        'languages' => 'json'
     ];
 
     public $timestamps = false;
-    protected $appends = array('discount_ends_in', 'discounted_price_per_hour');
+    protected $appends = array('discount_ends_in', 'discounted_price_per_hour', 'currency_symbol', 'fully_registered');
+
+    public function scopeFullyRegistered(Builder $query)
+    {
+        return $query->where('schedule', '<>', null)->where('lawyer_type_id', '<>', null)->whereHas('account', function ($query) {
+            return $query->where('email_verified_at', '<>', null);
+        });
+    }
+
+    public function getFullyRegisteredAttribute()
+    {
+        return $this->lawyer_type_id !== null && $this->account->email_verified_at !== null;
+    }
 
     public function getDiscountEndsInAttribute()
     {
@@ -88,5 +103,10 @@ class Lawyer extends Model
     public function isAvailable()
     {
         return $this->schedule !== null;
+    }
+
+    public function getCurrencySymbolAttribute()
+    {
+        return config('app.currency_symbol');
     }
 }

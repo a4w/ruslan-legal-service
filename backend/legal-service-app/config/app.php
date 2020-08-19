@@ -124,6 +124,7 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'stripe_api_key' => env('STRIPE_API_KEY'),
+    'stripe_client_id' => env('STRIPE_CLIENT_ID'),
     'twilio_account_sid' => env('TWILIO_ACCOUNT_SID'),
     'twilio_auth_token' => env('TWILIO_AUTH_TOKEN'),
 
@@ -134,6 +135,12 @@ return [
     'google_client_id' => env('GOOGLE_CLIENT_ID'),
 
     'frontend_url' => env('FRONTEND_LINK'),
+
+    'currency' => 'gbp',
+    'currency_symbol' => '£',
+
+    'commission_type' => 'PERCENT',
+    'commission_amount' => 10,
 
     /*
     |--------------------------------------------------------------------------

@@ -2,70 +2,113 @@ import React from "react";
 import {Link} from "react-router-dom";
 import Img from "./Img";
 import BlogImg from "./BlogImg";
+import moment from "moment";
+import NoContent from "./NoContent";
+import RoundImg from "./RoundImg";
 
-const BlogList = ({blogs}) => {
+const BlogList = ({blogs, editable, col}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
-                {blogs.map((blog) => (
-                    <Blog key={blog.id} blog={blog} />
-                ))}
+                {blogs.length ? (
+                    blogs.map((blog) => (
+                        <Blog key={blog.id} blog={blog} editable={editable} col={col} />
+                    ))
+                ) : (
+                        <NoContent>There ara no published blogs</NoContent>
+                    )}
             </div>
         );
     else return <Blog />;
 };
 
-const Blog = ({blog}) => {
+const ButtonStyle = {
+    // position: "absolute",
+    // left: "50%",
+    // transform: "translate(-50%, -50%)",
+    // msTransform: "translate(-50%, -50%)",
+    // padding: "12px 24px",
+    // border: "none",
+    // cursor: "pointer",
+    // borderRadius: "5px",
+    // height: "80px",
+    position: "absolute",
+    padding: "12px 24px",
+    border: "medium none",
+    cursor: "pointer",
+    borderRadius: "5px",
+    right: "0",
+    bottom: "0"
+};
+
+const Blog = ({blog, editable, col = 6}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
-        <div className="col-md-6 col-sm-12">
+        <div className={`col-md-${col} col-sm-12`}>
             <div className="blog grid-blog">
                 <div className="blog-image">
                     <Link
                         to={{
-                            pathname: `/blog/${id}`,
-                            state: { blog: blog, lawyer: lawyer },
+                            pathname: `/blogs/blog/${id}`,
+                            state: {blog: blog, lawyer: lawyer},
                         }}
                     >
                         <BlogImg
-                            className="img-fluid"
                             src={blog.cover_photo_link}
                             alt="Post Image"
+                            className="img-fluid"
+                            containerStyle={{
+                                height: "210px",
+                                maxHeight: "210px",
+                            }}
                         />
                     </Link>
+                    {editable &&
+                        <Link
+                            to={`/dashboard/blogs/edit-blog/${id}`}
+                            className="btn btn-primary"
+                            style={ButtonStyle}
+                        >
+                            Edit
+                        </Link>
+                    }
                 </div>
                 <div className="blog-content">
-                    <ul className="entry-meta meta-item">
+                    <ul className="entry-meta meta-item" style={{display: 'flex'}}>
                         <li>
-                            <div className="post-author">
+                            <div>
                                 <Link
                                     to={{
                                         pathname: `/profile/${lawyer.id}`,
-                                        state: { lawyer: lawyer },
+                                        state: {lawyer: lawyer},
                                     }}
+                                    style={{display: "flex", alignItems: "center"}}
                                 >
-                                    <Img
+                                    <RoundImg
                                         src={account.profile_picture}
                                         alt="Post Author"
-                                        style={{
-                                            width: "30px",
-                                            height: "30px",
-                                        }}
+                                        diameter={28}
                                     />
-                                    <span>{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
+                                    <span className="ml-3">{`${lawyer.account.name} ${lawyer.account.surname}`}</span>
                                 </Link>
                             </div>
                         </li>
-                        <li>
+                        <li style={{display: 'inline', maxWidth: 'unset', width: 'unset', flex: '0 0 auto'}}>
                             <i className="far fa-clock"></i>{" "}
-                            {new Date(blog.created_at).toLocaleTimeString()}
+                            {moment(blog.publish_date).format("Do of MMM YYYY")}
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blog/${id}`}>{blog.title}</Link>
+                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
                     </h3>
-                    <p className="mb-0">Preview</p>
+                    <ul className="tags mt-2">
+                        <li>
+                            <a href="#" className="tag">
+                                {blog.tag.area}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -73,3 +116,4 @@ const Blog = ({blog}) => {
 };
 
 export default BlogList;
+export {Blog};

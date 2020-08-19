@@ -104,6 +104,12 @@ export const editBasicInfoValidation = (data, field) => {
         test("phone", `${phone} is not a valid phone number`, () => {
             enforce(parseInt(phone)).isNumeric();
         });
+        test("profile", `Image size exceeds 2MB`, () => {
+            console.log(data.profile_picture);
+            if (data.profile_picture !== null) {
+                enforce(data.profile_picture.size / (1024 ** 2) <= 2).isTruthy();
+            }
+        });
     });
 };
 export const editEmailValidations = (data, field) => {
@@ -123,11 +129,11 @@ export const editEmailValidations = (data, field) => {
 export const LawyerInfoValidations = (data, field) => {
     return validate("LawyerCompleteRegisteration", () => {
         vest.only(field);
-        test("type", "Please select a type", () => {
-            enforce(data.type.toString()).isNotEmpty();
-        });
+        // test("type", "Please select a type", () => {
+        //     enforce(data.type).isTruthy();
+        // });
         test("other", "Please enter a type", () => {
-            const addOther = data.type.toString() === "other";
+            const addOther = data.type === 0;
             if (addOther) {
                 enforce(data.other.toString()).isNotEmpty();
             }
@@ -177,6 +183,34 @@ export const blogTitleValidations = (data, field) => {
         });
         test("tags", "Please select a tag", () => {
             enforce(data.tags !== null).isTruthy();
+        });
+    });
+};
+
+export const ChatMessageValidation = (data, field = null) => {
+    return validate("ResponsiveChatPage", () => {
+        test("message", "Message is too long", () => {
+            enforce(data.message.toString().length <= 949).isTruthy();
+        });
+    });
+};
+export const editInfoValidation = (data, field) => {
+    return validate("editInfo", () => {
+        vest.only(field);
+        ["name", "surname", "phone"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+        const phone = data.phone.toString();
+        test("phone", `${phone} is not a valid phone number`, () => {
+            enforce(parseInt(phone)).isNumeric();
+        });
+        test("profile", `Image size exceeds 2MB`, () => {
+            console.log(data.profile_picture);
+            if (data.profile_picture !== null) {
+                enforce(data.profile_picture.size / (1024 ** 2) <= 2).isTruthy();
+            }
         });
     });
 };

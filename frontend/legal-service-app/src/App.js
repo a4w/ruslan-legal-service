@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import "./App.css";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import {Route, Router, Switch, BrowserRouter, Redirect, useLocation} from "react-router-dom";
+import {Route, Router, Switch, Redirect, useLocation} from "react-router-dom";
 import history from "./History";
 import "bootstrap/dist/js/bootstrap.bundle"
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,11 +25,8 @@ import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import UserCalendar from "./UserCalendar";
 import BookLawyerModal from "./BookLawyerModal";
-import BlogDetails from "./BlogDetails"
-import ResponsiveChatPage from "./ResponsiveChatPage";
 import RatingModal from "./RatingModal";
 import NotFound from "./NotFound";
-import Admin from "./Admin";
 import LoadingOverlay from "react-loading-overlay"
 import AppointmentDetails from "./AppointmentDetails";
 import PrivateRoute from "./PrivateRoute";
@@ -104,79 +101,77 @@ function App() {
                             }}
                         >
                         </LoadingOverlay>
-                        <BrowserRouter>
-                            <ScrollToTop />
-                            <ToastContainer />
-                            <Router history={history}>
-                                {/* <NavBar /> */}
-                                <Route component={NavBar} />
-                                <Route path="(.+)/login" render={(props) => {
-                                    if (auth.isLoggedIn) {
-                                        return <Redirect to={props.match.params[0]} />
-                                    } else {
-                                        return <LoginModal back={props.match.params[0]} />
-                                    }
-                                }} />
-                                <Route path="(.+)/register" render={(props) => {
-                                    if (auth.isLoggedIn) {
-                                        return <Redirect to={props.match.params[0]} />
-                                    } else {
-                                        return <RegisterModal back={props.match.params[0]} />
-                                    }
-                                }} />
-                                <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
-                                <Route path="(.+)/rate-lawyer/:appId/:lawyerId" component={RatingModal} />
-                                <Route path="(.+)/details/:appId" component={AppointmentDetails} />
-                                <Switch>
-                                    <Route exact path="/">
-                                        <Redirect to="/home" />
-                                    </Route>
-                                    <Route path="/home">
-                                        <Home />
-                                    </Route>
-                                    <Route path="/list">
-                                        <LawyerList />
-                                    </Route>
-                                    <Route path="/blogs">
-                                        <Route path="/blogs" component={Blogs} />
-                                    </Route>
-                                    {/* <Route path="/blog/:blogId" component={BlogDetails} /> */}
-                                    <Route
-                                        exact
-                                        path="/reset/:Token"
-                                        component={ResetPassword}
-                                    />
-                                    <PrivateRoute path="/dashboard" component={LawyerDashboard} />
-                                    <Route
-                                        path="/profile/:LawyerId"
-                                        component={LawyerProfile}
-                                    />
-                                    <PrivateRoute path="/client-dashboard" component={ClientDashboard} />
-                                    <Route path="/forgot-password">
-                                        <ForgotPassword />
-                                    </Route>
-                                    <Route path="/video/:AppointmentId" render={(props) => {
-                                        return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
-                                    }}>
-                                    </Route>
-                                    <Route path="/logout">
-                                        <Redirect replace to="/" />
-                                    </Route>
-                                    <Route path="/calendar">
-                                        <UserCalendar />
-                                    </Route>
-                                    <Route path="/post-register" component={PostRegistration} />
-                                    <Route path="/not-found" status={404}>
-                                        <NotFound />
-                                    </Route>
-                                    <Route>
-                                        <Redirect replace to="/not-found" />
-                                    </Route>
-                                </Switch>
-                                <Route component={Footer} />
-                                {/* <Footer /> */}
-                            </Router>
-                        </BrowserRouter>
+                        <ScrollToTop />
+                        <ToastContainer />
+                        <Router history={history}>
+                            {/* <NavBar /> */}
+                            <Route component={NavBar} />
+                            <Route path="(.+)/login" render={(props) => {
+                                if (auth.isLoggedIn) {
+                                    return <Redirect to={props.match.params[0]} />
+                                } else {
+                                    return <LoginModal back={props.match.params[0]} />
+                                }
+                            }} />
+                            <Route path="(.+)/register" render={(props) => {
+                                if (auth.isLoggedIn) {
+                                    return <Redirect to={props.match.params[0]} />
+                                } else {
+                                    return <RegisterModal back={props.match.params[0]} />
+                                }
+                            }} />
+                            <Route path="(.+)/book-lawyer/:LawyerId" component={BookLawyerModal} />
+                            <Route path="(.+)/rate-lawyer/:appId/:lawyerId" component={RatingModal} />
+                            <Route path="(.+)/details/:appId" component={AppointmentDetails} />
+                            <Switch>
+                                <Route exact path="/">
+                                    <Redirect to="/home" />
+                                </Route>
+                                <Route path="/home">
+                                    <Home />
+                                </Route>
+                                <Route path="/list">
+                                    <LawyerList />
+                                </Route>
+                                <Route path="/blogs">
+                                    <Route path="/blogs" component={Blogs} />
+                                </Route>
+                                {/* <Route path="/blog/:blogId" component={BlogDetails} /> */}
+                                <Route
+                                    exact
+                                    path="/reset/:Token"
+                                    component={ResetPassword}
+                                />
+                                <PrivateRoute path="/dashboard" component={LawyerDashboard} />
+                                <Route
+                                    path="/profile/:LawyerId"
+                                    component={LawyerProfile}
+                                />
+                                <PrivateRoute path="/client-dashboard" component={ClientDashboard} />
+                                <Route path="/forgot-password">
+                                    <ForgotPassword />
+                                </Route>
+                                <Route path="/video/:AppointmentId" render={(props) => {
+                                    return <VideoComponent appointment_id={props.match.params.AppointmentId} />;
+                                }}>
+                                </Route>
+                                <Route path="/logout">
+                                    <Redirect replace to="/" />
+                                </Route>
+                                <Route path="/calendar">
+                                    <UserCalendar />
+                                </Route>
+                                <Route path="/post-register" component={PostRegistration} />
+                                <Route path="/not-found" status={404}>
+                                    <NotFound />
+                                </Route>
+                                <Route>
+                                    <Redirect replace to="/not-found" />
+                                </Route>
+                            </Switch>
+                            <Route component={Footer} />
+                            {/* <Footer /> */}
+                        </Router>
                     </LoadingOverlayContext.Provider>
                 </NotificationContext.Provider>
             </AuthContext.Provider>

@@ -80,7 +80,7 @@ const Blog = ({blog, editable, col = 6}) => {
                             <div>
                                 <Link
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                     style={{display: "flex", alignItems: "center"}}

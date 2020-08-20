@@ -109,7 +109,7 @@ function useRequests() {
             return Promise.resolve(response.data);
         };
         const onError = (error) => {
-            if (error) {
+            if (error && error.response) {
                 const status = error.response.request.status;
                 // Unauthorized request
                 if (status === 401) {

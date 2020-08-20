@@ -74,7 +74,10 @@ const UserRoutes = () => {
                 {/* <Route path="/blog/:blogId" component={BlogDetails} /> */}
                 <Route exact path="/reset/:Token" component={ResetPassword} />
                 <PrivateRoute path="/dashboard" component={LawyerDashboard} />
-                <Route path="/profile/:LawyerId" component={LawyerProfile} />
+                <Route
+                    path="/profile/:LawyerId/:LawyerName"
+                    component={LawyerProfile}
+                />
                 <PrivateRoute
                     path="/client-dashboard"
                     component={ClientDashboard}

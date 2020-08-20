@@ -94,7 +94,7 @@ const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
                                                 return (<span key={area.id}>{area.area}</span>)
                                         })}
                                         {lawyer.practice_areas.length > 2 &&
-                                            <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>
+                                            <Link to={{pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`, state: {lawyer: lawyer}}}>
                                                 {`+${lawyer.practice_areas.length - 2} more`}
                                             </Link>}
                                     </>
@@ -146,7 +146,7 @@ const LawyerCard = ({lawyer, setPopUp = () => {}}) => {
                             <Link
                                 className="view-pro-btn"
                                 to={{
-                                    pathname: `/profile/${lawyer.id}`,
+                                    pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                     state: {lawyer: lawyer},
                                 }}
                             >

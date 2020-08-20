@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./assets/css/admin.css";
+import { Route, NavLink, Switch, Router } from "react-router-dom";
+import AdminDashboardTabs from "./AdminDashboardTabs";
+import History from "./History";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
     const ref = useRef(null);
+    const _path = "/admin";
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () =>
@@ -36,69 +41,33 @@ const Admin = () => {
                 </a>
             </div>
             <div className="sidebar" id="sidebar" ref={ref}>
-                <AdminSidebar close={() => setToggle(false)} />
+                <AdminSidebar close={() => setToggle(false)} _path={_path} />
             </div>
-            <div className="page-wrapper">
-                <div className="content container-fluid"></div>
-            </div>
+            <Router history={History}>
+                <div className="page-wrapper">
+                    <div className="content container-fluid">
+                        <Switch>
+                            <Route path={`${_path}/dashboard`}>
+                                <AdminDashboardTabs />
+                            </Route>
+                        </Switch>
+                    </div>
+                </div>
+            </Router>
         </div>
     );
 };
 
-const AdminSidebar = () => {
+const AdminSidebar = ({_path, close}) => {
     return (
         <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">
                 <ul>
                     <li className="active">
-                        <a href="index.html">
+                        <NavLink to={`${_path}/dashboard`} onClick={close}>
                             <i className="fe fe-home"></i>{" "}
                             <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="appointment-list.html">
-                            <i className="fe fe-layout"></i>{" "}
-                            <span>Appointments</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="specialities.html">
-                            <i className="fe fe-users"></i>{" "}
-                            <span>Specialities</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="doctor-list.html">
-                            <i className="fe fe-user-plus"></i>{" "}
-                            <span>Doctors</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="patient-list.html">
-                            <i className="fe fe-user"></i> <span>Patients</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="reviews.html">
-                            <i className="fe fe-star-o"></i>{" "}
-                            <span>Reviews</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="transactions-list.html">
-                            <i className="fe fe-activity"></i>{" "}
-                            <span>Transactions</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="settings.html">
-                            <i className="fe fe-vector"></i>{" "}
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="invoice-report.html">Invoice Reports</a>
+                        </NavLink>
                     </li>
                 </ul>
             </div>

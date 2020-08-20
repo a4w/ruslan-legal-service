@@ -10,8 +10,8 @@ ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Switch>
-                <Route exact path="/admin" component={AdminApp} />
                 <Route exact path="/" component={App} />
+                <Route path="/admin" component={AdminApp} />
             </Switch>
         </BrowserRouter>
     </React.StrictMode>,

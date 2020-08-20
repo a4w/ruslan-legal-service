@@ -39,7 +39,7 @@ export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
 export const NotificationContext = React.createContext(null);
 
-function ScrollToTop() {
+export function ScrollToTop() {
     const {pathname} = useLocation();
     useEffect(() => {
         window.scrollTo(0, 0);

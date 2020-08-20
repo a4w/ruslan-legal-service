@@ -8,12 +8,12 @@ import Admin from "./Admin";
 const AdminRoutes = () => {
     return (
         <>
-            <PrivateRoute exact path="/admin" admin={true}>
-                <Admin />
-            </PrivateRoute>
-            <Route exact path="/admin/admin-login">
+            <Route path="/admin/admin-login">
                 <AdminLogin />
             </Route>
+            <PrivateRoute path="/admin" admin={true}>
+                <Admin />
+            </PrivateRoute>
         </>
     );
 };

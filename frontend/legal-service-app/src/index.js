@@ -3,16 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import AdminApp from './AdminApp';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <Switch>
-                <Route exact path="/" component={App} />
-                <Route path="/admin" component={AdminApp} />
-            </Switch>
+            <App />
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById("root")

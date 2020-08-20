@@ -4,13 +4,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Admin from './Admin';
+import AdminApp from './AdminApp';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Switch>
-                <Route exact path="/admin" component={Admin} />
+                <Route exact path="/admin" component={AdminApp} />
                 <Route exact path="/" component={App} />
             </Switch>
         </BrowserRouter>

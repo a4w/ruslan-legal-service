@@ -3,6 +3,8 @@ import "./assets/css/admin.css";
 import { Route, NavLink, Switch, Router } from "react-router-dom";
 import AdminNewLawyers from "./AdminNewLawyers";
 import History from "./History";
+import AdminNewBlogs from "./AdminNewBlogs";
+import AdminBlogDetails from "./AdminBlogDetails";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
@@ -50,6 +52,13 @@ const Admin = () => {
                             <Route path={`${_path}/new-lawyers`}>
                                 <AdminNewLawyers />
                             </Route>
+                            <Route path={`${_path}/new-blogs`}>
+                                <AdminNewBlogs />
+                            </Route>
+                            <Route
+                                path={`${_path}/blog-details/:blogId`}
+                                component={AdminBlogDetails}
+                            />
                         </Switch>
                     </div>
                 </div>
@@ -63,10 +72,14 @@ const AdminSidebar = ({_path, close}) => {
         <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">
                 <ul>
-                    <li className="active">
+                    <li>
                         <NavLink to={`${_path}/new-lawyers`} onClick={close}>
-                            <i className="fe fe-home"></i>{" "}
-                            <span>New Lawyers</span>
+                            <span>New lawyers</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={`${_path}/new-blogs`} onClick={close}>
+                            <span>New blogs</span>
                         </NavLink>
                     </li>
                 </ul>

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./assets/css/admin.css";
 import { Route, NavLink, Switch, Router } from "react-router-dom";
-import AdminDashboardTabs from "./AdminDashboardTabs";
+import AdminNewLawyers from "./AdminNewLawyers";
 import History from "./History";
 
 const Admin = () => {
@@ -47,8 +47,8 @@ const Admin = () => {
                 <div className="page-wrapper">
                     <div className="content container-fluid">
                         <Switch>
-                            <Route path={`${_path}/dashboard`}>
-                                <AdminDashboardTabs />
+                            <Route path={`${_path}/new-lawyers`}>
+                                <AdminNewLawyers />
                             </Route>
                         </Switch>
                     </div>
@@ -64,9 +64,9 @@ const AdminSidebar = ({_path, close}) => {
             <div id="sidebar-menu" className="sidebar-menu">
                 <ul>
                     <li className="active">
-                        <NavLink to={`${_path}/dashboard`} onClick={close}>
+                        <NavLink to={`${_path}/new-lawyers`} onClick={close}>
                             <i className="fe fe-home"></i>{" "}
-                            <span>Dashboard</span>
+                            <span>New Lawyers</span>
                         </NavLink>
                     </li>
                 </ul>

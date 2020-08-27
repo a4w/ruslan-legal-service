@@ -70,7 +70,7 @@ const AboutAuthor = ({lawyer}) => {
                         <div className="author-img-wrap" style={{display: "flex", justifyContent: "center"}}>
                             <Link
                                 to={{
-                                    pathname: `/profile/${lawyer.id}`,
+                                    pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                     state: {lawyer: lawyer},
                                 }}
                             >
@@ -88,7 +88,7 @@ const AboutAuthor = ({lawyer}) => {
                                 <Link
                                     className="blog-author-name"
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >
@@ -102,7 +102,7 @@ const AboutAuthor = ({lawyer}) => {
                                 <Link
                                     className="view-pro-btn"
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >
@@ -180,7 +180,7 @@ const Post = ({blog, lawyer}) => {
                             <div className="post-author-2">
                                 <Link
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >

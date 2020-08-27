@@ -147,7 +147,7 @@ function App() {
                                     />
                                     <PrivateRoute path="/dashboard" component={LawyerDashboard} />
                                     <Route
-                                        path="/profile/:LawyerId"
+                                        path="/profile/:LawyerId/:LawyerName"
                                         component={LawyerProfile}
                                     />
                                     <PrivateRoute path="/client-dashboard" component={ClientDashboard} />

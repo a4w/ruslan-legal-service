@@ -44,6 +44,7 @@ class RegistrationController extends Controller
         $data['unverified_email'] = Str::lower($data['email']);
         unset($data['email']);
         unset($data['email']);
+        $data['is_active'] = false;
         // Insert
         $account = Account::create($data);
         $account->lawyer()->save(Lawyer::make());

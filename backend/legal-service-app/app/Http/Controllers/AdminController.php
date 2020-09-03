@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Admin;
+use App\Blog;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -49,5 +51,17 @@ class AdminController extends Controller
             return RespondJSON::unauthorized();
         }
         return RespondJSON::success();
+    }
+
+    public function getBlogs(Request $request)
+    {
+        $request->validate([
+            'status' => ['in:PUBLISHED,UNDER_REVIEW']
+        ]);
+        $status = $request->get('status');
+        $blogs = Blog::when($status, function ($query, $status) {
+            $query->where('status', $status);
+        })->get();
+        return RespondJSON::success(['blogs' => $blogs]);
     }
 }

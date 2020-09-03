@@ -89,4 +89,14 @@ class AdminController extends Controller
         $blog->save();
         return RespondJSON::success();
     }
+
+    public function updateLawyerActivation(Lawyer $lawyer, JSONRequest $request)
+    {
+        $request->validate([
+            'is_active' => ['boolean']
+        ]);
+        $lawyer->account->is_active = $request->get('is_active');
+        $lawyer->account->save();
+        return RespondJSON::success();
+    }
 }

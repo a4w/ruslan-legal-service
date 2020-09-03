@@ -6,6 +6,7 @@ use App\Admin;
 use App\Blog;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
+use App\Lawyer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,5 +64,19 @@ class AdminController extends Controller
             $query->where('status', $status);
         })->get();
         return RespondJSON::success(['blogs' => $blogs]);
+    }
+
+    public function getLawyers(Request $request)
+    {
+        $request->validate([
+            'is_active' => ['string', 'IN:true,false']
+        ]);
+        $is_active = $request->get('is_active');
+        $lawyers = Lawyer::when($is_active, function ($query, $is_active) {
+            $query->whereHas('account', function ($query) use ($is_active) {
+                $query->where('is_active', $is_active === 'true');
+            });
+        })->get();
+        return RespondJSON::success(['lawyers' => $lawyers]);
     }
 }

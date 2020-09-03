@@ -95,6 +95,7 @@ Route::prefix('admin')->group(function () {
     Route::post('refresh-current-token', 'AdminController@refreshCurrentToken');
     Route::post('add', 'AdminController@addAdmin');
     Route::get('blogs', 'AdminController@getBlogs')->middleware('auth:admin');
+    Route::get('lawyers', 'AdminController@getLawyers')->middleware('auth:admin');
 });
 
 

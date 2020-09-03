@@ -89,6 +89,13 @@ Route::prefix('blogs')->group(function () {
     Route::get('latest/{number}', 'BlogsController@latestBlogs');
 });
 
+Route::prefix('admin')->group(function () {
+    Route::post('login', 'AdminController@login');
+    Route::post('logout', 'AdminController@logout');
+    Route::post('refresh-current-token', 'AdminController@refreshCurrentToken');
+    Route::post('add', 'AdminController@addAdmin');
+});
+
 
 Route::prefix('webhook')->group(function () {
     Route::post('/payment-status-success', 'WebhooksController@paymentIntentSuccessListener');

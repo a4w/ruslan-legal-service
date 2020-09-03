@@ -96,6 +96,7 @@ Route::prefix('admin')->group(function () {
     Route::post('add', 'AdminController@addAdmin');
     Route::get('blogs', 'AdminController@getBlogs')->middleware('auth:admin');
     Route::get('lawyers', 'AdminController@getLawyers')->middleware('auth:admin');
+    Route::post('blog/{blog}', 'AdminController@updateBlogStatus');
 });
 
 

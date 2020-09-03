@@ -79,4 +79,14 @@ class AdminController extends Controller
         })->get();
         return RespondJSON::success(['lawyers' => $lawyers]);
     }
+
+    public function updateBlogStatus(Blog $blog, JSONRequest $request)
+    {
+        $request->validate([
+            'status' => ['in:PUBLISHED,UNDER_REVIEW']
+        ]);
+        $blog->status = $request->get('status');
+        $blog->save();
+        return RespondJSON::success();
+    }
 }

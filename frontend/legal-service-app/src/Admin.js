@@ -5,6 +5,7 @@ import AdminsLawyersController from "./AdminsLawyersController";
 import History from "./History";
 import AdminsBlogsController from "./AdminsBlogsController";
 import AdminBlogDetails from "./AdminBlogDetails";
+import AddAdmin from "./AddAdmin";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
@@ -35,12 +36,9 @@ const Admin = () => {
                         <b>Lawbe</b>
                     </a>
                 </div>
-                <a href="//" id="toggle_btn">
-                    <i className="fe fe-text-align-left"></i>
-                </a>
-                <a href="//" className="mobile_btn" onClick={handleToggle}>
+                <div className="mobile_btn" onClick={handleToggle}>
                     <i className="fa fa-bars"></i>
-                </a>
+                </div>
             </div>
             <div className="sidebar" id="sidebar" ref={ref}>
                 <AdminSidebar close={() => setToggle(false)} _path={_path} />
@@ -50,7 +48,7 @@ const Admin = () => {
                     <div className="content container-fluid">
                         <Switch>
                             <Route exact path="/admin">
-                                <Redirect to="/admin/lawyers"/>
+                                <Redirect to="/admin/lawyers" />
                             </Route>
                             <Route path={`${_path}/lawyers`}>
                                 <AdminsLawyersController />
@@ -61,6 +59,10 @@ const Admin = () => {
                             <Route
                                 path={`${_path}/blog-details/:blogId`}
                                 component={AdminBlogDetails}
+                            />
+                            <Route
+                                path={`${_path}/add-admin`}
+                                component={AddAdmin}
                             />
                         </Switch>
                     </div>
@@ -83,6 +85,16 @@ const AdminSidebar = ({_path, close}) => {
                     <li>
                         <NavLink to={`${_path}/new-blogs`} onClick={close}>
                             <span>Blogs</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={`${_path}/add-admin`} onClick={close}>
+                            <span>Add Admin</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={`${_path}/all-admins`} onClick={close}>
+                            <span>Admins</span>
                         </NavLink>
                     </li>
                 </ul>

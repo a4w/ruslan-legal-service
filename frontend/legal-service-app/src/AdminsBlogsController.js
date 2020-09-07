@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import BlogList from "./BlogList";
 import useRequests from "./useRequests";
 
-const AdminNewBlogs = () => {
+const AdminsBlogsController = () => {
     const [blogs, setBlogs] = useState([]);
     const { request } = useRequests();
     useEffect(() => {
@@ -18,4 +18,4 @@ const AdminNewBlogs = () => {
     return <BlogList blogs={blogs} to="/admin/blog-details/" />;
 };
 
-export default AdminNewBlogs;
+export default AdminsBlogsController;

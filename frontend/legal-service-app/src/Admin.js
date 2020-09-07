@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./assets/css/admin.css";
 import { Route, NavLink, Switch, Router } from "react-router-dom";
-import AdminNewLawyers from "./AdminNewLawyers";
+import AdminsLawyersController from "./AdminsLawyersController";
 import History from "./History";
-import AdminNewBlogs from "./AdminNewBlogs";
+import AdminsBlogsController from "./AdminsBlogsController";
 import AdminBlogDetails from "./AdminBlogDetails";
 
 const Admin = () => {
@@ -50,10 +50,10 @@ const Admin = () => {
                     <div className="content container-fluid">
                         <Switch>
                             <Route path={`${_path}/new-lawyers`}>
-                                <AdminNewLawyers />
+                                <AdminsLawyersController />
                             </Route>
                             <Route path={`${_path}/new-blogs`}>
-                                <AdminNewBlogs />
+                                <AdminsBlogsController />
                             </Route>
                             <Route
                                 path={`${_path}/blog-details/:blogId`}

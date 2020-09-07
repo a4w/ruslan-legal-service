@@ -1,7 +1,7 @@
 import React from "react";
 import SpinnerButton from "./SpinnerButton";
 
-const AdminNewLawyers = () => {
+const AdminsLawyersController = () => {
     const headers = ["ID", "Name", "Phone", "Email", "Actions"];
     const test = [
         {
@@ -24,11 +24,54 @@ const AdminNewLawyers = () => {
         },
     ];
     return (
-        <Table header={headers}>
-            {test.map((lawyer, i) => (
-                <Lawyer {...lawyer} key={i} />
-            ))}
-        </Table>
+        <>
+            <div className="card">
+                <div className="card-header">
+                    <ul className="nav nav-tabs nav-tabs-solid nav-justified">
+                        <li className="nav-item">
+                            <a
+                                className="nav-link active"
+                                href="#solid-rounded-justified-tab1"
+                                data-toggle="tab"
+                            >
+                                New Lawyers
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a
+                                className="nav-link"
+                                href="#solid-rounded-justified-tab2"
+                                data-toggle="tab"
+                            >
+                                All Lawyers
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div className="card-body">
+                    <div className="tab-content">
+                        <div
+                            className="tab-pane show active"
+                            id="solid-rounded-justified-tab1"
+                        >
+                            <Table header={headers}>
+                                {test.map((lawyer, i) => (
+                                    <Lawyer {...lawyer} key={i} />
+                                ))}
+                            </Table>
+                        </div>
+                        <div
+                            className="tab-pane"
+                            id="solid-rounded-justified-tab2"
+                        >
+                            <Table header={headers}>
+                                <p> test</p>
+                            </Table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 const Lawyer = ({ id, fullname, phone, email }) => {
@@ -86,4 +129,4 @@ const Table = (props) => {
     );
 };
 
-export default AdminNewLawyers;
+export default AdminsLawyersController;

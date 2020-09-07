@@ -214,3 +214,46 @@ export const editInfoValidation = (data, field) => {
         });
     });
 };
+export const adminLoginValidation = (data, field) => {
+    return validate("AdminLogin", () => {
+        vest.only(field);
+        ["username", "password"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+        test("username", `${data.username} is not a valid username`, () => {
+            enforce(data.username.toString())
+                .isNotEmpty()
+                .matches(/^(?=.{4,20}$)(?![.])(?!.*[.]{2})[a-zA-Z0-9._]+(?<![.])$/g);
+        });
+    });
+};
+
+export const addAdminValidation = (data, field) => {
+    return validate("AddAdmin", () => {
+        vest.only(field);
+
+        ["name", "username", "password", "passConfirm"].forEach((elem) => {
+            test(elem, "This field is required", () => {
+                enforce(data[elem].toString()).isNotEmpty();
+            });
+        });
+
+        test("username", `${data.username} is not a valid username`, () => {
+            enforce(data.username.toString())
+                .isNotEmpty()
+                .matches(/^(?=.{4,20}$)(?![.])(?!.*[.]{2})[a-zA-Z0-9._]+(?<![.])$/g);
+        });
+
+        test("password", "Password should be atleast 8 characters long", () => {
+            enforce(data.password.toString()).longerThanOrEquals(8);
+        });
+        
+        test("passConfirm", "Passwords should be matching", () => {
+            enforce(
+                data.password.toString() === data.passConfirm.toString()
+            ).isTruthy();
+        });
+    });
+};

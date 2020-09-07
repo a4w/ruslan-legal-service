@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./assets/css/admin.css";
-import { Route, NavLink, Switch, Router } from "react-router-dom";
+import { Route, NavLink, Switch, Router, Redirect } from "react-router-dom";
 import AdminsLawyersController from "./AdminsLawyersController";
 import History from "./History";
 import AdminsBlogsController from "./AdminsBlogsController";
@@ -28,17 +28,17 @@ const Admin = () => {
         <div className={`main-wrapper ${sidebarToggle ? "slide-nav" : ""}`}>
             <div className="header">
                 <div className="header-left">
-                    <a href="index.html" className="logo">
+                    <a href="/admin" className="logo">
                         <b>Lawbe</b>.co.uk
                     </a>
-                    <a href="index.html" className="logo logo-small">
+                    <a href="/admin" className="logo logo-small">
                         <b>Lawbe</b>
                     </a>
                 </div>
-                <a href="" id="toggle_btn">
+                <a href="//" id="toggle_btn">
                     <i className="fe fe-text-align-left"></i>
                 </a>
-                <a className="mobile_btn" onClick={handleToggle}>
+                <a href="//" className="mobile_btn" onClick={handleToggle}>
                     <i className="fa fa-bars"></i>
                 </a>
             </div>
@@ -49,7 +49,10 @@ const Admin = () => {
                 <div className="page-wrapper">
                     <div className="content container-fluid">
                         <Switch>
-                            <Route path={`${_path}/new-lawyers`}>
+                            <Route exact path="/admin">
+                                <Redirect to="/admin/lawyers"/>
+                            </Route>
+                            <Route path={`${_path}/lawyers`}>
                                 <AdminsLawyersController />
                             </Route>
                             <Route path={`${_path}/new-blogs`}>
@@ -73,13 +76,13 @@ const AdminSidebar = ({_path, close}) => {
             <div id="sidebar-menu" className="sidebar-menu">
                 <ul>
                     <li>
-                        <NavLink to={`${_path}/new-lawyers`} onClick={close}>
-                            <span>New lawyers</span>
+                        <NavLink to={`${_path}/lawyers`} onClick={close}>
+                            <span>Lawyers</span>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={`${_path}/new-blogs`} onClick={close}>
-                            <span>New blogs</span>
+                            <span>Blogs</span>
                         </NavLink>
                     </li>
                 </ul>

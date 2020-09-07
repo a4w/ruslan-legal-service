@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
 import Img from "./Img";
 import ErrorMessageInput from "./ErrorMessageInput";
-import {loginValidation} from "./Validations";
+import {adminLoginValidation} from "./Validations";
 import useValidation from "./useValidation";
 import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 import SpinnerButton from "./SpinnerButton";
 
 const AdminLogin = () => {
-    const [admin, setAdmin] = useState({ email: "", password: "" });
+    const [admin, setAdmin] = useState({ username: "", password: "" });
     const [isLoggingIn, setLoggingIn] = useState(false);
-    const [errors, addError, runValidation] = useValidation(loginValidation);
+    const [errors, addError, runValidation] = useValidation(adminLoginValidation);
     const {request} = useRequests();
     const [auth, setAuth] = useContext(AuthContext);
     const onChange = ({ target: { name, value } }) => {
@@ -37,7 +37,7 @@ const AdminLogin = () => {
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);
-                        addError(["password", "email"], {
+                        addError(["password", "username"], {
                             password: ["Invalid password supplied"],
                         });
                     })
@@ -61,12 +61,12 @@ const AdminLogin = () => {
                                 <div className="form-group">
                                     <ErrorMessageInput
                                         className="form-control"
-                                        type="email"
-                                        placeholder="Email"
-                                        value={admin.email}
+                                        type="username"
+                                        placeholder="Username"
+                                        value={admin.username}
                                         OnChangeHandler={onChange}
-                                        name="email"
-                                        errors={errors.email}
+                                        name="username"
+                                        errors={errors.username}
                                     />
                                 </div>
                                 <div className="form-group mb-4">

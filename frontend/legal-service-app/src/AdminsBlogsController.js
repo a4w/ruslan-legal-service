@@ -6,7 +6,7 @@ const AdminsBlogsController = () => {
     const [blogs, setBlogs] = useState([]);
     const { request } = useRequests();
     useEffect(() => {
-        const url = "/blogs/all";
+        const url = "admin/blogs?status=UNDER_REVIEW";
         request({ url: url, method: "GET" })
             .then((data) => {
                 console.log(data);

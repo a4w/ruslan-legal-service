@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SpinnerButton from "./SpinnerButton";
+import useRequests from "./useRequests";
 
 const AdminsLawyersController = () => {
     const headers = ["ID", "Name", "Phone", "Email", "Actions"];
@@ -9,20 +10,44 @@ const AdminsLawyersController = () => {
             fullname: "123456789",
             phone: "123456789",
             email: "123456789",
+            account: {is_active: true},
         },
         {
             id: "askkkowowo",
             fullname: "askkkowowo",
             phone: "askkkowowo",
             email: "askkkowowo",
+            account: {is_active: false},
         },
         {
             id: "ppppppppp",
             fullname: "ppppppppp",
             phone: "ppppppppp",
             email: "ppppppppp",
+            account: {is_active: true},
         },
     ];
+    const [newLawyers, setNew] = useState(test);
+    const [allLawyers, setAll] = useState(test);
+    const {request} = useRequests();
+
+    useEffect(()=>{
+        request({ url: "/admin/lawyers?is_active=false", method: "GET" })
+            .then((data) => {
+                setNew(data.lawyers);
+                return request({
+                    url: "/admin/lawyers?is_active=true",
+                    method: "GET",
+                });
+            })
+            .then((data) => {
+                setAll(data.lawyers);
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+            .finally(() => {});
+    }, []);
     return (
         <>
             <div className="card">
@@ -55,8 +80,8 @@ const AdminsLawyersController = () => {
                             id="solid-rounded-justified-tab1"
                         >
                             <Table header={headers}>
-                                {test.map((lawyer, i) => (
-                                    <Lawyer {...lawyer} key={i} />
+                                {newLawyers.map((lawyer, i) => (
+                                    <Lawyer lawyer={lawyer} key={i} />
                                 ))}
                             </Table>
                         </div>
@@ -65,7 +90,9 @@ const AdminsLawyersController = () => {
                             id="solid-rounded-justified-tab2"
                         >
                             <Table header={headers}>
-                                <p> test</p>
+                                {allLawyers.map((lawyer, i) => (
+                                    <Lawyer lawyer={lawyer} key={i} />
+                                ))}
                             </Table>
                         </div>
                     </div>
@@ -74,7 +101,24 @@ const AdminsLawyersController = () => {
         </>
     );
 };
-const Lawyer = ({ id, fullname, phone, email }) => {
+const Lawyer = ({ lawyer }) => {
+    const { id, fullname, phone, email, account} = { ...lawyer };
+    const { is_active } = { ...account };
+    const [loading, setLoading] = useState(false);
+    const { request } = useRequests();
+    const OnClick = (id) => {
+        setLoading(true);
+        request({ url: `admin/lawyer/${id}`, method: "POST" })
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
     return (
         <tr>
             <td>{id}</td>
@@ -84,15 +128,11 @@ const Lawyer = ({ id, fullname, phone, email }) => {
             <td>
                 <SpinnerButton
                     type="button"
-                    className="btn btn-sm btn-rounded btn-success mr-2"
+                    className={`btn btn-sm btn-rounded btn-${is_active ? "success" : "danger"} mr-2`}
+                    loading={loading}
+                    onClick={OnClick}
                 >
-                    Add
-                </SpinnerButton>
-                <SpinnerButton
-                    type="button"
-                    className="btn btn-sm btn-rounded btn-danger"
-                >
-                    Remove
+                    {is_active ? "Deactivate" : "Activate"}
                 </SpinnerButton>
             </td>
         </tr>

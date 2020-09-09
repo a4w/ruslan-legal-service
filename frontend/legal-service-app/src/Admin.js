@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./assets/css/admin.css";
-import { Route, NavLink, Switch, Router, Redirect } from "react-router-dom";
+import { Route, NavLink, Switch, Router, Redirect, Link } from "react-router-dom";
 import AdminsLawyersController from "./AdminsLawyersController";
 import History from "./History";
 import AdminsBlogsController from "./AdminsBlogsController";
 import AdminBlogDetails from "./AdminBlogDetails";
 import AddAdmin from "./AddAdmin";
+import useRequests from "./useRequests";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
@@ -73,6 +74,7 @@ const Admin = () => {
 };
 
 const AdminSidebar = ({_path, close}) => {
+    const { Logout } = useRequests();
     return (
         <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">
@@ -92,10 +94,16 @@ const AdminSidebar = ({_path, close}) => {
                             <span>Add Admin</span>
                         </NavLink>
                     </li>
-                    <li>
+                    {/* <li>
                         <NavLink to={`${_path}/all-admins`} onClick={close}>
                             <span>Admins</span>
                         </NavLink>
+                    </li> */}
+                    <li>
+                        <a href="#" onClick={Logout}>
+                            <i className="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
                     </li>
                 </ul>
             </div>

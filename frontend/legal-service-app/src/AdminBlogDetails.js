@@ -14,7 +14,7 @@ const AdminBlogDetails = (props) => {
         let url = "";
         setLoading(true);
         request({
-            url: `/admin/blog/${peops.match.params.blogId}`,
+            url: `/admin/blog/${props.match.params.blogId}`,
             method: "POST",
             data: { status: data },
         })

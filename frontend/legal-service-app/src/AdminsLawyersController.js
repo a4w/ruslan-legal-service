@@ -106,9 +106,13 @@ const Lawyer = ({ lawyer }) => {
     const { is_active } = { ...account };
     const [loading, setLoading] = useState(false);
     const { request } = useRequests();
-    const OnClick = (id) => {
+    const OnClick = () => {
         setLoading(true);
-        request({ url: `admin/lawyer/${id}`, method: "POST" })
+        request({
+            url: `admin/lawyer/${id}`,
+            method: "POST",
+            data: { is_active: !is_active },
+        })
             .then((data) => {
                 console.log(data);
             })

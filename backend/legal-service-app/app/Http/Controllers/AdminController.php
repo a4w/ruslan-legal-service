@@ -99,4 +99,9 @@ class AdminController extends Controller
         $lawyer->account->save();
         return RespondJSON::success();
     }
+
+    public function getBlog(Blog $blog)
+    {
+        return RespondJSON::success(['blog' => $blog]);
+    }
 }

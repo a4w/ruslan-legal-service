@@ -3,7 +3,7 @@ import Img from "./Img";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {adminLoginValidation} from "./Validations";
 import useValidation from "./useValidation";
-import useRequests from "./useRequests";
+import useAdminRequest from "./useAdminRequest";
 import {AuthContext} from "./App";
 import SpinnerButton from "./SpinnerButton";
 
@@ -11,7 +11,7 @@ const AdminLogin = () => {
     const [admin, setAdmin] = useState({ username: "", password: "" });
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(adminLoginValidation);
-    const {request} = useRequests();
+    const {request} = useAdminRequest();
     const [auth, setAuth] = useContext(AuthContext);
     const onChange = ({ target: { name, value } }) => {
         const newAdmin = { ...admin, [name]: value };

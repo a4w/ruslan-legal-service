@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SpinnerButton from "./SpinnerButton";
-import useRequests from "./useRequests";
+import useAdminRequest from "./useAdminRequest";
 
 const AdminsLawyersController = () => {
     const headers = ["ID", "Name", "Phone", "Email", "Actions"];
@@ -29,7 +29,7 @@ const AdminsLawyersController = () => {
     ];
     const [newLawyers, setNew] = useState(test);
     const [allLawyers, setAll] = useState(test);
-    const {request} = useRequests();
+    const {request} = useAdminRequest();
 
     useEffect(()=>{
         request({ url: "/admin/lawyers?is_active=false", method: "GET" })
@@ -105,11 +105,11 @@ const Lawyer = ({ lawyer }) => {
     const { id, fullname, phone, email, account} = { ...lawyer };
     const { is_active } = { ...account };
     const [loading, setLoading] = useState(false);
-    const { request } = useRequests();
+    const { request } = useAdminRequest();
     const OnClick = () => {
         setLoading(true);
         request({
-            url: `admin/lawyer/${id}`,
+            url: `/admin/lawyer/${id}`,
             method: "POST",
             data: { is_active: !is_active },
         })

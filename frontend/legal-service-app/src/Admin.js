@@ -6,7 +6,7 @@ import History from "./History";
 import AdminsBlogsController from "./AdminsBlogsController";
 import AdminBlogDetails from "./AdminBlogDetails";
 import AddAdmin from "./AddAdmin";
-import useRequests from "./useRequests";
+import useAdminRequest from "./useAdminRequest";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
@@ -74,7 +74,7 @@ const Admin = () => {
 };
 
 const AdminSidebar = ({_path, close}) => {
-    const { Logout } = useRequests();
+    const { Logout } = useAdminRequest();
     return (
         <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">

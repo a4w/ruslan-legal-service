@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import SpinnerButton from "./SpinnerButton";
 import ErrorMessageInput from "./ErrorMessageInput";
-import useRequests from "./useRequests";
+import useAdminRequest from "./useAdminRequest";
 import { addAdminValidation } from "./Validations";
 import useValidation from "./useValidation";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ const AddAdmin = () => {
     const [admin, setAdmin] = useState({ name:"", username: "", password: "", passConfirm:"" });
     const [isAdding, setAdding] = useState(false);
     const [errors, addError, runValidation] = useValidation(addAdminValidation);
-    const {request} = useRequests();
+    const {request} = useAdminRequest();
 
     const onChange = ({ target: { name, value } }) => {
         const newAdmin = { ...admin, [name]: value };

@@ -4,12 +4,12 @@ import StickyBox from "react-sticky-box";
 import SpinnerButton from "./SpinnerButton";
 import "./AdminBlogDetails.css";
 import { useState } from "react";
-import useRequests from "./useRequests";
+import useAdminRequest from "./useAdminRequest";
 import { toast } from "react-toastify";
 
 const AdminBlogDetails = (props) => {
     const [loading, setLoading] = useState();
-    const { request } = useRequests();
+    const { request } = useAdminRequest();
     const OnClick = (data) => {
         let url = "";
         setLoading(true);

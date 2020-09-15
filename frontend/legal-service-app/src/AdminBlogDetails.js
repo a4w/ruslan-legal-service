@@ -22,7 +22,7 @@ const AdminBlogDetails = (props) => {
                 toast.success("Published succefully");
             })
             .catch((e) => {
-                toast.error("Published succefully");
+                toast.error("Error Occurred");
             })
             .finally(() => {
                 setLoading(false);

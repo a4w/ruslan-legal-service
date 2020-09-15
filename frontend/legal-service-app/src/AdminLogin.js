@@ -29,7 +29,7 @@ const AdminLogin = () => {
                         console.log(data);
                         setAuth({
                             accessToken: data.access_token,
-                            accountType: data.account_type,
+                            accountType: "ADMIN",
                             refreshToken: data.refresh_token || null,
                             isLoggedIn: true,
                             accountId: data.user_id

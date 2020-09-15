@@ -8,7 +8,7 @@ function PrivateRoute({component, admin, ...rest}) {
         if (auth.isLoggedIn && auth.accountType === "ADMIN") {
             return <Route {...rest} component={component} />;
         } else {
-            return <Redirect to="/admin/admin-login" />;
+            return <Redirect to="/admin/login" />;
         }
     } else {
         if (auth.isLoggedIn) {

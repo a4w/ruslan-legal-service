@@ -62,7 +62,7 @@ function useAdminRequest() {
         return new Promise((resolve, reject) => {
             axiosClient.request({
                 method: "POST",
-                url: "/auth/admin/refresh-current-token"
+                url: "/admin/refresh-current-token"
             }).then((response) => {
                 setAuth({
                     ...auth,
@@ -85,7 +85,7 @@ function useAdminRequest() {
             callback: (result) => {
                 if (result) {
                     request({
-                        url: '/auth/admin/logout',
+                        url: '/admin/logout',
                         method: 'POST',
                         data: null
                     }).finally(() => {

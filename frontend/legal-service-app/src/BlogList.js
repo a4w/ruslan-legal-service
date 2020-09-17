@@ -12,7 +12,7 @@ const BlogList = ({blogs, editable, col, to}) => {
             <div className="row blog-grid-row">
                 {blogs.length ? (
                     blogs.map((blog) => (
-                        <Blog key={blog.id} blog={blog} editable={editable} col={col} to={to}/>
+                        <Blog key={blog.id} blog={blog} editable={editable} col={col} to={to} />
                     ))
                 ) : (
                         <NoContent>There ara no published blogs</NoContent>
@@ -41,7 +41,7 @@ const ButtonStyle = {
     bottom: "0"
 };
 
-const Blog = ({blog, editable, col = 6, to="/blogs/blog/"}) => {
+const Blog = ({blog, editable, col = 6, to = "/blogs/blog/"}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
@@ -96,7 +96,7 @@ const Blog = ({blog, editable, col = 6, to="/blogs/blog/"}) => {
                         </li>
                         <li style={{display: 'inline', maxWidth: 'unset', width: 'unset', flex: '0 0 auto'}}>
                             <i className="far fa-clock"></i>{" "}
-                            {moment(blog.publish_date).format("Do of MMM YYYY")}
+                            {moment(blog.publish_date).format("D MMM YYYY")}
                         </li>
                     </ul>
                     <h3 className="blog-title">

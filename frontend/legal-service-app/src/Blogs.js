@@ -41,7 +41,7 @@ const Blogs = (props) => {
             </div>
             <div className="content">
                 <div className="container">
-                    <div className="row">
+                    <div className="row no-gutters">
                         <div className="col-lg-8 col-md-12">
                             <Switch history={History}>
                                 <Route exact path="/blogs">

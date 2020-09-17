@@ -2,18 +2,18 @@ import React, {useState} from "react";
 import SpinnerButton from "./SpinnerButton";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useAdminRequest from "./useAdminRequest";
-import { addAdminValidation } from "./Validations";
+import {addAdminValidation} from "./Validations";
 import useValidation from "./useValidation";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
 const AddAdmin = () => {
-    const [admin, setAdmin] = useState({ name:"", username: "", password: "", passConfirm:"" });
+    const [admin, setAdmin] = useState({username: "", password: "", passConfirm: ""});
     const [isAdding, setAdding] = useState(false);
     const [errors, addError, runValidation] = useValidation(addAdminValidation);
     const {request} = useAdminRequest();
 
-    const onChange = ({ target: { name, value } }) => {
-        const newAdmin = { ...admin, [name]: value };
+    const onChange = ({target: {name, value}}) => {
+        const newAdmin = {...admin, [name]: value};
         setAdmin(newAdmin);
         runValidation(newAdmin, name);
         if (name === "password" && admin.passConfirm !== "")
@@ -25,7 +25,7 @@ const AddAdmin = () => {
         runValidation(admin).then((hasErrors, _) => {
             if (!hasErrors) {
                 setAdding(true);
-                request({ url: "/admin/add", method: "POST", data: admin })
+                request({url: "/admin/add", method: "POST", data: admin})
                     .then((response) => {
                         console.log("success", response);
                         toast.success("Added Admin")
@@ -49,17 +49,6 @@ const AddAdmin = () => {
             <h1 className="text-center">Add Admin</h1>
             <p className="account-subtitle">Access to our dashboard</p>
             <form onSubmit={OnSubmitHandler}>
-                <div>
-                    <ErrorMessageInput
-                        className="form-control"
-                        type="text"
-                        placeholder="Name"
-                        name="name"
-                        value={admin.name}
-                        errors={errors.name}
-                        OnChangeHandler={onChange}
-                    />
-                </div>
                 <div className="form-group">
                     <ErrorMessageInput
                         className="form-control"

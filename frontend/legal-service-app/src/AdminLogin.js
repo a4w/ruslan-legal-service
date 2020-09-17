@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, {useState, useContext} from "react";
 import Img from "./Img";
 import ErrorMessageInput from "./ErrorMessageInput";
 import {adminLoginValidation} from "./Validations";
@@ -6,18 +6,20 @@ import useValidation from "./useValidation";
 import useAdminRequest from "./useAdminRequest";
 import {AuthContext} from "./App";
 import SpinnerButton from "./SpinnerButton";
+import {useHistory} from "react-router";
 
 const AdminLogin = () => {
-    const [admin, setAdmin] = useState({ username: "", password: "" });
+    const [admin, setAdmin] = useState({username: "", password: ""});
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [errors, addError, runValidation] = useValidation(adminLoginValidation);
     const {request} = useAdminRequest();
     const [auth, setAuth] = useContext(AuthContext);
-    const onChange = ({ target: { name, value } }) => {
-        const newAdmin = { ...admin, [name]: value };
+    const onChange = ({target: {name, value}}) => {
+        const newAdmin = {...admin, [name]: value};
         setAdmin(newAdmin);
         runValidation(newAdmin, name);
     };
+    const history = useHistory();
     const onSubmit = (e) => {
         e.preventDefault();
         runValidation(admin).then((hasErrors, _) => {
@@ -28,12 +30,12 @@ const AdminLogin = () => {
                     .then((data) => {
                         console.log(data);
                         setAuth({
-                            accessToken: data.access_token,
+                            accessToken: data.token,
                             accountType: "ADMIN",
-                            refreshToken: data.refresh_token || null,
                             isLoggedIn: true,
-                            accountId: data.user_id
+                            accountId: data.account_id
                         });
+                        history.push("/admin")
                     })
                     .catch((_errors) => {
                         console.log("failed", _errors);

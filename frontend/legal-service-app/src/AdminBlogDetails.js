@@ -3,23 +3,23 @@ import BlogDetails from "./BlogDetails";
 import StickyBox from "react-sticky-box";
 import SpinnerButton from "./SpinnerButton";
 import "./AdminBlogDetails.css";
-import { useState } from "react";
+import {useState} from "react";
 import useAdminRequest from "./useAdminRequest";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
 const AdminBlogDetails = (props) => {
     const [loading, setLoading] = useState();
-    const { request } = useAdminRequest();
+    const {request} = useAdminRequest();
     const OnClick = (data) => {
         let url = "";
         setLoading(true);
         request({
             url: `/admin/blog/${props.match.params.blogId}`,
             method: "POST",
-            data: { status: data },
+            data: {status: data},
         })
             .then((r) => {
-                toast.success("Published succefully");
+                toast.success("Blog status updated");
             })
             .catch((e) => {
                 toast.error("Error Occurred");
@@ -30,7 +30,7 @@ const AdminBlogDetails = (props) => {
     };
     return (
         <>
-            <StickyBox offsetTop={85} style={{ zIndex: 99 }}>
+            <StickyBox offsetTop={85} style={{zIndex: 99}}>
                 <div className="blog-publish">
                     <SpinnerButton
                         type="button"
@@ -46,7 +46,7 @@ const AdminBlogDetails = (props) => {
                         onClick={() => OnClick("UNDER_REVIEW")}
                         loading={loading}
                     >
-                        Reject
+                        Remove
                     </SpinnerButton>
                 </div>
             </StickyBox>

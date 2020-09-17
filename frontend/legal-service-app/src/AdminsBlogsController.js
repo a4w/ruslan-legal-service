@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import BlogList from "./BlogList";
 import useAdminRequest from "./useAdminRequest";
 
 const AdminsBlogsController = () => {
     const [blogs, setBlogs] = useState([]);
-    const { request } = useAdminRequest();
+    const {request} = useAdminRequest();
     useEffect(() => {
-        const url = "admin/blogs?status=UNDER_REVIEW";
-        request({ url: url, method: "GET" })
+        const url = "admin/blogs";
+        request({url: url, method: "GET"})
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);

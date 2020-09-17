@@ -1,38 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import SpinnerButton from "./SpinnerButton";
 import useAdminRequest from "./useAdminRequest";
 
 const AdminsLawyersController = () => {
     const headers = ["ID", "Name", "Phone", "Email", "Actions"];
-    const test = [
-        {
-            id: "123456789",
-            fullname: "123456789",
-            phone: "123456789",
-            email: "123456789",
-            account: {is_active: true},
-        },
-        {
-            id: "askkkowowo",
-            fullname: "askkkowowo",
-            phone: "askkkowowo",
-            email: "askkkowowo",
-            account: {is_active: false},
-        },
-        {
-            id: "ppppppppp",
-            fullname: "ppppppppp",
-            phone: "ppppppppp",
-            email: "ppppppppp",
-            account: {is_active: true},
-        },
-    ];
-    const [newLawyers, setNew] = useState(test);
-    const [allLawyers, setAll] = useState(test);
+    const [newLawyers, setNew] = useState([]);
+    const [allLawyers, setAll] = useState([]);
     const {request} = useAdminRequest();
 
-    useEffect(()=>{
-        request({ url: "/admin/lawyers?is_active=false", method: "GET" })
+    useEffect(() => {
+        request({url: "/admin/lawyers?is_active=false", method: "GET"})
             .then((data) => {
                 setNew(data.lawyers);
                 return request({
@@ -101,20 +78,20 @@ const AdminsLawyersController = () => {
         </>
     );
 };
-const Lawyer = ({ lawyer }) => {
-    const { id, fullname, phone, email, account} = { ...lawyer };
-    const { is_active } = { ...account };
+const Lawyer = ({lawyer}) => {
+    const {id, account} = {...lawyer};
+    const {is_active} = {...account};
     const [loading, setLoading] = useState(false);
-    const { request } = useAdminRequest();
+    const {request} = useAdminRequest();
     const OnClick = () => {
         setLoading(true);
         request({
             url: `/admin/lawyer/${id}`,
             method: "POST",
-            data: { is_active: !is_active },
+            data: {is_active: !is_active},
         })
             .then((data) => {
-                console.log(data);
+                window.location.reload();
             })
             .catch((e) => {
                 console.log(e);
@@ -126,9 +103,9 @@ const Lawyer = ({ lawyer }) => {
     return (
         <tr>
             <td>{id}</td>
-            <td>{fullname}</td>
-            <td>{phone}</td>
-            <td>{email}</td>
+            <td>{account.full_name}</td>
+            <td>{account.phone}</td>
+            <td>{account.email}</td>
             <td>
                 <SpinnerButton
                     type="button"
@@ -155,7 +132,7 @@ const Table = (props) => {
                                 display: "block",
                             }}
                         >
-                            <tbody style={{ width: "100%", display: "table" }}>
+                            <tbody style={{width: "100%", display: "table"}}>
                                 <thead>
                                     <tr>
                                         {props.header.map((h, i) => (

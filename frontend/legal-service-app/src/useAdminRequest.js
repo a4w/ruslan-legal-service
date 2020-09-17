@@ -13,7 +13,7 @@ const axiosClient = axios.create({
     }
 });
 
-function useRequests() {
+function useAdminRequest() {
 
     const [auth, setAuth] = useContext(AuthContext);
     const history = useHistory();
@@ -27,9 +27,7 @@ function useRequests() {
 
     function requireLogin() {
         setAuth({...auth, isLoggedIn: false});
-        if (routeMatch.params[routeMatch.params.length - 1] === "login") {
-            history.push(routeMatch.params[0]);
-        }
+        history.push("/admin/login");
     }
 
     function fetchNewAccessToken() {
@@ -46,7 +44,7 @@ function useRequests() {
                     setAuth({
                         ...auth,
                         accessToken: response.data.access_token,
-                        accountType: response.data.account_type,
+                        accountType: "ADMIN",
                         isLoggedIn: true,
                         accountId: response.data.account.account.id
                     });
@@ -64,7 +62,7 @@ function useRequests() {
         return new Promise((resolve, reject) => {
             axiosClient.request({
                 method: "POST",
-                url: "/auth/refresh-current-token"
+                url: "/admin/refresh-current-token"
             }).then((response) => {
                 setAuth({
                     ...auth,
@@ -83,11 +81,11 @@ function useRequests() {
     function Logout() {
         bootbox.confirm({
             title: "Confirm",
-            message: "Are you sure you would like to logout of lawbe ?",
+            message: "Are you sure you would like to logout admin panel?",
             callback: (result) => {
                 if (result) {
                     request({
-                        url: 'auth/logout',
+                        url: '/admin/logout',
                         method: 'POST',
                         data: null
                     }).finally(() => {
@@ -131,4 +129,4 @@ function useRequests() {
     return {request, Logout, fetchNewAccessToken, refreshAccessToken};
 }
 
-export default useRequests;
+export default useAdminRequest;

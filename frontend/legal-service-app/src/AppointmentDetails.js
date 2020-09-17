@@ -69,7 +69,7 @@ const Details = ({appointment}) => {
                             diameter={100}
                         />
                     </div>
-                    <Link to={`/profile/${lawyer.id}`}><span className="d-block text-center text-lg font-weight-bold">{lawyer.account.full_name}</span></Link>
+                    <Link to={`/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`}><span className="d-block text-center text-lg font-weight-bold">{lawyer.account.full_name}</span></Link>
                     <span class="d-block text-center text-muted">{lawyer.account.email}</span>
                 </div>
                 <div className="col-12 col-md-6">

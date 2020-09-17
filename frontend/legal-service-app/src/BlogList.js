@@ -6,13 +6,13 @@ import moment from "moment";
 import NoContent from "./NoContent";
 import RoundImg from "./RoundImg";
 
-const BlogList = ({blogs, editable, col}) => {
+const BlogList = ({blogs, editable, col, to}) => {
     if (blogs)
         return (
             <div className="row blog-grid-row">
                 {blogs.length ? (
                     blogs.map((blog) => (
-                        <Blog key={blog.id} blog={blog} editable={editable} col={col} />
+                        <Blog key={blog.id} blog={blog} editable={editable} col={col} to={to} />
                     ))
                 ) : (
                         <NoContent>There ara no published blogs</NoContent>
@@ -41,7 +41,7 @@ const ButtonStyle = {
     bottom: "0"
 };
 
-const Blog = ({blog, editable, col = 6}) => {
+const Blog = ({blog, editable, col = 6, to = "/blogs/blog/"}) => {
     const {lawyer, id} = {...blog};
     const {account} = {...lawyer};
     return (
@@ -50,7 +50,7 @@ const Blog = ({blog, editable, col = 6}) => {
                 <div className="blog-image">
                     <Link
                         to={{
-                            pathname: `/blogs/blog/${id}`,
+                            pathname: `${to}${id}`,
                             state: {blog: blog, lawyer: lawyer},
                         }}
                     >
@@ -80,7 +80,7 @@ const Blog = ({blog, editable, col = 6}) => {
                             <div>
                                 <Link
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                     style={{display: "flex", alignItems: "center"}}
@@ -96,11 +96,11 @@ const Blog = ({blog, editable, col = 6}) => {
                         </li>
                         <li style={{display: 'inline', maxWidth: 'unset', width: 'unset', flex: '0 0 auto'}}>
                             <i className="far fa-clock"></i>{" "}
-                            {moment(blog.publish_date).format("Do of MMM YYYY")}
+                            {moment(blog.publish_date).format("D MMM YYYY")}
                         </li>
                     </ul>
                     <h3 className="blog-title">
-                        <Link to={`/blogs/blog/${id}`}>{blog.title}</Link>
+                        <Link to={`${to}${id}`}>{blog.title}</Link>
                     </h3>
                     <ul className="tags mt-2">
                         <li>

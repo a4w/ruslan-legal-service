@@ -1,5 +1,7 @@
 <?php
 
+use App\Admin;
+
 return [
 
     /*
@@ -46,6 +48,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'admins'
+        ]
     ],
 
     /*
@@ -70,6 +77,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Account::class,
         ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => Admin::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

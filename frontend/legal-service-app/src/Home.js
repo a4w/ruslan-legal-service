@@ -292,7 +292,7 @@ const SearchLawyerByName = () => {
                                     setSelectedIdx((selectedIdx + results.length - 1) % results.length);
                                     break;
                                 case ENTER:
-                                    history.push(`/profile/${results[selectedIdx].id}`);
+                                    history.push(`/profile/${results[selectedIdx].id}/${results[selectedIdx].account.full_name.replace(/ +/g, "-")}`);
                                     break;
                             }
                         }}
@@ -308,7 +308,7 @@ const SearchLawyerByName = () => {
                             results.map((lawyer, i) => {
                                 return (
                                     <div className={"inline-search-result " + (i === selectedIdx ? 'highlight-result' : '')}>
-                                        <Link to={`/profile/${lawyer.id}`} className="d-flex">
+                                        <Link to={`/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`} className="d-flex">
                                             <RoundImg
                                                 alt={lawyer.full_name}
                                                 className="rounded-circle"
@@ -472,7 +472,7 @@ const LawyerCard = ({account, lawyer}) => {
     return (
         <div className="profile-widget">
             <div className="lawyer-img" style={{maxWidth: '100%'}}>
-                <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}} style={{justifyContent: "center", display: "flex"}}>
+                <Link to={{pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`, state: {lawyer: lawyer}}} style={{justifyContent: "center", display: "flex"}}>
                     <RoundImg
                         src={account.profile_picture}
                         alt="User Image"
@@ -482,7 +482,7 @@ const LawyerCard = ({account, lawyer}) => {
             </div>
             <div className="pro-content">
                 <h3 className="title">
-                    <Link to={{pathname: `/profile/${lawyer.id}`, state: {lawyer: lawyer}}}>{`${account.name} ${account.surname}`}</Link>
+                    <Link to={{pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`, state: {lawyer: lawyer}}}>{`${account.name} ${account.surname}`}</Link>
                     <i className="fas fa-check-circle verified"></i>
                 </h3>
                 <div className="speciality text-muted">
@@ -527,7 +527,7 @@ const LawyerCard = ({account, lawyer}) => {
                     <div className="col-6">
                         <Link
                             to={{
-                                pathname: `/profile/${lawyer.id}`,
+                                pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                 state: {lawyer: lawyer},
                             }}
                             className="btn view-btn"
@@ -610,7 +610,7 @@ const BlogCard = ({blog}) => {
                 <ul className="entry-meta meta-item">
                     <li>
                         <div className="post-author">
-                            <Link to={`/profile/${lawyer.id}`}>
+                            <Link to={`/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`}>
                                 <RoundImg
                                     src={account.profile_picture}
                                     alt="Post Author"

@@ -89,6 +89,18 @@ Route::prefix('blogs')->group(function () {
     Route::get('latest/{number}', 'BlogsController@latestBlogs');
 });
 
+Route::prefix('admin')->group(function () {
+    Route::post('login', 'AdminController@login');
+    Route::post('logout', 'AdminController@logout')->middleware('auth:admin');
+    Route::post('refresh-current-token', 'AdminController@refreshCurrentToken')->middleware('auth:admin');
+    Route::post('add', 'AdminController@addAdmin')->middleware('auth:admin');
+    Route::get('blogs', 'AdminController@getBlogs')->middleware('auth:admin');
+    Route::get('lawyers', 'AdminController@getLawyers')->middleware('auth:admin');
+    Route::get('blog/{blog}', 'AdminController@getBlog')->middleware('auth:admin');
+    Route::post('blog/{blog}', 'AdminController@updateBlogStatus')->middleware('auth:admin');
+    Route::post('lawyer/{lawyer}', 'AdminController@updateLawyerActivation')->middleware('auth:admin');
+});
+
 
 Route::prefix('webhook')->group(function () {
     Route::post('/payment-status-success', 'WebhooksController@paymentIntentSuccessListener');

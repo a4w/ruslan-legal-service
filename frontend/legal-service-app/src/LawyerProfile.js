@@ -24,18 +24,25 @@ import SpinnerButton from "./SpinnerButton";
 import {FaCommentAlt} from "react-icons/fa";
 import RoundImg from "./RoundImg";
 import PageHead from "./PageHead";
+import {LoadingOverlayContext} from "./App"
 
 const LawyerProfile = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
+    const loading = useContext(LoadingOverlayContext);
     const {request} = useRequests();
     useEffect(() => {
         const lawyerID = match.params.LawyerId;
+        loading.setLoadingOverlayText("Loading Lawter's Profile...");
+        loading.setIsLoadingOverlayShown(true);
         request({url: `lawyer/${lawyerID}`, method: "GET"})
             .then((data) => {
                 setLawyer(data.lawyer);
                 console.log(data.lawyer);
             })
-            .catch((e) => {});
+            .catch((e) => {})
+            .finally(()=>{
+                loading.setIsLoadingOverlayShown(false);
+            });
         console.log();
     }, []);
 
@@ -268,13 +275,9 @@ const Overview = ({lawyer}) => {
                     <p>
                         {lawyer.accreditations &&
                             <>
-                                {lawyer.accreditations.map((accreditation, i) => {
-                                    return (
-                                        <>
-                                            <AcImg style={{maxHeight: '75px', marginRight: '10px'}} accreditation={accreditation} />
-                                        </>
-                                    );
-                                })}
+                                {lawyer.accreditations.map((accreditation, i) => 
+                                    <AcImg style={{maxHeight: '75px', marginRight: '10px'}} accreditation={accreditation} />
+                                )}
                             </>
                         }
                     </p>
@@ -287,14 +290,16 @@ const Overview = ({lawyer}) => {
                 graduation_year={graduation_year}
             />
 
-            <div className="service-list">
-                <h4>Languages</h4>
-                <ul className="clearfix">
-                    {lawyer.languages.map((language) => (
-                        <li key={language}>{language}</li>
-                    ))}
-                </ul>
-            </div>
+           {lawyer.languages && 
+                <div className="service-list">
+                    <h4>Languages</h4>
+                    <ul className="clearfix">
+                        {lawyer.languages.map((language) => (
+                            <li key={language}>{language}</li>
+                        ))}
+                    </ul>
+                </div>
+            }
             <Specializations specializations={specializations} />
         </div>
     );

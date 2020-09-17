@@ -15,23 +15,29 @@ import Slider from "react-slick";
 import {BlogCard} from "./Home";
 import {Blog} from "./BlogList";
 import {LoadingOverlayContext} from "./App";
+import {AuthContext} from "./App"
 
 const BlogDetails = ({match}) => {
     const [lawyer, setLawyer] = useState(null);
     const [blog, setBlog] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const {request} = useRequests();
+    const [auth,] = useContext(AuthContext);
+
     console.log(match);
     useEffect(() => {
         setIsLoading(true);
+        let url = `/blogs/${match.params.blogId}`;
+        if (auth.accountType === "ADMIN")
+            url = `/admin/blog/${match.params.blogId}`;
         request({
-            url: `/blogs/${match.params.blogId}`,
-            method: 'GET'
-        }).then(response => {
+            url: url,
+            method: "GET",
+        }).then((response) => {
             setLawyer(response.blog.lawyer);
             setBlog(response.blog);
-        }).catch(error => {
-            console.error("Error occurred loading blog post");
+        }).catch(() => {
+             console.error("Error occurred loading blog post");
         }).finally(() => {
             setIsLoading(false);
         });
@@ -70,7 +76,7 @@ const AboutAuthor = ({lawyer}) => {
                         <div className="author-img-wrap" style={{display: "flex", justifyContent: "center"}}>
                             <Link
                                 to={{
-                                    pathname: `/profile/${lawyer.id}`,
+                                    pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                     state: {lawyer: lawyer},
                                 }}
                             >
@@ -88,7 +94,7 @@ const AboutAuthor = ({lawyer}) => {
                                 <Link
                                     className="blog-author-name"
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >
@@ -102,7 +108,7 @@ const AboutAuthor = ({lawyer}) => {
                                 <Link
                                     className="view-pro-btn"
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >
@@ -180,7 +186,7 @@ const Post = ({blog, lawyer}) => {
                             <div className="post-author-2">
                                 <Link
                                     to={{
-                                        pathname: `/profile/${lawyer.id}`,
+                                        pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`,
                                         state: {lawyer: lawyer},
                                     }}
                                 >

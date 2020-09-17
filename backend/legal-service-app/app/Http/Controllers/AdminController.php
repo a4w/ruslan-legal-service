@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    const MASTER_KEY = '1234';
     public function login(JSONRequest $request)
     {
         $request->validate([
@@ -23,7 +22,9 @@ class AdminController extends Controller
         if (!$token = Auth::guard('admin')->attempt($credentials)) {
             return RespondJSON::unauthorized();
         }
-        return RespondJSON::success(['token' => $token]);
+        /** @var Admin */
+        $user = Auth::guard('admin')->user();
+        return RespondJSON::success(['token' => $token, 'account_id' => $user->getKey()]);
     }
 
     public function logout()
@@ -41,16 +42,9 @@ class AdminController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string', 'min:4'],
-            'password' => ['required', 'min:8'],
-            'masterKey' => ['required']
+            'password' => ['required', 'min:8']
         ]);
-
-        if ($request->get('masterKey') === self::MASTER_KEY) {
-            // Add admin
-            Admin::create($request->only(['username', 'password']));
-        } else {
-            return RespondJSON::unauthorized();
-        }
+        Admin::create($request->only(['username', 'password']));
         return RespondJSON::success();
     }
 

@@ -4,6 +4,7 @@ import {AuthContext} from "./App";
 
 function PrivateRoute({component, admin, ...rest}) {
     const [auth] = useContext(AuthContext);
+    console.log("Admin auth", auth);
     if (admin) {
         if (auth.isLoggedIn && auth.accountType === "ADMIN") {
             return <Route {...rest} component={component} />;

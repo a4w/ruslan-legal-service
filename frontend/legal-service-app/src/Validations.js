@@ -234,7 +234,7 @@ export const addAdminValidation = (data, field) => {
     return validate("AddAdmin", () => {
         vest.only(field);
 
-        ["name", "username", "password", "passConfirm"].forEach((elem) => {
+        ["username", "password", "passConfirm"].forEach((elem) => {
             test(elem, "This field is required", () => {
                 enforce(data[elem].toString()).isNotEmpty();
             });
@@ -249,7 +249,7 @@ export const addAdminValidation = (data, field) => {
         test("password", "Password should be atleast 8 characters long", () => {
             enforce(data.password.toString()).longerThanOrEquals(8);
         });
-        
+
         test("passConfirm", "Passwords should be matching", () => {
             enforce(
                 data.password.toString() === data.passConfirm.toString()

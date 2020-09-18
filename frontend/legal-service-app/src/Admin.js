@@ -7,6 +7,7 @@ import AdminsBlogsController from "./AdminsBlogsController";
 import AdminBlogDetails from "./AdminBlogDetails";
 import AddAdmin from "./AddAdmin";
 import useAdminRequest from "./useAdminRequest";
+import AdminEdit from "./AdminEdit";
 
 const Admin = () => {
     const [sidebarToggle, setToggle] = useState(false);
@@ -65,6 +66,10 @@ const Admin = () => {
                                 path={`${_path}/add-admin`}
                                 component={AddAdmin}
                             />
+                            <Route
+                                path={`${_path}/edit-my`}
+                                component={AdminEdit}
+                            />
                         </Switch>
                     </div>
                 </div>
@@ -99,6 +104,11 @@ const AdminSidebar = ({_path, close}) => {
                             <span>Admins</span>
                         </NavLink>
                     </li> */}
+                    <li>
+                        <NavLink to={`${_path}/edit-my`} onClick={close}>
+                            <span>Edit Profile</span>
+                        </NavLink>
+                    </li>
                     <li>
                         <a href="#" onClick={Logout}>
                             <i className="fas fa-sign-out-alt"></i>

@@ -11,7 +11,7 @@ import env from "./env";
 import RoundImg from "./RoundImg";
 import moment from "moment";
 import LoadingOverlay from "react-loading-overlay";
-import Slider from "react-slick";
+import Slider from "./Slider";
 import {BlogCard} from "./Home";
 import {Blog} from "./BlogList";
 import {LoadingOverlayContext} from "./App";
@@ -213,40 +213,7 @@ const Post = ({blog, lawyer}) => {
         </div>
     );
 };
-var settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    initialSlide: 0,
-    responsive: [
-        {
-            breakpoint: 1024,
-            settings: {
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                infinite: false,
-                dots: true,
-            },
-        },
-        {
-            breakpoint: 600,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                initialSlide: 2,
-            },
-        },
-        {
-            breakpoint: 480,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-            },
-        },
-    ],
-};
+
 const OtherBlogs = ({lawyer}) => {
     const [blogs, setBlogs] = useState(null);
     const {request} = useRequests();
@@ -266,7 +233,7 @@ const OtherBlogs = ({lawyer}) => {
             <div className="card-body">
                 <div className="lawyer-slider slider">
 
-                    <Slider {...settings}>
+                    <Slider>
                         {blogs &&
                             blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
                     </Slider>

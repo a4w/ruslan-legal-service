@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
@@ -9,7 +9,7 @@ const Slider = (props) => {
     const [sliderRef, slider] = useKeenSlider({
         initial: 0,
         spacing: 20,
-        slidesPerView: 4,
+        slidesPerView: 3.5,
         centered: false,
         loop: false,
         breakpoints: {
@@ -22,7 +22,7 @@ const Slider = (props) => {
                 mode: "free",
             },
             "(min-width: 961px) and (max-width: 1280px)": {
-                slidesPerView: 3,
+                slidesPerView: 2.5,
                 mode: "free",
             },
         },
@@ -31,11 +31,13 @@ const Slider = (props) => {
         },
     });
     const clacDots = () => {
-        if (window.innerWidth <= 600) setInView(1);
-        else if (window.innerWidth <= 960) setInView(2);
-        else if (window.innerWidth <= 1280) setInView(3);
-        else setInView(4);
-        if(slider && inView >= slider.details().size) showArrows(false);
+        let i = inView;
+        if (window.innerWidth <= 600) i = 1;
+        else if (window.innerWidth <= 960) i = 2;
+        else if (window.innerWidth <= 1280) i = 2.5;
+        else i = 3.5;
+        setInView(Math.floor(i));
+        if(Math.floor(i) >= Children.toArray(props.children).length) showArrows(false);
         else showArrows(true);
     };
     useEffect(clacDots, []);

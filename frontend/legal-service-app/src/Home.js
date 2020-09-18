@@ -597,9 +597,17 @@ const BlogCard = ({blog}) => {
                 </h3>
                 <ul className="tags mt-2">
                     <li>
-                        <a href="#" className="tag">
+                        <Link
+                            to={{
+                                pathname: "/blogs/all",
+                                search: queryString.stringify({
+                                    tag: blog.tag.id,
+                                }),
+                            }}
+                            className="tag"
+                        >
                             {blog.tag.area}
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

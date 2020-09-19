@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import EditBasicInfo from "./EditBasicInfo";
 import EditInfo from "./EditInfo";
 import EditLawyerInfo from "./EditLawyerInfo";
@@ -10,9 +10,12 @@ import "./Tabs.css";
 import history from "./History";
 import LawyerPaymentSettings from "./LawyerPaymentSettings"
 import PageHead from "./PageHead";
+import LoadingOverlay from "react-loading-overlay";
 
 const EditPersonal = () => {
     const path = "/dashboard/settings";
+    const [loading, setLoading] = useState(true);
+
     // const path = history.location.pathname;
     return (
         <Router history={history}>
@@ -25,7 +28,7 @@ const EditPersonal = () => {
                     <div className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{width: "100%"}}
+                            style={{ width: "100%" }}
                         >
                             <li>
                                 <NavTab
@@ -53,31 +56,32 @@ const EditPersonal = () => {
                             </li>
                         </ul>
                     </div>
-
-                    <Switch>
-                        <Route exact path={path}>
-                            <Redirect
-                                replace
-                                to="/dashboard/settings/lawyer-info"
-                            />
-                        </Route>
-                        <Route path="/dashboard/settings/basic-info">
-                            <div>
-                                {/* <EditBasicInfo /> */}
-                                <EditInfo />
-                                <hr></hr>
-                                <EditEmail />
-                                {/* <hr></hr>
+                    <LoadingOverlay active={loading} spinner text={"Loading"}>
+                        <Switch>
+                            <Route exact path={path}>
+                                <Redirect
+                                    replace
+                                    to="/dashboard/settings/lawyer-info"
+                                />
+                            </Route>
+                            <Route path="/dashboard/settings/basic-info">
+                                <div>
+                                    {/* <EditBasicInfo /> */}
+                                    <EditInfo Loading={setLoading} />
+                                    <hr></hr>
+                                    <EditEmail Loading={setLoading} />
+                                    {/* <hr></hr>
                                 <EditAddress />{" "} */}
-                            </div>
-                        </Route>
-                        <Route path="/dashboard/settings/lawyer-info">
-                            <EditLawyerInfo />
-                        </Route>
-                        <Route path="/dashboard/settings/payment-settings">
-                            <LawyerPaymentSettings />
-                        </Route>
-                    </Switch>
+                                </div>
+                            </Route>
+                            <Route path="/dashboard/settings/lawyer-info">
+                                <EditLawyerInfo Loading={setLoading} />
+                            </Route>
+                            <Route path="/dashboard/settings/payment-settings">
+                                <LawyerPaymentSettings />
+                            </Route>
+                        </Switch>
+                    </LoadingOverlay>
                 </div>
             </div>
         </Router>

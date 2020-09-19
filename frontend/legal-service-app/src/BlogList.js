@@ -5,6 +5,7 @@ import BlogImg from "./BlogImg";
 import moment from "moment";
 import NoContent from "./NoContent";
 import RoundImg from "./RoundImg";
+import queryString from "query-string"
 
 const BlogList = ({blogs, editable, col, to}) => {
     if (blogs)
@@ -104,9 +105,17 @@ const Blog = ({blog, editable, col = 6, to = "/blogs/blog/"}) => {
                     </h3>
                     <ul className="tags mt-2">
                         <li>
-                            <a href="#" className="tag">
+                            <Link
+                                to={{
+                                    pathname: "/blogs/all",
+                                    search: queryString.stringify({
+                                        tag: blog.tag.id,
+                                    }),
+                                }}
+                                className="tag"
+                            >
                                 {blog.tag.area}
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

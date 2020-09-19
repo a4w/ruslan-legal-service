@@ -253,7 +253,7 @@ const ResponsiveChatPage = ({list_chats = true, initialSelectedChat = null, matc
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{flex: '1 1 auto', minHeight: minHeight}}>
+                                <div style={{flex: '1 1 auto', minHeight: minHeight, zIndex: 9}}>
                                     <MessagesList
                                         messages={messages}
                                         user_id={myId}

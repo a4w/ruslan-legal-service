@@ -152,6 +152,7 @@ function LawyerList(props) {
                 title="Available Lawyers list | Lawbe"
                 description="A list of the best lawyers from all across the country, book them now!"
             />
+            {/* <StickyBox style={{ zIndex: 10 }} offsetTop={85}> */}
             <LawyerListHeader
                 params={params}
                 OnChangeHandler={SortHandler}
@@ -161,9 +162,9 @@ function LawyerList(props) {
                 filterHandler={filterHandler}
                 filterClear={filterClear}
             />
+            {/* </StickyBox> */}
 
             <div className="container-fluid">
-
                 <div className="row">
                     <div className="col-12">
                         <div className="content">
@@ -185,13 +186,12 @@ function LawyerList(props) {
                                     </div>
                                 </div>
                                 <div className="col-sm-0 col-md-0 col-lg-4">
-                                    <StickyBox style={{height: '300px'}} offsetTop={85} offsetBottom={20}>
-                                        <PopUp lawyer={lawyerPopUp} />
+                                    <StickyBox offsetTop={90}>
+                                            <PopUp lawyer={lawyerPopUp} />
                                     </StickyBox>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -361,9 +361,7 @@ const PopUp = ({lawyer}) => {
                 </div>
                 <div style={{width: "100%"}}>
                     <div className="profile-info-widget justify-content-center">
-                        <Link
-                            to={`profile/${lawyer.id}`}
-                        >
+                        <Link to={{pathname: `/profile/${lawyer.id}/${lawyer.account.full_name.replace(/ +/g, "-")}`, state: {lawyer: lawyer}}}>
                             <RoundImg
                                 src={account.profile_picture}
                                 diameter={100}

@@ -7,6 +7,7 @@ use App\Blog;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
+use App\Notifications\LawyerAccountStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -91,6 +92,7 @@ class AdminController extends Controller
         ]);
         $lawyer->account->is_active = $request->get('is_active');
         $lawyer->account->save();
+        $lawyer->account->notify(new LawyerAccountStatusUpdated());
         return RespondJSON::success();
     }
 

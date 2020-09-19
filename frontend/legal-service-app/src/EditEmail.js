@@ -6,7 +6,7 @@ import {FaSpinner} from "react-icons/fa";
 import {toast} from 'react-toastify';
 import useRequests from "./useRequests";
 
-const EditEmail = ({email}) => {
+const EditEmail = ({email, Loading}) => {
     const [user, setUser] = useState({email: email ? email : ""});
     const [isSaving, setSaving] = useState(false);
     const [errors, addError, runValidation] = useValidation(editEmailValidations);
@@ -14,15 +14,22 @@ const EditEmail = ({email}) => {
 
     useEffect(() => {
         // Load profile data
+        Loading(true);
         request({
-            url: 'account/personal-info',
-            method: 'GET'
-        }).then((response) => {
-            // This will set the email field
-            setUser({...response.profile_data, profile_picture_url: response.profile_data.profile_picture});
-        }).catch((error) => {
-
-        });
+            url: "account/personal-info",
+            method: "GET",
+        })
+            .then((response) => {
+                // This will set the email field
+                setUser({
+                    ...response.profile_data,
+                    profile_picture_url: response.profile_data.profile_picture,
+                });
+            })
+            .catch((error) => {})
+            .finally(() => {
+                Loading(false);
+            });
     }, []);
 
     const OnChangeHandler = (event) => {
@@ -68,14 +75,15 @@ const EditEmail = ({email}) => {
                     />
                 </div>
                 <div className="col-12 col-md-3">
-                    <div className="submit-section w-100">
+                    <div className="submit-section w-100 mt-md-0">
                         <button
                             type="submit"
                             disabled={isSaving}
                             className={
-                                "btn btn-primary btn-block submit-btn float-right" +
+                                "btn btn-primary btn-block submit-btn float-right p-md-0" +
                                 (isSaving ? "cursor-not-allowed" : "")
                             }
+                            style={{minHeight: "50px"}}
                         >
                             {isSaving && <FaSpinner className="icon-spin" />}
                             <span>&nbsp;{isSaving ? "" : "Update email"}</span>

@@ -8,7 +8,7 @@ import useRequests from "./useRequests";
 import Img from "./Img";
 import RoundImg from "./RoundImg";
 
-const EditInfo = () => {
+const EditInfo = ({Loading}) => {
     const initUser = {
         name: "",
         surname: "",
@@ -29,16 +29,22 @@ const EditInfo = () => {
     
     useEffect(() => {
         // Load profile data
+        Loading(true);
         request({
-            url: 'account/personal-info',
-            method: 'GET'
-        }).then((response) => {
-            setUser({
-                ...response.profile_data,
-                profile_picture_url: response.profile_data.profile_picture,
-                profile_picture: null,
+            url: "account/personal-info",
+            method: "GET",
+        })
+            .then((response) => {
+                setUser({
+                    ...response.profile_data,
+                    profile_picture_url: response.profile_data.profile_picture,
+                    profile_picture: null,
+                });
+            })
+            .catch((error) => {})
+            .finally(() => {
+                Loading(false);
             });
-        }).catch((error) => {});
     }, []);
 
     const OnChangeHandler = (event) => {

@@ -6,12 +6,14 @@ import useRequests from "./useRequests";
 import {AuthContext} from "./App";
 import {Link} from "react-router-dom";
 import History from "./History";
+import LoadingOverlay from "react-loading-overlay";
 
 const UserCalendar = () => {
     const [appointments, setAppointments] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [monthAppointments, setMonthAppointments] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const {request} = useRequests();
     const [auth,] = useContext(AuthContext);
@@ -40,6 +42,9 @@ const UserCalendar = () => {
                 })
                 .catch(() => {
                     toast.error("An error occurred couldn't load appointments");
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         else toast.error("An error occurred couldn't load appointments");
     }, []);
@@ -58,38 +63,40 @@ const UserCalendar = () => {
         setMonthAppointments(next);
     }, [currentDate, appointments]);
     return (
-        <div className="content">
-            <div className="container-fluid">
-                <div className="card">
-                    <div className="card-body" style={{overflowY: "auto"}}>
-                        <div className="calendar">
-                            <div>
-                                <Header
-                                    currentDate={currentDate}
-                                    prevMonth={prevMonth}
-                                    nextMonth={nextMonth}
-                                />
-                            </div>
-                            <div style={{overflowX: "auto"}}>
-                                <div style={{minWidth: "750px"}}>
-                                    <HeaderDays />
-                                </div>
-                                <div style={{minWidth: "750px"}}>
-                                    <CalendarCells
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <div className="content">
+                <div className="container-fluid">
+                    <div className="card">
+                        <div className="card-body" style={{overflowY: "auto"}}>
+                            <div className="calendar">
+                                <div>
+                                    <Header
                                         currentDate={currentDate}
-                                        onDateClick={onDateClick}
-                                        selectedDate={selectedDate}
-                                        appointments={monthAppointments}
+                                        prevMonth={prevMonth}
+                                        nextMonth={nextMonth}
                                     />
                                 </div>
-
+                                <div style={{overflowX: "auto"}}>
+                                    <div style={{minWidth: "750px"}}>
+                                        <HeaderDays />
+                                    </div>
+                                    <div style={{minWidth: "750px"}}>
+                                        <CalendarCells
+                                            currentDate={currentDate}
+                                            onDateClick={onDateClick}
+                                            selectedDate={selectedDate}
+                                            appointments={monthAppointments}
+                                        />
+                                    </div>
+    
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </LoadingOverlay>
+   );
 };
 const CalendarEvent = ({appointment}) => {
     // let duration = new Date(0);

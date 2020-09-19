@@ -9,7 +9,7 @@ import {Alert} from "react-bootstrap";
 import History from "./History";
 import SpinnerButton from "./SpinnerButton";
 
-const LawyerCompleteRegisteration = ({}) => {
+const LawyerCompleteRegisteration = ({Loading}) => {
     const init = {
         type: 0,
         other: "",
@@ -36,6 +36,7 @@ const LawyerCompleteRegisteration = ({}) => {
     useEffect(() => {
         if (History.location.state && History.location.state.showAlert)
             setShow(true);
+        Loading(true);
         request({
             url: 'lawyer/types',
             method: 'GET'
@@ -122,6 +123,8 @@ const LawyerCompleteRegisteration = ({}) => {
             setLawyer(nextLawyer);
             validate(nextLawyer);
         }).catch((error) => {
+        }).finally(() => {
+            Loading(false);
         });
     }, []);
     const OnSubmitHandler = (event) => {
@@ -321,7 +324,7 @@ const LawyerCompleteRegisteration = ({}) => {
                             name="bio"
                             style={{minHeight: "100px"}}
                             form="regForm"
-                            value={lawyer.languages.join('\n')}
+                            value={lawyer.languages? lawyer.languages.join('\n') : []}
                             onChange={(e) => {
                                 setLawyer({...lawyer, languages: e.target.value.split('\n')})
                             }}

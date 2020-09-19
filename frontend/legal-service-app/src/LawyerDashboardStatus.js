@@ -11,6 +11,7 @@ import History from "./History";
 import useRequests from "./useRequests";
 import bootbox from "bootbox"
 import Status from "./Status";
+import LoadingOverlay from "react-loading-overlay";
 
 const LawyerDashboardStatus = () => {
     return (
@@ -236,6 +237,7 @@ const AppointmentsTable = (props) => {
 
 const UpcomingAppointments = () => {
     const [upcoming, setUpcoming] = useState([]);
+    const [loading, setLoading] = useState(true);
     const {request} = useRequests();
     useEffect(() => {
         request({
@@ -246,18 +248,26 @@ const UpcomingAppointments = () => {
                 console.log(data);
                 setUpcoming(data.appointments);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
-        <AppointmentsTable>
-            {upcoming && upcoming.length ? (
-                upcoming.map((appointment) => (
-                    <ListItem key={appointment.id} appointment={appointment} />
-                ))
-            ) : (
-                <NoContentRow>no upcoming appointments</NoContentRow>
-            )}
-        </AppointmentsTable>
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <AppointmentsTable>
+                {upcoming && upcoming.length ? (
+                    upcoming.map((appointment) => (
+                        <ListItem
+                            key={appointment.id}
+                            appointment={appointment}
+                        />
+                    ))
+                ) : (
+                    <NoContentRow>no upcoming appointments</NoContentRow>
+                )}
+            </AppointmentsTable>
+        </LoadingOverlay>
     );
 };
 
@@ -276,7 +286,9 @@ const NoContentRow = (props)=>{
 
 const AllAppointments = () => {
     const [all, setAll] = useState(null);
-    const {request} = useRequests();
+    const [loading, setLoading] = useState(true);
+
+    const { request } = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/appointments?upcoming=false",
@@ -286,25 +298,36 @@ const AllAppointments = () => {
                 console.log(data);
                 setAll(data.appointments);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
-        <AppointmentsTable>
-            {all && all.length ? (
-                all.map((appointment) => (
-                    <ListItem key={appointment.id} appointment={appointment} />
-                ))
-            ) : (
-                <NoContentRow>You don't have any appointments yet</NoContentRow>
-            )}
-        </AppointmentsTable>
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <AppointmentsTable>
+                {all && all.length ? (
+                    all.map((appointment) => (
+                        <ListItem
+                            key={appointment.id}
+                            appointment={appointment}
+                        />
+                    ))
+                ) : (
+                    <NoContentRow>
+                        You don't have any appointments yet
+                    </NoContentRow>
+                )}
+            </AppointmentsTable>{" "}
+        </LoadingOverlay>
     );
 };
 
 const DoneAppointments = () => {
     const [all, setAll] = useState(null);
-    const [total, setTotal] = useState({currency_symbol: '', total: 0});
-    const {request} = useRequests();
+    const [total, setTotal] = useState({ currency_symbol: "", total: 0 });
+    const [loading, setLoading] = useState(true);
+    const { request } = useRequests();
     useEffect(() => {
         request({
             url: "/lawyer/done-appointments",
@@ -315,30 +338,39 @@ const DoneAppointments = () => {
                 setAll(data.appointments);
                 setTotal({
                     total: data.total,
-                    currency_symbol: data.currency_symbol
+                    currency_symbol: data.currency_symbol,
                 });
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
-        <>
-        <AppointmentsTable>
-            {all && all.length ? (
-                all.map((appointment) => (
-                    <ListItem key={appointment.id} appointment={appointment} />
-                ))
-            ) : (
-                <NoContentRow>You don't have any appointments yet</NoContentRow>
-            )}
-            <tr>
-                <td colSpan="4">
-                    <div className="d-block text-right text-lg font-weight-bold">
-                        Total: {total.currency_symbol}{total.total}
-                    </div>
-                </td>
-            </tr>
-        </AppointmentsTable>
-        </>
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <AppointmentsTable>
+                {all && all.length ? (
+                    all.map((appointment) => (
+                        <ListItem
+                            key={appointment.id}
+                            appointment={appointment}
+                        />
+                    ))
+                ) : (
+                    <NoContentRow>
+                        You don't have any appointments yet
+                    </NoContentRow>
+                )}
+                <tr>
+                    <td colSpan="4">
+                        <div className="d-block text-right text-lg font-weight-bold">
+                            Total: {total.currency_symbol}
+                            {total.total}
+                        </div>
+                    </td>
+                </tr>
+            </AppointmentsTable>
+        </LoadingOverlay>
     );
 };
 const AppointmentsListTabs = () => {

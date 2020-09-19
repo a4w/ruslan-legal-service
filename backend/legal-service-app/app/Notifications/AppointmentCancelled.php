@@ -32,7 +32,7 @@ class AppointmentCancelled extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'email'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -43,7 +43,7 @@ class AppointmentCancelled extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('emails.account.appointment_cancelled', ['appointment' => $this->appointment]);
+        return (new MailMessage)->markdown('emails.account.cancelled_appointment', ['appointment' => $this->appointment]);
     }
 
     /**

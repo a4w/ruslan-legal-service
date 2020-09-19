@@ -11,6 +11,7 @@ import useRequests from "./useRequests";
 import bootbox from "bootbox"
 import {NoContentRow} from "./LawyerDashboardStatus";
 import Status from "./Status";
+import LoadingOverlay from "react-loading-overlay";
 
 const ClientDashboardStatus = () => {
     const appointments = [{id: 1}, {id: 2}, {id: 3}, {id: 4}];
@@ -166,7 +167,7 @@ const AppointmentsTable = (props) => {
         </div>
     );
 };
-const UpcomingAppointments = () => {
+const UpcomingAppointments = ({setLoading}) => {
     const [upcoming, setUpcoming] = useState([]);
     const {request} = useRequests();
     useEffect(() => {
@@ -178,7 +179,10 @@ const UpcomingAppointments = () => {
                 console.log(data);
                 setUpcoming(data.appointments);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
         <AppointmentsTable>
@@ -192,7 +196,7 @@ const UpcomingAppointments = () => {
         </AppointmentsTable>
     );
 };
-const AllAppointments = () => {
+const AllAppointments = ({setLoading}) => {
     const [all, setAll] = useState([]);
     const {request} = useRequests();
     useEffect(() => {
@@ -204,7 +208,10 @@ const AllAppointments = () => {
                 console.log(data);
                 setAll(data.appointments);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
         <AppointmentsTable>
@@ -222,6 +229,8 @@ const AllAppointments = () => {
 };
 const AppointmentsListTabs = ({appointments}) => {
     const path = "/client-dashboard/status";
+    const [loading, setLoading] = useState(true);
+
     // const path = History.location.pathname;
     return (
         <div className="card">
@@ -230,7 +239,7 @@ const AppointmentsListTabs = ({appointments}) => {
                     <Nav className="user-tabs mb-4">
                         <ul
                             className="nav nav-tabs nav-tabs-bottom nav-justified"
-                            style={{width: "100%"}}
+                            style={{ width: "100%" }}
                         >
                             <li className="nav-item">
                                 <NavTab to={`${path}/upcoming`}>
@@ -238,23 +247,29 @@ const AppointmentsListTabs = ({appointments}) => {
                                 </NavTab>
                             </li>
                             <li className="nav-item">
-                                <NavTab to={`${path}/all`}>
-                                    All
-                                </NavTab>
+                                <NavTab to={`${path}/all`}>All</NavTab>
                             </li>
                         </ul>
                     </Nav>
-                    <Switch>
-                        <Route exact path={"/client-dashboard/status"}>
-                            <Redirect replace to={`${path}/upcoming`} />
-                        </Route>
-                        <Route path={`${path}/upcoming`}>
-                            <UpcomingAppointments appointments={appointments} />
-                        </Route>
-                        <Route path={`${path}/all`}>
-                            <AllAppointments appointments={appointments} />
-                        </Route>
-                    </Switch>
+                    <LoadingOverlay active={loading} spinner text={"Loading"}>
+                        <Switch>
+                            <Route exact path={"/client-dashboard/status"}>
+                                <Redirect replace to={`${path}/upcoming`} />
+                            </Route>
+                            <Route path={`${path}/upcoming`}>
+                                <UpcomingAppointments
+                                    appointments={appointments}
+                                    setLoading={setLoading}
+                                />
+                            </Route>
+                            <Route path={`${path}/all`}>
+                                <AllAppointments
+                                    appointments={appointments}
+                                    setLoading={setLoading}
+                                />
+                            </Route>
+                        </Switch>
+                    </LoadingOverlay>
                 </Router>
             </div>
         </div>

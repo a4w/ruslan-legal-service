@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import SpinnerButton from "./SpinnerButton";
 import ErrorMessageInput from "./ErrorMessageInput";
 import useAdminRequest from "./useAdminRequest";
-import { addAdminValidation } from "./Validations";
+import {addAdminValidation} from "./Validations";
 import useValidation from "./useValidation";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
 const AdminEdit = () => {
     const [admin, setAdmin] = useState({
@@ -14,10 +14,10 @@ const AdminEdit = () => {
     });
     const [isAdding, setAdding] = useState(false);
     const [errors, addError, runValidation] = useValidation(addAdminValidation);
-    const { request } = useAdminRequest();
+    const {request} = useAdminRequest();
 
-    const onChange = ({ target: { name, value } }) => {
-        const newData = { ...admin, [name]: value };
+    const onChange = ({target: {name, value}}) => {
+        const newData = {...admin, [name]: value};
         setAdmin(newData);
         runValidation(newData, name);
         if (name === "password" && admin.passConfirm !== "")
@@ -28,7 +28,7 @@ const AdminEdit = () => {
         runValidation(admin).then((hasErrors, _) => {
             if (!hasErrors) {
                 setAdding(true);
-                request({ url: "/admin/add", method: "POST", data: admin })
+                request({url: "/admin/edit", method: "POST", data: admin})
                     .then((response) => {
                         console.log("success", response);
                         toast.success("updated successfuly");

@@ -49,6 +49,17 @@ class AdminController extends Controller
         return RespondJSON::success();
     }
 
+    public function updateAdmin(JSONRequest $request)
+    {
+        $request->validate([
+            'username' => ['required', 'string', 'min:4'],
+            'password' => ['required', 'min:8']
+        ]);
+        $admin = Auth::guard('admin')->user();
+        $admin->update($request->only(['username', 'password']));
+        return RespondJSON::success();
+    }
+
     public function getBlogs(Request $request)
     {
         $request->validate([

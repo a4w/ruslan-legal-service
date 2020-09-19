@@ -75,6 +75,7 @@ class LawyerController extends Controller
                 $join->on('lawyer_data.lawyer_id', '=', 'lawyers.id');
             })
             ->whereHas('account', function ($query) use ($location) {
+                $query->where('is_active', true);
                 if ($location === null) {
                     return $query;
                 }

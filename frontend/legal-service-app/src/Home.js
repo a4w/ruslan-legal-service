@@ -108,7 +108,7 @@ const Home = () => {
                         minWidth: '100vw',
                         minHeight: '10px',
                         zIndex: -1000,
-                        backgroundColor: 'rgba(9,125,225,0.2)'
+                        backgroundColor: 'rgba(9,125,225,0.2)',
                     }}>
 
                     </div>
@@ -120,7 +120,9 @@ const Home = () => {
                         minWidth: '100vw',
                         minHeight: '10px',
                         zIndex: -1000,
-                        backgroundColor: 'rgba(9,125,225,0.9)'
+                        backgroundColor: 'rgba(9,125,225,0.9)',
+                        backgroundImage: "url('looper.png')",
+                        filter: "brightness(0.65)"
                     }}>
 
                     </div>

@@ -1770,7 +1770,7 @@ button.bg-danger:hover {
 	-ms-flex-pack: center;
 }
 .header-navbar-rht li:last-child {
-	padding-right:0px;
+	/**padding-right:0px;*/
 }
 .header-navbar-rht li .dropdown-menu {
 	border: 0;
@@ -7069,7 +7069,12 @@ html.menu-opened body {
 	}
 }
 
+/*
 @media only screen and (max-width: 575.98px) {
+	.header-nav {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 	body {
 		font-size: 0.8125rem;
 	}
@@ -7102,10 +7107,6 @@ html.menu-opened body {
 	}
 	.card-footer {
 		padding: .75rem 1.25rem;
-	}
-	.header-nav {
-		padding-left: 15px;
-		padding-right: 15px;
 	}
 	.header-navbar-rht {
 		display: none;
@@ -7284,6 +7285,7 @@ html.menu-opened body {
 		font-size: 14px;
 	}
 }
+*/
 
 @media only screen and (max-width:479px) {
 	.section-search {

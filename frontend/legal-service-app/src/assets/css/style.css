@@ -6205,9 +6205,10 @@ html.menu-opened body {
     margin-bottom: 10px;
 }
 .grid-blog .entry-meta li:last-child {
-    flex: 0 0 100px;
+    flex: 0 0 175px !important;
     display: block ruby;
     width: 100%;
+    max-width: 100% !important;
 }
 .grid-blog .post-author {
     width: 189px;

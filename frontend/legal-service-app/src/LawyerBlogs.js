@@ -6,6 +6,7 @@ import history from "./History";
 import WriteBlog from "./WriteBlog";
 import BlogList from "./BlogList";
 import useRequests from "./useRequests";
+import LoadingOverlay from "react-loading-overlay";
 
 const LawyerBlogs = () => {
     const path = "/dashboard/blogs";
@@ -66,16 +67,24 @@ const LawyerBlogs = () => {
 
 const Blogs = ({setIsEditting}) => {
     const [blogs, setBlogs] = useState(null);
+    const [loading, setLoading] = useState(true);
     const {request} = useRequests();
     useEffect(() => {
         setIsEditting(false);
-        request({url: `/blogs/mine`, method: "GET"})
+        request({ url: `/blogs/mine`, method: "GET" })
             .then((data) => {
                 console.log(data);
                 setBlogs(data.blogs);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
-    return blogs && <BlogList blogs={blogs} editable={true} col={4} />
+    return (
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            {blogs && <BlogList blogs={blogs} editable={true} col={4} />}
+        </LoadingOverlay>
+    );
 }
 export default LawyerBlogs;

@@ -7,30 +7,37 @@ import useRequests from "./useRequests";
 import bootbox from "bootbox"
 import NoContent from "./NoContent";
 import RoundImg from "./RoundImg";
+import LoadingOverlay from "react-loading-overlay";
 
 const LawyerAppointments = () => {
     const [appointments, setAppointments] = useState();
+    const [loading, setLoading] = useState(true);
     const {request} = useRequests();
     useEffect(() => {
-        request({url: "/lawyer/appointments", method: "GET"})
+        request({ url: "/lawyer/appointments", method: "GET" })
             .then((data) => {
                 setAppointments(data.appointments);
             })
-            .catch((err) => {});
+            .catch((err) => {})
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
     return (
-        <div className="appointments">
-            {appointments && appointments.length ? (
-                appointments.map((appointment) => (
-                    <AppointmentCard
-                        key={appointment.id}
-                        appointment={appointment}
-                    />
-                ))
-            ) : (
-                <NoContent>There are no appointments yet</NoContent>
-            )}
-        </div>
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <div className="appointments">
+                {appointments && appointments.length ? (
+                    appointments.map((appointment) => (
+                        <AppointmentCard
+                            key={appointment.id}
+                            appointment={appointment}
+                        />
+                    ))
+                ) : (
+                    <NoContent>There are no appointments yet</NoContent>
+                )}
+            </div>
+        </LoadingOverlay>
     );
 };
 const AppointmentCard = ({appointment}) => {

@@ -4,20 +4,29 @@ import moment from "moment";
 import Img from "./Img";
 import useRequests from "./useRequests";
 import NoContent from "./NoContent";
+import LoadingOverlay from "react-loading-overlay";
 
 const LawyerReviews = ({lawyer}) => {
     const [comments, setComments] = useState(null);
+    const [loading, setLoading] = useState(true);
     const {request} = useRequests();
     useEffect(() => {
         if (!lawyer)
-            request({url: "/lawyer/me", method: "GET"})
+            request({ url: "/lawyer/me", method: "GET" })
                 .then((data) => {
                     setComments(data.lawyer.ratings);
                 })
-                .catch((err) => {});
+                .catch((err) => {})
+                .finally(() => {
+                    setLoading(false);
+                });
         else setComments(lawyer.ratings);
     }, []);
-    return <ReviewList comments={comments} />;
+    return (
+        <LoadingOverlay active={loading} spinner text={"Loading"}>
+            <ReviewList comments={comments} />
+        </LoadingOverlay>
+    );
 };
 
 const ReviewList = ({comments}) => {

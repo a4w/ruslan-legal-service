@@ -94,6 +94,7 @@ Route::prefix('admin')->group(function () {
     Route::post('logout', 'AdminController@logout')->middleware('auth:admin');
     Route::post('refresh-current-token', 'AdminController@refreshCurrentToken')->middleware('auth:admin');
     Route::post('add', 'AdminController@addAdmin')->middleware('auth:admin');
+    Route::post('edit', 'AdminController@updateAdmin')->middleware('auth:admin');
     Route::get('blogs', 'AdminController@getBlogs')->middleware('auth:admin');
     Route::get('lawyers', 'AdminController@getLawyers')->middleware('auth:admin');
     Route::get('blog/{blog}', 'AdminController@getBlog')->middleware('auth:admin');

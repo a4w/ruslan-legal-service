@@ -14,7 +14,7 @@ const MessagesList = ({messages, user_id}) => {
         <>
             <div className="chat-body">
                 <div className="chat-scroll" id="messages_container">
-                    <ul className="list-unstyled">
+                    <ul className="list-unstyled" style={{backgroundColor: "ghostwhite"}}>
                         {messages.map((message, i) => {
                             if (message.message_type === 'TEXT') {
                                 return (<Message isOutgoing={user_id === message.sender_id} content={message.content} timestamp={message.created_at} />);

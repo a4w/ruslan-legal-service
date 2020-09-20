@@ -75,6 +75,7 @@ class LawyerController extends Controller
                 $join->on('lawyer_data.lawyer_id', '=', 'lawyers.id');
             })
             ->whereHas('account', function ($query) use ($location) {
+                $query->where('is_active', true);
                 if ($location === null) {
                     return $query;
                 }
@@ -94,7 +95,7 @@ class LawyerController extends Controller
             $lawyers = $lawyers->filter(function ($item) use ($available_on) {
                 // Check if available on selected date
                 $day = new Carbon($available_on);
-                $dayIdx = $day->dayOfWeek;
+                $dayIdx = $day->dayOfWeekIso - 1;
                 $schedule = $item->schedule;
                 $slots = $schedule[$dayIdx]['slots'];
                 return count($slots) > 0;
@@ -197,7 +198,7 @@ class LawyerController extends Controller
                 'date' => $formatted_date,
                 'slots' => []
             );
-            $current_day_slots = $schedule[$current->dayOfWeek]['slots'];
+            $current_day_slots = $schedule[$current->dayOfWeekIso - 1]['slots'];
             for ($i = 0; $i < count($current_day_slots); ++$i) {
                 $slot = $current_day_slots[$i];
                 $start_time = new Carbon($slot['time']);

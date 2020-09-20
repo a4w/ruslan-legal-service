@@ -2,26 +2,22 @@
 
 namespace App\Notifications;
 
-use App\Appointment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AppointmentCancelled extends Notification
+class LawyerAccountStatusUpdated extends Notification
 {
     use Queueable;
-
-    private $appointment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Appointment $appointment)
+    public function __construct()
     {
-        $this->appointment = $appointment;
+        //
     }
 
     /**
@@ -32,7 +28,7 @@ class AppointmentCancelled extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['mail'];
     }
 
     /**
@@ -43,7 +39,7 @@ class AppointmentCancelled extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('emails.account.cancelled_appointment', ['appointment' => $this->appointment]);
+        return (new MailMessage)->markdown('emails.lawyer.account_status', ['is_active' => $notifiable->is_active]);
     }
 
     /**
@@ -55,10 +51,7 @@ class AppointmentCancelled extends Notification
     public function toArray($notifiable)
     {
         return [
-            'type' => 'APPOINTMENT_CANCELLED',
-            'notification_data' => [
-                'appointment' => $this->appointment->toArray()
-            ]
+            //
         ];
     }
 }

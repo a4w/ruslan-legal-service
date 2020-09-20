@@ -7,6 +7,7 @@ use App\Blog;
 use App\Helpers\RespondJSON;
 use App\Http\Requests\JSONRequest;
 use App\Lawyer;
+use App\Notifications\LawyerAccountStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,6 +46,17 @@ class AdminController extends Controller
             'password' => ['required', 'min:8']
         ]);
         Admin::create($request->only(['username', 'password']));
+        return RespondJSON::success();
+    }
+
+    public function updateAdmin(JSONRequest $request)
+    {
+        $request->validate([
+            'username' => ['required', 'string', 'min:4'],
+            'password' => ['required', 'min:8']
+        ]);
+        $admin = Auth::guard('admin')->user();
+        $admin->update($request->only(['username', 'password']));
         return RespondJSON::success();
     }
 
@@ -91,6 +103,7 @@ class AdminController extends Controller
         ]);
         $lawyer->account->is_active = $request->get('is_active');
         $lawyer->account->save();
+        $lawyer->account->notify(new LawyerAccountStatusUpdated());
         return RespondJSON::success();
     }
 

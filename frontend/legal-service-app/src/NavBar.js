@@ -44,7 +44,7 @@ const NavBar = () => {
 
     return (
         <StickyBox style={{zIndex: 10}}>
-            <header className="header">
+            <header>
                 <nav className="navbar navbar-expand-lg header-nav">
                     <div className="navbar-header">
                         <a id="mobile_btn" onClick={() => setOpen(true)} href="#">

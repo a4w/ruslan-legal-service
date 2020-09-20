@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Children } from "react";
-import { useKeenSlider } from "keen-slider/react";
+import React, {useState, useEffect, Children} from "react";
+import {useKeenSlider} from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
 const Slider = (props) => {
@@ -37,7 +37,7 @@ const Slider = (props) => {
         else if (window.innerWidth <= 1280) i = 2.5;
         else i = 3.5;
         setInView(Math.floor(i));
-        if(Math.floor(i) >= Children.toArray(props.children).length) showArrows(false);
+        if (Math.floor(i) >= Children.toArray(props.children).length) showArrows(false);
         else showArrows(true);
     };
     useEffect(clacDots, []);
@@ -45,6 +45,11 @@ const Slider = (props) => {
         window.addEventListener("resize", clacDots);
         return () => window.removeEventListener("resize", clacDots);
     });
+    useEffect(() => {
+        if (slider !== null) {
+            slider.resize();
+        }
+    }, [slider, props.children]);
 
     return (
         <>
@@ -57,12 +62,12 @@ const Slider = (props) => {
                 {arrows && slider && (
                     <>
                         <ArrowLeft
-                            onClick={(e) => e.stopPropagation() || slider.prev() }
+                            onClick={(e) => e.stopPropagation() || slider.prev()}
                             disabled={currentSlide === 0 || inView >= slider.details().size}
                         />
 
                         <ArrowRight
-                            onClick={(e) => e.stopPropagation() || slider.next() }
+                            onClick={(e) => e.stopPropagation() || slider.next()}
                             disabled={currentSlide === slider.details().size - 1 || inView >= slider.details().size}
                         />
                     </>
@@ -82,10 +87,10 @@ const Slider = (props) => {
                         return (
                             <li
                                 key={idx}
-                                className={"slick" +(currentSlide === idx ? "-active" : "")}
+                                className={"slick" + (currentSlide === idx ? "-active" : "")}
                             >
                                 <button
-                                    onClick={() => {slider.moveToSlideRelative(idx); }}
+                                    onClick={() => {slider.moveToSlideRelative(idx);}}
                                 />
                             </li>
                         );

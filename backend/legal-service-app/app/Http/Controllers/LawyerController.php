@@ -95,7 +95,7 @@ class LawyerController extends Controller
             $lawyers = $lawyers->filter(function ($item) use ($available_on) {
                 // Check if available on selected date
                 $day = new Carbon($available_on);
-                $dayIdx = $day->dayOfWeekIso - 1;
+                $dayIdx = AppointmentHelper::dayToIndex($day->dayName);
                 $schedule = $item->schedule;
                 $slots = $schedule[$dayIdx]['slots'];
                 return count($slots) > 0;

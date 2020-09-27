@@ -28,8 +28,5 @@ class FixLawyerLanguages extends Migration
      */
     public function down()
     {
-        Schema::table('lawyers', function (Blueprint $table) {
-            $table->dropColumn('languages');
-        });
     }
 }

@@ -15,19 +15,11 @@ import {useCookies} from "react-cookie"
 import moment from "moment"
 import AdminRoutes from "./AdminRoutes";
 import UserRoutes from "./UserRoutes";
+import ScrollToTop from "./ScrollToTop";
 
 export const LoadingOverlayContext = React.createContext(null);
 export const AuthContext = React.createContext(null);
 export const NotificationContext = React.createContext(null);
-
-export function ScrollToTop() {
-    const {pathname} = useLocation();
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
-
-    return null;
-}
 
 function App() {
     const [isLoadingOverlayShown, setIsLoadingOverlayShown] = useState(false);
@@ -81,9 +73,9 @@ function App() {
                                 })
                             }}
                         ></LoadingOverlay>
-                        <ScrollToTop />
                         <ToastContainer />
                         <Router history={history}>
+                            <ScrollToTop />
                             <Switch>
                                 <Route path="/admin" component={AdminRoutes} />
                                 <Route path="/" component={UserRoutes} />

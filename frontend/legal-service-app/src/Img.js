@@ -24,7 +24,7 @@ const AcImg = (props) => {
         <img
             {...props}
             alt={accreditation.accreditation}
-            src={`/ac_${accreditation.id}`}
+            src={`accreditation/ac_${accreditation.id}`}
             style={ImgStyle}
         />
     );

@@ -122,7 +122,7 @@ const Home = () => {
                         zIndex: -1000,
                         backgroundColor: 'rgba(9,125,225,0.9)',
                         backgroundImage: "url('looper.png')",
-                        filter: "brightness(0.65)"
+                        filter: "brightness(0.55)"
                     }}>
 
                     </div>

@@ -130,7 +130,8 @@ const ScheduleForm = ({}) => {
                     nextSchedule[day].slots.push({
                         ...slot,
                         time: time_obj,
-                        end_time: time_obj.clone().add(slot.length, "minutes")
+                        end_time: time_obj.clone().add(slot.length, "minutes"),
+                        weekday: day
                     });
                 }
             }
@@ -461,7 +462,7 @@ const ScheduleForm = ({}) => {
                                                     >
                                                         <button
                                                             key={slot.id}
-                                                            data-day={i}
+                                                            data-day={slot.weekday}
                                                             data-slot={j}
                                                             className="timing btn-block"
                                                             onClick={doubleTapDeleteSlot}

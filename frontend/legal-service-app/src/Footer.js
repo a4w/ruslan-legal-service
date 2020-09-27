@@ -25,8 +25,10 @@ const Footer = () => {
                                 <div className="footer-about-content">
                                     <div className="footer-logo">
                                         <p className="menu-logo" to="/">
-                                            <img src="/logo1.png" style={{maxWidth: '100%', height: '100px', marginRight: '5px'}} />
-                                            <img src="/logo3.png" style={{maxWidth: '100%', height: '100px'}} />
+                                            <Link className="navbar-brand logo" to="/">
+                                                <img src="/logo-ru12.png" style={{maxWidth: '100%', maxHeight: '50px'}} />
+                                                <span style={{color: 'white'}}><b>Lawbe</b><small style={{fontWeight: '100', fontSize: '0.7em'}}>.co.uk</small></span>
+                                            </Link>
                                         </p>
                                     </div>
                                     <p>Describtion</p>

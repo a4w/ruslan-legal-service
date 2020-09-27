@@ -14,13 +14,13 @@ class AppointmentHelper
     public const MINUTES_PER_DAY = 60 * 24;
 
     protected const DAY_MAPPING = [
-        'sunday' => Carbon::SUNDAY,
-        'monday' => Carbon::MONDAY,
-        'tuesday' => Carbon::TUESDAY,
-        'wednesday' => Carbon::WEDNESDAY,
-        'thursday' => Carbon::THURSDAY,
-        'friday' => Carbon::FRIDAY,
-        'saturday' => Carbon::SATURDAY
+        'monday' => 0,
+        'tuesday' => 1,
+        'wednesday' => 2,
+        'thursday' => 3,
+        'friday' => 4,
+        'saturday' => 5,
+        'sunday' => 6,
     ];
 
     public static function minutesToClock($minutes)
